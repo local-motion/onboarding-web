@@ -15,6 +15,7 @@ import Parallax from "components/Parallax/Parallax.jsx";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import PlaygroundDetails from "./Sections/PlaygroundDetails";
 import PlaygroundMap from "./Sections/PlaygroundMap";
 
 import { withNamespaces } from "react-i18next";
@@ -22,7 +23,7 @@ import { withNamespaces } from "react-i18next";
 class Onboarding extends React.Component {
     render() {
         const {classes, ...rest} = this.props;
-        const { t, i18n } = this.props;
+        const { t } = this.props;
         return (
             <div>
                 <Header
@@ -55,7 +56,8 @@ class Onboarding extends React.Component {
                 </Parallax>
 
                 <div className={classNames(classes.main, classes.mainRaised)}>
-                    <PlaygroundMap/>
+                    <PlaygroundMap isMarkerShown />
+                    <PlaygroundDetails/>
                 </div>
                 <Footer/>
             </div>
