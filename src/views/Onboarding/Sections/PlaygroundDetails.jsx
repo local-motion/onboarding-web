@@ -1,65 +1,33 @@
 import React from "react";
-
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
 import Schedule from "@material-ui/icons/Schedule";
 import List from "@material-ui/icons/List";
-
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import NavPills from "components/NavPills/NavPills.jsx";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
-
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-
-const GET_DOGS = gql`
-    {
-        dogs {
-            id
-            breed
-        }
-    }
-`;
-
-const Dogs = ({ onDogSelected }) => (
-    <Query query={GET_DOGS}>
-        {({ loading, error, data }) => {
-            if (loading) return 'Loading...';
-            if (error) return `Error! ${error.message}`;
-
-            return (
-                <select name="dog" onChange={onDogSelected}>
-                    {data.dogs.map(dog => (
-                        <option key={dog.id} value={dog.breed}>
-                            {dog.breed}
-                        </option>
-                    ))}
-                </select>
-            );
-        }}
-    </Query>
-);
+import {withNamespaces} from 'react-i18next';
 
 class PlaygroundDetails extends React.Component {
     render() {
-        const { classes, playground } = this.props;
+        const { t, classes, playground } = this.props;
+        if (!playground) return null;
+
         return (
             <div className={classes.section}>
                 <div className={classes.container}>
                     <div id="navigation-pills">
                         <div className={classes.title}>
-                            <h3>Navigation Pills {playground && playground.id}</h3>
+                            <h3>{t('onboarding.playground.details.title', {playgroundName: playground.name})}</h3>
                         </div>
                         <div className={classes.title}>
                             <h3>
-                                <small>With Icons</small>
+                                <small>{t('onboarding.playground.details.subtitle')}</small>
                             </h3>
-                            <Dogs/>
                         </div>
                         <GridContainer>
                             <GridItem xs={12} sm={12} md={8} lg={6}>
@@ -221,4 +189,4 @@ class PlaygroundDetails extends React.Component {
     }
 }
 
-export default withStyles(pillsStyle)(PlaygroundDetails);
+export default withStyles(pillsStyle)(withNamespaces("translations")(PlaygroundDetails));
