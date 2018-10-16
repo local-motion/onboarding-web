@@ -23,10 +23,6 @@ jobs:
     - export REPO=localmotion/onboarding-web
     - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo
       $TRAVIS_BRANCH | sed 's/\//_/g' ; fi`
-    - echo "Branch $TRAVIS_BRANCH"
-    - echo "Tag $TAG"
-    - echo "Repo $REPO"
-    - echo "Commit $COMMIT"
     - docker build -f Dockerfile -t $REPO:$COMMIT .
     - docker tag $REPO:$COMMIT $REPO:$TAG
     - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
