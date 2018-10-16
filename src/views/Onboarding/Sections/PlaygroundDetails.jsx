@@ -14,13 +14,36 @@ import GridItem from "components/Grid/GridItem.jsx";
 import NavPills from "components/NavPills/NavPills.jsx";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 
-import {connect} from "react-redux";
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 
-const mapStateToProps = state => {
-    return {
-        playground: state.selectedPlayground
-    };
-};
+const GET_DOGS = gql`
+    {
+        dogs {
+            id
+            breed
+        }
+    }
+`;
+
+const Dogs = ({ onDogSelected }) => (
+    <Query query={GET_DOGS}>
+        {({ loading, error, data }) => {
+            if (loading) return 'Loading...';
+            if (error) return `Error! ${error.message}`;
+
+            return (
+                <select name="dog" onChange={onDogSelected}>
+                    {data.dogs.map(dog => (
+                        <option key={dog.id} value={dog.breed}>
+                            {dog.breed}
+                        </option>
+                    ))}
+                </select>
+            );
+        }}
+    </Query>
+);
 
 class PlaygroundDetails extends React.Component {
     render() {
@@ -36,6 +59,7 @@ class PlaygroundDetails extends React.Component {
                             <h3>
                                 <small>With Icons</small>
                             </h3>
+                            <Dogs/>
                         </div>
                         <GridContainer>
                             <GridItem xs={12} sm={12} md={8} lg={6}>
@@ -197,4 +221,4 @@ class PlaygroundDetails extends React.Component {
     }
 }
 
-export default withStyles(pillsStyle)(connect(mapStateToProps)(PlaygroundDetails));
+export default withStyles(pillsStyle)(PlaygroundDetails);
