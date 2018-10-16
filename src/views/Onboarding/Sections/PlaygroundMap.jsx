@@ -1,41 +1,25 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import {connect} from "react-redux";
-import { selectPlayground } from "../../../redux/actions/index";
 
 // const fetch = require("isomorphic-fetch");
 import {MarkerClusterer} from "react-google-maps/lib/components/addons/MarkerClusterer";
 import {GoogleMap, Marker, withGoogleMap, withScriptjs} from "react-google-maps";
 import {compose, withHandlers, withProps} from "recompose";
 
-
-// Redux
-const mapStateToProps = state => {
-    return {
-        playgrounds: state.playgrounds.map(playground => ({
-            id: playground.id,
-            latitude: playground.lat,
-            longitude: playground.lng,
-            slug: playground.slug
-        }))
-    };
-};
-const mapDispatchToProps = dispatch => {
-    return {
-        selectPlayground: (id, marker)  => {
-            console.log('Marker with ID ' + id +' clicked:', marker);
-            dispatch(selectPlayground(id))
-        }
-    };
-};
-
-const ClusteredMarkerMap = compose(
+const PlaygroundMap = compose(
     withProps({
         googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDCX2YMrZPjKtWq0tEBviJedUfx-mdFiPs&v=3.exp&libraries=geometry,drawing,places",
         loadingElement: <div style={{height: `100%`}}/>,
         containerElement: <div style={{height: `400px`}}/>,
         mapElement: <div style={{height: `100%`}}/>,
+        playgrounds: [
+            {id: '1', name: 'Linnaeushof', lat: 52.327292, lng: 4.603781, slug: this.name + ' Rookvrij'},
+            {id: '2', name: 'Jan Miense Molenaerplein 12', lat: 52.359360, lng: 4.627239, slug: this.name + ' Rookvrij'}
+        ],
+        selectPlayground: (playground_id) => {
+            alert('Hi!' + playground_id);
+        }
     }),
     withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
@@ -54,16 +38,15 @@ const ClusteredMarkerMap = compose(
             enableRetinaIcons
             gridSize={60}
         >
-            {props.playgrounds.map(marker => (
+            {props.playgrounds.map(playground => (
                 <Marker
-                    onClick={props.selectPlayground.bind(this, marker.id)}
-                    key={marker.id}
-                    position={{lat: marker.latitude, lng: marker.longitude}}
+                    onClick={props.selectPlayground.bind(this, playground.id)}
+                    key={playground.id}
+                    position={{lat: playground.lat, lng: playground.lng}}
                 />
             ))}
         </MarkerClusterer>
     </GoogleMap>
 );
 
-const PlaygroundMap = connect(mapStateToProps, mapDispatchToProps)(ClusteredMarkerMap);
 export default withStyles(componentsStyle)(PlaygroundMap);
