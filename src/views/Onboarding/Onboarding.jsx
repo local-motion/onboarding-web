@@ -5,25 +5,39 @@ import classNames from "classnames";
 // import {Link} from "react-router-dom";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-// @material-ui/icons
-// core components
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
-// sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import PlaygroundDetails from "./Sections/PlaygroundDetails";
 import PlaygroundMap from "./Sections/PlaygroundMap";
+import PlaygroundStatistics from "./Sections/SmokeFreeProgress";
+import CallToAction from "./Sections/CallToAction";
 
-import { withNamespaces } from "react-i18next";
+
+import {withNamespaces} from "react-i18next";
 
 class Onboarding extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handlePlaygroundChange = this.handlePlaygroundChange.bind(this);
+        this.state = {
+            playground: null,
+            intentToHelp: {
+                cityArea: 'Haarlem-Zuid'
+            }
+        };
+    }
+
+    handlePlaygroundChange(playground) {
+        this.setState({playground: playground});
+    }
+
     render() {
         const {classes, ...rest} = this.props;
-        const { t } = this.props;
+        const {t} = this.props;
+        const {playground, intentToHelp} = this.state;
         return (
             <div>
                 <Header
@@ -32,32 +46,22 @@ class Onboarding extends React.Component {
                     fixed
                     color="transparent"
                     changeColorOnScroll={{
-                        height: 400,
+                        height: 100,
                         color: "white"
                     }}
                     {...rest}
                 />
                 <Parallax image={require("assets/img/bg2.jpg")}>
                     <div className={classes.container}>
-                        <GridContainer>
-                            <GridItem>
-                                <div className={classes.brand}>
-                                    <h1 className={classes.title}>Linnaeushof rookvrij!</h1>
-                                    <h3 className={classes.subtitle}>
-                                        Je hebt aangegeven dat jij Linnaeushof rookvrij wilt helpen maken
-                                    </h3>
-                                    <h3>
-                                        Help ons!
-                                    </h3>
-                                </div>
-                            </GridItem>
-                        </GridContainer>
+                        <CallToAction intentToHelp={intentToHelp}/>
                     </div>
                 </Parallax>
 
                 <div className={classNames(classes.main, classes.mainRaised)}>
-                    <PlaygroundMap isMarkerShown />
-                    <PlaygroundDetails/>
+                    {/*<div className={classes.space70} />*/}
+                    <PlaygroundMap isMarkerShown onPlaygroundChange={this.handlePlaygroundChange}/>
+                    <PlaygroundStatistics />
+                    <PlaygroundDetails playground={playground}/>
                 </div>
                 <Footer/>
             </div>
