@@ -28,9 +28,12 @@ i18n.use(LanguageDetector).init({
                 "onboarding.playground.calltoaction.subtitle": "Help make a playground " +
                     "in {{cityArea}} smoke-free. Sign up for a playground in your area, and " +
                     "let's make this happen!",
+
                 "onboarding.playground.details.title": "Playground {{playgroundName}}",
                 "onboarding.playground.details.subtitle": "Details",
                 "onboarding.playground.progress.title": "Progress",
+
+                "onboarding.playground.search.title": "Results",
             }
         },
         nl: {
