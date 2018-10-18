@@ -10,10 +10,13 @@ import Footer from "components/Footer/Footer.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import PlaygroundDetails from "./Sections/PlaygroundDetails";
+import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/SmokeFreeProgress";
+import PlaygroundDetails from "./Sections/PlaygroundDetails";
 import CallToAction from "./Sections/CallToAction";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import GridItem from "components/Grid/GridItem.jsx";
 
 
 import {withNamespaces} from "react-i18next";
@@ -59,9 +62,18 @@ class Onboarding extends React.Component {
 
                 <div className={classNames(classes.main, classes.mainRaised)}>
                     {/*<div className={classes.space70} />*/}
-                    <PlaygroundMap isMarkerShown onPlaygroundChange={this.handlePlaygroundChange}/>
-                    <PlaygroundStatistics />
-                    <PlaygroundDetails playground={playground}/>
+                    <GridContainer>
+                        <GridItem xs={12} sm={12} md={6}>
+                            <PlaygroundSearch />
+                            <PlaygroundMap isMarkerShown onPlaygroundChange={this.handlePlaygroundChange}/>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={6}>
+                            <PlaygroundStatistics />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={6}>
+                            <PlaygroundDetails playground={playground}/>
+                        </GridItem>
+                    </GridContainer>
                 </div>
                 <Footer/>
             </div>
