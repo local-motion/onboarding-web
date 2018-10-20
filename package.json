@@ -25,7 +25,7 @@
     "react-redux": "5.0.7",
     "react-router-dom": "4.3.1",
     "react-scripts": "1.1.5",
-    "react-slick": "0.23.1",
+    "react-slick": "0.23.2",
     "react-swipeable-views": "0.13.0",
     "recompose": "0.30.0"
   },
