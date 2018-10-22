@@ -33,7 +33,7 @@ i18n.use(LanguageDetector).init({
                 "onboarding.playground.details.subtitle": "Details",
                 "onboarding.playground.progress.title": "Progress",
 
-                "onboarding.playground.search.title": "Results",
+                "onboarding.playground.search.title": "Find a playground",
             }
         },
         nl: {
@@ -43,7 +43,7 @@ i18n.use(LanguageDetector).init({
                 "onboarding.playground.calltoaction.subtitle": "Help een speeltuin " +
                     "in {{cityArea}} rookvrij te maken. Schrijf je in op een speeltuin in jouw buurt, en " +
                     "help mee!",
-                "onboarding.playground.details.title": "Speeltuin",
+                "onboarding.playground.details.title": "Speeltuin {{playgroundName}}",
                 "onboarding.playground.details.subtitle": "Details",
                 "onboarding.playground.progress.title": "Voortgang",
             }

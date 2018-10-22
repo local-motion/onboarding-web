@@ -14,7 +14,7 @@ class CallToAction extends React.Component {
                 <GridItem>
                     <div className={classes.brand}>
                         <h1 className={classes.title}>{t('onboarding.playground.calltoaction.title', {cityArea: intentToHelp.cityArea})}</h1>
-                        <h3 className={classes.subtitle}>{t('onboarding.playground.calltoaction.subtitle')}</h3>
+                        <h3 className={classes.subtitle}>{t('onboarding.playground.calltoaction.subtitle', {cityArea: intentToHelp.cityArea})}</h3>
                     </div>
                 </GridItem>
             </GridContainer>
