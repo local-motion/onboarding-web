@@ -14,7 +14,7 @@ import {withNamespaces} from 'react-i18next';
 
 class PlaygroundDetails extends React.Component {
     render() {
-        const { t, classes, playground } = this.props;
+        const {t, classes, playground} = this.props;
         if (!playground) return null;
 
         return (
@@ -39,7 +39,7 @@ class PlaygroundDetails extends React.Component {
                                             tabIcon: Dashboard,
                                             tabContent: (
                                                 <span>
-                          <p>
+                            <p>
                             Collaboratively administrate empowered markets via
                             plug-and-play networks. Dynamically procrastinate
                             B2C users after installed base benefits.
@@ -73,7 +73,7 @@ class PlaygroundDetails extends React.Component {
                             cross-media value. Quickly maximize timely
                             deliverables for real-time schemas.
                           </p>
-                          <br />
+                          <br/>
                           <p>
                             Dramatically maintain clicks-and-mortar solutions
                             without functional solutions. Dramatically visualize
@@ -96,7 +96,7 @@ class PlaygroundDetails extends React.Component {
                             plug-and-play networks. Dynamically procrastinate
                             B2C users after installed base benefits.
                           </p>
-                          <br />
+                          <br/>
                           <p>
                             Dramatically visualize customer directed convergence
                             without revolutionary ROI. Collaboratively
@@ -104,7 +104,7 @@ class PlaygroundDetails extends React.Component {
                             networks. Dynamically procrastinate B2C users after
                             installed base benefits.
                           </p>
-                          <br />
+                          <br/>
                           <p>
                             Dramatically visualize customer directed convergence
                             without revolutionary ROI. Collaboratively
@@ -122,8 +122,8 @@ class PlaygroundDetails extends React.Component {
                                 <NavPills
                                     color="rose"
                                     horizontal={{
-                                        tabsGrid: { xs: 12, sm: 4, md: 4 },
-                                        contentGrid: { xs: 12, sm: 8, md: 8 }
+                                        tabsGrid: {xs: 12, sm: 4, md: 4},
+                                        contentGrid: {xs: 12, sm: 8, md: 8}
                                     }}
                                     tabs={[
                                         {
@@ -136,7 +136,7 @@ class PlaygroundDetails extends React.Component {
                             plug-and-play networks. Dynamically procrastinate
                             B2C users after installed base benefits.
                           </p>
-                          <br />
+                          <br/>
                           <p>
                             Dramatically visualize customer directed convergence
                             without revolutionary ROI. Collaboratively
@@ -144,7 +144,7 @@ class PlaygroundDetails extends React.Component {
                             networks. Dynamically procrastinate B2C users after
                             installed base benefits.
                           </p>
-                          <br />
+                          <br/>
                           <p>
                             Dramatically visualize customer directed convergence
                             without revolutionary ROI. Collaboratively
@@ -165,7 +165,7 @@ class PlaygroundDetails extends React.Component {
                             cross-media value. Quickly maximize timely
                             deliverables for real-time schemas.
                           </p>
-                          <br />
+                          <br/>
                           <p>
                             Dramatically maintain clicks-and-mortar solutions
                             without functional solutions. Dramatically visualize
