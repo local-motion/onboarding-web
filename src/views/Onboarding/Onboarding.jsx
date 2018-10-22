@@ -14,6 +14,7 @@ import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/SmokeFreeProgress";
 import PlaygroundDetails from "./Sections/PlaygroundDetails";
+import StartOrJoinInitiative from "./Sections/StartOrJoinInitiative";
 import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -70,6 +71,7 @@ class Onboarding extends React.Component {
                         </GridItem>
                         <GridItem xs={12} sm={12} md={6}>
                             <PlaygroundStatistics />
+                            <StartOrJoinInitiative playground={playground} />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={6}>
                             <PlaygroundDetails playground={playground}/>
