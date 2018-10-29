@@ -29,7 +29,8 @@ spec:
     spec:
       containers:
       - name: onboarding-web
-        image: localmotion/onboarding-web
+        image: localmotion/onboarding-web:local
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: 100m
