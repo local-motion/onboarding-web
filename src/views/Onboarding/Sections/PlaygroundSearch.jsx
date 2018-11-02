@@ -20,6 +20,9 @@ const GET_PLAYGROUNDS = gql`
         playgrounds {
             id
             name
+            lat
+            lng
+            status
         }
     }
 `;
@@ -38,6 +41,8 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
                     return {
                         id: playground.id,
                         name: playground.name,
+                        lat: playground.lat,
+                        lng: playground.lng
                     }
                 })
             }

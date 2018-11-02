@@ -20,6 +20,7 @@ const GET_PLAYGROUNDS = gql`
             name
             lng
             lat
+            status
         }
     }
 `;
@@ -40,7 +41,8 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
                         lng: playground.lng,
                         slug: this.name + ' Rookvrij'
                     }
-                })
+                }),
+                zoomLevel: 8
             }
         }
     }
@@ -64,14 +66,14 @@ const PlaygroundMap = compose(
     withScriptjs,
     withGoogleMap
 )(props =>
-    <GoogleMap defaultZoom={12} defaultCenter={{lat: 52.327292, lng: 4.603781}}>
+    <GoogleMap defaultZoom={props.zoomLevel} defaultCenter={{lat: 52.092876, lng: 5.104480}}>
         <MarkerClusterer
             onClick={props.onMarkerClustererClick}
             averageCenter
             enableRetinaIcons
             gridSize={60}
         >
-            {!props.playgroundsLoading && props.playgrounds.map(playground => (
+            {!props.playgroundsLoading && props.playgrounds && props.playgrounds.map(playground => (
                 <Marker
                     onClick={props.onPlaygroundChange.bind(this, playground)}
                     key={playground.id}
@@ -84,11 +86,5 @@ const PlaygroundMap = compose(
 );
 
 const PlaygroundMapWithData = withPlaygrounds(PlaygroundMap);
-
-// PlaygroundMap.propTypes = {
-//     playgroundsLoading: PropTypes.boolean,
-//     hasErrors: PropTypes.boolean,
-//     playgrounds: PropTypes.arrayOf(PropTypes.object),
-// };
 
 export default withStyles(componentsStyle)(PlaygroundMapWithData);

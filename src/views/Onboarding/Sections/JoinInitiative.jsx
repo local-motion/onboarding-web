@@ -12,23 +12,27 @@ import gql from 'graphql-tag';
 import {Mutation} from "react-apollo";
 
 const JOIN_INITIATIVE = gql`
-    mutation JoinInitiative($id: String!) {
-        joinInitiative(id: $id) {
+    mutation JoinInitiative($input: JoinInitiativeInput!) {
+        joinInitiative(input: $input) {
             id
         }
     }
 `;
 
 
-class StartOrJoinInitiative extends React.Component {
+class JoinInitiative extends React.Component {
     render() {
         const {t, classes, playground} = this.props;
         if (!playground) return null;
 
+        let initiativeInput = {
+            "initiativeId": playground.id
+        };
+
         return (
             <Mutation mutation={JOIN_INITIATIVE}>
                 {(joinInitiative, {data}) => (
-                    <Button onClick={ event => joinInitiative({ variables: { id: playground.id } })} color="primary" round>
+                    <Button onClick={ event => joinInitiative({ variables: { input: initiativeInput } })} color="primary" round>
                         <Favorite className={classes.icons}/> {t('onboarding.playground.calltoaction.button')}
                     </Button>
                 )}
@@ -37,4 +41,4 @@ class StartOrJoinInitiative extends React.Component {
     }
 }
 
-export default withStyles(basicsStyle)(withNamespaces("translations")(StartOrJoinInitiative));
+export default withStyles(basicsStyle)(withNamespaces("translations")(JoinInitiative));
