@@ -14,7 +14,7 @@ import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/SmokeFreeProgress";
 import PlaygroundDetails from "./Sections/PlaygroundDetails";
-import StartOrJoinInitiative from "./Sections/StartOrJoinInitiative";
+import StartOrJoinInitiative from "./Sections/JoinInitiative";
 import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";

@@ -5,6 +5,9 @@ i18n.use(LanguageDetector).init({
     resources: {
         en: {
             translations: {
+                "header.brand": "Smoke-free playground",
+                "footer.attribution": "Smoke-free playground is an initiative of het Longfonds and ABN AMRO",
+
                 "onboarding.playground.progress.smokefree.title": "{{percentage}}% smoke-free",
                 "onboarding.playground.progress.smokefree.html": "<p>\n" +
                     "  Collaboratively administrate empowered markets via\n" +
@@ -23,7 +26,6 @@ i18n.use(LanguageDetector).init({
                     "  plug-and-play networks. Dynamically procrastinate\n" +
                     "  B2C users after installed base benefits.\n" +
                     "</p>\n",
-                "header.brand": "Smoke-free playground",
                 "onboarding.playground.calltoaction.title": "{{cityArea}} smoke-free",
                 "onboarding.playground.calltoaction.subtitle": "Help make a playground " +
                     "in {{cityArea}} smoke-free. Sign up for a playground in your area, and " +
@@ -40,6 +42,8 @@ i18n.use(LanguageDetector).init({
         nl: {
             translations: {
                 "header.brand": "Rookvrije speeltuin",
+                "footer.attribution": "Rookvrije speeltuinen is een initiatief van het Longfonds en ABN AMRO",
+
                 "onboarding.playground.calltoaction.title": "{{cityArea}} rookvrij",
                 "onboarding.playground.calltoaction.subtitle": "Help een speeltuin " +
                     "in {{cityArea}} rookvrij te maken. Schrijf je in op een speeltuin in jouw buurt, en " +

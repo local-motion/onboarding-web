@@ -24,7 +24,7 @@ const client = new ApolloClient({
     // to a different host
     link: new HttpLink({
         // TODO: Point to loadbalancer instead
-        uri: 'http://localhost:18085/graphql'
+        uri: 'http://localhost:18086/graphql'
     }),
     cache: new InMemoryCache(),
 });
