@@ -51,7 +51,7 @@ const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
 class SmokeFreeProgress extends React.Component {
     render() {
         const {statsLoading, progress, t, classes} = this.props;
-        if (statsLoading) {
+        if (statsLoading || !progress) {
             return "Loading...";
         }
         return (
