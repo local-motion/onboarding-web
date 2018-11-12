@@ -137,7 +137,11 @@ class MyApp extends React.Component {
             return "Logging in failed: " + (auth && auth.state);
         }
 
-        const httpLink = new HttpLink({ uri: process.env.ONBOARDING_API || 'http://localhost:8086/graphql' });
+        let uri = process.env.ONBOARDING_API || 'http://localhost:8086/graphql';
+        console.log('ONBOARDING_API: ' + process.env.ONBOARDING_API);
+        console.log('Using Onboarding API at ' + uri);
+
+        const httpLink = new HttpLink({ uri: uri });
         const authLink = setContext(async (req, { headers }) => {
             let session = authData.getSignInUserSession();
             let idToken = session.getIdToken();
