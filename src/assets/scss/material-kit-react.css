@@ -10,6 +10,58 @@
  * License Creative Tim (https://www.creative-tim.com/license)
  *
  * ========================================================= */
+/*
+This CSS resource incorporates links to font software which is the valuable copyrighted property of Monotype and/or its suppliers. You may not attempt to copy, install, redistribute, convert, modify or reverse engineer this font software. Please contact Monotype with any questions regarding Web Fonts: http://www.fonts.com
+*/
+/*Webfonts through font-face & mixins*/
+@font-face {
+  font-family: "dk_black_bamboo-webfont";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../fonts/dk_black_bamboo-webfont.woff2") format("woff2"), url("../fonts/dk_black_bamboo-webfont.woff") format("woff"); }
+
+@font-face {
+  font-family: "montserrat-light-webfont";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../fonts/montserrat-light-webfont.woff2") format("woff2"), url("../fonts/montserrat-light-webfont.woff") format("woff"); }
+
+.grunge-title {
+  font-family: 'dk_black_bamboo-webfont';
+  color: #2D519A; }
+
+.title {
+  font-family: 'montserrat-light-webfont'; }
+
+.font-montserrat {
+  font-family: 'montserrat-light-webfont'; }
+
+.font-bamboo {
+  font-family: 'dk_black_bamboo-webfont'; }
+
+/*Define colours*/
+.lm-blue-1 {
+  color: #2D519A; }
+
+.lm-blue-2 {
+  color: #518AC9; }
+
+.lm-blue-3 {
+  color: #508BBB; }
+
+.lm-red-1 {
+  color: #C73146; }
+
+.lm-red-2 {
+  color: #CF6669; }
+
+.lm-red-3 {
+  color: #AF1B24; }
+
+/*Custom styling for the Parralax call to action*/
+.Parallax-parallax-9 h1 {
+  margin-top: 0; }
+
 html * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
