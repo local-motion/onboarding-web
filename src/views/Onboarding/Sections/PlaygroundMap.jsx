@@ -57,7 +57,7 @@ const PlaygroundMap = compose(
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDCX2YMrZPjKtWq0tEBviJedUfx-mdFiPs&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
+    containerElement: <div style={{ height: `400px` }} className="playground-map" />,
     mapElement: <div style={{ height: `100%` }} />
   }),
   withHandlers({
