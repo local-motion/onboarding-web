@@ -1,0 +1,10 @@
+projects:
+  onboarding:
+    schemaPath: >-
+      ../../local-motion/smokefree-initiative-service/src/main/resources/public/schema.graphql
+    extensions:
+      endpoints:
+        dev:
+          url: 'http://localhost:8086/graphql'
+          headers:
+            Authorization: "Bearer ${env:ID_TOKEN}"
