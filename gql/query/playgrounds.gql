@@ -4,5 +4,8 @@ query Query {
         name
         lng
         lat
+        status
+        volunteerCount
+        votes
     }
 }
