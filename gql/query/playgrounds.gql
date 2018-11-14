@@ -1,0 +1,8 @@
+query Query {
+    playgrounds {
+        id
+        name
+        lng
+        lat
+    }
+}
