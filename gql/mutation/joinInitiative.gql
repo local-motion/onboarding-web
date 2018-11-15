@@ -1,0 +1,9 @@
+mutation JoinInitiative($input: JoinInitiativeInput!) {
+    joinInitiative(input: $input) {
+        id
+    }
+}
+
+input JoinInitiativeInput {
+    "initiativeId": "initiative-104"
+}

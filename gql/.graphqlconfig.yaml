@@ -1,5 +1,5 @@
 projects:
-  onboarding:
+  smokefree-initiative-service:
     schemaPath: >-
       ../../local-motion/smokefree-initiative-service/src/main/resources/public/schema.graphql
     extensions:
