@@ -1,9 +1,14 @@
 /*Within this file the styling of the playground map will be placed*/
 
-.playground-search{
-  display: flex;
+.MuiInputBase-input-151.MuiInput-input-136{
+  padding: 15px;
 }
 
 .playground-map{
 
+}
+
+/*Styling the stubborn autosuggest tooltip*/
+div[role=tooltip]{
+  z-index:99;
 }
