@@ -1,19 +1,19 @@
-import React from "react";
-import lunr from "lunr";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
-import { withNamespaces } from "react-i18next";
-// core components
-import withStyles from "@material-ui/core/styles/withStyles";
+//import { withNamespaces } from "react-i18next";
 
-import TextField from "@material-ui/core/TextField";
-import Button from "components/CustomButtons/Button.jsx";
-import navbarsStyle from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.jsx";
+//extra related to autosuggest demo + Material UI
+import React from "react";
+import PropTypes from "prop-types";
+import deburr from "lodash/deburr";
 import Autosuggest from "react-autosuggest";
-
-// @material-ui/icons
-import Search from "@material-ui/icons/Search";
-// import image from "assets/img/bg.jpg";
+import match from "autosuggest-highlight/match";
+import parse from "autosuggest-highlight/parse";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import MenuItem from "@material-ui/core/MenuItem";
+import Popper from "@material-ui/core/Popper";
+import { withStyles } from "@material-ui/core/styles";
 
 const GET_PLAYGROUNDS = gql`
   {
@@ -28,15 +28,14 @@ const GET_PLAYGROUNDS = gql`
 `;
 
 const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
-  // `ownProps` are the props passed into `MyComponentWithData`
+  // `ownProps` are the props passed into `IntegrationAutosuggest`
   // `data` is the result data (see above)
   props: ({ ownProps, data }) => {
     if (data.loading) return { playgroundsLoading: true };
     if (data.error) return { hasErrors: true };
+    if (data.error) return { hasErrors: true };
+    console.log(data);
     return {
-      onSelectPlayground: playground => {
-        alert("Picked " + playground.id);
-      },
       playgrounds: data.playgrounds.map(playground => {
         return {
           id: playground.id,
@@ -49,129 +48,193 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
   }
 });
 
-class SearchBar extends React.Component {
+function renderInputComponent(inputProps) {
+  const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+
+  return (
+    <TextField
+      fullWidth
+      InputProps={{
+        inputRef: node => {
+          ref(node);
+          inputRef(node);
+        },
+        classes: {
+          input: classes.input
+        }
+      }}
+      {...other}
+    />
+  );
+}
+
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+  const matches = match(suggestion.name, query);
+  const parts = parse(suggestion.name, matches);
+
+  return (
+    <div className="playground-suggestionContainer">
+      <MenuItem selected={isHighlighted} component="div">
+        <div>
+          {parts.map((part, index) => {
+            return part.highlight ? (
+              <span key={String(index)} style={{ fontWeight: 500 }}>
+                {part.text}
+              </span>
+            ) : (
+              <strong key={String(index)} style={{ fontWeight: 300 }}>
+                {part.text}
+              </strong>
+            );
+          })}
+        </div>
+      </MenuItem>
+    </div>
+  );
+}
+
+function getSuggestions(value, suggestionList) {
+  const inputValue = deburr(value.trim()).toLowerCase();
+  const inputLength = inputValue.length;
+  const suggestions = suggestionList;
+
+  console.log(value, suggestionList);
+
+  let count = 0;
+
+  return inputLength === 0
+    ? []
+    : suggestions.filter(suggestion => {
+        const keep =
+          count < 5 &&
+          suggestion.name.slice(0, inputLength).toLowerCase() === inputValue;
+        if (keep) {
+          count += 1;
+        }
+
+        return keep;
+      });
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion.name;
+}
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  container: {
+    position: "relative",
+  },
+  suggestionsContainerOpen: {
+    position: "absolute",
+    zIndex: 99,
+    marginTop: theme.spacing.unit,
+    left: 0,
+    right: 0
+  },
+  suggestion: {
+    display: "block"
+  },
+  suggestionsList: {
+    margin: 0,
+    padding: 0,
+    listStyleType: "none"
+  }
+});
+
+class IntegrationAutosuggest extends React.Component {
+  //cons
   constructor() {
     super();
 
-    // Autosuggest is a controlled component.
-    // This means that you need to provide an input value
-    // and an onChange handler that updates this value (see below).
-    // Suggestions also need to be provided to the Autosuggest,
-    // and they are initially empty because the Autosuggest is closed.
     this.state = {
-      value: "",
+      single: "",
+      popper: "",
       suggestions: []
     };
   }
 
-  // Teach Autosuggest how to calculate suggestions for any given input value.
-  getSuggestions = value => {
-    const playgrounds = this.props.playgrounds;
-    const idx = lunr(function() {
-      this.ref("id");
-      this.field("name");
-      // noinspection JSUnusedGlobalSymbols
-      this.metadataWhitelist = ["position"];
-
-      playgrounds.forEach(function(doc) {
-        this.add(doc);
-      }, this);
-    });
-
-    function addPlaygroundToResult(result) {
-      return {
-        playground: playgrounds.find(
-          playground => playground.id === result.ref
-        ),
-        ...result
-      };
-    }
-
-    // TODO: Consider adding search metadata to result. Allows text highlighting.
-    return idx.search(value + "*").map(addPlaygroundToResult);
-  };
-
-  // When suggestion is clicked, Autosuggest needs to populate the input
-  // based on the clicked suggestion. Teach Autosuggest how to calculate the
-  // input value for every given suggestion.
-  getSuggestionValue = suggestion => suggestion.playground.name;
-
-  // Use your imagination to render suggestions.
-  renderSuggestion = suggestion => (
-    <div>
-      {suggestion.playground.ref} - {suggestion.playground.name}
-    </div>
-  );
-
-  onChange = (event, { newValue }) => {
+  handleSuggestionsFetchRequested = ({ value }) => {
+    const playgrounds = this.props.playgrounds
     this.setState({
-      value: newValue
-    });
-    console.log("Autosuggest changed to: ", newValue);
-  };
-
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: this.getSuggestions(value)
+      suggestions: getSuggestions(value, playgrounds)
     });
   };
 
-  // Autosuggest will call this function every time you need to clear suggestions.
-  onSuggestionsClearRequested = () => {
+  handleSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
     });
   };
 
+  handleChange = name => (event, { newValue }) => {
+    this.setState({
+      [name]: newValue
+    });
+  };
+
   render() {
-    const { t, classes, playgrounds, onPlaygroundChange } = this.props;
-    const { value, suggestions } = this.state;
-    if (!playgrounds) return null;
+    const { classes } = this.props;
 
-    // Autosuggest will pass through all these props to the input.
-    const inputProps = {
-      placeholder: t("onboarding.playground.search.title"),
-      value,
-      onChange: this.onChange
+    const autosuggestProps = {
+      renderInputComponent,
+      suggestions: this.state.suggestions,
+      onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
+      onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
+      getSuggestionValue,
+      renderSuggestion
     };
 
-    let onSuggestionSelected = (evt, { suggestion }) => {
-      console.log("Selected ", suggestion);
-      onPlaygroundChange(suggestion.playground);
-    };
-
-    // Finally, render it!
     return (
-      <div className="playground-search">
-        <TextField
-          fullWidth
-          InputProps={{
-            classes: {
-              input: classes.input
+      <div className={classes.root}>
+        <div className={classes.divider} />
+        <Autosuggest
+          {...autosuggestProps}
+          inputProps={{
+            classes,
+            placeholder: "Enter a playground",
+            value: this.state.popper,
+            onChange: this.handleChange("popper"),
+            inputRef: node => {
+              this.popperNode = node;
+            },
+            InputLabelProps: {
+              shrink: true
             }
           }}
+          theme={{
+            suggestionsList: classes.suggestionsList,
+            suggestion: classes.suggestion
+          }}
+          renderSuggestionsContainer={options => (
+            <div>
+              <Popper
+                anchorEl={this.popperNode}
+                open={Boolean(options.children)}
+              >
+                <Paper
+                  square
+                  {...options.containerProps}
+                  style={{
+                    width: this.popperNode ? this.popperNode.clientWidth : null
+                  }}
+                >
+                  {options.children}
+                </Paper>
+              </Popper>
+            </div>
+          )}
         />
-        <Autosuggest
-          className={classes.textField}
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={this.getSuggestionValue}
-          onSuggestionSelected={onSuggestionSelected}
-          renderSuggestion={this.renderSuggestion}
-          highlightFirstSuggestion={true}
-          inputProps={inputProps}
-        />
-        <Button justIcon>
-          <Search className={classes.searchIcon} />
-        </Button>
       </div>
     );
   }
 }
 
-const TranslatedSearch = withNamespaces("translations")(SearchBar);
-const PlaygroundSearch = withPlaygrounds(TranslatedSearch);
-export default withStyles(navbarsStyle)(PlaygroundSearch);
+IntegrationAutosuggest.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+const playgroundSearch = withPlaygrounds(IntegrationAutosuggest);
+export default withStyles(styles)(playgroundSearch);

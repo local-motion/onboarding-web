@@ -62,6 +62,14 @@ This CSS resource incorporates links to font software which is the valuable copy
 .Parallax-parallax-9 h1 {
   margin-top: 0; }
 
+/*Within this file the styling of the playground map will be placed*/
+.MuiInputBase-input-151.MuiInput-input-136 {
+  padding: 15px; }
+
+/*Styling the stubborn autosuggest tooltip*/
+div[role=tooltip] {
+  z-index: 99; }
+
 html * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
