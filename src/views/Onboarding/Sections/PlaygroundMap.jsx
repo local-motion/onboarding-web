@@ -2,18 +2,12 @@ import React from "react";
 // import PropTypes from 'prop-types';
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-
+import { compose, withHandlers, withProps } from "recompose";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
-import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import {
-  GoogleMap,
-  Marker,
-  withGoogleMap,
-  withScriptjs
-} from "react-google-maps";
-import { compose, withHandlers, withProps } from "recompose";
 
+import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-maps";
+import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import markerGray from "assets/img/markers/playground_gray.png";
 // import markerPink from "assets/img/markers/playground_pink.png";
 // import markerGreen from "assets/img/markers/playground_green.png";
@@ -58,8 +52,7 @@ const PlaygroundMap = compose(
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDCX2YMrZPjKtWq0tEBviJedUfx-mdFiPs&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `400px` }} />,
-    mapElement: <div style={{ height: `100%` }} />,
-      disableDefaultUI: true
+    mapElement: <div style={{ height: `100%` }} />
   }),
   withHandlers({
     onMarkerClustererClick: () => markerClusterer => {
@@ -74,6 +67,7 @@ const PlaygroundMap = compose(
   <GoogleMap
     defaultZoom={props.zoomLevel}
     defaultCenter={{ lat: 52.092876, lng: 5.10448 }}
+    defaultOptions = {{ disableDefaultUI: true }}
   >
     <MarkerClusterer
       onClick={props.onMarkerClustererClick}
