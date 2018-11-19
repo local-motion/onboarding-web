@@ -1,0 +1,14 @@
+/*Within this file the styling of the playground map will be placed*/
+
+.playground.autosuggest input{
+  padding: 15px;
+}
+
+.playground-map{
+
+}
+
+/*Styling the stubborn autosuggest tooltip*/
+div[role=tooltip]{
+  z-index:99;
+}
