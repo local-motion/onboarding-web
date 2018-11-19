@@ -62,6 +62,7 @@ i18n.use(LanguageDetector).init({
         "onboarding.playground.details.title.default": "Nederland",
         "onboarding.playground.details.subtitle": "Details",
         "onboarding.playground.progress.title": "Voortgang",
+        "onboarding.playground.progress.intro.default": "Het is tijd om {{cityArea}} rookvrij te maken, om dit voor elkaar te krijgen moeten we nog {{playgroundCount}} speeltuinen rookvrij maken.",
         "onboarding.playground.progress.smokefree.title":
           "{{percentage}}% Rookvrij",
         "onboarding.playground.progress.smokefree.html":

@@ -11,7 +11,8 @@ import Parallax from "components/Parallax/Parallax.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
-import PlaygroundDetails from "./Sections/PlaygroundDetails";
+import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
+import StartOrJoinInitiative from "./Sections/JoinInitiative";
 import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -56,26 +57,26 @@ class Onboarding extends React.Component {
                     </div>
                 </Parallax>
 
-                <div className={classNames(classes.main, classes.mainRaised)}>
-                    {/*<div className={classes.space70} />*/}
-                    <GridContainer>
-                        <GridItem xs={12} sm={12} md={6}>
-                            <PlaygroundSearch/>
-                            <PlaygroundMap
-                                isMarkerShown
-                                onPlaygroundChange={this.handlePlaygroundChange}
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={6}>
-                            <PlaygroundDetails playground={playground}/>
-                        </GridItem>
-                    </GridContainer>
-                </div>
-
-                <Footer/>
-            </div>
-        );
-    }
+        <div className={classNames(classes.main, classes.mainRaised)}>
+          {/*<div className={classes.space70} />*/}
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={6}>
+              <PlaygroundSearch />
+              <PlaygroundMap
+                isMarkerShown
+                onPlaygroundChange={this.handlePlaygroundChange}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={6}>
+              <PlaygroundStatistics />
+              <StartOrJoinInitiative playground={playground} />
+            </GridItem>
+          </GridContainer>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 }
 
 export default withStyles(componentsStyle)(
