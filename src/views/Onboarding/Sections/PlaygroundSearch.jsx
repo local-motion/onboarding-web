@@ -188,7 +188,7 @@ class IntegrationAutosuggest extends React.Component {
     };
 
     return (
-      <div className={classes.root}>
+      <div className={classes.root + " playground autosuggest"}>
         <div className={classes.divider} />
         <Autosuggest
           {...autosuggestProps}
