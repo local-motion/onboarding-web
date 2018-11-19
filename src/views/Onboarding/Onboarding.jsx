@@ -10,8 +10,7 @@ import Parallax from "components/Parallax/Parallax.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
-import PlaygroundStatistics from "./Sections/SmokeFreeProgress";
-import PlaygroundDetails from "./Sections/PlaygroundDetails";
+import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
 import StartOrJoinInitiative from "./Sections/JoinInitiative";
 import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -71,9 +70,6 @@ class Onboarding extends React.Component {
             <GridItem xs={12} sm={12} md={6}>
               <PlaygroundStatistics />
               <StartOrJoinInitiative playground={playground} />
-            </GridItem>
-            <GridItem xs={12} sm={12} md={6}>
-              <PlaygroundDetails playground={playground} />
             </GridItem>
           </GridContainer>
         </div>
