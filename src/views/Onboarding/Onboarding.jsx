@@ -62,9 +62,7 @@ class Onboarding extends React.Component {
           {/*<div className={classes.space70} />*/}
           <GridContainer>
             <GridItem xs={12} sm={12} md={6}>
-              <PlaygroundSearch
-                onPlaygroundChange={this.handlePlaygroundChange}
-              />
+              <PlaygroundSearch />
               <PlaygroundMap
                 isMarkerShown
                 onPlaygroundChange={this.handlePlaygroundChange}
