@@ -17,7 +17,6 @@ import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 
-
 class Onboarding extends React.Component {
     constructor(props) {
         super(props);
