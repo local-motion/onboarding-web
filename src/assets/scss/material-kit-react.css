@@ -63,7 +63,7 @@ This CSS resource incorporates links to font software which is the valuable copy
   margin-top: 0; }
 
 /*Within this file the styling of the playground map will be placed*/
-.MuiInputBase-input-151.MuiInput-input-136 {
+.playground.autosuggest input {
   padding: 15px; }
 
 /*Styling the stubborn autosuggest tooltip*/

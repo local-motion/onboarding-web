@@ -15,6 +15,7 @@ import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/p
 import { withNamespaces } from "react-i18next";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
+import StartOrJoinInitiative from "./JoinInitiative";
 
 const GET_SMOKEFREE_PROGRESS = gql`
   {
@@ -36,69 +37,72 @@ const GET_SMOKEFREE_PROGRESS = gql`
 `;
 
 const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
-  props: ({ ownProps, data }) => {
-    if (data.loading) return { statsLoading: true };
-    if (data.error) return { hasErrors: true };
+    props: ({ ownProps, data }) => {
+        if(data.loading) return { statsLoading: true };
+        if(data.error) return { hasErrors: true };
 
-    console.log(data.progress);
-    return {
-      progress: data.progress
-    };
-  }
+        console.log(data.progress);
+        return {
+            progress: data.progress
+        };
+    }
 });
 
 class SmokeFreeProgress extends React.Component {
-  render() {
-    const { statsLoading, progress, t, classes } = this.props;
-    if (statsLoading || !progress) {
-      return "Loading...";
+    render() {
+        const { statsLoading, progress, playground, t, classes } = this.props;
+        if(statsLoading || !progress) {
+            return "Loading...";
+        }
+        return (
+            <div className={classes.section}>
+                <div className={classes.container}>
+                    <h2 className="playground ">
+                        {t("onboarding.playground.details.title.default")}
+                    </h2>
+
+                    <StartOrJoinInitiative playground={ playground }/>
+
+                    <div id="navigation-pills">
+                        <GridContainer>
+                            <GridItem xs={12} sm={12} md={8} lg={6}>
+                                <NavPills
+                                    color="primary"
+                                    tabs={[
+                                        {
+                                            tabButton: t(
+                                                "onboarding.playground.progress.smokefree.title",
+                                                { percentage: progress.smokeFree.percentage }
+                                            ),
+                                            tabIcon: SmokeFree
+                                        },
+                                        {
+                                            tabButton: t(
+                                                "onboarding.playground.progress.workingonit.title",
+                                                { percentage: progress.workingOnIt.percentage }
+                                            ),
+                                            tabIcon: People
+                                        },
+                                        {
+                                            tabButton: t(
+                                                "onboarding.playground.progress.smoking.title",
+                                                { percentage: progress.smoking.percentage }
+                                            ),
+                                            tabIcon: SmokingRooms
+                                        }
+                                    ]}
+                                />
+                            </GridItem>
+                        </GridContainer>
+                    </div>
+                </div>
+            </div>
+        );
     }
-    return (
-      <div className={classes.section}>
-        <div className={classes.container}>
-          <h2 className="playground ">
-            {t("onboarding.playground.details.title.default")}
-          </h2>
-          <div id="navigation-pills">
-            <GridContainer>
-              <GridItem xs={12} sm={12} md={8} lg={6}>
-                <NavPills
-                  color="primary"
-                  tabs={[
-                    {
-                      tabButton: t(
-                        "onboarding.playground.progress.smokefree.title",
-                        { percentage: progress.smokeFree.percentage }
-                      ),
-                      tabIcon: SmokeFree
-                    },
-                    {
-                      tabButton: t(
-                        "onboarding.playground.progress.workingonit.title",
-                        { percentage: progress.workingOnIt.percentage }
-                      ),
-                      tabIcon: People
-                    },
-                    {
-                      tabButton: t(
-                        "onboarding.playground.progress.smoking.title",
-                        { percentage: progress.smoking.percentage }
-                      ),
-                      tabIcon: SmokingRooms
-                    }
-                  ]}
-                />
-              </GridItem>
-            </GridContainer>
-          </div>
-        </div>
-      </div>
-    );
-  }
 }
 
 const SmokeFreePlaygroundProgress = withPlaygroundProgress(SmokeFreeProgress);
 
 export default withStyles(pillsStyle)(
-  withNamespaces("translations")(SmokeFreePlaygroundProgress)
+    withNamespaces("translations")(SmokeFreePlaygroundProgress)
 );

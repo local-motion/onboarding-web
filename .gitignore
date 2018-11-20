@@ -138,3 +138,5 @@ typings/
 # Serverless directories
 .serverless
 
+#Generated CSS
+src/assets/scss/material-kit-react.css
