@@ -5,6 +5,7 @@ import classNames from "classnames";
 // import {Link} from "react-router-dom";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import { withNamespaces } from "react-i18next";
 import Footer from "components/Footer/Footer.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
@@ -15,7 +16,6 @@ import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 
-import { withNamespaces } from "react-i18next";
 
 class Onboarding extends React.Component {
     constructor(props) {

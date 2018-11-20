@@ -70,6 +70,12 @@ This CSS resource incorporates links to font software which is the valuable copy
 div[role=tooltip] {
   z-index: 99; }
 
+.playground-statistics.wrapper {
+  padding: 45px 0; }
+
+.playground-statistics h2 {
+  margin-top: 0; }
+
 html * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }

@@ -139,4 +139,4 @@ typings/
 .serverless
 
 #Generated CSS
-src/assets/scss/material-kit-react.css
+src/assets/scss/*.css

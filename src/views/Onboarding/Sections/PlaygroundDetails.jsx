@@ -5,7 +5,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 import { withNamespaces } from "react-i18next";
-import GlobalProgress from "./SmokeFreeProgress";
+import GlobalProgress from "./PlaygroundStatistics";
 import StartOrJoinInitiative from "./JoinInitiative";
 
 class PlaygroundDetails extends React.Component {

@@ -48,20 +48,20 @@ const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
     }
 });
 
-class SmokeFreeProgress extends React.Component {
+class PlaygroundStatistics extends React.Component {
     render() {
         const { statsLoading, progress, playground, t, classes } = this.props;
         if(statsLoading || !progress) {
             return "Loading...";
         }
         return (
-            <div className={classes.section}>
-                <div className={classes.container}>
+            <div className={classes.section + " playground-statistics wrapper"}>
+                <div className={classes.container + " playground-statistics container"}>
                     <h2 className="playground ">
                         {t("onboarding.playground.details.title.default")}
                     </h2>
 
-                    <StartOrJoinInitiative playground={ playground }/>
+                    <StartOrJoinInitiative playground={playground}/>
 
                     <div id="navigation-pills">
                         <GridContainer>
@@ -99,9 +99,9 @@ class SmokeFreeProgress extends React.Component {
             </div>
         );
     }
-}
+};
 
-const SmokeFreePlaygroundProgress = withPlaygroundProgress(SmokeFreeProgress);
+const SmokeFreePlaygroundProgress = withPlaygroundProgress(PlaygroundStatistics);
 
 export default withStyles(pillsStyle)(
     withNamespaces("translations")(SmokeFreePlaygroundProgress)
