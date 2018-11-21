@@ -5,6 +5,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
+import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 import DefaultStatistic from "components/PlaygroundStatistic/DefaultStatistic.jsx";
 import PlaygroundStatistic from "components/PlaygroundStatistic/PlaygroundStatistic.jsx";
 
