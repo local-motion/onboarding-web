@@ -1,8 +1,14 @@
-.onboarding-header{
-    h1 {
+.playground-statistics {
+    &.wrapper {
+        padding: 45px 0;
+    }
+    h2 {
         margin-top: 0;
     }
-    h2{
+    .grid-item {
         max-width: 100% !important;
+        p.explainer{
+            max-width: 80% !important;
+        }
     }
 }

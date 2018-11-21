@@ -58,6 +58,10 @@ This CSS resource incorporates links to font software which is the valuable copy
 .lm-red-3 {
   color: #AF1B24; }
 
+/*Custom styling for the Parralax call to action*/
+.Parallax-parallax-9 h1 {
+  margin-top: 0; }
+
 .pull-left {
   float: left; }
 
@@ -94,12 +98,6 @@ div[role=tooltip] {
   max-width: 100% !important; }
   .playground-statistics .grid-item p.explainer {
     max-width: 80% !important; }
-
-.onboarding-header h1 {
-  margin-top: 0; }
-
-.onboarding-header h2 {
-  max-width: 100% !important; }
 
 html * {
   -webkit-font-smoothing: antialiased;

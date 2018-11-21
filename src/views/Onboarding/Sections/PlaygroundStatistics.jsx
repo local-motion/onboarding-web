@@ -7,8 +7,6 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import DefaultStatistic from "components/PlaygroundStatistic/DefaultStatistic.jsx";
 import PlaygroundStatistic from "components/PlaygroundStatistic/PlaygroundStatistic.jsx";
-import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
-
 
 import {withNamespaces} from "react-i18next";
 import {graphql} from "react-apollo";
