@@ -30,9 +30,9 @@ class JoinInitiative extends React.Component {
 
     return (
       <Mutation mutation={JOIN_INITIATIVE}>
-        {(joinInitiative, { data }) => (
+        {(joinInitiative) => (
           <Button
-            onClick={event =>
+            onClick={(/*event*/) =>
               joinInitiative({ variables: { input: initiativeInput } })
             }
             color="primary"

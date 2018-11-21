@@ -76,7 +76,7 @@ class CustomDropdown extends React.Component {
         icon = null;
         break;
     }
-    return (
+      return (
       <div>
         <div>
           <Button
@@ -109,7 +109,7 @@ class CustomDropdown extends React.Component {
             [classes.pooperResponsive]: true
           })}
         >
-          {({ TransitionProps, placement }) => (
+          {() => (
             <Grow
               in={open}
               id="menu-list"
