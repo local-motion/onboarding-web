@@ -29,7 +29,7 @@ const GET_PLAYGROUNDS = gql`
 const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
     // `ownProps` are the props passed into `MyComponentWithData`
     // `data` is the result data (see above)
-    props: ({ ownProps, data }) => {
+    props: ({ /*ownProps,*/ data }) => {
         if(data.loading) return { playgroundsLoading: true };
         if(data.error) return { hasErrors: true };
         console.log(data);

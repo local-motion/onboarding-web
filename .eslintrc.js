@@ -19,7 +19,6 @@ module.exports = {
   ],
   rules: {
       'no-console': 'off',
-      'no-unused-vars': 'off',
       'react/prop-types': 'off',
       'react/no-unescaped-entities': 'off',
       'react/no-string-refs': 'off'
