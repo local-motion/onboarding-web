@@ -21,10 +21,11 @@ class Onboarding extends React.Component {
     constructor(props) {
         super(props);
         this.handlePlaygroundChange = this.handlePlaygroundChange.bind(this);
+        const { t } = this.props;
         this.state = {
-            playground: null,
-            intentToHelp: {
-                cityArea: "een speeltuin"
+            playground: {
+                default: true,
+                name: t("playground.default.area")
             }
         };
     }
@@ -36,44 +37,32 @@ class Onboarding extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { playground, intentToHelp } = this.state;
+        const { playground } = this.state;
         return (
             <div>
-                {/*<Header
-          brand={t("header.brand")}
-          rightLinks={<HeaderLinks />}
-          fixed
-          color="transparent"
-          changeColorOnScroll={{
-            height: 100,
-            color: "white"
-          }}
-          {...rest}
-        />*/}
-                <Parallax image={require("assets/img/bg-zand.jpg")}>
+                <Parallax image={require("assets/img/bg-zand.jpg")} >
                     <div className={classes.container}>
-                        <CallToAction intentToHelp={intentToHelp}/>
+                        <CallToAction playground={playground}/>
                     </div>
                 </Parallax>
 
-        <div className={classNames(classes.main, classes.mainRaised)}>
-          {/*<div className={classes.space70} />*/}
-          <GridContainer>
-            <GridItem xs={12} sm={12} md={6}>
-              <PlaygroundSearch />
-              <PlaygroundMap
-                isMarkerShown
-                onPlaygroundChange={this.handlePlaygroundChange}
-              />
-            </GridItem>
-            <GridItem xs={12} sm={12} md={6}>
-              <PlaygroundStatistics />
-              <StartOrJoinInitiative playground={playground} />
-            </GridItem>
-          </GridContainer>
-        </div>
-        <Footer />
-      </div>
+                <div className={classNames(classes.main, classes.mainRaised)}>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <PlaygroundSearch />
+                      <PlaygroundMap
+                        isMarkerShown
+                        onPlaygroundChange={this.handlePlaygroundChange}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <PlaygroundStatistics playground={playground} />
+                      <StartOrJoinInitiative playground={playground} />
+                    </GridItem>
+                  </GridContainer>
+                </div>
+                <Footer />
+            </div>
     );
   }
 }
