@@ -1,16 +1,13 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-// @material-ui/icons
-import People from "@material-ui/icons/People";
-import SmokingRooms from "@material-ui/icons/SmokingRooms";
-import SmokeFree from "@material-ui/icons/SmokeFree";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import NavPills from "components/NavPills/NavPills.jsx";
+import Statistic from "components/PlaygroundStatistic/PlaygroundStatistic.jsx";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
+
 
 import {withNamespaces} from "react-i18next";
 import {graphql} from "react-apollo";
@@ -73,33 +70,11 @@ class PlaygroundStatistics extends React.Component {
                                             t("onboarding.playground.progress.intro.specific", {playgroundName: playground.name})
                                     }
                                 </p>
-
-                                <NavPills
-                                    color="primary"
-                                    tabs={[
-                                        {
-                                            tabButton: t(
-                                                "onboarding.playground.progress.smokefree.title",
-                                                {percentage: progress.smokeFree.percentage}
-                                            ),
-                                            tabIcon: SmokeFree
-                                        },
-                                        {
-                                            tabButton: t(
-                                                "onboarding.playground.progress.workingonit.title",
-                                                {percentage: progress.workingOnIt.percentage}
-                                            ),
-                                            tabIcon: People
-                                        },
-                                        {
-                                            tabButton: t(
-                                                "onboarding.playground.progress.smoking.title",
-                                                {percentage: progress.smoking.percentage}
-                                            ),
-                                            tabIcon: SmokingRooms
-                                        }
-                                    ]}
-                                />
+                                <div className="statistics-wrapper">
+                                    <Statistic progress={progress.smokeFree} playground={playground} name={"smokefree"} measurement={"percentage"} />
+                                    <Statistic progress={progress.workingOnIt} playground={playground} name={"workingonit"} measurement={"percentage"} />
+                                    <Statistic progress={progress.smoking} playground={playground} name={"smoking"} measurement={"count"} />
+                                </div>
                             </GridItem>
                         </GridContainer>
                     </div>

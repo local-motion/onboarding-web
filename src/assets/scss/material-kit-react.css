@@ -62,6 +62,24 @@ This CSS resource incorporates links to font software which is the valuable copy
 .Parallax-parallax-9 h1 {
   margin-top: 0; }
 
+.pull-left {
+  float: left; }
+
+.pull-right {
+  float: right; }
+
+.mr-15 {
+  margin-right: 15px !important; }
+
+.mr-30 {
+  margin-right: 30px !important; }
+
+.ml-15 {
+  margin-left: 15px !important; }
+
+.ml-30 {
+  margin-left: 30px !important; }
+
 /*Within this file the styling of the playground map will be placed*/
 .playground.autosuggest input {
   padding: 15px; }
@@ -77,7 +95,9 @@ div[role=tooltip] {
   margin-top: 0; }
 
 .playground-statistics .grid-item {
-  max-width: 80% !important; }
+  max-width: 100% !important; }
+  .playground-statistics .grid-item p.explainer {
+    max-width: 80% !important; }
 
 html * {
   -webkit-font-smoothing: antialiased;

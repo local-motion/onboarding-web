@@ -6,46 +6,75 @@ This CSS resource incorporates links to font software which is the valuable copy
 @include font-face('dk_black_bamboo-webfont');
 @include font-face('montserrat-light-webfont');
 
-.grunge-title{
-  font-family: 'dk_black_bamboo-webfont';
-  color: $lm-blue-1;
+.grunge-title {
+    font-family: 'dk_black_bamboo-webfont';
+    color: $lm-blue-1;
 }
 
 .title {
-  font-family: 'montserrat-light-webfont';
+    font-family: 'montserrat-light-webfont';
 }
 
-.font-montserrat{
-  font-family: 'montserrat-light-webfont';
+.font-montserrat {
+    font-family: 'montserrat-light-webfont';
 }
 
-.font-bamboo{
-  font-family: 'dk_black_bamboo-webfont';
+.font-bamboo {
+    font-family: 'dk_black_bamboo-webfont';
 }
 
 /*Define colours*/
-.lm-blue-1{
-  color: $lm-blue-1;
+.lm-blue-1 {
+    color: $lm-blue-1;
 }
-.lm-blue-2{
-  color: $lm-blue-2;
+
+.lm-blue-2 {
+    color: $lm-blue-2;
 }
-.lm-blue-3{
-  color: $lm-blue-3;
+
+.lm-blue-3 {
+    color: $lm-blue-3;
 }
-.lm-red-1{
-  color: $lm-red-1;
+
+.lm-red-1 {
+    color: $lm-red-1;
 }
-.lm-red-2{
-  color: $lm-red-2;
+
+.lm-red-2 {
+    color: $lm-red-2;
 }
-.lm-red-3{
-  color: $lm-red-3;
+
+.lm-red-3 {
+    color: $lm-red-3;
 }
 
 /*Custom styling for the Parralax call to action*/
-.Parallax-parallax-9{
-  h1{
-    margin-top: 0;
-  }
+.Parallax-parallax-9 {
+    h1 {
+        margin-top: 0;
+    }
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+.mr-15 {
+    margin-right: 15px !important;
+}
+
+.mr-30 {
+    margin-right: 30px !important;
+}
+
+.ml-15 {
+    margin-left: 15px !important;
+}
+
+.ml-30 {
+    margin-left: 30px !important;
 }
