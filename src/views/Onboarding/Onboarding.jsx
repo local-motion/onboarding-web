@@ -18,45 +18,55 @@ import GridItem from "components/Grid/GridItem.jsx";
 
 
 class Onboarding extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handlePlaygroundChange = this.handlePlaygroundChange.bind(this);
+    constructor( props ) {
+        super( props );
+        this.handlePlaygroundChange = this.handlePlaygroundChange.bind( this );
         this.state = {
             playground: null,
             intentToHelp: {
                 cityArea: "een speeltuin"
+            },
+            map: {
+                latlng: { lat: 52.092876, lng: 5.10448 },
+                zoom: 8
             }
         };
     }
 
-    handlePlaygroundChange(playground) {
-        console.log("Onboarding parent received selected playground:", playground);
-        this.setState({ playground: playground });
+    handlePlaygroundChange( playground ) {
+        console.log( "Onboarding parent received selected playground:", playground );
+        this.setState( {
+            playground: playground,
+            map: {
+                latlng: { lat: playground.lat, lng: playground.lng },
+                zoom: 18
+            }
+        } );
     }
 
     render() {
         const { classes } = this.props;
-        const { playground, intentToHelp } = this.state;
+        const { playground, intentToHelp, map } = this.state;
         return (
             <div>
                 {/*<Header
-          brand={t("header.brand")}
-          rightLinks={<HeaderLinks />}
-          fixed
-          color="transparent"
-          changeColorOnScroll={{
-            height: 100,
-            color: "white"
-          }}
-          {...rest}
-        />*/}
-                <Parallax image={require("assets/img/bg-zand.jpg")}>
+                  brand={t("header.brand")}
+                  rightLinks={<HeaderLinks />}
+                  fixed
+                  color="transparent"
+                  changeColorOnScroll={{
+                    height: 100,
+                    color: "white"
+                  }}
+                  {...rest}
+                />*/}
+                <Parallax image={require( "assets/img/bg-zand.jpg" )}>
                     <div className={classes.container}>
                         <CallToAction intentToHelp={intentToHelp}/>
                     </div>
                 </Parallax>
 
-                <div className={classNames(classes.main, classes.mainRaised)}>
+                <div className={classNames( classes.main, classes.mainRaised )}>
                     {/*<div className={classes.space70} />*/}
                     <GridContainer>
                         <GridItem xs={12} sm={12} md={6}>
@@ -64,6 +74,8 @@ class Onboarding extends React.Component {
                             <PlaygroundMap
                                 isMarkerShown
                                 onPlaygroundChange={this.handlePlaygroundChange}
+                                center={map.latlng}
+                                zoom={map.zoom}
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={6}>
@@ -78,6 +90,6 @@ class Onboarding extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(
-    withNamespaces("translations")(Onboarding)
+export default withStyles( componentsStyle )(
+    withNamespaces( "translations" )( Onboarding )
 );

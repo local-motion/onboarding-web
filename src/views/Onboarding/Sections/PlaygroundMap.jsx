@@ -42,8 +42,7 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
                     lng: playground.lng,
                     slug: this.name + " Rookvrij"
                 };
-            }),
-            zoomLevel: 8
+            })
         };
     }
 });
@@ -67,8 +66,8 @@ const PlaygroundMap = compose(
     withGoogleMap
 )(props => (
     <GoogleMap
-        defaultZoom={props.zoomLevel}
-        defaultCenter={{ lat: 52.092876, lng: 5.10448 }}
+        zoom={props.zoom}
+        center={props.center}
         defaultOptions={{ disableDefaultUI: true }}
     >
         <MarkerClusterer
