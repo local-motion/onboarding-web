@@ -40,7 +40,7 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
                     name: playground.name,
                     lat: playground.lat,
                     lng: playground.lng,
-                    slug: this.name + " Rookvrij"
+                    slug: playground.name + " Rookvrij"
                 };
             }),
             zoomLevel: 8
