@@ -99,7 +99,7 @@ class PlaygroundStatistics extends React.Component {
             </div>
         );
     }
-};
+}
 
 const SmokeFreePlaygroundProgress = withPlaygroundProgress(PlaygroundStatistics);
 
