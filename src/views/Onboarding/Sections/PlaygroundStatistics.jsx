@@ -37,7 +37,7 @@ const GET_SMOKEFREE_PROGRESS = gql`
 `;
 
 const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
-    props: ({ ownProps, data }) => {
+    props: ({ /*ownProps, */data }) => {
         if(data.loading) return { statsLoading: true };
         if(data.error) return { hasErrors: true };
 
