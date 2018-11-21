@@ -76,6 +76,9 @@ div[role=tooltip] {
 .playground-statistics h2 {
   margin-top: 0; }
 
+.playground-statistics .grid-item {
+  max-width: 80% !important; }
+
 html * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
