@@ -26,45 +26,45 @@ const GET_PLAYGROUNDS = gql`
   }
 `;
 
-const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
+const withPlaygrounds = graphql( GET_PLAYGROUNDS, {
     // `ownProps` are the props passed into `MyComponentWithData`
     // `data` is the result data (see above)
-    props: ({ ownProps, data }) => {
-        if(data.loading) return { playgroundsLoading: true };
-        if(data.error) return { hasErrors: true };
-        console.log(data);
+    props: ( { ownProps, data } ) => {
+        if( data.loading ) return { playgroundsLoading: true };
+        if( data.error ) return { hasErrors: true };
+        console.log( data );
         return {
-            playgrounds: data.playgrounds.map(playground => {
+            playgrounds: data.playgrounds.map( playground => {
                 return {
                     id: playground.id,
                     name: playground.name,
                     lat: playground.lat,
                     lng: playground.lng,
-                    slug: this.name + " Rookvrij"
+                    slug: playground.name + " Rookvrij"
                 };
-            })
+            } )
         };
     }
-});
+} );
 
 const PlaygroundMap = compose(
-    withProps({
+    withProps( {
         googleMapURL:
             `https://maps.googleapis.com/maps/api/js?key=${ MAP_API_KEY }&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{ height: `100%` }}/>,
         containerElement: <div style={{ height: `400px` }} className="playground-map"/>,
         mapElement: <div style={{ height: `100%` }}/>
-    }),
-    withHandlers({
+    } ),
+    withHandlers( {
         onMarkerClustererClick: () => markerClusterer => {
             const clickedMarkers = markerClusterer.getMarkers();
-            console.log(`Current clicked markers length: ${clickedMarkers.length}`);
-            console.log(clickedMarkers);
+            console.log( `Current clicked markers length: ${clickedMarkers.length}` );
+            console.log( clickedMarkers );
         }
-    }),
+    } ),
     withScriptjs,
     withGoogleMap
-)(props => (
+)( props => (
     <GoogleMap
         zoom={props.zoom}
         center={props.center}
@@ -78,18 +78,18 @@ const PlaygroundMap = compose(
         >
             {!props.playgroundsLoading &&
             props.playgrounds &&
-            props.playgrounds.map(playground => (
+            props.playgrounds.map( playground => (
                 <Marker
-                    onClick={props.onPlaygroundChange.bind(this, playground)}
+                    onClick={props.onPlaygroundChange.bind( this, playground )}
                     key={playground.id}
                     position={{ lat: playground.lat, lng: playground.lng }}
                     icon={markerGray}
                 />
-            ))}
+            ) )}
         </MarkerClusterer>
     </GoogleMap>
-));
+) );
 
-const PlaygroundMapWithData = withPlaygrounds(PlaygroundMap);
+const PlaygroundMapWithData = withPlaygrounds( PlaygroundMap );
 
-export default withStyles(componentsStyle)(PlaygroundMapWithData);
+export default withStyles( componentsStyle )( PlaygroundMapWithData );
