@@ -2,7 +2,7 @@ import React from "react";
 // import PropTypes from 'prop-types';
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import { compose, withHandlers, withProps } from "recompose";
+import { compose, withStateHandlers, withProps } from "recompose";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 
@@ -53,32 +53,24 @@ const PlaygroundMap = compose(
             `https://maps.googleapis.com/maps/api/js?key=${ MAP_API_KEY }&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{height: `100%`}}/>,
         containerElement: <div style={{height: `400px`}} className="playground-map"/>,
-        mapElement: <div style={{height: `100%`}}/>,
-        newPin: {}
+        mapElement: <div style={{height: `100%`}}/>
     }),
-    withHandlers({
-        onMapClick: (scope) => GoogleMap => {
-            var newMarker = {
-                id: null,
-                lat: GoogleMap.latLng.lat(),
-                lng: GoogleMap.latLng.lng(),
-                _slug: "new playground"
-            };
-
-                // set the new pin
-            scope.newPin.lat = GoogleMap.latLng.lat();
-            scope.newPin.lng = GoogleMap.latLng.lng();
-                // in desperation even try to add a pin into the main array...
-            scope.playgrounds.push(newMarker);
-                // log to see if newpin has any content and is really props (it does and is)
-            console.log(scope);
-        },
-        onMarkerClustererClick: () => markerClusterer => {
-            const clickedMarkers = markerClusterer.getMarkers();
-            console.log(`Current clicked markers length: ${clickedMarkers.length}`);
-            console.log(clickedMarkers);
+    withStateHandlers(
+        () => ({
+            isMarkerShown: false,
+            newPin: null,
+        }), {
+            onMapClick: () => (e) => ({
+                newPin: e.latLng,
+                isMarkerShown: true
+            }),
+            onMarkerClustererClick: () => markerClusterer => {
+                const clickedMarkers = markerClusterer.getMarkers();
+                console.log(`Current clicked markers length: ${clickedMarkers.length}`);
+                console.log(clickedMarkers);
+            }
         }
-    }),
+    ),
     withScriptjs,
     withGoogleMap
 )(props => (
@@ -105,12 +97,12 @@ const PlaygroundMap = compose(
                 />
             ))}
 
-            {props.newPin.length > 0 &&
-            <Marker
-                key={99999}
-                position={{lat: props.newPin.lat, lng: props.newPin.lng}}
-                icon={markerGray}
-            />}
+            {props.isMarkerShown &&
+                <Marker
+                    position={props.newPin}
+                    icon={markerGray}
+                />
+            }
         </MarkerClusterer>
 
     </GoogleMap>
