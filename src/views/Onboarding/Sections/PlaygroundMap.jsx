@@ -9,8 +9,8 @@ import gql from "graphql-tag";
 import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import markerGray from "assets/img/markers/playground_gray.png";
+import markerGreen from "assets/img/markers/playground_green.png";
 // import markerPink from "assets/img/markers/playground_pink.png";
-// import markerGreen from "assets/img/markers/playground_green.png";
 
 const MAP_API_KEY = "AIzaSyDCX2YMrZPjKtWq0tEBviJedUfx-mdFiPs";
 
@@ -26,15 +26,15 @@ const GET_PLAYGROUNDS = gql`
   }
 `;
 
-const withPlaygrounds = graphql( GET_PLAYGROUNDS, {
+const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
     // `ownProps` are the props passed into `MyComponentWithData`
     // `data` is the result data (see above)
-    props: ( { ownProps, data } ) => {
-        if( data.loading ) return { playgroundsLoading: true };
-        if( data.error ) return { hasErrors: true };
-        console.log( data );
+    props: ({ownProps, data}) => {
+        if(data.loading) return {playgroundsLoading: true};
+        if(data.error) return {hasErrors: true};
+        console.log(data);
         return {
-            playgrounds: data.playgrounds.map( playground => {
+            playgrounds: data.playgrounds.map(playground => {
                 return {
                     id: playground.id,
                     name: playground.name,
@@ -42,54 +42,80 @@ const withPlaygrounds = graphql( GET_PLAYGROUNDS, {
                     lng: playground.lng,
                     slug: playground.name + " Rookvrij"
                 };
-            } )
+            })
         };
     }
-} );
+});
 
 const PlaygroundMap = compose(
-    withProps( {
+    withProps({
         googleMapURL:
             `https://maps.googleapis.com/maps/api/js?key=${ MAP_API_KEY }&v=3.exp&libraries=geometry,drawing,places`,
-        loadingElement: <div style={{ height: `100%` }}/>,
-        containerElement: <div style={{ height: `400px` }} className="playground-map"/>,
-        mapElement: <div style={{ height: `100%` }}/>
-    } ),
-    withHandlers( {
+        loadingElement: <div style={{height: `100%`}}/>,
+        containerElement: <div style={{height: `400px`}} className="playground-map"/>,
+        mapElement: <div style={{height: `100%`}}/>,
+        newPin: {}
+    }),
+    withHandlers({
+        onMapClick: (scope) => GoogleMap => {
+            var newMarker = {
+                id: null,
+                lat: GoogleMap.latLng.lat(),
+                lng: GoogleMap.latLng.lng(),
+                _slug: "new playground"
+            };
+
+                // set the new pin
+            scope.newPin.lat = GoogleMap.latLng.lat();
+            scope.newPin.lng = GoogleMap.latLng.lng();
+                // in desperation even try to add a pin into the main array...
+            scope.playgrounds.push(newMarker);
+                // log to see if newpin has any content and is really props (it does and is)
+            console.log(scope);
+        },
         onMarkerClustererClick: () => markerClusterer => {
             const clickedMarkers = markerClusterer.getMarkers();
-            console.log( `Current clicked markers length: ${clickedMarkers.length}` );
-            console.log( clickedMarkers );
+            console.log(`Current clicked markers length: ${clickedMarkers.length}`);
+            console.log(clickedMarkers);
         }
-    } ),
+    }),
     withScriptjs,
     withGoogleMap
-)( props => (
+)(props => (
     <GoogleMap
         zoom={props.zoom}
         center={props.center}
-        defaultOptions={{ disableDefaultUI: true }}
+        onClick={props.onMapClick}
+        defaultOptions={{disableDefaultUI: true}}
     >
         <MarkerClusterer
-            onClick={props.onMarkerClustererClick}
+            onClick={props.onMarkerClustererClick.bind(this)}
             averageCenter
             enableRetinaIcons
             gridSize={60}
         >
             {!props.playgroundsLoading &&
             props.playgrounds &&
-            props.playgrounds.map( playground => (
+            props.playgrounds.map(playground => (
                 <Marker
-                    onClick={props.onPlaygroundChange.bind( this, playground )}
+                    onClick={props.onPlaygroundChange.bind(this, playground)}
                     key={playground.id}
-                    position={{ lat: playground.lat, lng: playground.lng }}
-                    icon={markerGray}
+                    position={{lat: playground.lat, lng: playground.lng}}
+                    icon={markerGreen}
                 />
-            ) )}
+            ))}
+
+            {props.newPin.length > 0 &&
+            <Marker
+                key={99999}
+                position={{lat: props.newPin.lat, lng: props.newPin.lng}}
+                icon={markerGray}
+            />}
         </MarkerClusterer>
+
     </GoogleMap>
-) );
+));
 
-const PlaygroundMapWithData = withPlaygrounds( PlaygroundMap );
+const PlaygroundMapWithData = withPlaygrounds(PlaygroundMap);
 
-export default withStyles( componentsStyle )( PlaygroundMapWithData );
+export default withStyles(componentsStyle)(PlaygroundMapWithData);
