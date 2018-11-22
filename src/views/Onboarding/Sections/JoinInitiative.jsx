@@ -2,7 +2,6 @@ import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
-import Favorite from "@material-ui/icons/Favorite";
 // core components
 import basicsStyle from "assets/jss/material-kit-react/views/componentsSections/basicsStyle.jsx";
 import Button from "components/CustomButtons/Button.jsx";
@@ -21,8 +20,8 @@ const JOIN_INITIATIVE = gql`
 
 class JoinInitiative extends React.Component {
   render() {
-    const { t, classes, playground } = this.props;
-    if (!playground) return null;
+    const { t, playground } = this.props;
+    if (playground.default) return null;
 
     let initiativeInput = {
       initiativeId: playground.id
@@ -35,10 +34,10 @@ class JoinInitiative extends React.Component {
             onClick={(/*event*/) =>
               joinInitiative({ variables: { input: initiativeInput } })
             }
-            color="primary"
+            color="danger"
             round
+            className="pull-right mr-15"
           >
-            <Favorite className={classes.icons} />{" "}
             {t("onboarding.playground.calltoaction.button")}
           </Button>
         )}

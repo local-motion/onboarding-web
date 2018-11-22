@@ -11,7 +11,8 @@ import Parallax from "components/Parallax/Parallax.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
-import PlaygroundDetails from "./Sections/PlaygroundDetails";
+import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
+import StartOrJoinInitiative from "./Sections/JoinInitiative";
 import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -20,10 +21,11 @@ class Onboarding extends React.Component {
     constructor(props) {
         super(props);
         this.handlePlaygroundChange = this.handlePlaygroundChange.bind(this);
+        const { t } = this.props;
         this.state = {
-            playground: null,
-            intentToHelp: {
-                cityArea: "een speeltuin"
+            playground: {
+                default: true,
+                name: t("playground.default.area")
             },
             map: {
                 latlng: {lat: 52.092876, lng: 5.10448},
@@ -44,7 +46,7 @@ class Onboarding extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {playground, intentToHelp, map} = this.state;
+        const {playground, map} = this.state;
         return (
             <div>
                 {/*<Header
@@ -58,34 +60,33 @@ class Onboarding extends React.Component {
                   }}
                   {...rest}
                 />*/}
-                <Parallax image={require("assets/img/bg-zand.jpg")}>
+               <Parallax image={require("assets/img/bg-zand.jpg")} >
                     <div className={classes.container}>
-                        <CallToAction intentToHelp={intentToHelp}/>
+                        <CallToAction playground={playground}/>
                     </div>
                 </Parallax>
 
                 <div className={classNames(classes.main, classes.mainRaised)}>
-                    {/*<div className={classes.space70} />*/}
-                    <GridContainer>
-                        <GridItem xs={12} sm={12} md={6}>
-                            <PlaygroundSearch/>
-                            <PlaygroundMap
-                                isMarkerShown
-                                onPlaygroundChange={this.handlePlaygroundChange}
-                                center={map.latlng}
-                                zoom={map.zoom}
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={6}>
-                            <PlaygroundDetails playground={playground}/>
-                        </GridItem>
-                    </GridContainer>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <PlaygroundSearch />
+                      <PlaygroundMap
+                        isMarkerShown
+                        onPlaygroundChange={this.handlePlaygroundChange}
+                        center={map.latlng}
+                        zoom={map.zoom}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <PlaygroundStatistics playground={playground} />
+                      <StartOrJoinInitiative playground={playground} />
+                    </GridItem>
+                  </GridContainer>
                 </div>
-
-                <Footer/>
+                <Footer />
             </div>
-        );
-    }
+    );
+  }
 }
 
 export default withStyles(componentsStyle)(
