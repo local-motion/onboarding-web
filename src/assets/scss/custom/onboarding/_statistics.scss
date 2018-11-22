@@ -1,14 +1,8 @@
-.playground-statistics {
-    &.wrapper {
-        padding: 45px 0;
-    }
-    h2 {
+.onboarding-header{
+    h1 {
         margin-top: 0;
     }
-    .grid-item {
+    h2{
         max-width: 100% !important;
-        p.explainer{
-            max-width: 80% !important;
-        }
     }
 }
