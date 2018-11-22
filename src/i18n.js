@@ -58,7 +58,7 @@ i18n.use(LanguageDetector).init({
             "onboarding.playground.calltoaction.smokefree": "rookvrij",
             "onboarding.playground.calltoaction.title.name": "Maak {{playgroundName}}",
             "onboarding.playground.calltoaction.subtitle":
-                "Help " +
+                "Help met " +
                 "{{playgroundName}} rookvrij te maken.",
             "onboarding.playground.calltoaction.subtitle.cta.default":
                 " Kies of schrijf een speeltuin in via de kaart.",
@@ -81,7 +81,7 @@ i18n.use(LanguageDetector).init({
                 "Wil jij helpen met {{playgroundName}} rookvrij te maken? " +
                 "Doe dan gerust mee, we hebben je hulp nodig.",
             "onboarding.playground.progress.smokefree.title":
-                "{{percentage}}% Rookvrij",
+                "% Rookvrij",
             "onboarding.playground.progress.smokefree.html":
                 "<p>\n" +
                 "  Collaboratively administrate empowered markets via\n" +
@@ -89,7 +89,7 @@ i18n.use(LanguageDetector).init({
                 "  B2C users after installed base benefits.\n" +
                 "</p>\n",
             "onboarding.playground.progress.workingonit.title":
-                "{{percentage}}% Richting rookvrij",
+                "% Richting rookvrij",
             "onboarding.playground.progress.workingonit.html":
                 "<p>\n" +
                 "  Collaboratively administrate empowered markets via\n" +
@@ -97,13 +97,17 @@ i18n.use(LanguageDetector).init({
                 "  B2C users after installed base benefits.\n" +
                 "</p>\n",
             "onboarding.playground.progress.smoking.title":
-                "{{percentage}} Speeltuinen niet rookvrij",
+                " Speeltuinen niet rookvrij",
             "onboarding.playground.progress.smoking.html":
                 "<p>\n" +
                 "  Collaboratively administrate empowered markets via\n" +
                 "  plug-and-play networks. Dynamically procrastinate\n" +
                 "  B2C users after installed base benefits.\n" +
-                "</p>\n"
+                "</p>\n",
+            "onboarding.playground.vol.title":
+                " Teamleden",
+            "onboarding.playground.votes.title":
+                " Getekende petities"
         }
     }
   },

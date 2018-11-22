@@ -23,6 +23,8 @@ const GET_PLAYGROUNDS = gql`
       lat
       lng
       status
+      volunteerCount
+      votes
     }
   }
 `;

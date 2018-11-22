@@ -22,6 +22,8 @@ const GET_PLAYGROUNDS = gql`
       lng
       lat
       status
+      volunteerCount
+      votes
     }
   }
 `;
@@ -40,6 +42,8 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
                     name: playground.name,
                     lat: playground.lat,
                     lng: playground.lng,
+                    vol: playground.volunteerCount,
+                    votes: playground.votes,
                     slug: playground.name + " Rookvrij"
                 };
             })

@@ -5,7 +5,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import Statistic from "components/PlaygroundStatistic/PlaygroundStatistic.jsx";
+import DefaultStatistic from "components/PlaygroundStatistic/DefaultStatistic.jsx";
+import PlaygroundStatistic from "components/PlaygroundStatistic/PlaygroundStatistic.jsx";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 
 
@@ -70,10 +71,21 @@ class PlaygroundStatistics extends React.Component {
                                             t("onboarding.playground.progress.intro.specific", {playgroundName: playground.name})
                                     }
                                 </p>
-                                <div className="statistics-wrapper">
-                                    <Statistic progress={progress.smokeFree} playground={playground} name={"smokefree"} measurement={"percentage"} />
-                                    <Statistic progress={progress.workingOnIt} playground={playground} name={"workingonit"} measurement={"percentage"} />
-                                    <Statistic progress={progress.smoking} playground={playground} name={"smoking"} measurement={"count"} />
+                                <div className="statistics-wrapper default"
+                                     style={
+                                         {display: isDefault ? 'block' : 'none'}
+                                     }>
+                                    <DefaultStatistic progress={progress.smokeFree} playground={playground} name={"smokefree"}
+                                               measurement={"percentage"}/>
+                                    <DefaultStatistic progress={progress.workingOnIt} playground={playground}
+                                               name={"workingonit"} measurement={"percentage"}/>
+                                    <DefaultStatistic progress={progress.smoking} playground={playground} name={"smoking"}
+                                               measurement={"count"}/>
+                                </div>
+                                <div className="statistics-wrapper specific"
+                                     style={{display: isDefault ? 'none' : 'block'}}>
+                                    <PlaygroundStatistic playground={playground} name={playground.name} stat={"vol"} />
+                                    <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"} />
                                 </div>
                             </GridItem>
                         </GridContainer>
