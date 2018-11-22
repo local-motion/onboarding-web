@@ -26,21 +26,41 @@ class Onboarding extends React.Component {
             playground: {
                 default: true,
                 name: t("playground.default.area")
+            },
+            map: {
+                latlng: {lat: 52.092876, lng: 5.10448},
+                zoom: 8
             }
         };
     }
 
     handlePlaygroundChange(playground) {
-        console.log("Onboarding parent received selected playground:", playground);
-        this.setState({ playground: playground });
+        this.setState({
+            playground: playground,
+            map: {
+                latlng: {lat: playground.lat, lng: playground.lng},
+                zoom: 18
+            }
+        });
     }
 
     render() {
-        const { classes } = this.props;
-        const { playground } = this.state;
+        const {classes} = this.props;
+        const {playground, map} = this.state;
         return (
             <div>
-                <Parallax image={require("assets/img/bg-zand.jpg")} >
+                {/*<Header
+                  brand={t("header.brand")}
+                  rightLinks={<HeaderLinks />}
+                  fixed
+                  color="transparent"
+                  changeColorOnScroll={{
+                    height: 100,
+                    color: "white"
+                  }}
+                  {...rest}
+                />*/}
+               <Parallax image={require("assets/img/bg-zand.jpg")} >
                     <div className={classes.container}>
                         <CallToAction playground={playground}/>
                     </div>
@@ -53,6 +73,8 @@ class Onboarding extends React.Component {
                       <PlaygroundMap
                         isMarkerShown
                         onPlaygroundChange={this.handlePlaygroundChange}
+                        center={map.latlng}
+                        zoom={map.zoom}
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
