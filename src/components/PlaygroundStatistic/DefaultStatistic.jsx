@@ -16,13 +16,13 @@ const style = {
 
 class PlaygroundStatistic extends React.Component {
     render() {
-        const {t, classes, playground, name, stat } = this.props;
+        const {t, classes, progress, name, measurement } = this.props;
         return (
             <div className={"statistic-container " + name}>
                 <h2 className={classes.statTitle + " grunge-title"}>
-                    <span className={classes.stat}>{playground[stat]}</span>
+                    <span className={classes.stat}>{progress[measurement]}</span>
                     {t(
-                        `onboarding.playground.${stat}.title`
+                        `onboarding.playground.progress.${name}.title`
                     )}
                 </h2>
             </div>
