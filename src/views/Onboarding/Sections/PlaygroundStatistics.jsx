@@ -57,7 +57,7 @@ class PlaygroundStatistics extends React.Component {
                     <h2 className="playground-statistics title">
                         {playground.name}
                     </h2>
-                    <div id="navigation-pills">
+                    <div>
                         <GridContainer>
                             <GridItem xs={12} sm={12} md={8} lg={6} className="grid-item">
                                 <p className="explainer">

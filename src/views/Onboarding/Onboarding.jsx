@@ -49,17 +49,6 @@ class Onboarding extends React.Component {
         const {playground, map} = this.state;
         return (
             <div>
-                {/*<Header
-                  brand={t("header.brand")}
-                  rightLinks={<HeaderLinks />}
-                  fixed
-                  color="transparent"
-                  changeColorOnScroll={{
-                    height: 100,
-                    color: "white"
-                  }}
-                  {...rest}
-                />*/}
                <Parallax image={require("assets/img/bg-zand.jpg")} >
                     <div className={classes.container}>
                         <CallToAction playground={playground}/>
@@ -68,7 +57,7 @@ class Onboarding extends React.Component {
 
                 <div className={classNames(classes.main, classes.mainRaised)}>
                   <GridContainer>
-                    <GridItem xs={12} sm={12} md={6}>
+                    <GridItem xs={12} sm={12} md={6} className={"playground-map-container"}>
                       <PlaygroundSearch />
                       <PlaygroundMap
                         isMarkerShown
