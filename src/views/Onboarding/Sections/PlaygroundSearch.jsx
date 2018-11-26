@@ -32,7 +32,7 @@ const GET_PLAYGROUNDS = gql`
 const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
     // `ownProps` are the props passed into `IntegrationAutosuggest`
     // `data` is the result data (see above)
-    props: ({ /*ownProps, */data }) => {
+    props: ({ownProps, data }) => {
         if(data.loading) return { playgroundsLoading: true };
         if(data.error) return { hasErrors: true };
         if(data.error) return { hasErrors: true };
@@ -43,7 +43,10 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
                     id: playground.id,
                     name: playground.name,
                     lat: playground.lat,
-                    lng: playground.lng
+                    lng: playground.lng,
+                    vol: playground.volunteerCount,
+                    votes: playground.votes,
+                    slug: playground.name + " Rookvrij"
                 };
             })
         };
@@ -103,7 +106,7 @@ function getSuggestions(value, suggestionList) {
     const inputLength = inputValue.length;
     const suggestions = suggestionList;
 
-    console.log(value, suggestionList);
+    //console.log(value, suggestionList);
 
     let count = 0;
 
@@ -157,12 +160,13 @@ class IntegrationAutosuggest extends React.Component {
         this.state = {
             single: "",
             popper: "",
-            suggestions: []
+            suggestions: [],
+            selectedPlayground: {}
         };
     }
 
     handleSuggestionsFetchRequested = ({ value }) => {
-        const playgrounds = this.props.playgrounds
+        const playgrounds = this.props.playgrounds;
         this.setState({
             suggestions: getSuggestions(value, playgrounds)
         });
@@ -173,7 +177,6 @@ class IntegrationAutosuggest extends React.Component {
             suggestions: []
         });
     };
-
     handleChange = name => (event, { newValue }) => {
         this.setState({
             [name]: newValue
@@ -181,7 +184,7 @@ class IntegrationAutosuggest extends React.Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, onPlaygroundChange } = this.props;
 
         const autosuggestProps = {
             renderInputComponent,
@@ -208,6 +211,14 @@ class IntegrationAutosuggest extends React.Component {
                         InputLabelProps: {
                             shrink: true
                         }
+                    }}
+                    onSuggestionSelected={() => {
+                        const self = this;
+                        window.setTimeout(function() {
+                            const suggestion = self.state.popper;
+                            let result = self.props.playgrounds.find(a => a.name === suggestion);
+                            onPlaygroundChange.bind(self, result)();
+                        }, 110);
                     }}
                     theme={{
                         suggestionsList: classes.suggestionsList,

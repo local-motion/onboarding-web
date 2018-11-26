@@ -35,6 +35,7 @@ class Onboarding extends React.Component {
     }
 
     handlePlaygroundChange(playground) {
+        console.log('changed playground: ' + playground);
         this.setState({
             playground: playground,
             map: {
@@ -58,7 +59,7 @@ class Onboarding extends React.Component {
                 <div className={classNames(classes.main, classes.mainRaised)}>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6} className={"playground-map-container"}>
-                      <PlaygroundSearch />
+                      <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange}/>
                       <PlaygroundMap
                         isMarkerShown
                         onPlaygroundChange={this.handlePlaygroundChange}
