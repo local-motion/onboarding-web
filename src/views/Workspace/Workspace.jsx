@@ -14,47 +14,44 @@ import GridItem from "components/Grid/GridItem.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
-// import SectionBasics from "./Sections/SectionBasics.jsx";
 
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import SectionPills from "./Sections/SectionPills.jsx";
 
 class Workspace extends React.Component {
     render() {
         const {classes, ...rest} = this.props;
         return (
-            <div>
+            <div className={"workspace-wrapper"}>
                 <Header
-                    brand="Smoke-free playground"
+                    brand="Speeltuin"
                     rightLinks={<HeaderLinks/>}
                     fixed
-                    color="transparent"
+                    color="white"
                     changeColorOnScroll={{
-                        height: 400,
+                        height: 50,
                         color: "white"
                     }}
                     {...rest}
                 />
-                <Parallax image={require("assets/img/bg2.jpg")}>
+                <Parallax image={require("assets/img/bg-zand.jpg")} >
                     <div className={classes.container}>
-                        <GridContainer>
-                            <GridItem>
-                                <div className={classes.brand}>
-                                    <h1 className={classes.title}>Linnaeushof rookvrij!</h1>
-                                    <h3 className={classes.subtitle}>
-                                        Je hebt aangegeven dat jij Linnaeushof rookvrij wilt helpen maken
-                                    </h3>
-                                    <h3>
-                                        Help ons!
-                                    </h3>
-                                </div>
-                            </GridItem>
-                        </GridContainer>
+                        {/*Place Phase component*/}
                     </div>
                 </Parallax>
 
                 <div className={classNames(classes.main, classes.mainRaised)}>
-                    <SectionPills/>
+                    <GridContainer>
+                        <GridItem>
+                            {/*Place Phase description*/}
+                        </GridItem>
+                    </GridContainer>
+                </div>
+                <div className={"dashboard"}>
+                    <GridContainer>
+                        <GridItem>
+                            {/*Place Card elements*/}
+                        </GridItem>
+                    </GridContainer>
                 </div>
                 <Footer/>
             </div>
