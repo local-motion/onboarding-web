@@ -81,7 +81,7 @@ const PlaygroundMap = compose(
     <GoogleMap
         zoom={props.zoom}
         center={props.center}
-        onClick={props.onMapClick, props.onCreatePlayground}
+        onClick={(props.onMapClick, props.onCreatePlayground)}
         defaultOptions={{disableDefaultUI: true}}
     >
         <MarkerClusterer
