@@ -65,8 +65,8 @@ const PlaygroundMap = compose(
             newPin: null,
         }), {
             onMapClick: () => (e) => ({
-                newPin: e.latLng,
-                isMarkerShown: true
+                    newPin: e.latLng,
+                    isMarkerShown: true
             }),
             onMarkerClustererClick: () => markerClusterer => {
                 const clickedMarkers = markerClusterer.getMarkers();
@@ -81,7 +81,7 @@ const PlaygroundMap = compose(
     <GoogleMap
         zoom={props.zoom}
         center={props.center}
-        onClick={props.onMapClick}
+        onClick={props.onMapClick, props.onCreatePlayground}
         defaultOptions={{disableDefaultUI: true}}
     >
         <MarkerClusterer
