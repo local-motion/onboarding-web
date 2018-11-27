@@ -21,6 +21,6 @@ module.exports = {
       'no-console': 'off',
       'react/prop-types': 'off',
       'react/no-unescaped-entities': 'off',
-      'react/no-string-refs': 'off'
+      'react/no-string-refs': 'off',
   }
 };

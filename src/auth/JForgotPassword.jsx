@@ -80,11 +80,11 @@ export default class JForgotPassword extends Component {
                 </form>
                 <div style={style.links}>
                     <div>
-                        <a
+                        <Button
                             style={style.button}
                             onClick={() => this.changeState('signIn')}>
                             Back to sign in
-                        </a>
+                        </Button>
                     </div>
                     <div>
                         <p> No account? </p>
