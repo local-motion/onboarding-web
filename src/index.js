@@ -15,13 +15,13 @@ import "assets/scss/material-kit-react.css?v=1.2.0";
 
 
 import Amplify from "aws-amplify";
-import {Greetings, withAuthenticator} from 'aws-amplify-react';
+import {withAuthenticator} from 'aws-amplify-react';
 
 import JSignOut from "auth/JSignOut";
 import JSignUp from "auth/JSignUp";
 import JSignIn from "auth/JSignIn";
 import JConfirmSignUp from "auth/JConfirmSignUp";
-import JConfirmSignIn from "auth/JConfirmSignUp";
+import JConfirmSignIn from "auth/JConfirmSignIn";
 import JForgotPassword from "./auth/JForgotPassword";
 import JForgotPasswordReset from "./auth/JForgotPasswordReset";
 

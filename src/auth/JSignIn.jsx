@@ -87,7 +87,7 @@ export default class JSignIn extends Component {
 
         return (
             <div>
-                <form style={style} preventDefault>
+                <form style={style}>
                     <Input
                         type="text"
                         placeholder="Username"
@@ -105,14 +105,14 @@ export default class JSignIn extends Component {
                     <div style={style.links}>
                         <div>
                             New to us?{' '}
-                            <a href="#" preventDefault onClick={() => this.changeState('signUp')}>
+                            <button onClick={() => this.changeState('signUp')}>
                                 Sign up
-                            </a>
+                            </button>
                         </div>
                         <div>
-                            <a href="#" preventDefault onClick={() => this.changeState('forgotPassword')}>
+                            <button onClick={() => this.changeState('forgotPassword')}>
                                 Forgot password
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <Button
