@@ -16,6 +16,7 @@ import StartOrJoinInitiative from "./Sections/JoinInitiative";
 import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
+import NewPlayground from "./forms/NewPlayground.jsx";
 
 class Onboarding extends React.Component {
     constructor(props) {
@@ -30,7 +31,8 @@ class Onboarding extends React.Component {
             map: {
                 latlng: {lat: 52.092876, lng: 5.10448},
                 zoom: 8
-            }
+            },
+            view: 'default'
         };
     }
 
@@ -45,9 +47,23 @@ class Onboarding extends React.Component {
         });
     }
 
+    handleCreatePlayground = (playground) => {
+        this.setState({
+            view: 'playground'
+        });
+    }
+
     render() {
         const {classes} = this.props;
         const {playground, map} = this.state;
+        var view = this.state.view === 'default' ?
+            <div>
+            <PlaygroundStatistics playground={playground} />
+            <StartOrJoinInitiative playground={playground} />
+            </div>
+        :
+            <NewPlayground playground={playground} />;
+
         return (
             <div className={"onboarding-wrapper"}>
                <Parallax image={require("assets/img/bg-zand.jpg")} >
@@ -63,16 +79,17 @@ class Onboarding extends React.Component {
                       <PlaygroundMap
                         isMarkerShown
                         onPlaygroundChange={this.handlePlaygroundChange}
+                        onCreatePlayground={this.handleCreatePlayground}
                         center={map.latlng}
                         zoom={map.zoom}
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
-                      <PlaygroundStatistics playground={playground} />
-                      <StartOrJoinInitiative playground={playground} />
+                        {view}
                     </GridItem>
                   </GridContainer>
                 </div>
+
                 <Footer />
             </div>
     );
