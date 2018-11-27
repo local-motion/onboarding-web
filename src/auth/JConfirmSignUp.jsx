@@ -72,7 +72,7 @@ export default class JConfirmSignUp extends Component {
 
         return (
             <div style={style.container}>
-                <h1>SignUp</h1>
+                <h1>Confirm SignUp</h1>
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <Input
@@ -98,11 +98,11 @@ export default class JConfirmSignUp extends Component {
                 </form>
                 <div style={style.links}>
                     <div>
-                        <a
+                        <Button
                             style={style.button}
                             onClick={() => this.changeState('signIn')}>
                             Back to sign in
-                        </a>
+                        </Button>
                     </div>
                     <div>
                         <Button
