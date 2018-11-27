@@ -1,14 +1,26 @@
-.onboarding-header{
+.onboarding-header {
     h1 {
         margin-top: 0;
     }
-    h2{
+    h2 {
         max-width: 100% !important;
     }
 }
 
-.playground-statistics{
-    .grid-item{
+.playground-statistics.wrapper {
+    .grid-item {
         max-width: 100% !important;
+    }
+    @include breakpoint($breakpoints-lg) {
+        padding: 35px 0;
+
+        .statistic-container {
+            h2 {
+                font-size: 1.5rem;
+                span {
+                    font-size: 3rem;
+                }
+            }
+        }
     }
 }

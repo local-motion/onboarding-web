@@ -20,9 +20,10 @@
 @import "custom/custom";
 
 //onboarding page styling
-@import 'custom/onboarding/maps';
-@import 'custom/onboarding/statistics';
-@import 'custom/onboarding/header';
+@import "custom/onboarding/container";
+@import "custom/onboarding/header";
+@import "custom/onboarding/maps";
+@import "custom/onboarding/statistics";
 
 // Core Components
 @import "core/misc";

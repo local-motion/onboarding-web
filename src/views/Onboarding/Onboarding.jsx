@@ -49,15 +49,15 @@ class Onboarding extends React.Component {
         const {classes} = this.props;
         const {playground, map} = this.state;
         return (
-            <div>
+            <div className={"onboarding-wrapper"}>
                <Parallax image={require("assets/img/bg-zand.jpg")} >
                     <div className={classes.container}>
                         <CallToAction playground={playground}/>
                     </div>
                 </Parallax>
 
-                <div className={classNames(classes.main, classes.mainRaised)}>
-                  <GridContainer>
+                <div className={classNames(classes.main, classes.mainRaised) + " onboarding-container"}>
+                  <GridContainer className={"grid-container"}>
                     <GridItem xs={12} sm={12} md={6} className={"playground-map-container"}>
                       <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange}/>
                       <PlaygroundMap

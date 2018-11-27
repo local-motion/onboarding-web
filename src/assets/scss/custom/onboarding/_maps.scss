@@ -12,11 +12,10 @@
 
 .playground-map-container{
     padding: 0 !important;
-    @media screen and (max-width: 960px){
+    @include breakpoint($breakpoints-lg){
         min-height: 50vw !important;
     }
-
-    @media screen and (max-width: 600px){
+    @include breakpoint($breakpoints-sm){
         min-height: 100vw !important;
     }
     .playground-map{
