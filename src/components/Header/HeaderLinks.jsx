@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React from "react";
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -10,7 +10,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
+import {AccountCircle, Apps, CloudDownload, Menu} from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
@@ -18,96 +18,40 @@ import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 
-function HeaderLinks({ ...props }) {
-  const { classes } = props;
-  return (
-    <List className={classes.list}>
-      <ListItem className={classes.listItem}>
-        <CustomDropdown
-          noLiPadding
-          buttonText="Charity"
-          buttonProps={{
-            className: classes.navLink,
-            color: "transparent"
-          }}
-          buttonIcon={Apps}
-          dropdownList={[
-            <Link to="https://github.com/local-motion" className={classes.dropdownLink}>
-              Open Source on Github
-            </Link>,
-            <a
-              href="https://www.longfonds.nl"
-              target="_blank"
-              className={classes.dropdownLink}
-            >
-              Non-profit organization
-            </a>
-          ]}
-        />
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Button
-          href="https://localmotion.community/stappen-plan.pdf"
-          color="transparent"
-          target="_blank"
-          className={classes.navLink}
-        >
-          <CloudDownload className={classes.icons} /> Download
-        </Button>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Tooltip
-          id="instagram-twitter"
-          title="Follow us on twitter"
-          placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
-        >
-          <Button
-            href="https://twitter.com/LocalMotionCommunity"
-            target="_blank"
-            color="transparent"
-            className={classes.navLink}
-          >
-            <i className={classes.socialIcons + " fab fa-twitter"} />
-          </Button>
-        </Tooltip>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Tooltip
-          id="instagram-facebook"
-          title="Follow us on facebook"
-          placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
-        >
-          <Button
-            color="transparent"
-            href="https://www.facebook.com/LocalMotionCommunity"
-            target="_blank"
-            className={classes.navLink}
-          >
-            <i className={classes.socialIcons + " fab fa-facebook"} />
-          </Button>
-        </Tooltip>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Tooltip
-          id="instagram-tooltip"
-          title="Follow us on instagram"
-          placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
-        >
-          <Button
-            color="transparent"
-            href="https://www.instagram.com/LocalMotionCommunity"
-            target="_blank"
-            className={classes.navLink}
-          >
-            <i className={classes.socialIcons + " fab fa-instagram"} />
-          </Button>
-        </Tooltip>
-      </ListItem>
-    </List>
-  );
+function HeaderLinks({...props}) {
+    const {classes} = props;
+    return (
+        <List className={classes.list}>
+            <ListItem className={classes.listItem}>
+                <CustomDropdown
+                    noLiPadding
+                    buttonText=""
+                    buttonProps={{
+                        className: classes.navLink,
+                        color: "transparent"
+                    }}
+                    buttonIcon={Menu}
+                    dropdownList={[
+                        <Link to="onboarding" className={classes.dropdownLink}>
+                            Onboarding
+                        </Link>,
+                        <Link to="workspace" className={classes.dropdownLink}>
+                            Workspace
+                        </Link>
+                    ]}
+                />
+            </ListItem>
+            <ListItem className={classes.listItem}>
+                <Button
+                    color="transparent"
+                    href="profile-page"
+                    className={classes.navLink}
+                >
+                    <AccountCircle className={classes.icons}/>
+                </Button>
+            </ListItem>
+        </List>
+    );
 }
 
 export default withStyles(headerLinksStyle)(HeaderLinks);
