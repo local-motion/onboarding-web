@@ -23,4 +23,24 @@
             }
         }
     }
+
+    .phase-explainer-container{
+        background: white;
+        margin: -60px auto 30px;
+        z-index: 30;
+        position: relative;
+        .title-wrapper{
+            padding: 20px 0;
+            h2,h3{
+                text-align: center;
+            }
+            h2{
+                margin-top: 0;
+            }
+            h3{
+                font-size: 1.5rem;
+                margin-top: 10px;
+            }
+        }
+    }
 }

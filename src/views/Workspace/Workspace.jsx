@@ -41,10 +41,13 @@ class Workspace extends React.Component {
                     </div>
                 </Parallax>
 
-                <div className={classNames(classes.main, classes.mainRaised)}>
+                <div className={classNames(classes.mainRaised, classes.container + " phase-explainer-container")}>
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
-                            Phase explainer
+                            <div className={"title-wrapper"}>
+                                <h2>Stap 1: Voorbereiding</h2>
+                                <h3>Enthousiasmerende tekst.</h3>
+                            </div>
                         </GridItem>
                     </GridContainer>
                 </div>
