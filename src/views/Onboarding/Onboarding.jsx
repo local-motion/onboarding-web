@@ -37,7 +37,6 @@ class Onboarding extends React.Component {
     }
 
     handlePlaygroundChange(playground) {
-        console.log('changed playground: ' + playground);
         this.setState({
             playground: playground,
             map: {
@@ -49,7 +48,8 @@ class Onboarding extends React.Component {
 
     handleCreatePlayground = (playground) => {
         this.setState({
-            view: 'playground'
+            view: 'playground',
+            playground: playground
         });
     }
 
