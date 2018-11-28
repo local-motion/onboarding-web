@@ -34,7 +34,6 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
     props: ({ownProps, data}) => {
         if(data.loading) return {playgroundsLoading: true};
         if(data.error) return {hasErrors: true};
-        console.log(data);
         return {
             playgrounds: data.playgrounds.map(playground => {
                 return {
