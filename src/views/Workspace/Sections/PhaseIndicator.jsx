@@ -74,7 +74,8 @@ class PhaseIndicator extends React.Component {
                 {steps.map((label, index) => {
                     return (
                         <Step key={label} className={"lm-step"}>
-                            <StepButton className={"lm-step-button"}
+
+                            <StepButton className={this.state.activeStep === index ? "active lm-step-button" : "inactive lm-step-button"}
                                         completed={this.state.completed[index]}
                             >
                             </StepButton>
