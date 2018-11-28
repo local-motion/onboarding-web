@@ -4,58 +4,56 @@ import { withNamespaces } from "react-i18next";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-/*import { graphql } from "react-apollo";
+import { graphql } from "react-apollo";
 import gql from "graphql-tag";
+import { Mutation } from "react-apollo";
 
-const PUT_PLAYGROUND = gql`
-    {
-        playground {
-            name
-            lng
-            lat
-        }
+const CREATE_INITIATIVE = gql`
+  mutation CreateInitiative($input: CreateInitiativeInput!) {
+    CreateInitiative(input: $input) {
+      id
     }
+  }
 `;
 
-const withPlaygrounds = graphql(PUT_PLAYGROUND, {
-    // `ownProps` are the props passed into `IntegrationAutosuggest`
-    // `data` is the result data (see above)
-    props: ({ ownProps, data }) => {
-        if(data.loading) return { playgroundsLoading: true };
-        if(data.error) return { hasErrors: true };
-        if(data.error) return { hasErrors: true };
-        console.log(data);
-        return {};
-    }
-});*/
 
-const playground = {
-    name: "test playground",
-    address: "test address",
-    latitude: 100,
-    longitude: 100,
-    contactName: "Bob Dobbs",
-    contactemail: "bob@subgenius.com"
-};
 
 class NewPlayground extends React.Component {
     render() {
-        const {classes} = this.props;
+        const {t, classes} = this.props;
+
+        const newInitiative = {
+            name: "",
+            address: "",
+            latitude: "",
+            longitude: "",
+            contactName: "",
+            contactEmail: "",
+            initiativeId: null,
+            type: "smokefree",
+            status: "not_started"
+        };
 
         return (
             <div>
                 <h2>Add a playground</h2>
                 <form className={classes.container}>
-                    <TextField className={classes.textField} label="Playground name" defaultValue={playground.name}/>
-                    <TextField className={classes.textField} label="Address" defaultValue={playground.address}/>
-                    <TextField className={classes.textField} label="Contact name" defaultValue={playground.contactName}/>
-                    <TextField className={classes.textField} label="Contact email" defaultValue={playground.contactemail}/>
+                    <TextField className={classes.textField} label="Playground name" pattern="/^\w{6,}$/" defaultValue={newInitiative.name}/>
+                    <TextField className={classes.textField} label="Address" pattern="^\w{6,}$" defaultValue={newInitiative.address}/>
+                    <TextField className={classes.textField} label="Contact name" pattern="^\w{6,}$" defaultValue={newInitiative.contactName}/>
+                    <TextField className={classes.textField} label="Contact email" pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' defaultValue={newInitiative.contactEmail}/>
 
-                    <input type="hidden" id={"latitude"} defaultValue={playground.latitude}/>
-                    <input type="hidden" id={"longitude"} defaultValue={playground.latitude}/>
+                    <input type="hidden" id={"latitude"} defaultValue={newInitiative.latitude}/>
+                    <input type="hidden" id={"longitude"} defaultValue={newInitiative.latitude}/>
                 </form>
 
-                <Button>Save</Button>
+                <Mutation mutation={CREATE_INITIATIVE}>
+                    {(joinInitiative) => (
+                        <Button onClick={() => joinInitiative({ variables: { input: newInitiative } })}>
+                            {t("onboarding.playground.calltoaction.button")}
+                        </Button>
+                    )}
+                </Mutation>
             </div>
         );
     }
