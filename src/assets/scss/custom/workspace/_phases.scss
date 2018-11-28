@@ -1,0 +1,26 @@
+.workspace-wrapper {
+    .phase-container {
+        height: 20vw !important;
+    }
+    .lm-step {
+        svg {
+            width: 100px;
+            height: 100px;
+            text {
+                font-family: 'dk_black_bamboo-webfont';
+            }
+        }
+        .lm-step-button {
+            &.active {
+                svg {
+                    color: $lm-red-1;
+                }
+            }
+            &.inactive {
+                svg {
+                    color: $lm-blue-1;
+                }
+            }
+        }
+    }
+}

@@ -12,6 +12,8 @@ import Footer from "components/Footer/Footer.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
+import PhaseIndicator from "./Sections/PhaseIndicator.jsx";
+
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 
@@ -33,16 +35,16 @@ class Workspace extends React.Component {
                     }}
                     {...rest}
                 />
-                <Parallax image={require("assets/img/bg-zand.jpg")} >
+                <Parallax image={require("assets/img/bg-zand.jpg")} className={"phase-container"} >
                     <div className={classes.container}>
-                        {/*Place Phase component*/}
+                        <PhaseIndicator/>
                     </div>
                 </Parallax>
 
                 <div className={classNames(classes.main, classes.mainRaised)}>
-                    <GridContainer>
-                        <GridItem>
-                            {/*Place Phase description*/}
+                    <GridContainer className={"grid-container"}>
+                        <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
+                            Phase explainer
                         </GridItem>
                     </GridContainer>
                 </div>
