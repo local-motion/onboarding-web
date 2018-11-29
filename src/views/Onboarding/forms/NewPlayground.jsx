@@ -8,11 +8,11 @@ import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 
 const CREATE_INITIATIVE = gql`
-  mutation CreateInitiative($input: CreateInitiativeInput!) {
-    createInitiative(input: $input) {
-      id
+    mutation CreateInitiative($input: CreateInitiativeInput!) {
+        createInitiative(input: $input) {
+            id
+        }
     }
-  }
 `;
 
 
@@ -24,6 +24,7 @@ class NewPlayground extends React.Component {
             lat: this.props.playground.latLng.lat(),
             lng: this.props.playground.latLng.lng(),
             initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                // generate a uuid
                 var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
                 return v.toString(16);
             }),
@@ -38,6 +39,11 @@ class NewPlayground extends React.Component {
         });
     }
 
+    loadWorkspace = (eEvent) => {
+        console.log("loadWorkspace", eEvent);
+        window.location.href = `/workspace/${this.state.initiativeId}`;
+    }
+
     render() {
         const {t, classes} = this.props;
 
@@ -49,7 +55,10 @@ class NewPlayground extends React.Component {
                     <TextField className={classes.textField} label="Playground name" pattern="/^\w{4,}$/" onKeyUp={this.updateName} defaultValue={this.state.name}/>
                 </form>
 
-                <Mutation mutation={CREATE_INITIATIVE}>
+                <Mutation
+                    mutation={CREATE_INITIATIVE}
+                    update={this.loadWorkspace}
+                >
                     {(joinInitiative) => (
                         <Button onClick={() => joinInitiative({ variables: { input: this.state } })}>
                             {t("onboarding.playground.calltoaction.button")}
