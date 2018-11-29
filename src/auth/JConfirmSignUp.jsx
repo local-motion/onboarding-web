@@ -73,52 +73,58 @@ export default class JConfirmSignUp extends Component {
         const {message, error} = this.state;
 
         return (
-            <div style={style.container}>
-                <h2>Bevestig je account</h2>
-                <form onSubmit={this.onSubmit}>
-                    <div>
-                        <Input
-                        type="text"
-                        placeholder="Username"
-                        defaultValue={authData || ''}
-                        style={style.input}
-                        onChange={event => this.inputs.username = event.target.value}
-                        disabled={!!authData}
-                        />
-                    </div>
-                    <div>
-                        <Input
-                            type="text"
-                            placeholder="Code"
-                            style={style.input}
-                            onChange={event => this.inputs.code = event.target.value}
-                            autoFocus
-                        />
-                    </div>
-                    <div>
-                        <Button
-                            style={style.button}
-                            onClick={this.confirmSignUp}>
-                            Bevestig
-                        </Button>
-                    </div>
-                    <div>
-                        <Button
-                            style={style.button}
-                            onClick={this.resendCode}>
-                            Stuur code opnieuw
-                        </Button>
-                    </div>
-                    {error && <p style={style.alert}>{error.message}</p>}
-                    {message && <p style={style.alert}>{message}</p>}
-                </form>
-                <div style={style.links}>
-                    <div>
-                        <button
-                            style={style.extraButton}
-                            onClick={() => this.changeState('signIn')}>
-                            Terug naar het inlogscherm
-                        </button>
+            <div className={"secure-app-wrapper"}>
+                <div className={"secure-app-background"}></div>
+                <div className={"secure-app-container"}>
+                    <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+                    <div style={style.container}>
+                        <h2>Bevestig je account</h2>
+                        <form onSubmit={this.onSubmit}>
+                            <div>
+                                <Input
+                                    type="text"
+                                    placeholder="Username"
+                                    defaultValue={authData || ''}
+                                    style={style.input}
+                                    onChange={event => this.inputs.username = event.target.value}
+                                    disabled={!!authData}
+                                />
+                            </div>
+                            <div>
+                                <Input
+                                    type="text"
+                                    placeholder="Code"
+                                    style={style.input}
+                                    onChange={event => this.inputs.code = event.target.value}
+                                    autoFocus
+                                />
+                            </div>
+                            <div>
+                                <Button
+                                    style={style.button}
+                                    onClick={this.confirmSignUp}>
+                                    Bevestig
+                                </Button>
+                            </div>
+                            <div>
+                                <Button
+                                    style={style.button}
+                                    onClick={this.resendCode}>
+                                    Stuur code opnieuw
+                                </Button>
+                            </div>
+                            {error && <p style={style.alert}>{error.message}</p>}
+                            {message && <p style={style.alert}>{message}</p>}
+                        </form>
+                        <div style={style.links}>
+                            <div>
+                                <button
+                                    style={style.extraButton}
+                                    onClick={() => this.changeState('signIn')}>
+                                    Terug naar het inlogscherm
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

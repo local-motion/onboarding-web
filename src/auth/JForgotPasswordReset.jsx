@@ -64,42 +64,48 @@ export default class JForgotPasswordReset extends Component {
         const {error} = this.state;
 
         return (
-            <div style={style.container}>
-                <div>
-                    <h2>Password reset code</h2>
-                </div>
-                <form>
-                    <div>
-                        Code:
-                        <Input
-                            type="text"
-                            placeholder="Code"
-                            style={style.input}
-                            onChange={event => this.inputs.code = event.target.value}
-                            autoFocus
-                        />
-                    </div>
-                    <div>
-                        New password:
-                        <Input
-                            type="password"
-                            placeholder="Password"
-                            style={style.input}
-                            onChange={event => this.inputs.password = event.target.value}
-                        />
-                    </div>
-                    <div>
-                        <Button style={style.button} onClick={this.submit}>Reset password</Button>
-                    </div>
-                    {error && <div style={style.alert}>{error}</div>}
-                </form>
-                <div style={style.links}>
-                    <div>
-                        <Button
-                            style={style.button}
-                            onClick={() => this.changeState('forgotPassword')}>
-                            Back to forgot password
-                        </Button>
+            <div className={"secure-app-wrapper"}>
+                <div className={"secure-app-background"}></div>
+                <div className={"secure-app-container"}>
+                    <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+                    <div style={style.container}>
+                        <div>
+                            <h2>Password reset code</h2>
+                        </div>
+                        <form>
+                            <div>
+                                Code:
+                                <Input
+                                    type="text"
+                                    placeholder="Code"
+                                    style={style.input}
+                                    onChange={event => this.inputs.code = event.target.value}
+                                    autoFocus
+                                />
+                            </div>
+                            <div>
+                                New password:
+                                <Input
+                                    type="password"
+                                    placeholder="Password"
+                                    style={style.input}
+                                    onChange={event => this.inputs.password = event.target.value}
+                                />
+                            </div>
+                            <div>
+                                <Button style={style.button} onClick={this.submit}>Reset password</Button>
+                            </div>
+                            {error && <div style={style.alert}>{error}</div>}
+                        </form>
+                        <div style={style.links}>
+                            <div>
+                                <Button
+                                    style={style.button}
+                                    onClick={() => this.changeState('forgotPassword')}>
+                                    Back to forgot password
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

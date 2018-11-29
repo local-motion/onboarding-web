@@ -1,6 +1,6 @@
 .onboarding-wrapper{
     .onboarding-container, .grid-container{
-        @include breakpoint($breakpoints-lg){
+        @include breakpoint-max($breakpoints-lg){
             margin-left: 0 !important;
             margin-right: 0 !important;
         }
