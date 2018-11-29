@@ -6,6 +6,8 @@ import classNames from "classnames";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 // core components
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
@@ -20,6 +22,20 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 
 class Workspace extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            startDate: new Date()
+        };
+        this.handleDateChange = this.handleDateChange.bind(this);
+    }
+
+    handleDateChange(date) {
+        this.setState({
+            startDate: date
+        });
+    }
+
     render() {
         const {classes, ...rest} = this.props;
         return (
@@ -51,10 +67,22 @@ class Workspace extends React.Component {
                         </GridItem>
                     </GridContainer>
                 </div>
-                <div className={"dashboard"}>
+                <div className={classNames(classes.mainRaised, classes.container, "dashboard")}>
                     <GridContainer>
                         <GridItem>
-                            {/*Place Card elements*/}
+                            <label>
+                                <input type="checkbox" id={"smokeFree"}/>
+                                Make smokeFree
+                            </label>
+
+                            <br/>
+
+                            <label>From<br/>
+                                <DatePicker
+                                    selected={this.state.startDate}
+                                    onChange={this.handleChange}
+                                />
+                            </label>
                         </GridItem>
                     </GridContainer>
                 </div>
