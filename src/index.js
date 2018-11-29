@@ -159,16 +159,22 @@ const App = class App extends React.Component {
 };
 
 const SecuredApp = withAuthenticator(App, false, [
-    <JSignIn />,
-    <JSignUp />,
-    <JForgotPassword />,
-    <JForgotPasswordReset />,
-    <JConfirmSignIn />,
-    <JConfirmSignUp />,
+    <JSignIn/>,
+    <JSignUp/>,
+    <JForgotPassword/>,
+    <JForgotPasswordReset/>,
+    <JConfirmSignIn/>,
+    <JConfirmSignUp/>,
     <AlwaysOn/>
 ]);
 
 ReactDOM.render(
-    <SecuredApp/>,
+    <div className={"secure-app-wrapper"}>
+        <div className={"secure-app-background"}></div>
+        <div className={"secure-app-container"}>
+            <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+            <SecuredApp className={"secure-app"}/>
+        </div>
+    </div>,
     rootEl
 );

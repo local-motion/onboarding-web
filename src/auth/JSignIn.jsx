@@ -77,16 +77,18 @@ export default class JSignIn extends Component {
 
         const style = {
             width: '20rem',
-            input: {borderRadius: '0'},
-            links: {fontSize: '0.9em'},
-            button: {width: '100%'},
+            input: {borderRadius: '0', display: 'block'},
+            links: {fontSize: '0.9em', minHeight: "25px"},
+            button: {width: '100%', marginBottom: "15px"},
+            extraButton: { border: "0", marginBottom: "15px", cursor: "pointer"},
+            left: { float: "left" },
             alert: {fontSize: '0.8em'}
         };
 
         const {error} = this.state;
 
         return (
-            <div>
+            <div className={"signin-wrapper"}>
                 <form style={style}>
                     <Input
                         type="text"
@@ -102,25 +104,26 @@ export default class JSignIn extends Component {
                         onChange={event => this.inputs.password = event.target.value}
                         style={style.input}
                     />
-                    <div style={style.links}>
-                        <div>
-                            New to us?{' '}
-                            <button onClick={() => this.changeState('signUp')}>
-                                Sign up
-                            </button>
-                        </div>
-                        <div>
-                            <button onClick={() => this.changeState('forgotPassword')}>
-                                Forgot password
-                            </button>
-                        </div>
-                    </div>
                     <Button
                         style={style.button}
                         onClick={this.signIn}
                     >
                         Sign In
                     </Button>
+                    <div style={style.links} className={"extra-info"}>
+                        <div style={style.left}>
+                            <button
+                                style={style.extraButton}
+                                onClick={() => this.changeState('signUp')}>
+                                Maak een account
+                            </button>
+                        </div>
+                        <div style={style.left}>
+                            <button style={style.extraButton} onClick={() => this.changeState('forgotPassword')}>
+                                Wachtwoord vergeten?
+                            </button>
+                        </div>
+                    </div>
                     {/*<Federated federated={federated_data} onStateChange={this.changeState} />*/}
                     {error && <div style={style.alert}>{error}</div>}
                 </form>

@@ -68,7 +68,6 @@ export default class JConfirmSignIn extends Component {
         }
 
         const style = {
-            width: '20rem',
             links: {fontSize: '0.9em'},
             button: {width: '100%'},
             alert: {fontSize: '0.8em'}
@@ -78,7 +77,7 @@ export default class JConfirmSignIn extends Component {
 
         return (
             <div style={style.container}>
-                <h1>Confirm Sign In</h1>
+                <h2>Confirm Sign In</h2>
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <Input

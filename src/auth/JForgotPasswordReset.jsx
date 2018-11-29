@@ -56,7 +56,6 @@ export default class JForgotPasswordReset extends Component {
 
         const style = {
             width: '20rem',
-            input: {borderRadius: '0'},
             links: {fontSize: '0.9em'},
             button: {width: '100%'},
             alert: {fontSize: '0.8em'}
@@ -67,7 +66,7 @@ export default class JForgotPasswordReset extends Component {
         return (
             <div style={style.container}>
                 <div>
-                    <h1>Password reset code</h1>
+                    <h2>Password reset code</h2>
                 </div>
                 <form>
                     <div>

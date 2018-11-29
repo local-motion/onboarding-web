@@ -57,25 +57,21 @@ export default class JSignUp extends Component {
         }
 
         const style = {
-            width: '20rem',
-            input: {borderRadius: '0'},
-            links: {fontSize: '0.9em'},
+            width: '100%',
+            input: {borderRadius: '0', display: 'block'},
+            links: {fontSize: '0.9em', minHeight: "35px"},
             button: {width: '100%'},
-            alert: {fontSize: '0.8em'},
-            container: {
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center"
-            }
+            extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
+            left: {float: "left"},
+            alert: {fontSize: '0.8em'}
         };
 
         const {error} = this.state;
 
         return (
             <div style={style.container}>
-                <h1>SignUp</h1>
-                <form onSubmit={this.onSubmit}>
+                <h2>Schrijf je in</h2>
+                <form onSubmit={this.onSubmit} style={style}>
                     <div>
                         <Input
                             type="text"
@@ -86,46 +82,44 @@ export default class JSignUp extends Component {
                         />
                     </div>
                     <div>
-                    <Input
-                        type="password"
-                        placeholder="Password"
-                        onChange={event => this.inputs.password = event.target.value}
-                        style={style.input}
-                    />
+                        <Input
+                            type="password"
+                            placeholder="Password"
+                            onChange={event => this.inputs.password = event.target.value}
+                            style={style.input}
+                        />
                     </div>
                     <div>
-                    <Input
-                        type="email"
-                        placeholder="Email address"
-                        style={style.input}
-                        onChange={event => this.inputs.email = event.target.value}
-                    />
-                    </div>
-                    {error && <p>{error.message}</p>}
-                </form>
-                <div style={style.links}>
-                    <div>
-                        <Button
-                            style={style.button}
-                            onClick={() => this.changeState('signIn')}>
-                            Back to sign in
-                        </Button>
+                        <Input
+                            type="email"
+                            placeholder="Email address"
+                            style={style.input}
+                            onChange={event => this.inputs.email = event.target.value}
+                        />
                     </div>
                     <div>
-                        <p> No account? </p>
-                        <Button
-                            style={style.button}
-                            onClick={() => this.changeState('confirmSignUp')}>
-                            Confirm a code
-                        </Button>
-                    </div>
-                    <div>
-                        <p> No account? </p>
                         <Button
                             style={style.button}
                             onClick={this.signUp}>
-                            Create account
+                            Maak het account
                         </Button>
+                    </div>
+                    {error && <p>{error.message}</p>}
+                </form>
+                <div style={style.links} className={"extra-info"}>
+                    <div style={style.left}>
+                        <button
+                            style={style.extraButton}
+                            onClick={() => this.changeState('signIn')}>
+                            Ga terug naar login
+                        </button>
+                    </div>
+                    <div style={style.left}>
+                        <button
+                            style={style.extraButton}
+                            onClick={() => this.changeState('confirmSignUp')}>
+                            Bevestig je account
+                        </button>
                     </div>
                 </div>
             </div>
