@@ -1,6 +1,11 @@
 .secure-app-wrapper{
     width: 1024px;
     margin: 0 auto;
+    @include breakpoint($breakpoints-xs){ width: 90%; }
+    @include breakpoint($breakpoints-sm){ width: $breakpoints-sm; }
+    @include breakpoint($breakpoints-md){ width: $breakpoints-md; }
+    @include breakpoint($breakpoints-lg){ width: $breakpoints-lg; }
+    @include breakpoint($breakpoints-xl){ width: $breakpoints-xl; }
     .secure-app-background{
         height: 100%;
         width: 100%;
@@ -15,7 +20,9 @@
     .secure-app-container{
         background: white;
         padding: 25px;
-        width: 50%;
+        width: 90%;
+        @include breakpoint($breakpoints-lg){ width: 70%; }
+        @include breakpoint($breakpoints-xl){ width: 50%; }
         margin: 100px auto;
         @include shadow-big();
         position: relative;

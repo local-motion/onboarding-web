@@ -90,15 +90,6 @@ Amplify.configure({
 let hist = createBrowserHistory();
 const rootEl = document.querySelector("#root");
 
-const AlwaysOn = (props) => {
-    return (
-        <div>
-            <div>I am always here to show current auth state: {props.authState}</div>
-            <button onClick={() => props.onStateChange('signIn')}>Show Sign In</button>
-        </div>
-    )
-};
-
 const App = class App extends React.Component {
     render() {
         const {auth, authData} = this.props;
@@ -165,16 +156,13 @@ const SecuredApp = withAuthenticator(App, false, [
     <JForgotPasswordReset/>,
     <JConfirmSignIn/>,
     <JConfirmSignUp/>,
-    <AlwaysOn/>
 ]);
 
-ReactDOM.render(
-    <div className={"secure-app-wrapper"}>
-        <div className={"secure-app-background"}></div>
-        <div className={"secure-app-container"}>
-            <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+const Wrapped = [
             <SecuredApp className={"secure-app"}/>
-        </div>
-    </div>,
+];
+
+ReactDOM.render(
+    Wrapped,
     rootEl
 );
