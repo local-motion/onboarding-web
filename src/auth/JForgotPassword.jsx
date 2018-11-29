@@ -62,47 +62,54 @@ export default class JForgotPassword extends Component {
         const {error} = this.state;
 
         return (
-            <div style={style.container}>
-                <div>
-                    <h2>Je wachtwoord vergeten?</h2>
-                </div>
-                <form style={style}>
-                    <div>
-                        <Input
-                            type="text"
-                            style={style.input}
-                            placeholder="Username"
-                            defaultValue={authData || ''}
-                            onChange={event => this.inputs.username = event.target.value}
-                            autoFocus
-                        />
-                    </div>
-                    <div>
-                        <Button style={style.button} onClick={this.sendCode}>Verstuur wachtwoord reset code</Button>
-                    </div>
-                    {error && <div style={style.alert}>{error}</div>}
-                </form>
-                <div style={style.links}>
-                    <div>
-                        <button
-                            style={style.extraButton}
-                            onClick={() => this.changeState('signIn')}>
-                            Terug naar het inlogscherm
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            style={style.extraButton}
-                            onClick={() => this.changeState('confirmSignUp')}>
-                            Bevestig je account
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            style={style.extraButton}
-                            onClick={this.signUp}>
-                            Nog geen account?
-                        </button>
+            <div className={"secure-app-wrapper"}>
+                <div className={"secure-app-background"}></div>
+                <div className={"secure-app-container"}>
+                    <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+                    <div style={style.container}>
+                        <div>
+                            <h2>Je wachtwoord vergeten?</h2>
+                        </div>
+                        <form style={style}>
+                            <div>
+                                <Input
+                                    type="text"
+                                    style={style.input}
+                                    placeholder="Username"
+                                    defaultValue={authData || ''}
+                                    onChange={event => this.inputs.username = event.target.value}
+                                    autoFocus
+                                />
+                            </div>
+                            <div>
+                                <Button style={style.button} onClick={this.sendCode}>Verstuur wachtwoord reset
+                                    code</Button>
+                            </div>
+                            {error && <div style={style.alert}>{error}</div>}
+                        </form>
+                        <div style={style.links}>
+                            <div>
+                                <button
+                                    style={style.extraButton}
+                                    onClick={() => this.changeState('signIn')}>
+                                    Terug naar het inlogscherm
+                                </button>
+                            </div>
+                            <div>
+                                <button
+                                    style={style.extraButton}
+                                    onClick={() => this.changeState('confirmSignUp')}>
+                                    Bevestig je account
+                                </button>
+                            </div>
+                            <div>
+                                <button
+                                    style={style.extraButton}
+                                    onClick={this.signUp}>
+                                    Nog geen account?
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

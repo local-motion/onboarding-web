@@ -76,33 +76,39 @@ export default class JConfirmSignIn extends Component {
         const {error} = this.state;
 
         return (
-            <div style={style.container}>
-                <h2>Confirm Sign In</h2>
-                <form onSubmit={this.onSubmit}>
-                    <div>
-                        <Input
-                            type="text"
-                            placeholder="Code"
-                            onChange={event => this.inputs.code = event.target.value}
-                            autoFocus
-                        />
-                    </div>
-                    {error && <p style={style.alert}>{error.message}</p>}
-                </form>
-                <div style={style.links}>
-                    <div>
-                        <Button
-                            style={style.button}
-                            onClick={() => this.changeState('signIn')}>
-                            Back to sign in
-                        </Button>
-                    </div>
-                    <div>
-                        <Button
-                            style={style.button}
-                            onClick={this.confirmSignIn}>
-                            Confirm
-                        </Button>
+            <div className={"secure-app-wrapper"}>
+                <div className={"secure-app-background"}></div>
+                <div className={"secure-app-container"}>
+                    <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+                    <div style={style.container}>
+                        <h2>Confirm Sign In</h2>
+                        <form onSubmit={this.onSubmit}>
+                            <div>
+                                <Input
+                                    type="text"
+                                    placeholder="Code"
+                                    onChange={event => this.inputs.code = event.target.value}
+                                    autoFocus
+                                />
+                            </div>
+                            {error && <p style={style.alert}>{error.message}</p>}
+                        </form>
+                        <div style={style.links}>
+                            <div>
+                                <Button
+                                    style={style.button}
+                                    onClick={() => this.changeState('signIn')}>
+                                    Back to sign in
+                                </Button>
+                            </div>
+                            <div>
+                                <Button
+                                    style={style.button}
+                                    onClick={this.confirmSignIn}>
+                                    Confirm
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -69,57 +69,63 @@ export default class JSignUp extends Component {
         const {error} = this.state;
 
         return (
-            <div style={style.container}>
-                <h2>Schrijf je in</h2>
-                <form onSubmit={this.onSubmit} style={style}>
-                    <div>
-                        <Input
-                            type="text"
-                            placeholder="Username"
-                            style={style.input}
-                            onChange={event => this.inputs.username = event.target.value}
-                            autoFocus
-                        />
-                    </div>
-                    <div>
-                        <Input
-                            type="password"
-                            placeholder="Password"
-                            onChange={event => this.inputs.password = event.target.value}
-                            style={style.input}
-                        />
-                    </div>
-                    <div>
-                        <Input
-                            type="email"
-                            placeholder="Email address"
-                            style={style.input}
-                            onChange={event => this.inputs.email = event.target.value}
-                        />
-                    </div>
-                    <div>
-                        <Button
-                            style={style.button}
-                            onClick={this.signUp}>
-                            Maak het account
-                        </Button>
-                    </div>
-                    {error && <p>{error.message}</p>}
-                </form>
-                <div style={style.links} className={"extra-info"}>
-                    <div style={style.left}>
-                        <button
-                            style={style.extraButton}
-                            onClick={() => this.changeState('signIn')}>
-                            Ga terug naar login
-                        </button>
-                    </div>
-                    <div style={style.left}>
-                        <button
-                            style={style.extraButton}
-                            onClick={() => this.changeState('confirmSignUp')}>
-                            Bevestig je account
-                        </button>
+            <div className={"secure-app-wrapper"}>
+                <div className={"secure-app-background"}></div>
+                <div className={"secure-app-container"}>
+                    <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+                    <div style={style.container}>
+                        <h2>Schrijf je in</h2>
+                        <form onSubmit={this.onSubmit} style={style}>
+                            <div>
+                                <Input
+                                    type="text"
+                                    placeholder="Username"
+                                    style={style.input}
+                                    onChange={event => this.inputs.username = event.target.value}
+                                    autoFocus
+                                />
+                            </div>
+                            <div>
+                                <Input
+                                    type="password"
+                                    placeholder="Password"
+                                    onChange={event => this.inputs.password = event.target.value}
+                                    style={style.input}
+                                />
+                            </div>
+                            <div>
+                                <Input
+                                    type="email"
+                                    placeholder="Email address"
+                                    style={style.input}
+                                    onChange={event => this.inputs.email = event.target.value}
+                                />
+                            </div>
+                            <div>
+                                <Button
+                                    style={style.button}
+                                    onClick={this.signUp}>
+                                    Maak het account
+                                </Button>
+                            </div>
+                            {error && <p>{error.message}</p>}
+                        </form>
+                        <div style={style.links} className={"extra-info"}>
+                            <div style={style.left}>
+                                <button
+                                    style={style.extraButton}
+                                    onClick={() => this.changeState('signIn')}>
+                                    Ga terug naar login
+                                </button>
+                            </div>
+                            <div style={style.left}>
+                                <button
+                                    style={style.extraButton}
+                                    onClick={() => this.changeState('confirmSignUp')}>
+                                    Bevestig je account
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

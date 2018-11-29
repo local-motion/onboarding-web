@@ -11,7 +11,7 @@
     .grid-item {
         max-width: 100% !important;
     }
-    @include breakpoint($breakpoints-lg) {
+    @include breakpoint-max($breakpoints-lg) {
         padding: 35px 0;
 
         .statistic-container {

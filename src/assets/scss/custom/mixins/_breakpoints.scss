@@ -1,5 +1,11 @@
 // BREAKPOINT MIXIN
 @mixin breakpoint($size) {
+    @media screen and (min-width: #{ $size }) {
+        @content;
+    }
+}
+
+@mixin breakpoint-max($size) {
     @media screen and (max-width: #{ $size }) {
         @content;
     }
