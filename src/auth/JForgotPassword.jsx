@@ -50,9 +50,12 @@ export default class JForgotPassword extends Component {
         }
 
         const style = {
-            width: '20rem',
-            links: {fontSize: '0.9em'},
+            width: '100%',
+            input: {borderRadius: '0', display: 'block'},
+            links: {fontSize: '0.9em', minHeight: "35px"},
             button: {width: '100%'},
+            extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
+            left: {float: "left"},
             alert: {fontSize: '0.8em'}
         };
 
@@ -61,12 +64,13 @@ export default class JForgotPassword extends Component {
         return (
             <div style={style.container}>
                 <div>
-                    <h1>Forgot password</h1>
+                    <h2>Je wachtwoord vergeten?</h2>
                 </div>
-                <form>
+                <form style={style}>
                     <div>
                         <Input
                             type="text"
+                            style={style.input}
                             placeholder="Username"
                             defaultValue={authData || ''}
                             onChange={event => this.inputs.username = event.target.value}
@@ -74,33 +78,31 @@ export default class JForgotPassword extends Component {
                         />
                     </div>
                     <div>
-                        <Button style={style.button} onClick={this.sendCode}>Send password reset code</Button>
+                        <Button style={style.button} onClick={this.sendCode}>Verstuur wachtwoord reset code</Button>
                     </div>
                     {error && <div style={style.alert}>{error}</div>}
                 </form>
                 <div style={style.links}>
                     <div>
-                        <Button
-                            style={style.button}
+                        <button
+                            style={style.extraButton}
                             onClick={() => this.changeState('signIn')}>
-                            Back to sign in
-                        </Button>
+                            Terug naar het inlogscherm
+                        </button>
                     </div>
                     <div>
-                        <p> No account? </p>
-                        <Button
-                            style={style.button}
+                        <button
+                            style={style.extraButton}
                             onClick={() => this.changeState('confirmSignUp')}>
-                            Confirm a code
-                        </Button>
+                            Bevestig je account
+                        </button>
                     </div>
                     <div>
-                        <p> No account? </p>
-                        <Button
-                            style={style.button}
+                        <button
+                            style={style.extraButton}
                             onClick={this.signUp}>
-                            Create account
-                        </Button>
+                            Nog geen account?
+                        </button>
                     </div>
                 </div>
             </div>
