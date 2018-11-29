@@ -46,10 +46,10 @@ class Onboarding extends React.Component {
         });
     }
 
-    handleCreatePlayground = (playground) => {
+    handleCreatePlayground = (e) => {
         this.setState({
             view: 'playground',
-            playground: playground
+            playground: { latLng: e.latLng }
         });
     }
 
@@ -79,7 +79,7 @@ class Onboarding extends React.Component {
                       <PlaygroundMap
                         isMarkerShown
                         onPlaygroundChange={this.handlePlaygroundChange}
-                        onCreatePlayground={this.handleCreatePlayground}
+                        onPlaygroundCreated={this.handleCreatePlayground}
                         center={map.latlng}
                         zoom={map.zoom}
                       />
