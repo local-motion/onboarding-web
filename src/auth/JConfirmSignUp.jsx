@@ -62,9 +62,11 @@ export default class JConfirmSignUp extends Component {
 
         const style = {
             width: '20rem',
-            input: {borderRadius: '0'},
-            links: {fontSize: '0.9em'},
+            input: {borderRadius: '0', display: 'block'},
+            links: {fontSize: '0.9em', minHeight: "35px"},
             button: {width: '100%'},
+            extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
+            left: {float: "left"},
             alert: {fontSize: '0.8em'}
         };
 
@@ -72,7 +74,7 @@ export default class JConfirmSignUp extends Component {
 
         return (
             <div style={style.container}>
-                <h1>Confirm SignUp</h1>
+                <h2>Bevestig je account</h2>
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <Input
@@ -93,30 +95,30 @@ export default class JConfirmSignUp extends Component {
                             autoFocus
                         />
                     </div>
-                    {error && <p style={style.alert}>{error.message}</p>}
-                    {message && <p style={style.alert}>{message}</p>}
-                </form>
-                <div style={style.links}>
-                    <div>
-                        <Button
-                            style={style.button}
-                            onClick={() => this.changeState('signIn')}>
-                            Back to sign in
-                        </Button>
-                    </div>
                     <div>
                         <Button
                             style={style.button}
                             onClick={this.confirmSignUp}>
-                            Confirm
+                            Bevestig
                         </Button>
                     </div>
                     <div>
                         <Button
                             style={style.button}
                             onClick={this.resendCode}>
-                            Resend
+                            Stuur code opnieuw
                         </Button>
+                    </div>
+                    {error && <p style={style.alert}>{error.message}</p>}
+                    {message && <p style={style.alert}>{message}</p>}
+                </form>
+                <div style={style.links}>
+                    <div>
+                        <button
+                            style={style.extraButton}
+                            onClick={() => this.changeState('signIn')}>
+                            Terug naar het inlogscherm
+                        </button>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,41 @@
+.secure-app-wrapper{
+    width: 1024px;
+    margin: 0 auto;
+    .secure-app-background{
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-image: url("../img/bg-auth.jpg");
+        background-size: 100%;
+        background-position: center;
+        position: fixed;
+        z-index: 1;
+    }
+    .secure-app-container{
+        background: white;
+        padding: 25px;
+        width: 50%;
+        margin: 100px auto;
+        @include shadow-big();
+        position: relative;
+        z-index: 10;
+        border-radius: 10px;
+    }
+
+    h2{
+        font-size: 1.5rem;
+    }
+
+    form{
+        width: 100% !important;
+        input{
+            margin: 20px 0;
+        }
+            button{
+                &:hover{
+                    color: $lm-red-1;
+                }
+            }
+    }
+}
