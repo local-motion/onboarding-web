@@ -80,53 +80,60 @@ export default class JSignIn extends Component {
             input: {borderRadius: '0', display: 'block'},
             links: {fontSize: '0.9em', minHeight: "25px"},
             button: {width: '100%', marginBottom: "15px"},
-            extraButton: { border: "0", marginBottom: "15px", cursor: "pointer"},
-            left: { float: "left" },
+            extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
+            left: {float: "left"},
             alert: {fontSize: '0.8em'}
         };
 
         const {error} = this.state;
 
         return (
-            <div className={"signin-wrapper"}>
-                <form style={style}>
-                    <Input
-                        type="text"
-                        placeholder="Username"
-                        style={style.input}
-                        defaultValue={authData || ''}
-                        onChange={event => this.inputs.username = event.target.value}
-                        autoFocus
-                    />
-                    <Input
-                        type="password"
-                        placeholder="Password"
-                        onChange={event => this.inputs.password = event.target.value}
-                        style={style.input}
-                    />
-                    <Button
-                        style={style.button}
-                        onClick={this.signIn}
-                    >
-                        Sign In
-                    </Button>
-                    <div style={style.links} className={"extra-info"}>
-                        <div style={style.left}>
-                            <button
-                                style={style.extraButton}
-                                onClick={() => this.changeState('signUp')}>
-                                Maak een account
-                            </button>
-                        </div>
-                        <div style={style.left}>
-                            <button style={style.extraButton} onClick={() => this.changeState('forgotPassword')}>
-                                Wachtwoord vergeten?
-                            </button>
-                        </div>
+            <div className={"secure-app-wrapper"}>
+                <div className={"secure-app-background"}></div>
+                <div className={"secure-app-container"}>
+                    <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+                    <div className={"signin-wrapper"}>
+                        <form style={style}>
+                            <Input
+                                type="text"
+                                placeholder="Username"
+                                style={style.input}
+                                defaultValue={authData || ''}
+                                onChange={event => this.inputs.username = event.target.value}
+                                autoFocus
+                            />
+                            <Input
+                                type="password"
+                                placeholder="Password"
+                                onChange={event => this.inputs.password = event.target.value}
+                                style={style.input}
+                            />
+                            <Button
+                                style={style.button}
+                                onClick={this.signIn}
+                            >
+                                Sign In
+                            </Button>
+                            <div style={style.links} className={"extra-info"}>
+                                <div style={style.left}>
+                                    <button
+                                        style={style.extraButton}
+                                        onClick={() => this.changeState('signUp')}>
+                                        Maak een account
+                                    </button>
+                                </div>
+                                <div style={style.left}>
+                                    <button style={style.extraButton}
+                                            onClick={() => this.changeState('forgotPassword')}>
+                                        Wachtwoord vergeten?
+                                    </button>
+                                </div>
+                            </div>
+                            {/*<Federated federated={federated_data} onStateChange={this.changeState} />*/}
+                            {error && <div style={style.alert}>{error}</div>}
+                        </form>
                     </div>
-                    {/*<Federated federated={federated_data} onStateChange={this.changeState} />*/}
-                    {error && <div style={style.alert}>{error}</div>}
-                </form>
+                </div>
             </div>
         )
     }
