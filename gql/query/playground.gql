@@ -1,0 +1,11 @@
+query Query {
+    playground(id: "initiative-207") {
+        id
+        name
+        lng
+        lat
+        status
+        volunteerCount
+        votes
+    }
+}
