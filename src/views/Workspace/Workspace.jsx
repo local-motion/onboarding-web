@@ -5,10 +5,10 @@ import classNames from "classnames";
 // import {Link} from "react-router-dom";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
+
 // @material-ui/icons
-import Button from "@material-ui/core/Button";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 // core components
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
@@ -20,39 +20,44 @@ import PhaseIndicator from "./Sections/PhaseIndicator.jsx";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import SmokefreeDecision from "./forms/SmokefreeDecision.jsx";
 
-class Workspace extends React.Component {
+const GET_PLAYGROUND = gql`
+    {
+        playground(id: "${window.location.pathname.split("/").pop()}") {
+            id
+            name
+            lat
+            lng
+            status
+            type
+            status
+        }
+    }
+`;
+
+const withPlayground = graphql(GET_PLAYGROUND, {
+    // `ownProps` are the props passed into component
+    // `data` is the result data (see above)
+    props: ({ownProps, data }) => {
+        if(data.loading) return { playgroundsLoading: true };
+        if(data.error) return { hasErrors: true };
+        if(data.error) return { hasErrors: true };
+        console.log("ownProps", ownProps);
+        console.log("data", data);
+        return {
+            playground: data.playground
+        };
+    }
+});
+
+class WorkspaceTemplate extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            startDate: new Date()
-        };
-        this.state = {
-            name: "TestPlayground",
-            lat: 52.468369,
-            lng: 4.809581,
-            initiativeId: 'afakepark-fake-fake-fake-afakeparkisfake',
-            type: "smokefree",
-            status: "not_started"
-        };
-
-        this.handleDateChange = this.handleDateChange.bind(this);
-    }
-
-    handleDateChange(date) {
-        this.setState({
-            startDate: date
-        });
-    }
-
-    handleSubmit(date) {
-        this.setState({
-            startDate: date
-        });
     }
 
     render() {
-        const {classes, ...rest} = this.props;
+        const {classes, playground, ...rest} = this.props;
         return (
             <div className={"workspace-wrapper"}>
                 <Header
@@ -85,23 +90,7 @@ class Workspace extends React.Component {
                 <div className={classNames(classes.mainRaised, classes.container + " phase-explainer-container")}>
                     <GridContainer>
                         <GridItem>
-                            <label>
-                                <input type="checkbox" id={"smokeFree"}/>
-                                Make smokeFree
-                            </label>
-
-                            <br/>
-
-                            <label>From<br/>
-                                <DatePicker
-                                    selected={this.state.startDate}
-                                    onChange={this.handleChange}
-                                />
-                            </label>
-
-                            <Button onClick={() => handleSubmit({ variables: { input: this.state } })}>
-                                {t("onboarding.playground.calltoaction.button")}
-                            </Button>
+                            <SmokefreeDecision playground={playground}/>
                         </GridItem>
                     </GridContainer>
                 </div>
@@ -110,5 +99,7 @@ class Workspace extends React.Component {
         );
     }
 }
+
+const Workspace = withPlayground(WorkspaceTemplate);
 
 export default withStyles(componentsStyle)(Workspace);
