@@ -1,19 +1,34 @@
-/*
-decideToBecomeSmokeFree(input: DecideToBecomeSmokeFreeCommand!): InputAcceptedResponse!
-decideToNotBecomeSmokeFree(input: DecideToNotBecomeSmokeFreeCommand!): InputAcceptedResponse!
-|*/
-
 import React from "react";
-import classNames from "classnames";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 import Button from "@material-ui/core/Button";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
 // core components
 import { withNamespaces } from "react-i18next";
+
+const SET_SMOKEFREE = gql`
+    mutation DecideToBecomeSmokeFreeCommand {
+        initiativeId
+    }
+`;
+
+const UNSET_SMOKEFREE = gql`
+    mutation DecideToNotBecomeSmokeFreeCommand {
+        initiativeId
+        reason
+    }
+`;
+
+const SET_SMOKEFREE_DATE = gql`
+    mutation CommitToSmokeFreeDateCommand {
+        initiativeId
+        smokeFreeDate
+    }
+`;
 
 class SmokefreeDecision extends React.Component {
     constructor(props) {
@@ -21,29 +36,43 @@ class SmokefreeDecision extends React.Component {
 
         this.state = {
             startDate: new Date(),
-            status: props.smokefree
+            status: props.smokefree,
+            reason: "none"
         };
 
         this.handleChangeDate = this.handleChangeDate.bind(this);
         this.handleChangeStatus = this.handleChangeStatus.bind(this);
     }
 
-    handleChangeDate(e) {
-        console.log("date", e);
+    handleChangeStatus(isSmokefree) {
         this.setState({
-            startDate: e
+            status: isSmokefree
         });
     }
 
-    handleChangeStatus(e) {
-        console.log("status", e.target.checked);
+    handleChangeDate(targetDate) {
         this.setState({
-            status: e
+            startDate: targetDate
         });
     }
 
-    handleSubmit(e) {
-        console.log("submit", e);
+    handleSubmitForm(e) {
+        console.log("State", this.state);
+        if(this.state.status !== this.props.status) {
+            if(this.state.status === true) {
+                console.log('set smoke free');
+                //{() => DecideToBecomeSmokeFreeCommand({ variables: { input: this.state.status } })}
+                if(this.state.startDate !== this.props.startDate) {
+                    console.log('set startDate');
+                    //{() => CommitToSmokeFreeDateCommand({ variables: { input: this.state.status } })}
+                }
+            } else {
+                console.log('unset smoke free');
+                console.log('reason', this.state.reason);
+                //{() => DecideToNotBecomeSmokeFreeCommand({ variables: { input: this.state.status } })}
+            }
+        }
+
     }
 
     render() {
@@ -65,9 +94,17 @@ class SmokefreeDecision extends React.Component {
                     />
                 </label>
 
-                <Button onClick={this.handleSubmit}>
-                    {t("onboarding.playground.calltoaction.button")}
-                </Button>
+                <Mutation
+                    mutation={SET_SMOKEFREE}
+                    update={null}
+                >
+                    {(setSmokeFree) => (
+                        //<Button onClick={() => setSmokeFree({ variables: { input: this.state } })}>
+                        <Button onClick={this.handleSubmitForm.bind(this)}>
+                            {t("onboarding.playground.calltoaction.button")}
+                        </Button>
+                    )}
+                </Mutation>
             </div>
         );
     }
