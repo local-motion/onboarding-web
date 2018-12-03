@@ -12,7 +12,7 @@ class CallToAction extends React.Component {
 
         return (
             <GridContainer>
-                <GridItem>
+                <GridItem xs={12} sm={12} md={12} className={"onboarding-header-container"}>
                     <div className={classes.brand + " onboarding-header"}>
                         <h1 className={"grunge-title"}>
                             {t("onboarding.playground.calltoaction.title.name", {

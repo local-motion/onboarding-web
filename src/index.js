@@ -138,7 +138,7 @@ const App = class App extends React.Component {
                         <Router history={hist}>
                             <Switch>
                                 {indexRoutes.map((prop, key) => {
-                                    return <Route path={prop.path} key={key} component={prop.component}/>;
+                                    return <Route path={prop.path} key={key} component={prop.component} />;
                                 })}
                             </Switch>
                         </Router>
@@ -159,7 +159,7 @@ const SecuredApp = withAuthenticator(App, false, [
 ]);
 
 const Wrapped = [
-            <SecuredApp className={"secure-app"}/>
+    <SecuredApp className={"secure-app"}/>
 ];
 
 ReactDOM.render(
