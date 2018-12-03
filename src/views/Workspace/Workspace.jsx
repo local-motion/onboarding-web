@@ -25,26 +25,17 @@ import SmokefreeDecision from "./forms/SmokefreeDecision.jsx";
 const GET_PLAYGROUND = gql`
     {
         playground(id: "${window.location.pathname.split("/").pop()}") {
-            id
             name
-            lat
-            lng
-            status
-            type
             status
         }
     }
 `;
 
-const withPlayground = graphql(GET_PLAYGROUND, {
-    // `ownProps` are the props passed into component
-    // `data` is the result data (see above)
+const playgroundRequest = graphql(GET_PLAYGROUND,{
     props: ({ownProps, data }) => {
         if(data.loading) return { playgroundsLoading: true };
         if(data.error) return { hasErrors: true };
         if(data.error) return { hasErrors: true };
-        console.log("ownProps", ownProps);
-        console.log("data", data);
         return {
             playground: data.playground
         };
@@ -52,12 +43,9 @@ const withPlayground = graphql(GET_PLAYGROUND, {
 });
 
 class WorkspaceTemplate extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {classes, playground, ...rest} = this.props;
+
         return (
             <div className={"workspace-wrapper"}>
                 <Header
@@ -89,9 +77,12 @@ class WorkspaceTemplate extends React.Component {
                 </div>
                 <div className={classNames(classes.mainRaised, classes.container + " phase-explainer-container")}>
                     <GridContainer>
-                        <GridItem>
-                            <SmokefreeDecision playground={playground}/>
-                        </GridItem>
+                            {!!playground &&
+                            <GridItem>
+                                <h1>{ playground.name }</h1>
+                                <SmokefreeDecision playground={ playground }/>
+                            </GridItem>
+                            }
                     </GridContainer>
                 </div>
                 <Footer/>
@@ -99,7 +90,6 @@ class WorkspaceTemplate extends React.Component {
         );
     }
 }
-
-const Workspace = withPlayground(WorkspaceTemplate);
-
+console.log("start");
+const Workspace = playgroundRequest(WorkspaceTemplate);
 export default withStyles(componentsStyle)(Workspace);

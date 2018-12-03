@@ -52,7 +52,7 @@ class SmokefreeDecision extends React.Component {
         return (
             <div>
                 <label>
-                    <input type="checkbox" id={"smokeFree"}  onChange={this.handleChangeStatus}/>
+                    <input type="checkbox" id={"smokeFree"} defaultChecked={playground.status !== "not_started"} onChange={this.handleChangeStatus}/>
                     Make smoke free
                 </label>
 
