@@ -22,6 +22,7 @@ const styles = {
 
 function MediaCard(props) {
     const {classes, title, image, content, primaryCta, secondaryCta} = props;
+
     return (
         <Card className={classes.card}>
             <CardActionArea>
@@ -40,12 +41,8 @@ function MediaCard(props) {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button size="small" color="primary">
-                    {primaryCta}
-                </Button>
-                <Button size="small" color="primary">
-                    {secondaryCta}
-                </Button>
+                {primaryCta ? <Button size="small" color="primary">{primaryCta}</Button> : null }
+                {secondaryCta ? <Button size="small" color="primary">{secondaryCta}</Button> : null }
             </CardActions>
         </Card>
     );
