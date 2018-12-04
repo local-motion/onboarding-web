@@ -45,7 +45,7 @@ class CollapseMediaCard extends React.Component {
     };
 
     render() {
-        const {classes, title, image, content, primaryCta, secondaryCta} = this.props;
+        const {classes, title, image, content, primaryCta, MoreInformation} = this.props;
         return (
             <Card className={classes.card}>
                 <CardActionArea>
@@ -65,7 +65,7 @@ class CollapseMediaCard extends React.Component {
                 </CardActionArea>
                 <CardActions>
                     {primaryCta ? <Button size="small" color="primary">{primaryCta}</Button> : null}
-                    {secondaryCta ? <Button size="small" color="primary">{secondaryCta}</Button> : null}
+                    {MoreInformation ? <Button size="small" color="primary" onClick={this.handleExpandClick}>{MoreInformation}</Button> : null}
                     <IconButton
                         className={classnames(classes.expand, {
                             [classes.expandOpen]: this.state.expanded,

@@ -57,16 +57,16 @@ class Workspace extends React.Component {
                     <GridContainer className={"information-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
                             <CollapseCard title={"Team"}
-                                        image={require("assets/img/backgrounds/team.jpg")}
-                                        content={"Maak kennis met het team die deze speeltuin rookvrij maakt"}
-                                        primaryCta={"Word lid"}
-                                        secondaryCta={"Meer informatie"}
+                                          image={require("assets/img/backgrounds/team.jpg")}
+                                          content={"Maak kennis met het team die deze speeltuin rookvrij maakt"}
+                                          primaryCta={"Word lid"}
+                                          MoreInformation={"Meer informatie"}
                             />
                             <CollapseCard title={"Petities"}
-                                        image={require("assets/img/backgrounds/petities.jpg")}
-                                        content={"Help mee met deze speeltuin rookvrij te maken door de petitie te tekenen"}
-                                        primaryCta={"Teken Petitie"}
-                                        secondaryCta={"Meer informatie"}
+                                          image={require("assets/img/backgrounds/petities.jpg")}
+                                          content={"Help mee met deze speeltuin rookvrij te maken door de petitie te tekenen"}
+                                          primaryCta={"Teken Petitie"}
+                                          MoreInformation={"Meer informatie"}
                             />
                             <SimpleCard title={"Donaties"}
                                         image={require("assets/img/backgrounds/donaties.jpg")}
