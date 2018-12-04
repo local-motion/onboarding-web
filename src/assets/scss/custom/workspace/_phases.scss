@@ -1,6 +1,9 @@
 .workspace-wrapper {
     .phase-container {
         height: 20vw !important;
+        .phase-wrapper{
+            margin-top: -30px;
+        }
     }
     .lm-step {
         svg {

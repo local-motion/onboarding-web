@@ -37,7 +37,7 @@ class Workspace extends React.Component {
                     {...rest}
                 />
                 <Parallax image={require("assets/img/bg-zand.jpg")} className={"phase-container"}>
-                    <div className={classes.container}>
+                    <div className={classes.container + " phase-wrapper"}>
                         <PhaseIndicator/>
                     </div>
                 </Parallax>
