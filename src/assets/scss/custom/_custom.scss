@@ -74,5 +74,6 @@ This CSS resource incorporates links to font software which is the valuable copy
 
 .flex-divide{
     display: flex;
-    justify-content:  space-between;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
