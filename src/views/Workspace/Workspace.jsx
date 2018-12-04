@@ -13,6 +13,7 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import PhaseIndicator from "./Sections/PhaseIndicator.jsx";
+import CustomCard from "components/CustomCard/Card.jsx"
 
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -35,7 +36,7 @@ class Workspace extends React.Component {
                     }}
                     {...rest}
                 />
-                <Parallax image={require("assets/img/bg-zand.jpg")} className={"phase-container"} >
+                <Parallax image={require("assets/img/bg-zand.jpg")} className={"phase-container"}>
                     <div className={classes.container}>
                         <PhaseIndicator/>
                     </div>
@@ -51,10 +52,26 @@ class Workspace extends React.Component {
                         </GridItem>
                     </GridContainer>
                 </div>
-                <div className={"dashboard"}>
-                    <GridContainer>
-                        <GridItem>
-                            {/*Place Card elements*/}
+                <div className={classes.container + " information-wrapper"}>
+                    <GridContainer className={"information-container"}>
+                        <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
+                            <CustomCard title={"Team"}
+                                        image={require("assets/img/backgrounds/team.jpg")}
+                                        content={"Maak kennis met het team die deze speeltuin rookvrij maakt"}
+                                        primaryCta={"Word lid"}
+                                        secondaryCta={"Meer informatie"}
+                            />
+                            <CustomCard title={"Petities"}
+                                        image={require("assets/img/backgrounds/petities.jpg")}
+                                        content={"Help mee met deze speeltuin rookvrij te maken door de petitie te tekenen"}
+                                        primaryCta={"Teken Petitie"}
+                                        secondaryCta={"Meer informatie"}
+                            />
+                            <CustomCard title={"Donaties"}
+                                        image={require("assets/img/backgrounds/donaties.jpg")}
+                                        content={"Door te doneren help je mee deze speeltuin rookvrij te maken."}
+                                        primaryCta={"Doneer nu"}
+                            />
                         </GridItem>
                     </GridContainer>
                 </div>
