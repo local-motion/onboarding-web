@@ -13,39 +13,48 @@ const styles = {
     card: {
         maxWidth: 345,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        alignSelf: "baseline",
     },
     media: {
         height: 140,
     },
+    cardActions: {
+        paddingTop: 16,
+        paddingRight: 8,
+        paddingBottom: 16,
+        paddingLeft: 8
+    }
 };
 
-function MediaCard(props) {
-    const {classes, title, image, content, primaryCta, secondaryCta} = props;
+class MediaCard extends React.Component {
 
-    return (
-        <Card className={classes.card}>
-            <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={image}
-                    title={title}
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {title}
-                    </Typography>
-                    <Typography component="p">
-                        {content}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions>
-                {primaryCta ? <Button size="small" color="primary">{primaryCta}</Button> : null }
-                {secondaryCta ? <Button size="small" color="primary">{secondaryCta}</Button> : null }
-            </CardActions>
-        </Card>
-    );
+    render() {
+        const {classes, title, image, content, primaryCta, secondaryCta} = this.props;
+        return (
+            <Card className={classes.card}>
+                <CardActionArea>
+                    <CardMedia
+                        className={classes.media}
+                        image={image}
+                        title={title}
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {title}
+                        </Typography>
+                        <Typography component="p">
+                            {content}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions className={classes.cardActions}>
+                    {primaryCta ? <Button size="small" color="primary">{primaryCta}</Button> : null}
+                    {secondaryCta ? <Button size="small" color="primary">{secondaryCta}</Button> : null}
+                </CardActions>
+            </Card>
+        );
+    }
 }
 
 MediaCard.propTypes = {
