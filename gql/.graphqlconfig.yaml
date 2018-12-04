@@ -5,6 +5,6 @@ projects:
     extensions:
       endpoints:
         dev:
-          url: 'http://localhost:8086/graphql'
+          url: 'http://localhost:8086/api/graphql'
           headers:
             Authorization: "Bearer ${env:ID_TOKEN}"
