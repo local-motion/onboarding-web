@@ -7,16 +7,15 @@ import {Link} from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
-import {AccountCircle, Apps, CloudDownload, Menu} from "@material-ui/icons";
+import {AccountCircle, Menu} from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
-import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.jsx";
+import JSignOut from "../../auth/JSignOut";
 
 function HeaderLinks({...props}) {
     const {classes} = props;
@@ -32,23 +31,29 @@ function HeaderLinks({...props}) {
                     }}
                     buttonIcon={Menu}
                     dropdownList={[
-                        <Link to="onboarding" className={classes.dropdownLink}>
+                        <Link to="./onboarding" className={classes.dropdownLink}>
                             Onboarding
                         </Link>,
-                        <Link to="workspace" className={classes.dropdownLink}>
+                        <Link to="./workspace" className={classes.dropdownLink}>
                             Workspace
                         </Link>
                     ]}
                 />
             </ListItem>
             <ListItem className={classes.listItem}>
-                <Button
-                    color="transparent"
-                    href="profile-page"
-                    className={classes.navLink}
-                >
-                    <AccountCircle className={classes.icons}/>
-                </Button>
+                <CustomDropdown
+                    noLiPadding
+                    buttonText=""
+                    buttonProps={{
+                        className: classes.navLink,
+                        color: "transparent"
+                    }}
+                    buttonIcon={AccountCircle}
+                    dropdownList={[
+                        <JSignOut/>,
+                    ]}
+                />
+
             </ListItem>
         </List>
     );

@@ -13,12 +13,12 @@
         .lm-step-button {
             &.active {
                 svg {
-                    color: $lm-red-1;
+                    color: $lm-blue-1;
                 }
             }
             &.inactive {
                 svg {
-                    color: $lm-blue-1;
+                    color: $lm-red-1;
                 }
             }
         }
