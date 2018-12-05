@@ -24,9 +24,9 @@ function Footer({...props}) {
         [classes.footerWhiteFont]: whiteFont
     });
     return (
-        <footer className={footerClasses}>
-            <div className={classes.container}>
-                <div className={classes.left}>
+        <footer className={footerClasses + " footer"}>
+            <div className={classes.container + " footer-container"}>
+                <div className={classes.left + " links-container"}>
                     <List className={classes.list}>
                         <ListItem className={classes.inlineBlock}>
                             <a
@@ -34,7 +34,7 @@ function Footer({...props}) {
                                 className={classes.block}
                                 target="_blank"
                             >
-                                Local Motion
+                                Rookvrije Generatie
                             </a>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
@@ -43,7 +43,7 @@ function Footer({...props}) {
                                 className={classes.block}
                                 target="_blank"
                             >
-                                About us
+                                Algemene voorwaarden
                             </a>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
@@ -52,22 +52,41 @@ function Footer({...props}) {
                                 className={classes.block}
                                 target="_blank"
                             >
-                                Smoke-free generation
-                            </a>
-                        </ListItem>
-                        <ListItem className={classes.inlineBlock}>
-                            <a
-                                href="https://www.creative-tim.com/license"
-                                className={classes.block}
-                                target="_blank"
-                            >
-                                Licenses
+                                Privacy statement
                             </a>
                         </ListItem>
                     </List>
                 </div>
-                <div className={classes.right}>
-                    {t('footer.attribution')}
+                <div className={classes.right + " logos-container"}>
+                    <List className={classes.list}>
+                        <ListItem className={classes.inlineBlock + " footer-logo"}>
+                            <a
+                                href="https://www.hartstichting.nl/"
+                                className={classes.block}
+                                target="_blank"
+                            >
+                                <img src={require("assets/img/logo-hartstichting.png")} alt="Logo Hartstichting" />
+                            </a>
+                        </ListItem>
+                        <ListItem className={classes.inlineBlock + " footer-logo"}>
+                            <a
+                                href="https://www.kwf.nl/"
+                                className={classes.block}
+                                target="_blank"
+                            >
+                                <img src={require("assets/img/logo-kwf.png")} alt="Logo KWF Kankerfonds" />
+                            </a>
+                        </ListItem>
+                        <ListItem className={classes.inlineBlock + " footer-logo"}>
+                            <a
+                                href="https://www.longfonds.nl/"
+                                className={classes.block}
+                                target="_blank"
+                            >
+                                <img src={require("assets/img/logo-longfonds.png")} alt="Logo Longfonds" />
+                            </a>
+                        </ListItem>
+                    </List>
                 </div>
             </div>
         </footer>

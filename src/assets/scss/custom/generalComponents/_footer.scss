@@ -1,0 +1,20 @@
+.footer{
+    .footer-container{
+        display: flex;
+        justify-content: space-between;
+        .links-container, .logos-container{
+            float: none !important;
+            display: flex;
+            padding: 0;
+            vertical-align: middle;
+            align-items: center;
+        }
+    }
+
+    .footer-logo{
+        img {
+            width: auto;
+            height: 60px;
+        }
+    }
+}
