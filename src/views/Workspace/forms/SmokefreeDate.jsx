@@ -36,21 +36,17 @@ class SmokefreeDate extends React.Component {
 
     render() {
         return (
-            <div>
-                <h2>Pick a date</h2>
-
-                <Mutation
-                    mutation={SET_SMOKEFREE_DATE}
-                    update={null}
-                >
-                    {(setSmokeFreeDate) => (
-                        <DatePicker
-                            selected={this.state.startDate}
-                            onChange={() => setSmokeFreeDate({ variables: { input: this.state.startDate } })}
-                        />
-                    )}
-                </Mutation>
-            </div>
+            <Mutation
+                mutation={SET_SMOKEFREE_DATE}
+                update={null}
+            >
+                {(setSmokeFreeDate) => (
+                    <DatePicker
+                        selected={this.state.startDate}
+                        onChange={() => setSmokeFreeDate({ variables: { input: this.state.startDate } })}
+                    />
+                )}
+            </Mutation>
         );
     }
 }

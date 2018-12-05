@@ -1,16 +1,22 @@
 import React from "react";
-//import PropTypes from 'prop-types';
-
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-
 // core components
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import SimpleCard from "components/CustomCard/Card.jsx"
-import CollapseCard from "components/CustomCard/CollapseCard.jsx"
-
+import SimpleCard from "components/CustomCard/Card.jsx";
+import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+
+import Card from "components/Card/Card.jsx";
+
+const SET_SMOKEFREE = gql`
+    mutation DecideToBecomeSmokeFreeCommand {
+        initiativeId
+    }
+`;
 
 class PhasePrepare extends React.Component {
 
@@ -28,16 +34,30 @@ class PhasePrepare extends React.Component {
                                         text: "Verstuur een email"
                                     }}
                         />
+
                         <CollapseCard title={"Deel via social media"}
                                       image={require("assets/img/backgrounds/social.jpg")}
                                       content={"Laat je volgers weten dat je Speeltuin rookvrij wilt maken."}
                                       MoreInformation={"Meer informatie"}
                         />
-                        <CollapseCard title={"Maak speeltuin rookvrij"}
-                                      image={require("assets/img/backgrounds/smokefree.jpg")}
-                                      content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
-                                      MoreInformation={"Maak rookvrij"}
-                        />
+
+                        <Mutation
+                            mutation={SET_SMOKEFREE}
+                            update={null}
+                        >
+                            {(setSmokeFree) => (
+                                <SimpleCard
+                                    title={"Maak speeltuin rookvrij"}
+                                    image={require("assets/img/backgrounds/smokefree.jpg")}
+                                    content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
+                                    onClick={() => setSmokeFree({ variables: { input: true } })}
+                                    primaryCta={{
+                                        click: (() => {console.log('foo'); setSmokeFree({ variables: { input: true } })}),
+                                        text: "Maak rookvrij"
+                                    }}
+                                />
+                            )}
+                        </Mutation>
                     </GridItem>
                 </GridContainer>
             </div>

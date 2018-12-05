@@ -31,14 +31,14 @@ class MediaCard extends React.Component {
     render() {
         const {classes, title, image, content, primaryCta, secondaryCta} = this.props;
         return (
-            <Card className={classes.card}>
+            <Card className={classes.card + " card"}>
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
                         image={image}
                         title={title}
                     />
-                    <CardContent>
+                    <CardContent className={"card-content"}>
                         <Typography gutterBottom variant="h5" component="h2">
                             {title}
                         </Typography>
@@ -48,7 +48,7 @@ class MediaCard extends React.Component {
                     </CardContent>
                 </CardActionArea>
                 <CardActions className={classes.cardActions + " card-actions"}>
-                    {primaryCta ? <Button size="small" color="primary" href={primaryCta.action}>{primaryCta.text}</Button> : null}
+                    {primaryCta ? <Button size="small" color="primary" href={primaryCta.action} onClick={primaryCta.click}>{primaryCta.text}</Button> : null}
                     {secondaryCta ? <Button size="small" color="primary">{secondaryCta}</Button> : null}
                 </CardActions>
             </Card>
