@@ -24,6 +24,7 @@ import PhaseExecute from "./Sections/PhaseExecute.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import SmokefreeDecision from "./forms/SmokefreeDecision.jsx";
+import SmokefreeDate from "./forms/SmokefreeDate.jsx";
 
 const GET_PLAYGROUND = gql`
     {
@@ -59,9 +60,19 @@ class WorkspaceTemplate extends React.Component {
         console.log(phase, this.state.phase);
         switch (phase) {
             case "1":
-                return <PhasePrepare />;
+                return(
+                    <span>
+                        <SmokefreeDecision playground={ this.props.playground }/>
+                        <PhasePrepare />
+                    </span>
+                );
             case "2":
-                return <PhaseExecute />;
+                return(
+                    <span>
+                        <SmokefreeDate playground={ this.props.playground }/>
+                        <PhaseExecute />
+                    </span>
+                );
             default:
                 return <Dashboard />;
         }

@@ -2,7 +2,6 @@ import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
-import Button from "@material-ui/core/Button";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Mutation } from "react-apollo";
@@ -32,14 +31,6 @@ class SmokefreeDate extends React.Component {
         this.setState({
             startDate: targetDate
         });
-    }
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            startDate: new Date()
-        };
     }
 
 
