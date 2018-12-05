@@ -28,10 +28,15 @@ class PhasePrepare extends React.Component {
                                         text: "Verstuur een email"
                                     }}
                         />
-                        <CollapseCard title={"Deel via Social Media"}
+                        <CollapseCard title={"Deel via social media"}
                                       image={require("assets/img/backgrounds/social.jpg")}
                                       content={"Laat je volgers weten dat je Speeltuin rookvrij wilt maken."}
                                       MoreInformation={"Meer informatie"}
+                        />
+                        <CollapseCard title={"Maak speeltuin rookvrij"}
+                                      image={require("assets/img/backgrounds/smokefree.jpg")}
+                                      content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
+                                      MoreInformation={"Maak rookvrij"}
                         />
                     </GridItem>
                 </GridContainer>

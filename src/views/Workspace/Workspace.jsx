@@ -15,6 +15,7 @@ import Parallax from "components/Parallax/Parallax.jsx";
 import PhaseIndicator from "./Sections/PhaseIndicator.jsx";
 import Dashboard from "./Sections/Dashboard.jsx";
 import PhasePrepare from "./Sections/PhasePrepare.jsx";
+import PhaseExecute from "./Sections/PhaseExecute.jsx";
 
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -35,7 +36,9 @@ class Workspace extends React.Component {
         console.log(phase, this.state.phase);
         switch (phase) {
             case "1":
-                return <PhasePrepare/>;
+                return <PhasePrepare />;
+            case "2":
+                return <PhaseExecute />;
             default:
                 return <Dashboard />;
         }
