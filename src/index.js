@@ -99,7 +99,7 @@ const App = class App extends React.Component {
             return "Logging in failed: " + (auth && auth.state);
         }
 
-        let uri = process.env.ONBOARDING_API || 'http://techoverflow-d.aws.nl.eu.abnamro.com/api/graphql';
+        let uri = process.env.ONBOARDING_API || 'https://techoverflow-d.aws.nl.eu.abnamro.com/api/graphql';
         console.log('ONBOARDING_API: ' + process.env.ONBOARDING_API);
         console.log('Using Onboarding API at ' + uri);
 
