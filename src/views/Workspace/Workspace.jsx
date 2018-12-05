@@ -26,6 +26,7 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 const GET_PLAYGROUND = gql`
     {
         playground(id: "${window.location.pathname.split("/").pop()}") {
+            id
             name
             status
         }

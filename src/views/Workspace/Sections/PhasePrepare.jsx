@@ -10,18 +10,24 @@ import SimpleCard from "components/CustomCard/Card.jsx";
 import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 
-import Card from "components/Card/Card.jsx";
 
 const SET_SMOKEFREE = gql`
-    mutation DecideToBecomeSmokeFreeCommand {
-        initiativeId
+  mutation DecideToBecomeSmokeFree($input: DecideToBecomeSmokeFreeCommand!) {
+    decideToBecomeSmokeFree(input: $input) {
+      id
     }
+  }
 `;
 
 class PhasePrepare extends React.Component {
 
     render() {
         const {classes} = this.props;
+        const playgroundId = window.location.pathname.split("/").pop();
+        console.log("Posting decision to become smokefree for playground " + playgroundId);
+        let decideToBecomeSmokeFreeCommand = {
+            initiativeId: playgroundId
+        };
         return (
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
@@ -50,9 +56,8 @@ class PhasePrepare extends React.Component {
                                     title={"Maak speeltuin rookvrij"}
                                     image={require("assets/img/backgrounds/smokefree.jpg")}
                                     content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
-                                    onClick={() => setSmokeFree({ variables: { input: true } })}
                                     primaryCta={{
-                                        click: (() => {console.log('foo'); setSmokeFree({ variables: { input: true } })}),
+                                        click: (() => {setSmokeFree({ variables: { input: decideToBecomeSmokeFreeCommand } })}),
                                         text: "Maak rookvrij"
                                     }}
                                 />
