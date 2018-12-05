@@ -25,66 +25,64 @@ import JConfirmSignIn from "auth/JConfirmSignIn";
 import JForgotPassword from "./auth/JForgotPassword";
 import JForgotPasswordReset from "./auth/JForgotPasswordReset";
 
+const environments = {
+    "https://techoverflow-d.aws.nl.eu.abnamro.com": {
+        aws: {
+            cognito: {
+                region: "eu-west-1",
+                userPoolId: "eu-west-1_64ShtC2tS",
+                userPoolWebClientId: "5djhi4lvjkf33cu6aik6kd1uku",
+                domain: "techoverflow-d.auth.eu-west-1.amazoncognito.com",
+                redirectSignIn: "https://techoverflow-d.aws.nl.eu.abnamro.com/onboarding/signin",
+                redirectSignOut: "https://techoverflow-d.aws.nl.eu.abnamro.com/onboarding/logout",
+            }
+        },
+        api: {
+            onboarding: "https://techoverflow-d.aws.nl.eu.abnamro.com/api/graphql"
+        }
+    },
+    "localhost": {
+        aws: {
+            cognito: {
+                region: "eu-west-1",
+                userPoolId: "eu-west-1_WsTxYUHyC",
+                userPoolWebClientId: "3nkh1qomocr39s893jf0dp44cd",
+                domain: "smokefree-dev.auth.eu-west-1.amazoncognito.com",
+                redirectSignIn: "http://localhost:3000/onboarding/signin",
+                redirectSignOut: "http://localhost:3000/onboarding/logout",
+            }
+        },
+        api: {
+            onboarding: "http://localhost:8086/api/graphql"
+        }
+    }
+};
+const settings = environments[window.location.hostname] || environments["https://techoverflow-d.aws.nl.eu.abnamro.com"];
+console.log("Host name is: " + window.location.hostname);
+console.log("Using settings:", settings);
+
+const uri = process.env.ONBOARDING_API || settings.api.onboarding;
+console.log('Using Onboarding API at ' + uri);
+
 const isAuthenticated = () => Amplify.Auth.user != null;
 const oauth = {
     awsCognito: {
-        // Domain name
-        domain: 'smokefree-dev.auth.eu-west-1.amazoncognito.com',
-
-        // Authorized scopes
+        domain: settings.aws.cognito.domain,
         scope: ['email', 'openid'],
-
-        // Callback URL
-        redirectSignIn: 'http://localhost:3000/onboarding/signin',
-
-        // Sign out URL
-        redirectSignOut: 'http://localhost:3000/onboarding/logout',
-
-        // 'code' for Authorization code grant,
-        // 'token' for Implicit grant
-        responseType: 'token',
-
-        // optional, for Cognito hosted ui specified options
-        options: {
-            // Indicates if the data collection is enabled to support Cognito advanced security features. By default, this flag is set to true.
-            AdvancedSecurityDataCollectionFlag: true
-        }
+        redirectSignIn: settings.aws.cognito.redirectSignIn,
+        redirectSignOut: settings.aws.cognito.redirectSignOut,
+        responseType: 'token', // 'token' for Implicit grant, 'code' for Authorization code grant
     }
 };
 
 Amplify.configure({
     Auth: {
-        // REQUIRED - Amazon Cognito Region
-        region: 'eu-west-1',
-        // OPTIONAL - Amazon Cognito User Pool ID
-        userPoolId: 'eu-west-1_WsTxYUHyC',
-        // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-        userPoolWebClientId: '3nkh1qomocr39s893jf0dp44cd',
-
-        // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
+        region: settings.aws.cognito.region,
+        userPoolId: settings.aws.cognito.userPoolId,
+        userPoolWebClientId: settings.aws.cognito.userPoolWebClientId,
         mandatorySignIn: false,
-
-        // // OPTIONAL - Configuration for cookie storage
-        // cookieStorage: {
-        //     // REQUIRED - Cookie domain (only required if cookieStorage is provided)
-        //     domain: '.yourdomain.com',
-        //     // OPTIONAL - Cookie path
-        //     path: '/',
-        //     // OPTIONAL - Cookie expiration in days
-        //     expires: 365,
-        //     // OPTIONAL - Cookie secure flag
-        //     secure: true
-        // },
-
-        // OPTIONAL - customized storage object
-        // storage: new MyStorage(),
-
-        // OPTIONAL - Manually set the authentication flow type. Default is 'USER_SRP_AUTH'
-        // authenticationFlowType: 'USER_PASSWORD_AUTH',
-
         oauth: oauth
-    },
-    // ...
+    }
 });
 
 let hist = createBrowserHistory();
@@ -98,10 +96,6 @@ const App = class App extends React.Component {
         if (!authData) {
             return "Logging in failed: " + (auth && auth.state);
         }
-
-        let uri = process.env.ONBOARDING_API || 'http://localhost:8086/api/graphql';
-        console.log('ONBOARDING_API: ' + process.env.ONBOARDING_API);
-        console.log('Using Onboarding API at ' + uri);
 
         const httpLink = new HttpLink({uri: uri});
         const authLink = setContext(async (req, {headers}) => {
