@@ -22,6 +22,25 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 
 class Workspace extends React.Component {
+    state = {
+        phase: "0",
+        view: "dashboard"
+    };
+
+    switchPhase = (phase) => {
+        this.setState(state => ({ phase: phase }));
+    };
+
+    renderPhase = (phase) => {
+        console.log(phase, this.state.phase);
+        switch (phase) {
+            case "1":
+                return <PhasePrepare/>;
+            default:
+                return <Dashboard />;
+        }
+    }
+
     render() {
         const {classes, ...rest} = this.props;
         return (
@@ -39,7 +58,7 @@ class Workspace extends React.Component {
                 />
                 <Parallax image={require("assets/img/bg-zand.jpg")} className={"phase-container"}>
                     <div className={classes.container + " phase-wrapper"}>
-                        <PhaseIndicator/>
+                        <PhaseIndicator onSwitchPhase={this.switchPhase}/>
                     </div>
                 </Parallax>
 
@@ -47,14 +66,13 @@ class Workspace extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2>Stap 1: Voorbereiding</h2>
+                                <h2>{ this.state.phase === "0" ? "Dashboard" : "Stap " + this.state.phase} </h2>
                                 <h3>Enthousiasmerende tekst.</h3>
                             </div>
                         </GridItem>
                     </GridContainer>
                 </div>
-                <Dashboard />
-                <PhasePrepare />
+                {this.renderPhase(this.state.phase)}
                 <Footer/>
             </div>
         );

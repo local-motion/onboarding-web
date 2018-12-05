@@ -28,7 +28,6 @@ const styles = {
 };
 
 class MediaCard extends React.Component {
-
     render() {
         const {classes, title, image, content, primaryCta, secondaryCta} = this.props;
         return (
