@@ -47,14 +47,14 @@ class CollapseMediaCard extends React.Component {
     render() {
         const {classes, title, image, content, primaryCta, MoreInformation} = this.props;
         return (
-            <Card className={classes.card}>
+            <Card className={classes.card + " card"}>
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
                         image={image}
                         title={title}
                     />
-                    <CardContent>
+                    <CardContent className={"card-content"}>
                         <Typography gutterBottom variant="h5" component="h2">
                             {title}
                         </Typography>

@@ -16,6 +16,7 @@ import PhaseIndicator from "./Sections/PhaseIndicator.jsx";
 import Dashboard from "./Sections/Dashboard.jsx";
 import PhasePrepare from "./Sections/PhasePrepare.jsx";
 import PhaseExecute from "./Sections/PhaseExecute.jsx";
+import PhaseSustain from "./Sections/PhaseSustain.jsx";
 
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -39,6 +40,8 @@ class Workspace extends React.Component {
                 return <PhasePrepare />;
             case "2":
                 return <PhaseExecute />;
+            case "3":
+                return <PhaseSustain />;
             default:
                 return <Dashboard />;
         }
