@@ -35,7 +35,10 @@ class Dashboard extends React.Component {
                         <SimpleCard title={"Donaties"}
                                     image={require("assets/img/backgrounds/donaties.jpg")}
                                     content={"Door te doneren help je mee deze speeltuin rookvrij te maken."}
-                                    primaryCta={"Doneer nu"}
+                                    primaryCta={{
+                                        action: "#",
+                                        text: "Doneer nu"
+                                    }}
                         />
                     </GridItem>
                 </GridContainer>

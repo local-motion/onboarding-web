@@ -14,6 +14,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import PhaseIndicator from "./Sections/PhaseIndicator.jsx";
 import Dashboard from "./Sections/Dashboard.jsx";
+import PhasePrepare from "./Sections/PhasePrepare.jsx";
 
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -53,6 +54,7 @@ class Workspace extends React.Component {
                     </GridContainer>
                 </div>
                 <Dashboard />
+                <PhasePrepare />
                 <Footer/>
             </div>
         );

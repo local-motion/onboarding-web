@@ -21,9 +21,9 @@ const styles = {
     },
     cardActions: {
         paddingTop: 16,
-        paddingRight: 8,
+        paddingRight: 12,
         paddingBottom: 16,
-        paddingLeft: 8
+        paddingLeft: 12
     }
 };
 
@@ -48,8 +48,8 @@ class MediaCard extends React.Component {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
-                <CardActions className={classes.cardActions}>
-                    {primaryCta ? <Button size="small" color="primary">{primaryCta}</Button> : null}
+                <CardActions className={classes.cardActions + " card-actions"}>
+                    {primaryCta ? <Button size="small" color="primary" href={primaryCta.action}>{primaryCta.text}</Button> : null}
                     {secondaryCta ? <Button size="small" color="primary">{secondaryCta}</Button> : null}
                 </CardActions>
             </Card>
