@@ -99,7 +99,7 @@ const App = class App extends React.Component {
             return "Logging in failed: " + (auth && auth.state);
         }
 
-        let uri = process.env.ONBOARDING_API || 'http://localhost:8086/graphql';
+        let uri = process.env.ONBOARDING_API || 'http://localhost:8086/api/graphql';
         console.log('ONBOARDING_API: ' + process.env.ONBOARDING_API);
         console.log('Using Onboarding API at ' + uri);
 
@@ -138,7 +138,7 @@ const App = class App extends React.Component {
                         <Router history={hist}>
                             <Switch>
                                 {indexRoutes.map((prop, key) => {
-                                    return <Route path={prop.path} key={key} component={prop.component}/>;
+                                    return <Route path={prop.path} key={key} component={prop.component} />;
                                 })}
                             </Switch>
                         </Router>
@@ -159,7 +159,7 @@ const SecuredApp = withAuthenticator(App, false, [
 ]);
 
 const Wrapped = [
-            <SecuredApp className={"secure-app"}/>
+    <SecuredApp className={"secure-app"}/>
 ];
 
 ReactDOM.render(

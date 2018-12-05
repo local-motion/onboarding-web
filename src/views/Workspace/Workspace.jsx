@@ -16,6 +16,9 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import PhaseIndicator from "./Sections/PhaseIndicator.jsx";
+import Dashboard from "./Sections/Dashboard.jsx";
+import PhasePrepare from "./Sections/PhasePrepare.jsx";
+import PhaseExecute from "./Sections/PhaseExecute.jsx";
 
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -43,6 +46,27 @@ const playgroundRequest = graphql(GET_PLAYGROUND,{
 });
 
 class WorkspaceTemplate extends React.Component {
+    state = {
+        phase: "0",
+        view: "dashboard"
+    };
+
+    switchPhase = (phase) => {
+        this.setState(state => ({ phase: phase }));
+    };
+
+    renderPhase = (phase) => {
+        console.log(phase, this.state.phase);
+        switch (phase) {
+            case "1":
+                return <PhasePrepare />;
+            case "2":
+                return <PhaseExecute />;
+            default:
+                return <Dashboard />;
+        }
+    }
+
     render() {
         const {classes, playground, ...rest} = this.props;
 
@@ -59,9 +83,9 @@ class WorkspaceTemplate extends React.Component {
                     }}
                     {...rest}
                 />
-                <Parallax image={require("assets/img/bg-zand.jpg")} className={"phase-container"} >
-                    <div className={classes.container}>
-                        <PhaseIndicator/>
+                <Parallax image={require("assets/img/bg-zand.jpg")} className={"phase-container"}>
+                    <div className={classes.container + " phase-wrapper"}>
+                        <PhaseIndicator onSwitchPhase={this.switchPhase}/>
                     </div>
                 </Parallax>
 
@@ -69,12 +93,13 @@ class WorkspaceTemplate extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2>Stap 1: Voorbereiding</h2>
+                                <h2>{ this.state.phase === "0" ? "Dashboard" : "Stap " + this.state.phase} </h2>
                                 <h3>Enthousiasmerende tekst.</h3>
                             </div>
                         </GridItem>
                     </GridContainer>
                 </div>
+                {this.renderPhase(this.state.phase)}
                 <div className={classNames(classes.mainRaised, classes.container + " phase-explainer-container")}>
                     <GridContainer>
                             {!!playground &&
@@ -90,6 +115,6 @@ class WorkspaceTemplate extends React.Component {
         );
     }
 }
-console.log("start");
+
 const Workspace = playgroundRequest(WorkspaceTemplate);
 export default withStyles(componentsStyle)(Workspace);

@@ -18,6 +18,9 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import NewPlayground from "./forms/NewPlayground.jsx";
 
+import Header from "components/Header/Header.jsx";
+import HeaderLinks from "components/Header/HeaderLinks.jsx";
+
 class Onboarding extends React.Component {
     constructor(props) {
         super(props);
@@ -54,7 +57,7 @@ class Onboarding extends React.Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, ...rest } = this.props;
         const {playground, map} = this.state;
         var view = this.state.view === 'default' ?
             <div>
@@ -66,7 +69,20 @@ class Onboarding extends React.Component {
 
         return (
             <div className={"onboarding-wrapper"}>
-               <Parallax image={require("assets/img/bg-zand.jpg")} >
+
+                <Header
+                    brand={"Rookvrije generatie"}
+                    rightLinks={<HeaderLinks/>}
+                    fixed
+                    color="white"
+                    changeColorOnScroll={{
+                        height: 50,
+                        color: "white"
+                    }}
+                    {...rest}
+                />
+
+               <Parallax image={require("assets/img/bg-zand.jpg")} className={"parralax"} >
                     <div className={classes.container}>
                         <CallToAction playground={playground}/>
                     </div>

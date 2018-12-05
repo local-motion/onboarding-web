@@ -19,6 +19,12 @@
 @import "custom/mixins";
 @import "custom/custom";
 
+//General Components
+@import "custom/generalComponents/parralax";
+@import "custom/generalComponents/header";
+@import "custom/generalComponents/footer";
+@import "custom/generalComponents/cards";
+
 //onboarding page styling
 @import "custom/onboarding/container";
 @import "custom/onboarding/header";
@@ -26,7 +32,6 @@
 @import "custom/onboarding/statistics";
 
 //workspace styling
-@import "custom/workspace/header";
 @import "custom/workspace/phases";
 
 //Authentication styling
