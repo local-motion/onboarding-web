@@ -28,6 +28,7 @@ class PhaseSustain extends React.Component {
                                         text: "Verstuur een email"
                                     }}
                         />
+
                         <SimpleCard title={"Validatie"}
                                     image={require("assets/img/backgrounds/smokefree.jpg")}
                                     content={"Valideer of de speeltuin nog steeds rookvrij is. "}
@@ -36,6 +37,7 @@ class PhaseSustain extends React.Component {
                                         text: "Valideer"
                                     }}
                         />
+
                         <CollapseCard title={"Het laatste nieuws"}
                                       image={require("assets/img/backgrounds/social.jpg")}
                                       content={"Ontdek het laatste nieuws over deze speeltuin"}

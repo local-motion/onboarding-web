@@ -48,7 +48,7 @@ class MediaCard extends React.Component {
                     </CardContent>
                 </CardActionArea>
                 <CardActions className={classes.cardActions + " card-actions"}>
-                    {primaryCta ? <Button size="small" color="primary" href={primaryCta.action}>{primaryCta.text}</Button> : null}
+                    {primaryCta ? <Button size="small" color="primary" href={primaryCta.action} onClick={primaryCta.click}>{primaryCta.text}</Button> : null}
                     {secondaryCta ? <Button size="small" color="primary">{secondaryCta}</Button> : null}
                 </CardActions>
             </Card>

@@ -1,5 +1,5 @@
 query Query {
-    playground(id: "initiative-207") {
+    playground(id: "98b70cde-ef3c-40a8-b7d8-cc98b1868086") {
         id
         name
         lng

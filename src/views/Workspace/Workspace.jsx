@@ -5,8 +5,11 @@ import classNames from "classnames";
 // import {Link} from "react-router-dom";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
 // core components
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -17,13 +20,32 @@ import Dashboard from "./Sections/Dashboard.jsx";
 import PhasePrepare from "./Sections/PhasePrepare.jsx";
 import PhaseExecute from "./Sections/PhaseExecute.jsx";
 import PhaseSustain from "./Sections/PhaseSustain.jsx";
-
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+const GET_PLAYGROUND = gql`
+    {
+        playground(id: "${window.location.pathname.split("/").pop()}") {
+            id
+            name
+            status
+        }
+    }
+`;
 
-class Workspace extends React.Component {
+const playgroundRequest = graphql(GET_PLAYGROUND,{
+    props: ({ownProps, data }) => {
+        if(data.loading) return { playgroundsLoading: true };
+        if(data.error) return { hasErrors: true };
+        if(data.error) return { hasErrors: true };
+        console.log("data", data);
+        return {
+            playground: data.playground
+        };
+    }
+});
+
+class WorkspaceTemplate extends React.Component {
     state = {
         phase: "0",
         view: "dashboard"
@@ -34,12 +56,11 @@ class Workspace extends React.Component {
     };
 
     renderPhase = (phase) => {
-        console.log(phase, this.state.phase);
         switch (phase) {
             case "1":
-                return <PhasePrepare />;
+                return <PhasePrepare playground={this.props.playground}/>;
             case "2":
-                return <PhaseExecute />;
+                return <PhaseExecute playground={this.props.playground}/>;
             case "3":
                 return <PhaseSustain />;
             default:
@@ -48,7 +69,7 @@ class Workspace extends React.Component {
     }
 
     render() {
-        const {classes, ...rest} = this.props;
+        const {classes, playground, ...rest} = this.props;
         return (
             <div className={"workspace-wrapper"}>
                 <Header
@@ -73,16 +94,21 @@ class Workspace extends React.Component {
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
                                 <h2>{ this.state.phase === "0" ? "Dashboard" : "Stap " + this.state.phase} </h2>
-                                <h3>Enthousiasmerende tekst.</h3>
+                                {!!playground &&
+                                    <h3>{playground.name}</h3>
+                                }
                             </div>
                         </GridItem>
                     </GridContainer>
                 </div>
+
                 {this.renderPhase(this.state.phase)}
+
                 <Footer/>
             </div>
         );
     }
 }
 
+const Workspace = playgroundRequest(WorkspaceTemplate);
 export default withStyles(componentsStyle)(Workspace);
