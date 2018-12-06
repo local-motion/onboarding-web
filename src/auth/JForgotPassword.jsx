@@ -56,6 +56,7 @@ export default class JForgotPassword extends Component {
             button: {width: '100%'},
             extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
             left: {float: "left"},
+            right: {float: "right"},
             alert: {fontSize: '0.8em'}
         };
 
@@ -88,24 +89,24 @@ export default class JForgotPassword extends Component {
                             {error && <div style={style.alert}>{error}</div>}
                         </form>
                         <div style={style.links}>
-                            <div>
+                            <div style={style.right}>
                                 <button
                                     style={style.extraButton}
                                     onClick={() => this.changeState('signIn')}>
                                     Terug naar het inlogscherm
                                 </button>
                             </div>
-                            <div>
+                            <div style={style.left}>
                                 <button
                                     style={style.extraButton}
                                     onClick={() => this.changeState('confirmSignUp')}>
                                     Bevestig je account
                                 </button>
                             </div>
-                            <div>
+                            <div style={style.left}>
                                 <button
                                     style={style.extraButton}
-                                    onClick={this.signUp}>
+                                    onClick={() => this.changeState('signUp')}>
                                     Nog geen account?
                                 </button>
                             </div>
