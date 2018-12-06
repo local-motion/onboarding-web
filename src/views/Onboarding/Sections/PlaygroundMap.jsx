@@ -12,8 +12,7 @@ import markerGray from "assets/img/markers/playground_gray.png";
 import markerGreen from "assets/img/markers/playground_green.png";
 // import markerPink from "assets/img/markers/playground_pink.png";
 
-//const MAP_API_KEY = "AIzaSyDCX2YMrZPjKtWq0tEBviJedUfx-mdFiPs";
-const MAP_API_KEY = "AIzaSyD9Rqdplfw_YkmwBQyNEyzbrtV8Gi0CieQ";
+const MAP_API_KEY = "AIzaSyDCX2YMrZPjKtWq0tEBviJedUfx-mdFiPs";
 
 const GET_PLAYGROUNDS = gql`
   {

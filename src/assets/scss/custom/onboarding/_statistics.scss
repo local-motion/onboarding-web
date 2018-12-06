@@ -26,7 +26,7 @@
 }
 
 .playground-form-container{
-    min-height: 400px;
+    min-height: 587px;
     h2, p{
         padding: 0 15px;
     }
@@ -35,3 +35,8 @@
     }
 }
 
+.statistics-wrapper{
+    &.default{
+        margin-bottom: 25px;
+    }
+}
