@@ -40,12 +40,10 @@ class FormDialog extends React.Component {
                 return v.toString(16);
             }),
             type: "smokefree",
-            status: "not_started"
+            status: "not_started",
+            open: false
         };
     }
-    state = {
-        open: false,
-    };
 
     handleClickOpen = () => {
         this.setState({open: true});
@@ -123,7 +121,7 @@ class FormDialog extends React.Component {
                                 defaultValue={this.state.name}/>
                         </form>
                     </DialogContent>
-                    <DialogActions>
+                    <DialogActions className={"dialog-actions"}>
                         <Button onClick={this.handleClose} color="primary">
                             Annuleren
                         </Button>
