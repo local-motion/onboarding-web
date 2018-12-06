@@ -61,8 +61,8 @@ class Onboarding extends React.Component {
         const {playground, map} = this.state;
         var view = this.state.view === 'default' ?
             <div>
-            <PlaygroundStatistics playground={playground} />
-            <StartOrJoinInitiative playground={playground} />
+                <PlaygroundStatistics playground={playground} />
+                <StartOrJoinInitiative playground={playground} />
             </div>
         :
             <NewPlayground playground={playground} />;
@@ -100,12 +100,11 @@ class Onboarding extends React.Component {
                         zoom={map.zoom}
                       />
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
+                    <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
                         {view}
                     </GridItem>
                   </GridContainer>
                 </div>
-
                 <Footer />
             </div>
     );

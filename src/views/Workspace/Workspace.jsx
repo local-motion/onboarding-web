@@ -34,7 +34,6 @@ class Workspace extends React.Component {
     };
 
     renderPhase = (phase) => {
-        console.log(phase, this.state.phase);
         switch (phase) {
             case "1":
                 return <PhasePrepare />;
