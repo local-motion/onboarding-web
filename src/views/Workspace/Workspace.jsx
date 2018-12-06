@@ -83,7 +83,7 @@ class WorkspaceTemplate extends React.Component {
                     }}
                     {...rest}
                 />
-                <Parallax image={require("assets/img/bg-zand.jpg")} className={"phase-container"}>
+                <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")} className={"phase-container"}>
                     <div className={classes.container + " phase-wrapper"}>
                         <PhaseIndicator onSwitchPhase={this.switchPhase}/>
                     </div>
