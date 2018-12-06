@@ -8,32 +8,23 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 // core components
 import { withNamespaces } from "react-i18next";
-
+import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 
 const SET_SMOKEFREE_DATE = gql`
-    mutation CommitToSmokeFreeDateCommand {
-        initiativeId
-        smokeFreeDate
+    mutation CommitToSmokeFreeDate($input: CommitToSmokeFreeDateCommand!) {
+        commitToSmokeFreeDate(input: $input) {
+            id
+        }
     }
 `;
 
 class SmokefreeDate extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             startDate: new Date()
         };
-
-        this.handleChangeDate = this.handleChangeDate.bind(this);
     }
-
-    handleChangeDate(targetDate) {
-        this.setState({
-            startDate: targetDate
-        });
-    }
-
 
     render() {
         return (
@@ -43,8 +34,14 @@ class SmokefreeDate extends React.Component {
             >
                 {(setSmokeFreeDate) => (
                     <DatePicker
+                        dateFormat="YYYY-m-dd"
                         selected={this.state.startDate}
-                        onChange={() => setSmokeFreeDate({ variables: { input: this.state.startDate } })}
+                        onChange={() => setSmokeFreeDate({ variables: {
+                            input: {
+                                smokeFreeDate: this.state.startDate.getFullYear() + '-' + (this.state.startDate.getMonth()+1) + '-' + ("0" + this.state.startDate.getDate()).slice(-2),
+                                initiativeId: window.location.pathname.split("/").pop()
+                            }
+                        }})}
                     />
                 )}
             </Mutation>
@@ -52,6 +49,6 @@ class SmokefreeDate extends React.Component {
     }
 }
 
-export default withStyles()(
+export default withStyles(componentsStyle)(
     withNamespaces("translations")(SmokefreeDate)
 );
