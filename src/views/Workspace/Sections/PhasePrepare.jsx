@@ -53,7 +53,7 @@ class PhasePrepare extends React.Component {
                                       image={require("assets/img/backgrounds/social.jpg")}
                                       content={"Laat je volgers weten dat je Speeltuin rookvrij wilt maken."}
                                       MoreInformation={"Meer informatie"}
-                                      ExpandContent={<SocialMedia playground={this.props.playground.id}/>}
+                                      ExpandContent={<SocialMedia playground={this.props.playground}/>}
                         />
 
                         <Mutation
