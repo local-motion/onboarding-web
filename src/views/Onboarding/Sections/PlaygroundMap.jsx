@@ -82,7 +82,7 @@ const PlaygroundMap = compose(
         center={props.center}
         onClick={function(e) {
             props.onMapClick(e);
-            props.onPlaygroundCreated(e);
+            props.viewOnly ? console.log('View only') : props.onPlaygroundCreated(e);
         }}
         defaultOptions={{disableDefaultUI: true}}
     >
