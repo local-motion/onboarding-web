@@ -55,9 +55,13 @@ export default class JForgotPasswordReset extends Component {
         }
 
         const style = {
-            width: '20rem',
-            links: {fontSize: '0.9em'},
+            width: '100%',
+            input: {borderRadius: '0', display: 'block'},
+            links: {fontSize: '0.9em', minHeight: "35px"},
             button: {width: '100%'},
+            extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
+            left: {float: "left"},
+            right: {float: "right"},
             alert: {fontSize: '0.8em'}
         };
 
@@ -70,26 +74,30 @@ export default class JForgotPasswordReset extends Component {
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
                         <div>
-                            <h2>Password reset code</h2>
+                            <h2>Wachtwoord reset code</h2>
                         </div>
-                        <form>
+                        <form autocomplete="off" name={"pass-reset-with-code"}>
                             <div>
                                 Code:
                                 <Input
                                     type="text"
                                     placeholder="Code"
+                                    name={"code"}
                                     style={style.input}
                                     onChange={event => this.inputs.code = event.target.value}
                                     autoFocus
+                                    autoComplete='off'
                                 />
                             </div>
                             <div>
-                                New password:
+                                Nieuw wachtwoord:
                                 <Input
                                     type="password"
-                                    placeholder="Password"
+                                    placeholder="Wachtwoord"
+                                    name={"password"}
                                     style={style.input}
                                     onChange={event => this.inputs.password = event.target.value}
+                                    autoComplete='off'
                                 />
                             </div>
                             <div>
