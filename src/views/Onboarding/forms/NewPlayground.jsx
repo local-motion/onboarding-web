@@ -40,7 +40,6 @@ class NewPlayground extends React.Component {
     }
 
     loadWorkspace = (eEvent) => {
-        console.log("loadWorkspace", eEvent);
         window.location.href = `/workspace/${this.state.initiativeId}`;
     }
 
