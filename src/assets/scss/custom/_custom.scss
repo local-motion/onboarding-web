@@ -72,8 +72,27 @@ This CSS resource incorporates links to font software which is the valuable copy
     margin-left: 30px !important;
 }
 
+.pr-15{
+    padding-right: 15px !important;
+}
+
+.pr-25{
+    padding-right: 25px !important;
+}
+
+.pr-30{
+    padding-right: 30px !important;
+}
+
 .flex-divide{
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
+}
+
+.btn-highlight{
+    background-image: url("../img/backgrounds/bg-btn.jpg");
+    span{
+        color: white;
+    }
 }
