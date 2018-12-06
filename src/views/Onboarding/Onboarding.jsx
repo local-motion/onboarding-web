@@ -59,13 +59,6 @@ class Onboarding extends React.Component {
     render() {
         const {classes, ...rest } = this.props;
         const {playground, map} = this.state;
-        var view = this.state.view === 'default' ?
-            <div>
-                <PlaygroundStatistics playground={playground} />
-                <StartOrJoinInitiative playground={playground} />
-            </div>
-        :
-            <NewPlayground playground={playground} />;
 
         return (
             <div className={"onboarding-wrapper"}>
@@ -94,14 +87,16 @@ class Onboarding extends React.Component {
                       <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange}/>
                       <PlaygroundMap
                         isMarkerShown
+                        viewOnly={true}
                         onPlaygroundChange={this.handlePlaygroundChange}
-                        onPlaygroundCreated={this.handleCreatePlayground}
                         center={map.latlng}
                         zoom={map.zoom}
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
-                        {view}
+                        <div>
+                            <PlaygroundStatistics playground={playground} />
+                        </div>
                     </GridItem>
                   </GridContainer>
                 </div>

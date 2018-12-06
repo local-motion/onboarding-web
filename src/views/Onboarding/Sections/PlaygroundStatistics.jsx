@@ -12,8 +12,7 @@ import PlaygroundStatistic from "components/PlaygroundStatistic/PlaygroundStatis
 import {withNamespaces} from "react-i18next";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
-import Button from "@material-ui/core/Button/Button";
-import AddLocation from "@material-ui/icons/AddLocation"
+import FormDialog from "components/FormDialog/FormDialog.jsx";
 
 const GET_SMOKEFREE_PROGRESS = gql`
   {
@@ -88,12 +87,8 @@ class PlaygroundStatistics extends React.Component {
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"vol"} />
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"} />
                                 </div>
-                                <Button
-                                    className={"btn btn-highlight pr-25"}
-                                >
-                                    <AddLocation className={"mr-15"}/>
-                                    <span>Voeg een speeltuin toe</span>
-                                </Button>
+
+                                <FormDialog/>
                             </GridItem>
                         </GridContainer>
                     </div>
