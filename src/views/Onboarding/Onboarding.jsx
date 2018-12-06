@@ -82,7 +82,7 @@ class Onboarding extends React.Component {
                     {...rest}
                 />
 
-               <Parallax image={require("assets/img/bg-zand.jpg")} className={"parralax"} >
+               <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")} className={"parralax"} >
                     <div className={classes.container}>
                         <CallToAction playground={playground}/>
                     </div>
