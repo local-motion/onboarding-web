@@ -13,7 +13,7 @@ import {withNamespaces} from "react-i18next";
 import AddLocation from "@material-ui/icons/AddLocation";
 import PlaygroundMap from "../../views/Onboarding/Sections/PlaygroundMap";
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
+import {Mutation} from "react-apollo";
 
 const CREATE_INITIATIVE = gql`
     mutation CreateInitiative($input: CreateInitiativeInput!) {
@@ -57,10 +57,10 @@ class FormDialog extends React.Component {
         this.setState({
             name: eEvent.target.value
         });
-    }
+    };
     loadWorkspace = (eEvent) => {
         window.location.href = `/workspace/${this.state.initiativeId}`;
-    }
+    };
 
     handlePlaygroundChange(playground) {
         this.setState({
@@ -75,13 +75,28 @@ class FormDialog extends React.Component {
     handleCreatePlayground = (e) => {
         this.setState({
             view: 'playground',
-            playground: { latLng: e.latLng }
+            playground: {latLng: e.latLng}
         });
-    }
+    };
 
     render() {
-       const { classes } = this.props;
-       const { map } = this.state;
+        const {classes} = this.props;
+        const {map} = this.state;
+
+        console.log(this.state);
+
+        const playground = {
+            name: this.state.name,
+            lat: map.latlng.lat,
+            lng: map.latlng.lng,
+            initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                // generate a uuid
+                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
+                return v.toString(16);
+            }),
+            type: "smokefree",
+            status: "not_started"
+        };
 
         return (
             <div>
@@ -101,7 +116,8 @@ class FormDialog extends React.Component {
                     <DialogTitle id="form-dialog-title">Voeg een speeltuin toe</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Je staat op het punt om een speeltuin toe te voegen. We willen alleen nog weten van je hoe deze speeltuin heet.
+                            Je staat op het punt om een speeltuin toe te voegen. We willen alleen nog weten van je hoe
+                            deze speeltuin heet.
                         </DialogContentText>
                         <PlaygroundMap
                             className={"playground-container"}
@@ -132,8 +148,8 @@ class FormDialog extends React.Component {
                         >
                             {(joinInitiative) => (
                                 <Button
-                                onClick={() => joinInitiative({ variables: { input: this.state } })}
-                                className={"btn btn-highlight"}
+                                    onClick={() => joinInitiative({variables: {input: playground}})}
+                                    className={"btn btn-highlight"}
                                 >
                                     <span>Voeg een speeltuin toe</span>
                                 </Button>
