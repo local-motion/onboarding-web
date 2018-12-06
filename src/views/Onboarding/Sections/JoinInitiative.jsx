@@ -19,33 +19,41 @@ const JOIN_INITIATIVE = gql`
 `;
 
 class JoinInitiative extends React.Component {
-  render() {
-    const { t, playground } = this.props;
-    if (playground.default) return null;
 
-    let initiativeInput = {
-      initiativeId: playground.id
-    };
+    loadWorkspace = (eEvent) => {
+        window.location.href = `/workspace/${this.props.playground.id}`;
+    }
 
-    return (
-      <Mutation mutation={JOIN_INITIATIVE}>
-        {(joinInitiative) => (
-          <Button
-            onClick={(/*event*/) =>
-              joinInitiative({ variables: { input: initiativeInput } })
-            }
-            color="danger"
-            round
-            className="pull-right mr-15"
-          >
-            {t("onboarding.playground.calltoaction.button")}
-          </Button>
-        )}
-      </Mutation>
-    );
-  }
+    render() {
+        const {t, playground} = this.props;
+        if(playground.default) return null;
+
+        let initiativeInput = {
+            initiativeId: playground.id
+        };
+
+        return (
+            <Mutation
+                mutation={JOIN_INITIATIVE}
+                update={this.loadWorkspace}
+            >
+                {(joinInitiative) => (
+                    <Button
+                        onClick={(/*event*/) =>
+                            joinInitiative({variables: {input: initiativeInput}})
+                        }
+                        color="danger"
+                        round
+                        className="pull-right mr-15"
+                    >
+                        {t("onboarding.playground.calltoaction.button")}
+                    </Button>
+                )}
+            </Mutation>
+        );
+    }
 }
 
 export default withStyles(basicsStyle)(
-  withNamespaces("translations")(JoinInitiative)
+    withNamespaces("translations")(JoinInitiative)
 );
