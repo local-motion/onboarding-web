@@ -87,7 +87,6 @@ class PlaygroundStatistics extends React.Component {
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"vol"} />
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"} />
                                 </div>
-
                                 <FormDialog/>
                             </GridItem>
                         </GridContainer>
