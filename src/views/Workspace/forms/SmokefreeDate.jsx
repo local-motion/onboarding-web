@@ -9,6 +9,7 @@ import gql from "graphql-tag";
 // core components
 import { withNamespaces } from "react-i18next";
 
+
 const SET_SMOKEFREE_DATE = gql`
     mutation CommitToSmokeFreeDateCommand {
         initiativeId
