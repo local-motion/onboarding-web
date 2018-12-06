@@ -75,14 +75,16 @@ export default class JSignUp extends Component {
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
                         <h2>Schrijf je in</h2>
-                        <form onSubmit={this.onSubmit} style={style}>
+                        <form onSubmit={this.onSubmit} style={style} autoComplete={"off"}>
                             <div>
                                 <Input
                                     type="text"
                                     placeholder="Username"
                                     style={style.input}
+                                    className={"code"}
                                     onChange={event => this.inputs.username = event.target.value}
                                     autoFocus
+                                    autoComplete='off'
                                 />
                             </div>
                             <div>
@@ -91,6 +93,7 @@ export default class JSignUp extends Component {
                                     placeholder="Password"
                                     onChange={event => this.inputs.password = event.target.value}
                                     style={style.input}
+                                    autoComplete='off'
                                 />
                             </div>
                             <div>
@@ -99,6 +102,7 @@ export default class JSignUp extends Component {
                                     placeholder="Email address"
                                     style={style.input}
                                     onChange={event => this.inputs.email = event.target.value}
+                                    autoComplete='off'
                                 />
                             </div>
                             <div>

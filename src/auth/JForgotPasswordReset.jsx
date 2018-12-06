@@ -76,7 +76,7 @@ export default class JForgotPasswordReset extends Component {
                         <div>
                             <h2>Wachtwoord reset code</h2>
                         </div>
-                        <form autocomplete="off" name={"pass-reset-with-code"}>
+                        <form name={"pass-reset-with-code"} autoComplete={"off"}>
                             <div>
                                 Code:
                                 <Input

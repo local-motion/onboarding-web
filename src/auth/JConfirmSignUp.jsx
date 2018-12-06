@@ -79,7 +79,7 @@ export default class JConfirmSignUp extends Component {
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
                         <h2>Bevestig je account</h2>
-                        <form onSubmit={this.onSubmit}>
+                        <form onSubmit={this.onSubmit} autoComplete={"off"}>
                             <div>
                                 <Input
                                     type="text"
@@ -88,6 +88,7 @@ export default class JConfirmSignUp extends Component {
                                     style={style.input}
                                     onChange={event => this.inputs.username = event.target.value}
                                     disabled={!!authData}
+                                    autoComplete='off'
                                 />
                             </div>
                             <div>
@@ -97,6 +98,7 @@ export default class JConfirmSignUp extends Component {
                                     style={style.input}
                                     onChange={event => this.inputs.code = event.target.value}
                                     autoFocus
+                                    autoComplete='off'
                                 />
                             </div>
                             <div>

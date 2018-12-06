@@ -82,13 +82,14 @@ export default class JConfirmSignIn extends Component {
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
                         <h2>Confirm Sign In</h2>
-                        <form onSubmit={this.onSubmit}>
+                        <form onSubmit={this.onSubmit} autoComplete={"off"}>
                             <div>
                                 <Input
                                     type="text"
                                     placeholder="Code"
                                     onChange={event => this.inputs.code = event.target.value}
                                     autoFocus
+                                    autoComplete='off'
                                 />
                             </div>
                             {error && <p style={style.alert}>{error.message}</p>}

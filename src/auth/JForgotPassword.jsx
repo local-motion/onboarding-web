@@ -71,7 +71,7 @@ export default class JForgotPassword extends Component {
                         <div>
                             <h2>Je wachtwoord vergeten?</h2>
                         </div>
-                        <form style={style}>
+                        <form style={style} autoComplete={"off"}>
                             <div>
                                 <Input
                                     type="text"
@@ -80,6 +80,7 @@ export default class JForgotPassword extends Component {
                                     defaultValue={authData || ''}
                                     onChange={event => this.inputs.username = event.target.value}
                                     autoFocus
+                                    autoComplete='off'
                                 />
                             </div>
                             <div>
