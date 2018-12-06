@@ -9,6 +9,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import SimpleCard from "components/CustomCard/Card.jsx";
 import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import SocialMedia from "../forms/SocialMedia.jsx";
 
 const SET_MANAGER = gql`
   mutation ClaimManagerRole($input: ClaimManagerRoleCommand!) {
@@ -52,6 +53,7 @@ class PhasePrepare extends React.Component {
                                       image={require("assets/img/backgrounds/social.jpg")}
                                       content={"Laat je volgers weten dat je Speeltuin rookvrij wilt maken."}
                                       MoreInformation={"Meer informatie"}
+                                      ExpandContent={<SocialMedia playground={this.props.playground.id}/>}
                         />
 
                         <Mutation
