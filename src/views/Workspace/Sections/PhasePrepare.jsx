@@ -10,6 +10,13 @@ import SimpleCard from "components/CustomCard/Card.jsx";
 import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 
+const SET_MANAGER = gql`
+  mutation ClaimManagerRole($input: ClaimManagerRoleCommand!) {
+    claimManagerRole(input: $input) {
+      id
+    }
+  }
+`;
 
 const SET_SMOKEFREE = gql`
   mutation DecideToBecomeSmokeFree($input: DecideToBecomeSmokeFreeCommand!) {
@@ -24,10 +31,10 @@ class PhasePrepare extends React.Component {
     render() {
         const {classes} = this.props;
         const playgroundId = window.location.pathname.split("/").pop();
-        console.log("Posting decision to become smokefree for playground " + playgroundId);
-        let decideToBecomeSmokeFreeCommand = {
+        let queryInput = {
             initiativeId: playgroundId
         };
+
         return (
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
@@ -48,6 +55,23 @@ class PhasePrepare extends React.Component {
                         />
 
                         <Mutation
+                            mutation={SET_MANAGER}
+                            update={null}
+                        >
+                            {(setManager) => (
+                                <SimpleCard
+                                    title={"Help run this playground"}
+                                    image={require("assets/img/backgrounds/smokefree.jpg")}
+                                    content={"Click here to become a manager at this playground."}
+                                    primaryCta={{
+                                        click: (() => {setManager({ variables: { input: queryInput } })}),
+                                        text: "Claim manager role"
+                                    }}
+                                />
+                            )}
+                        </Mutation>
+
+                        <Mutation
                             mutation={SET_SMOKEFREE}
                             update={null}
                         >
@@ -57,7 +81,7 @@ class PhasePrepare extends React.Component {
                                     image={require("assets/img/backgrounds/smokefree.jpg")}
                                     content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
                                     primaryCta={{
-                                        click: (() => {setSmokeFree({ variables: { input: decideToBecomeSmokeFreeCommand } })}),
+                                        click: (() => {setSmokeFree({ variables: { input: queryInput } })}),
                                         text: "Maak rookvrij"
                                     }}
                                 />
