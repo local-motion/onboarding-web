@@ -27,7 +27,22 @@ import JForgotPassword from "./auth/JForgotPassword";
 import JForgotPasswordReset from "./auth/JForgotPasswordReset";
 
 const environments = {
-    "https://techoverflow-d.aws.nl.eu.abnamro.com": {
+    "techoverflow-ta.aws.abnamro.org": {
+        aws: {
+            cognito: {
+                region: "eu-west-1",
+                userPoolId: "eu-west-1_idQ64RQes",
+                userPoolWebClientId: "59g3k8si4b7ougs9f5a5f826q3",
+                domain: "techoverflow-ta.auth.eu-west-1.amazoncognito.com",
+                redirectSignIn: "https://techoverflow-ta.aws.abnamro.org/onboarding/signin",
+                redirectSignOut: "https://techoverflow-ta.aws.abnamro.org/onboarding/logout",
+            }
+        },
+        api: {
+            onboarding: "https://techoverflow-ta.aws.abnamro.org/api/graphql"
+        }
+    },
+    "techoverflow-d.aws.nl.eu.abnamro.com": {
         aws: {
             cognito: {
                 region: "eu-west-1",
@@ -58,7 +73,7 @@ const environments = {
         }
     }
 };
-const settings = environments[window.location.hostname] || environments["https://techoverflow-d.aws.nl.eu.abnamro.com"];
+const settings = environments[window.location.hostname] || environments["localhost"];
 console.log("Host name is: " + window.location.hostname);
 console.log("Using settings:", settings);
 
