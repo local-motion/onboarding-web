@@ -1,7 +1,7 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { withNamespaces } from "react-i18next";
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import gql from "graphql-tag";
@@ -48,11 +48,12 @@ class NewPlayground extends React.Component {
         const {t, classes} = this.props;
 
         return (
-            <div>
-                <h2>Add a playground</h2>
+            <div className={classes.section + " playground-form-container"}>
+                <h2>Voeg een speeltuin toe</h2>
+                <p>Wat goed dat je een speeltuin rookvrij wilt maken. Je staat namelijk op het punt om een speeltuin toe te voegen. We willen alleen nog weten van je hoe deze speeltuin heet.</p>
 
                 <form className={classes.container}>
-                    <TextField className={classes.textField} label="Playground name" pattern="/^\w{4,}$/" onKeyUp={this.updateName} defaultValue={this.state.name}/>
+                    <TextField className={classes.textField + " form-control"} label="Hoe heet de speeltuin?" pattern="/^\w{4,}$/" onKeyUp={this.updateName} defaultValue={this.state.name}/>
                 </form>
 
                 <Mutation
@@ -70,6 +71,6 @@ class NewPlayground extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(
+export default withStyles(pillsStyle)(
     withNamespaces("translations")(NewPlayground)
 );
