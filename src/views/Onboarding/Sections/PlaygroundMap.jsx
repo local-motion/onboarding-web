@@ -81,8 +81,10 @@ const PlaygroundMap = compose(
         zoom={props.zoom}
         center={props.center}
         onClick={function(e) {
-            props.onMapClick(e);
-            props.onPlaygroundCreated(e);
+            if(!props.viewOnly){
+                props.onPlaygroundCreated(e);
+                props.onMapClick(e);
+            }
         }}
         defaultOptions={{disableDefaultUI: true}}
     >

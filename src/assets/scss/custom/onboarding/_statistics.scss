@@ -35,6 +35,23 @@
     }
 }
 
+.FormDialog{
+    .form-control{
+        width: 100%;
+        margin: 15px 0;
+        padding: 0;
+    }
+    .dialog-actions{
+        margin: 15px;
+    }
+    .playground-container, .playground-map{
+        min-height: 190px !important;
+        height: 190px !important;
+        margin: 20px 0;
+    }
+}
+
+
 .statistics-wrapper{
     &.default{
         margin-bottom: 25px;

@@ -8,6 +8,7 @@ import { withNamespaces } from "react-i18next";
 import GlobalProgress from "./PlaygroundStatistics";
 import StartOrJoinInitiative from "./JoinInitiative";
 
+
 class PlaygroundDetails extends React.Component {
     render() {
         const { t, classes, playground } = this.props;

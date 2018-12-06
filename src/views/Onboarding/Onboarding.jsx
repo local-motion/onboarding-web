@@ -12,11 +12,9 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
-import StartOrJoinInitiative from "./Sections/JoinInitiative";
 import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import NewPlayground from "./forms/NewPlayground.jsx";
 
 import Header from "components/Header/Header.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -59,13 +57,6 @@ class Onboarding extends React.Component {
     render() {
         const {classes, ...rest } = this.props;
         const {playground, map} = this.state;
-        var view = this.state.view === 'default' ?
-            <div>
-                <PlaygroundStatistics playground={playground} />
-                <StartOrJoinInitiative playground={playground} />
-            </div>
-        :
-            <NewPlayground playground={playground} />;
 
         return (
             <div className={"onboarding-wrapper"}>
@@ -94,14 +85,16 @@ class Onboarding extends React.Component {
                       <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange}/>
                       <PlaygroundMap
                         isMarkerShown
+                        viewOnly={true}
                         onPlaygroundChange={this.handlePlaygroundChange}
-                        onPlaygroundCreated={this.handleCreatePlayground}
                         center={map.latlng}
                         zoom={map.zoom}
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
-                        {view}
+                        <div>
+                            <PlaygroundStatistics playground={playground} />
+                        </div>
                     </GridItem>
                   </GridContainer>
                 </div>
