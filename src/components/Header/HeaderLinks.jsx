@@ -31,11 +31,11 @@ function HeaderLinks({...props}) {
                     }}
                     buttonIcon={Menu}
                     dropdownList={[
-                        <Link to="./onboarding" className={classes.dropdownLink}>
-                            Onboarding
+                        <Link to="./" className={classes.dropdownLink}>
+                            Playgrounds in the Netherlands
                         </Link>,
                         <Link to="./workspace" className={classes.dropdownLink}>
-                            Workspace
+                            Your workspace
                         </Link>
                     ]}
                 />
