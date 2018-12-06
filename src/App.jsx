@@ -96,7 +96,7 @@ const App = class App extends React.Component {
                             </Switch>
                         </Router>
                     </I18nextProvider>
-                </ApolloProvider>,
+                </ApolloProvider>
             </div>
         )
     }
