@@ -12,11 +12,9 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
-import StartOrJoinInitiative from "./Sections/JoinInitiative";
 import CallToAction from "./Sections/CallToAction";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import NewPlayground from "./forms/NewPlayground.jsx";
 
 import Header from "components/Header/Header.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
