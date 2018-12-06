@@ -39,6 +39,7 @@ class Onboarding extends React.Component {
 
     handlePlaygroundChange(playground) {
         this.setState({
+            view: 'default',
             playground: playground,
             map: {
                 latlng: {lat: playground.lat, lng: playground.lng},
