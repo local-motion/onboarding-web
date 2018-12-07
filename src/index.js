@@ -31,8 +31,8 @@ const environments = {
         aws: {
             cognito: {
                 region: "eu-west-1",
-                userPoolId: "eu-west-1_idQ64RQes",
-                userPoolWebClientId: "59g3k8si4b7ougs9f5a5f826q3",
+                userPoolId: "eu-west-1_z7zmkKXNL",
+                userPoolWebClientId: "3mbj6opcbj65nb2vihun7eau5a",
                 domain: "techoverflow-ta.auth.eu-west-1.amazoncognito.com",
                 redirectSignIn: "https://techoverflow-ta.aws.abnamro.org/onboarding/signin",
                 redirectSignOut: "https://techoverflow-ta.aws.abnamro.org/onboarding/logout",
