@@ -28,7 +28,7 @@
     "apollo-link-context": "1.0.10",
     "apollo-link-http": "1.5.7",
     "autosuggest-highlight": "3.1.1",
-    "aws-amplify": "1.1.12",
+    "aws-amplify": "1.1.13",
     "aws-amplify-react": "2.1.6",
     "classnames": "2.2.6",
     "cognito-user-pool": "0.2.4",
