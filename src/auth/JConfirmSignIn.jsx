@@ -89,7 +89,7 @@ export default class JConfirmSignIn extends Component {
                                     placeholder="Code"
                                     onChange={event => this.inputs.code = event.target.value}
                                     autoFocus
-                                    autoComplete='off'
+                                    autoComplete='new-password'
                                 />
                             </div>
                             {error && <p style={style.alert}>{error.message}</p>}
