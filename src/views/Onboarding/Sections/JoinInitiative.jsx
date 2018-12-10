@@ -27,7 +27,7 @@ class JoinInitiative extends React.Component {
     }
 
     render() {
-        const {t, playground} = this.props;
+        const {playground} = this.props;
         if (playground.default) return null;
 
         let initiativeInput = {

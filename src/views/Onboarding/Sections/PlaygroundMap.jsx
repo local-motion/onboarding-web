@@ -43,7 +43,9 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
                     lng: playground.lng,
                     vol: playground.volunteerCount,
                     votes: playground.votes,
-                    slug: playground.name + " Rookvrij"
+                    slug: playground.name + " Rookvrij",
+                    zoom: 18,
+                    default: false,
                 };
             })
         };
@@ -98,7 +100,9 @@ const PlaygroundMap = compose(
             props.playgrounds &&
             props.playgrounds.map(playground => (
                 <Marker
-                    onClick={props.onPlaygroundChange.bind(this, playground)}
+                    onClick={
+                        props.onPlaygroundChange.bind(this, playground)
+                    }
                     key={playground.id}
                     position={{lat: playground.lat, lng: playground.lng}}
                     icon={markerGreen}
