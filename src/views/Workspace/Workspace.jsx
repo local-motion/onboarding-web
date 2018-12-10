@@ -4,6 +4,7 @@ import classNames from "classnames";
 // react components for routing our app without refresh
 // import {Link} from "react-router-dom";
 // @material-ui/core components
+import Dialog from '@material-ui/core/Dialog';
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
@@ -39,8 +40,10 @@ const GET_PLAYGROUND = gql`
 const playgroundRequest = graphql(GET_PLAYGROUND,{
     props: ({ownProps, data }) => {
         if(data.loading) return { playgroundsLoading: true };
-        if(data.error) return { hasErrors: true };
-        if(data.error) return { hasErrors: true };
+        if(data.error) return {
+            hasErrors: true,
+            error: data.error.toString()
+        };
         console.log("data", data);
         return {
             playground: data.playground
@@ -82,6 +85,10 @@ class WorkspaceTemplate extends React.Component {
 
         return (
             <div className={"workspace-wrapper"}>
+                {this.props.hasErrors === true &&
+                 <Dialog open={true} className={classes.container + " phase-wrapper"}>{this.props.error}</Dialog>
+                }
+                
                 <Header
                     brand="Speeltuin"
                     rightLinks={<HeaderLinks/>}
