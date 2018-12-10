@@ -11,14 +11,6 @@ import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import SocialMedia from "../forms/SocialMedia.jsx";
 
-const SET_MANAGER = gql`
-  mutation ClaimManagerRole($input: ClaimManagerRoleCommand!) {
-    claimManagerRole(input: $input) {
-      id
-    }
-  }
-`;
-
 const SET_SMOKEFREE = gql`
   mutation DecideToBecomeSmokeFree($input: DecideToBecomeSmokeFreeCommand!) {
     decideToBecomeSmokeFree(input: $input) {
@@ -55,23 +47,6 @@ class PhasePrepare extends React.Component {
                                       MoreInformation={"Meer informatie"}
                                       ExpandContent={<SocialMedia playground={this.props.playground}/>}
                         />
-
-                        <Mutation
-                            mutation={SET_MANAGER}
-                            update={null}
-                        >
-                            {(setManager) => (
-                                <SimpleCard
-                                    title={"Help run this playground"}
-                                    image={require("assets/img/backgrounds/smokefree.jpg")}
-                                    content={"Click here to become a manager at this playground."}
-                                    primaryCta={{
-                                        click: (() => {setManager({ variables: { input: queryInput } })}),
-                                        text: "Claim manager role"
-                                    }}
-                                />
-                            )}
-                        </Mutation>
 
                         <Mutation
                             mutation={SET_SMOKEFREE}
