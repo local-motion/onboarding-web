@@ -98,7 +98,7 @@ export default class JConfirmSignUp extends Component {
                                     style={style.input}
                                     onChange={event => this.inputs.code = event.target.value}
                                     autoFocus
-                                    autoComplete='off'
+                                    autoComplete='new-password'
                                 />
                             </div>
                             <div>
