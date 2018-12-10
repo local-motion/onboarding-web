@@ -1,6 +1,9 @@
 .workspace-wrapper {
     .phase-container {
         height: 250px !important;
+        &.empty{
+            height: 125px !important;
+        }
         .phase-wrapper{
             margin-top: -30px;
         }
@@ -32,6 +35,14 @@
         margin: -60px auto 30px;
         z-index: 30;
         position: relative;
+        .explainer-actions{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            h3{
+                width: 100%;
+            }
+        }
         .title-wrapper{
             padding: 20px 0;
             h2,h3{
