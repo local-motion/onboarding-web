@@ -76,7 +76,7 @@ export default class JForgotPasswordReset extends Component {
                         <div>
                             <h2>Wachtwoord reset code</h2>
                         </div>
-                        <form name={"pass-reset-with-code"} autoComplete={"off"}>
+                        <form name={"pass-reset-with-code"} autoComplete={"new-password"}>
                             <div>
                                 Code:
                                 <Input
@@ -86,7 +86,7 @@ export default class JForgotPasswordReset extends Component {
                                     style={style.input}
                                     onChange={event => this.inputs.code = event.target.value}
                                     autoFocus
-                                    autoComplete='off'
+                                    autoComplete='new-password'
                                 />
                             </div>
                             <div>
@@ -97,7 +97,7 @@ export default class JForgotPasswordReset extends Component {
                                     name={"password"}
                                     style={style.input}
                                     onChange={event => this.inputs.password = event.target.value}
-                                    autoComplete='off'
+                                    autoComplete='new-password'
                                 />
                             </div>
                             <div>
