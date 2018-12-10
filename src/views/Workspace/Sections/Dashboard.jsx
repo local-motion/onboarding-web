@@ -3,6 +3,7 @@ import React from "react";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import Dialog from '@material-ui/core/Dialog';
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -11,11 +12,27 @@ import SimpleCard from "components/CustomCard/Card.jsx"
 import CollapseCard from "components/CustomCard/CollapseCard.jsx"
 
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import {Mutation} from "react-apollo";
+import gql from "graphql-tag";
+
+
+const SET_MANAGER = gql`
+  mutation ClaimManagerRole($input: ClaimManagerRoleCommand!) {
+    claimManagerRole(input: $input) {
+      id
+    }
+  }
+`;
+
 
 class Dashboard extends React.Component {
 
     render() {
         const { classes } = this.props;
+        const playgroundId = window.location.pathname.split("/").pop();
+        let queryInput = {
+            initiativeId: playgroundId
+        };
         return(
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
@@ -40,6 +57,26 @@ class Dashboard extends React.Component {
                                         text: "Doneer nu"
                                     }}
                         />
+                        <Mutation
+                            mutation={SET_MANAGER}
+                            update={null}
+                        >
+                            {(setManager, { loading, error }) => (
+                                <div>
+                                    <SimpleCard
+                                        title={"Claim speeltuin manager rol"}
+                                        image={require("assets/img/backgrounds/smokefree.jpg")}
+                                        content={"Hier kun je de manager rol claimen."}
+                                        primaryCta={{
+                                            click: (() => {setManager({ variables: { input: queryInput } })}),
+                                            text: "Claim manager rol"
+                                        }}
+                                    />
+                                    {loading && <p>Loading...</p>}
+                                    {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                                </div>
+                            )}
+                        </Mutation>
                     </GridItem>
                 </GridContainer>
             </div>

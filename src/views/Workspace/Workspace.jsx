@@ -23,6 +23,7 @@ import PhaseExecute from "./Sections/PhaseExecute.jsx";
 import PhaseSustain from "./Sections/PhaseSustain.jsx";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
+import Button from "@material-ui/core/Button/Button";
 
 const GET_PLAYGROUND = gql`
     {
@@ -30,6 +31,8 @@ const GET_PLAYGROUND = gql`
             id
             name
             status
+            volunteerCount
+            votes
         }
     }
 `;
@@ -49,10 +52,15 @@ const playgroundRequest = graphql(GET_PLAYGROUND,{
 });
 
 class WorkspaceTemplate extends React.Component {
-    state = {
-        phase: "0",
-        view: "dashboard"
-    };
+
+    constructor() {
+        super();
+        this.state = {
+            phase: "0",
+            view: "dashboard",
+            progress: ""
+        };
+    }
 
     switchPhase = (phase) => {
         this.setState(state => ({ phase: phase }));
@@ -72,13 +80,15 @@ class WorkspaceTemplate extends React.Component {
     }
 
     render() {
+        const { phase } = this.state;
         const {classes, playground, ...rest} = this.props;
+
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
                  <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
                 }
-                
+
                 <Header
                     brand="Speeltuin"
                     rightLinks={<HeaderLinks/>}
@@ -90,9 +100,13 @@ class WorkspaceTemplate extends React.Component {
                     }}
                     {...rest}
                 />
-                <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")} className={"phase-container"}>
+                <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")}
+                          className={phase === "0" ? "phase-container empty" : "phase-container"}>
                     <div className={classes.container + " phase-wrapper"}>
-                        <PhaseIndicator onSwitchPhase={this.switchPhase}/>
+                        {phase !== "0" ?
+                                <PhaseIndicator onSwitchPhase={this.switchPhase}/> : <div></div>
+                        }
+
                     </div>
                 </Parallax>
 
@@ -100,16 +114,39 @@ class WorkspaceTemplate extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2>{ this.state.phase === "0" ? "Dashboard" : "Stap " + this.state.phase} </h2>
-                                {!!playground &&
-                                    <h3>{playground.name}</h3>
+                                <h2>{ phase === "0" ? " Overzichtpagina" : "Stap " + phase} </h2>
+                                {!!playground && phase === "0" ?
+                                    <div className={"explainer-actions"}>
+                                        <h3>
+                                            Op deze pagina vind je alle informatie die je nodig hebt om {playground.name} rookvrij te maken.
+                                        </h3>
+                                        <Button
+                                            className={"btn btn-highlight"}
+                                            onClick={() => this.switchPhase("1")}
+                                            style={{textAlign: 'center'}}
+                                        >
+                                            <span>Ga naar Stap 1</span>
+                                        </Button>
+                                    </div>
+
+                                    :
+                                    <div className={"explainer-actions"}>
+                                        <h3>Welkom bij Stap {phase}</h3>
+                                        <Button
+                                            className={"btn btn-highlight"}
+                                            onClick={() => this.switchPhase("0")}
+                                            style={{textAlign: 'center'}}
+                                            >
+                                            <span>Ga terug naar de startpagina</span>
+                                        </Button>
+                                    </div>
                                 }
                             </div>
                         </GridItem>
                     </GridContainer>
                 </div>
 
-                {this.renderPhase(this.state.phase)}
+                {this.renderPhase(phase)}
 
                 <Footer/>
             </div>
