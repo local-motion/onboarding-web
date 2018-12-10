@@ -47,7 +47,7 @@ class SmokefreeDate extends React.Component {
                         }})}
                     />
                     {loading && <p>Loading...</p>}
-                    {error && <Dialog open={true} className={classes.container + " phase-wrapper"}>{error.toString()}</Dialog>}
+                    {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
                     </div>
                 )}
             </Mutation>

@@ -76,7 +76,7 @@ class WorkspaceTemplate extends React.Component {
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
-                 <Dialog open={true} className={classes.container + " phase-wrapper"}>{this.props.error}</Dialog>
+                 <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
                 }
                 
                 <Header
