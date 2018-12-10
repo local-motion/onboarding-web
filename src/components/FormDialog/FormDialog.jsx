@@ -95,7 +95,7 @@ class FormDialog extends React.Component {
         };
 
         return (
-            <div>
+            <div className={"FormDialog-container"}>
                 <Button
                     className={"btn btn-highlight pr-25"}
                     onClick={this.handleClickOpen}
