@@ -37,23 +37,24 @@ class Onboarding extends React.Component {
         };
     }
 
+
     handlePlaygroundChange(playground) {
         this.setState({
             view: 'default',
             playground: playground,
             map: {
                 latlng: {lat: playground.lat, lng: playground.lng},
-                zoom: 18
+                zoom: playground.zoom
             }
         });
     }
 
-    handleCreatePlayground = (e) => {
+/*    handleCreatePlayground = (e) => {
         this.setState({
             view: 'playground',
             playground: { latLng: e.latLng }
         });
-    }
+    }*/
 
     render() {
         const {classes, ...rest } = this.props;
@@ -94,7 +95,11 @@ class Onboarding extends React.Component {
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
                         <div>
-                            <PlaygroundStatistics playground={playground} />
+                            <PlaygroundStatistics
+                                playground={playground}
+                                onBackButton={this.handlePlaygroundChange}
+                                defaultView={playground.default}
+                            />
                         </div>
                     </GridItem>
                   </GridContainer>

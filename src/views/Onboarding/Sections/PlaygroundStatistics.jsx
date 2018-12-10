@@ -50,20 +50,18 @@ const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
 });
 
 class PlaygroundStatistics extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            generalStatistics: true
-        }
-    };
 
     render() {
-        const {statsLoading, progress, t, classes, playground} = this.props;
-        const { generalStatistics } = this.state;
-        const isDefault = playground.default;
-        //eerst true, daarna false op een specifieke playground
-        //bij het setten van false moet dus de state geupdate worden.
+        const {statsLoading, progress, t, classes, playground, defaultView} = this.props;
+        const generalStatistics = defaultView;
 
+        const defaultPlayground = {
+            name: t("playground.default.area"),
+            lng: 5.10448,
+            lat: 52.092876,
+            zoom: 8,
+            default: true,
+        }
 
         if (statsLoading || !progress) {
             return "Loading...";
@@ -79,7 +77,7 @@ class PlaygroundStatistics extends React.Component {
                             <GridItem xs={12} sm={12} md={8} lg={6} className="grid-item">
                                 <p className="explainer">
                                     {
-                                        isDefault ?
+                                        generalStatistics ?
                                             t("onboarding.playground.progress.intro.default", {
                                                 cityArea: playground.name,
                                                 playgroundCount: progress.smoking.count
@@ -89,7 +87,7 @@ class PlaygroundStatistics extends React.Component {
                                 </p>
                                 <div className="statistics-wrapper default"
                                      style={
-                                         {display: isDefault ? 'block' : 'none'}
+                                         {display: generalStatistics ? 'block' : 'none'}
                                      }>
                                     <DefaultStatistic progress={progress.smokeFree} playground={playground}
                                                       name={"smokefree"}
@@ -101,21 +99,23 @@ class PlaygroundStatistics extends React.Component {
                                                       measurement={"count"}/>
                                 </div>
                                 <div className="statistics-wrapper specific"
-                                     style={{display: isDefault ? 'none' : 'block'}}>
+                                     style={{display: generalStatistics ? 'none' : 'block'}}>
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"vol"}/>
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"}/>
                                 </div>
-                                <div style={{display: isDefault ? 'block' : 'none'}}>
-                                    <FormDialog />
+                                <div style={{display: generalStatistics ? 'block' : 'none'}}>
+                                    <FormDialog/>
                                 </div>
-                                <div style={{display: isDefault ? 'none' : 'block'}}>
+                                <div style={{display: generalStatistics ? 'none' : 'block'}}>
                                     <JoinInitiative playground={playground}/>
                                     <Button
-                                        style={{display: isDefault ? 'none' : 'inline-flex'}}
-                                        onClick={() => this.setState({generalStatistics: true }) }
+                                        style={{display: generalStatistics ? 'none' : 'inline-flex'}}
+                                        onClick={
+                                            this.props.onBackButton.bind(this, defaultPlayground)
+                                        }
                                         className={"btn btn-highlight pr-25 pull-right"}
                                     >
-                                        <ArrowBack className={"mr-5"} />
+                                        <ArrowBack className={"mr-5"}/>
                                         <span>Ga terug</span>
                                     </Button>
                                 </div>
