@@ -1,14 +1,15 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import { withNamespaces } from "react-i18next";
+import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
+import Dialog from '@material-ui/core/Dialog';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 // core components
-import { withNamespaces } from "react-i18next";
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 
 const SET_SMOKEFREE_DATE = gql`
     mutation CommitToSmokeFreeDate($input: CommitToSmokeFreeDateCommand!) {
@@ -27,12 +28,14 @@ class SmokefreeDate extends React.Component {
     }
 
     render() {
+        const {classes} = this.props;
         return (
             <Mutation
                 mutation={SET_SMOKEFREE_DATE}
                 update={null}
             >
-                {(setSmokeFreeDate) => (
+                {(setSmokeFreeDate, { loading, error }) => (
+                    <div>
                     <DatePicker
                         dateFormat="YYYY-m-dd"
                         selected={this.state.startDate}
@@ -43,6 +46,9 @@ class SmokefreeDate extends React.Component {
                             }
                         }})}
                     />
+                    {loading && <p>Loading...</p>}
+                    {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                    </div>
                 )}
             </Mutation>
         );

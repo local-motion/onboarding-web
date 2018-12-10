@@ -1,6 +1,7 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import Dialog from '@material-ui/core/Dialog';
 // core components
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -52,16 +53,20 @@ class PhasePrepare extends React.Component {
                             mutation={SET_SMOKEFREE}
                             update={null}
                         >
-                            {(setSmokeFree) => (
-                                <SimpleCard
-                                    title={"Maak speeltuin rookvrij"}
-                                    image={require("assets/img/backgrounds/smokefree.jpg")}
-                                    content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
-                                    primaryCta={{
-                                        click: (() => {setSmokeFree({ variables: { input: queryInput } })}),
-                                        text: "Maak rookvrij"
-                                    }}
-                                />
+                            {(setSmokeFree, { loading, error }) => (
+                                <div>
+                                    <SimpleCard
+                                        title={"Maak speeltuin rookvrij"}
+                                        image={require("assets/img/backgrounds/smokefree.jpg")}
+                                        content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
+                                        primaryCta={{
+                                            click: (() => {setSmokeFree({ variables: { input: queryInput } })}),
+                                            text: "Maak rookvrij"
+                                        }}
+                                    />
+                                    {loading && <p>Loading...</p>}
+                                    {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                                </div>
                             )}
                         </Mutation>
                     </GridItem>

@@ -3,6 +3,7 @@ import React from "react";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import Dialog from '@material-ui/core/Dialog';
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -60,16 +61,20 @@ class Dashboard extends React.Component {
                             mutation={SET_MANAGER}
                             update={null}
                         >
-                            {(setManager) => (
-                                <SimpleCard
-                                    title={"Claim speeltuin manager rol"}
-                                    image={require("assets/img/backgrounds/smokefree.jpg")}
-                                    content={"Hier kun je de manager rol claimen."}
-                                    primaryCta={{
-                                        click: (() => {setManager({ variables: { input: queryInput } })}),
-                                        text: "Claim manager rol"
-                                    }}
-                                />
+                            {(setManager, { loading, error }) => (
+                                <div>
+                                    <SimpleCard
+                                        title={"Claim speeltuin manager rol"}
+                                        image={require("assets/img/backgrounds/smokefree.jpg")}
+                                        content={"Hier kun je de manager rol claimen."}
+                                        primaryCta={{
+                                            click: (() => {setManager({ variables: { input: queryInput } })}),
+                                            text: "Claim manager rol"
+                                        }}
+                                    />
+                                    {loading && <p>Loading...</p>}
+                                    {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                                </div>
                             )}
                         </Mutation>
                     </GridItem>
