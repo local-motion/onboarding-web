@@ -26,7 +26,7 @@ i18n.use(LanguageDetector).init({
           "  B2C users after installed base benefits.\n" +
           "</p>\n",
         "onboarding.playground.progress.smoking.title":
-          "{{percentage}}% smoking",
+          "{{count}} smoking",
         "onboarding.playground.progress.smoking.html":
           "<p>\n" +
           "  Collaboratively administrate empowered markets via\n" +
