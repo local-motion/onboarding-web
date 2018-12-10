@@ -8,11 +8,15 @@ import GridItem from "components/Grid/GridItem.jsx";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 import DefaultStatistic from "components/PlaygroundStatistic/DefaultStatistic.jsx";
 import PlaygroundStatistic from "components/PlaygroundStatistic/PlaygroundStatistic.jsx";
+import ArrowBack from "@material-ui/icons/ArrowBack";
+import FormDialog from "components/FormDialog/FormDialog.jsx";
+import Button from "@material-ui/core/Button/Button";
+import JoinInitiative from "./JoinInitiative.jsx"
 
 import {withNamespaces} from "react-i18next";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
-import FormDialog from "components/FormDialog/FormDialog.jsx";
+
 
 const GET_SMOKEFREE_PROGRESS = gql`
   {
@@ -46,9 +50,21 @@ const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
 });
 
 class PlaygroundStatistics extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            generalStatistics: true
+        }
+    };
+
     render() {
         const {statsLoading, progress, t, classes, playground} = this.props;
+        const { generalStatistics } = this.state;
         const isDefault = playground.default;
+        //eerst true, daarna false op een specifieke playground
+        //bij het setten van false moet dus de state geupdate worden.
+
+
         if (statsLoading || !progress) {
             return "Loading...";
         }
@@ -75,19 +91,35 @@ class PlaygroundStatistics extends React.Component {
                                      style={
                                          {display: isDefault ? 'block' : 'none'}
                                      }>
-                                    <DefaultStatistic progress={progress.smokeFree} playground={playground} name={"smokefree"}
-                                               measurement={"percentage"}/>
+                                    <DefaultStatistic progress={progress.smokeFree} playground={playground}
+                                                      name={"smokefree"}
+                                                      measurement={"percentage"}/>
                                     <DefaultStatistic progress={progress.workingOnIt} playground={playground}
-                                               name={"workingonit"} measurement={"percentage"}/>
-                                    <DefaultStatistic progress={progress.smoking} playground={playground} name={"smoking"}
-                                               measurement={"count"}/>
+                                                      name={"workingonit"} measurement={"percentage"}/>
+                                    <DefaultStatistic progress={progress.smoking} playground={playground}
+                                                      name={"smoking"}
+                                                      measurement={"count"}/>
                                 </div>
                                 <div className="statistics-wrapper specific"
                                      style={{display: isDefault ? 'none' : 'block'}}>
-                                    <PlaygroundStatistic playground={playground} name={playground.name} stat={"vol"} />
-                                    <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"} />
+                                    <PlaygroundStatistic playground={playground} name={playground.name} stat={"vol"}/>
+                                    <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"}/>
                                 </div>
-                                <FormDialog/>
+                                <div style={{display: isDefault ? 'block' : 'none'}}>
+                                    <FormDialog />
+                                </div>
+                                <div style={{display: isDefault ? 'none' : 'block'}}>
+                                    <JoinInitiative playground={playground}/>
+                                    <Button
+                                        style={{display: isDefault ? 'none' : 'inline-flex'}}
+                                        onClick={() => this.setState({generalStatistics: true }) }
+                                        className={"btn btn-highlight pr-25 pull-right"}
+                                    >
+                                        <ArrowBack className={"mr-5"} />
+                                        <span>Ga terug</span>
+                                    </Button>
+                                </div>
+
                             </GridItem>
                         </GridContainer>
                     </div>

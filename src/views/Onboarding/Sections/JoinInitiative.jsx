@@ -3,12 +3,14 @@ import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 // core components
-import basicsStyle from "assets/jss/material-kit-react/views/componentsSections/basicsStyle.jsx";
-import Button from "components/CustomButtons/Button.jsx";
+import Button from "@material-ui/core/Button/Button";
+import PersonAdd from "@material-ui/icons/PersonAdd";
+import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 
-import { withNamespaces } from "react-i18next";
+import {withNamespaces} from "react-i18next";
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
+import {Mutation} from "react-apollo";
+
 
 const JOIN_INITIATIVE = gql`
   mutation JoinInitiative($input: JoinInitiativeInput!) {
@@ -26,7 +28,7 @@ class JoinInitiative extends React.Component {
 
     render() {
         const {t, playground} = this.props;
-        if(playground.default) return null;
+        if (playground.default) return null;
 
         let initiativeInput = {
             initiativeId: playground.id
@@ -39,14 +41,13 @@ class JoinInitiative extends React.Component {
             >
                 {(joinInitiative) => (
                     <Button
+                        className={"btn btn-highlight pr-25 pull-left"}
                         onClick={(/*event*/) =>
                             joinInitiative({variables: {input: initiativeInput}})
                         }
-                        color="danger"
-                        round
-                        className="pull-right mr-15"
                     >
-                        {t("onboarding.playground.calltoaction.button")}
+                        <PersonAdd className={"mr-5"}/>
+                        <span>Maak deze speeltuin rookvrij</span>
                     </Button>
                 )}
             </Mutation>
@@ -54,6 +55,6 @@ class JoinInitiative extends React.Component {
     }
 }
 
-export default withStyles(basicsStyle)(
+export default withStyles(pillsStyle)(
     withNamespaces("translations")(JoinInitiative)
 );
