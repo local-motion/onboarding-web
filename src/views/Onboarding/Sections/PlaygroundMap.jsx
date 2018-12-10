@@ -7,6 +7,7 @@ import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 
 import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-maps";
+import { InfoBox } from "react-google-maps/lib/components/addons/InfoBox";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import markerGray from "assets/img/markers/playground_gray.png";
 import markerGreen from "assets/img/markers/playground_green.png";
@@ -33,7 +34,12 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
     // `data` is the result data (see above)
     props: ({ownProps, data}) => {
         if(data.loading) return {playgroundsLoading: true};
-        if(data.error) return {hasErrors: true};
+        if(data.error) {
+            return {
+                hasErrors: true,
+                error: data.error.toString()
+            };
+        }
         return {
             playgrounds: data.playgrounds.map(playground => {
                 return {
@@ -55,7 +61,7 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
 const PlaygroundMap = compose(
     withProps({
         googleMapURL:
-            `https://maps.googleapis.com/maps/api/js?key=${ MAP_API_KEY }&v=3.exp&libraries=geometry,drawing,places`,
+            `https://maps.googleapis.com/maps/api/js?key=${MAP_API_KEY}&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{height: `100%`}}/>,
         containerElement: <div style={{height: `100%`}} className="playground-map"/>,
         mapElement: <div style={{height: `100%`}}/>
@@ -79,45 +85,60 @@ const PlaygroundMap = compose(
     withScriptjs,
     withGoogleMap
 )(props => (
-    <GoogleMap
-        zoom={props.zoom}
-        center={props.center}
-        onClick={function(e) {
-            if(!props.viewOnly){
-                props.onPlaygroundCreated(e);
-                props.onMapClick(e);
-            }
-        }}
-        defaultOptions={{disableDefaultUI: true}}
-    >
-        <MarkerClusterer
-            onClick={props.onMarkerClustererClick.bind(this)}
-            averageCenter
-            enableRetinaIcons
-            gridSize={60}
+    <div>
+        { props.hasErrors === true &&
+            <InfoBox
+                defaultPosition={new window.google.maps.LatLng(props.center.lat, props.center.lng - 1)}
+                options={{closeBoxURL: ``, enableEventPropagation: true}}
+            >
+                <div style={{backgroundColor: `white`, opacity: 0.75, padding: `12px`}}>
+                    <div style={{fontSize: `16px`, fontColor: `darkred`}}>
+                        {props.error}
+                    </div>
+                </div>
+            </InfoBox>
+        }
+
+        <GoogleMap
+            zoom={props.zoom}
+            center={props.center}
+            onClick={function(e) {
+                if(!props.viewOnly) {
+                    props.onPlaygroundCreated(e);
+                    props.onMapClick(e);
+                }
+            }}
+            defaultOptions={{disableDefaultUI: false}}
         >
-            {!props.playgroundsLoading &&
-            props.playgrounds &&
-            props.playgrounds.map(playground => (
-                <Marker
-                    onClick={
-                        props.onPlaygroundChange.bind(this, playground)
-                    }
-                    key={playground.id}
-                    position={{lat: playground.lat, lng: playground.lng}}
-                    icon={markerGreen}
-                />
-            ))}
 
-            {props.isMarkerShown &&
-                <Marker
-                    position={props.newPin}
-                    icon={markerGray}
-                />
-            }
-        </MarkerClusterer>
+            <MarkerClusterer
+                onClick={props.onMarkerClustererClick.bind(this)}
+                averageCenter
+                enableRetinaIcons
+                gridSize={60}
+            >
+                {!props.playgroundsLoading &&
+                props.playgrounds &&
+                props.playgrounds.map(playground => (
+                    <Marker
+                        onClick={
+                            props.onPlaygroundChange.bind(this, playground)
+                        }
+                        key={playground.id}
+                        position={{lat: playground.lat, lng: playground.lng}}
+                        icon={markerGreen}
+                    />
+                ))}
 
-    </GoogleMap>
+                {props.isMarkerShown &&
+                    <Marker
+                        position={props.newPin}
+                        icon={markerGray}
+                    />
+                }
+            </MarkerClusterer>
+        </GoogleMap>
+    </div>
 ));
 
 const PlaygroundMapWithData = withPlaygrounds(PlaygroundMap);
