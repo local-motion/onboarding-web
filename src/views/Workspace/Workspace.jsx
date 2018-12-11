@@ -40,7 +40,6 @@ const playgroundRequest = graphql(GET_PLAYGROUND,{
     props: ({ownProps, data }) => {
         if(data.loading) return { playgroundsLoading: true };
         if(data.error) return { hasErrors: true };
-        if(data.error) return { hasErrors: true };
         console.log("data", data);
         return {
             playground: data.playground
@@ -70,7 +69,7 @@ class WorkspaceTemplate extends React.Component {
             case "2":
                 return <PhaseExecute playground={this.props.playground}/>;
             case "3":
-                return <PhaseSustain />;
+                return <PhaseSustain playground={this.props.playground}/>;
             default:
                 return <Dashboard />;
         }
@@ -78,12 +77,15 @@ class WorkspaceTemplate extends React.Component {
 
     render() {
         const { phase } = this.state;
-        const {classes, playground, ...rest} = this.props;
+        const {playgroundsLoading, classes, playground, ...rest} = this.props;
 
+        if (playgroundsLoading) {
+            return "loading..";
+        }
         return (
             <div className={"workspace-wrapper"}>
                 <Header
-                    brand="Speeltuin"
+                    brand={playground.name}
                     rightLinks={<HeaderLinks/>}
                     fixed
                     color="white"

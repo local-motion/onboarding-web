@@ -27,11 +27,13 @@ const SET_MANAGER = gql`
 class Dashboard extends React.Component {
 
     render() {
-        const { classes } = this.props;
+        const { classes, playground } = this.props;
         const playgroundId = window.location.pathname.split("/").pop();
         let queryInput = {
             initiativeId: playgroundId
         };
+
+        console.log(playground);
         return(
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
