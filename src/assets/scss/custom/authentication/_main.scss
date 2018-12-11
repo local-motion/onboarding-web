@@ -1,12 +1,22 @@
-.secure-app-wrapper{
+.secure-app-wrapper {
     width: 1024px;
     margin: 0 auto;
-    @include breakpoint($breakpoints-xs){ width: 90%; }
-    @include breakpoint($breakpoints-sm){ width: $breakpoints-sm; }
-    @include breakpoint($breakpoints-md){ width: $breakpoints-md; }
-    @include breakpoint($breakpoints-lg){ width: $breakpoints-lg; }
-    @include breakpoint($breakpoints-xl){ width: $breakpoints-xl; }
-    .secure-app-background{
+    @include breakpoint($breakpoints-xs) {
+        width: 90%;
+    }
+    @include breakpoint($breakpoints-sm) {
+        width: $breakpoints-sm;
+    }
+    @include breakpoint($breakpoints-md) {
+        width: $breakpoints-md;
+    }
+    @include breakpoint($breakpoints-lg) {
+        width: $breakpoints-lg;
+    }
+    @include breakpoint($breakpoints-xl) {
+        width: $breakpoints-xl;
+    }
+    .secure-app-background {
         height: 100%;
         width: 100%;
         top: 0;
@@ -17,12 +27,16 @@
         position: fixed;
         z-index: 1;
     }
-    .secure-app-container{
+    .secure-app-container {
         background: white;
         padding: 25px;
         width: 90%;
-        @include breakpoint($breakpoints-lg){ width: 70%; }
-        @include breakpoint($breakpoints-xl){ width: 50%; }
+        @include breakpoint($breakpoints-lg) {
+            width: 70%;
+        }
+        @include breakpoint($breakpoints-xl) {
+            width: 50%;
+        }
         margin: 100px auto;
         @include shadow-big();
         position: relative;
@@ -30,19 +44,37 @@
         border-radius: 10px;
     }
 
-    h2{
+    h2 {
         font-size: 1.5rem;
     }
 
-    form{
+    form {
         width: 100% !important;
-        input{
-            margin: 20px 0;
-        }
-            button{
-                &:hover{
-                    color: $lm-red-1;
+        .input-container {
+            &.success {
+                input {
+                    color: limegreen;
+                }
+                &:after{
+                    border-bottom: 2px solid #32CD32;
                 }
             }
+            &.error {
+                input {
+                    color: $lm-red-1;
+                }
+                &:after{
+                    border-bottom: 2px solid $lm-red-1;
+                }
+            }
+        }
+        input {
+            margin: 20px 0;
+        }
+        button {
+            &:hover {
+                color: $lm-red-1;
+            }
+        }
     }
 }
