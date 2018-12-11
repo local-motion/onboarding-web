@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
-import Error from "@material-ui/icons/Error";
 
 const logger = new Logger('JConfirmSignUp');
 
@@ -28,10 +27,12 @@ export default class JConfirmSignUp extends Component {
     }
 
     validateCode(input) {
-        const RGEX = new RegExp(/([0-9])\S{5}/g);
+        const RGEX = new RegExp(/([0-9])\d{5}/g);
         const validatedResult = RGEX.test(input);
+
+        this.inputs.code = input;
+
         this.setState({codeLength: input.toString().length });
-        console.log(this.state.codeLength);
         validatedResult ?
             this.setState({validateCode: "validated", error: ''}) :
             this.setState({validateCode: "unvalidated", error: 'De code bestaat uit 6 cijfers'});
@@ -58,6 +59,7 @@ export default class JConfirmSignUp extends Component {
         logger.info('confirm sign up success with ' + username);
         this.setState({message: '', error: ''});
         this.changeState('signIn', username);
+        this.setState({codeLength: 0, error: '', validateCode: "unvalidated"});
     }
 
     handleError(err) {
@@ -79,10 +81,11 @@ export default class JConfirmSignUp extends Component {
             extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
             left: {float: "left"},
             alert: {fontSize: '0.8em'},
-            error: {fontSize: '0.8em', color: "red"}
+            error: {fontSize: '0.8em', color: "red"},
+            message: {fontSize: '0.8em', color: "#333333"}
         };
 
-        const {error, validateCode, codeLength} = this.state;
+        const {message, error, validateCode, codeLength} = this.state;
 
         return (
             <div className={"secure-app-wrapper"}>
@@ -113,8 +116,7 @@ export default class JConfirmSignUp extends Component {
                                         "input-container last " + (validateCode === "validated" ? 'success' : 'error') + (codeLength === 0 ? " untouched" : " dirty" )
                                     }
                                     onChange={
-                                        event => this.inputs.code = event.target.value &&
-                                        this.validateCode(event.target.value)
+                                        event => this.validateCode(event.target.value)
                                     }
                                     autoFocus
                                     autoComplete='new-password'
@@ -122,13 +124,16 @@ export default class JConfirmSignUp extends Component {
                                         maxLength: "6",
                                     }}
                                 />
-                                { error !== '' ? <span className={"error"} style={style.error}> Error: {error} </span> : null }
+                                { error !== '' ? <span className={"error"} style={style.error}> {error} </span> : null }
+                                { message !== '' ? <span className={"message"} style={style.message}> {message} </span> : null }
 
                             </div>
                             <div>
                                 <Button
                                     style={style.button}
-                                    onClick={this.confirmSignUp}>
+                                    onClick={this.confirmSignUp}
+                                    disabled={ error !== '' ? true : false }
+                                >
                                     Bevestig
                                 </Button>
                             </div>
