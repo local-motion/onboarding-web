@@ -1,6 +1,7 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import Dialog from '@material-ui/core/Dialog';
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -40,7 +41,10 @@ const GET_SMOKEFREE_PROGRESS = gql`
 const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
     props: ({ownProps, data}) => {
         if (data.loading) return {statsLoading: true};
-        if (data.error) return {hasErrors: true};
+        if(data.error) return {
+            hasErrors: true,
+            error: data.error.toString()
+        };
 
         console.log(data.progress);
         return {
@@ -68,6 +72,9 @@ class PlaygroundStatistics extends React.Component {
         }
         return (
             <div className={classes.section + " playground-statistics wrapper"}>
+                {this.props.hasErrors === true &&
+                <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
+                }
                 <div className={classes.container + " playground-statistics container"}>
                     <h2 className="playground-statistics title">
                         {playground.name}

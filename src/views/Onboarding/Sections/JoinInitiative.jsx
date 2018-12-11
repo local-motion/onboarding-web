@@ -1,6 +1,7 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import Dialog from '@material-ui/core/Dialog';
 // @material-ui/icons
 // core components
 import Button from "@material-ui/core/Button/Button";
@@ -27,7 +28,7 @@ class JoinInitiative extends React.Component {
     }
 
     render() {
-        const {playground} = this.props;
+        const {classes, playground} = this.props;
         if (playground.default) return null;
 
         let initiativeInput = {
@@ -39,16 +40,20 @@ class JoinInitiative extends React.Component {
                 mutation={JOIN_INITIATIVE}
                 update={this.loadWorkspace}
             >
-                {(joinInitiative) => (
-                    <Button
-                        className={"btn btn-highlight pr-25 pull-left"}
-                        onClick={(/*event*/) =>
-                            joinInitiative({variables: {input: initiativeInput}})
-                        }
-                    >
-                        <PersonAdd className={"mr-5"}/>
-                        <span>Maak deze speeltuin rookvrij</span>
-                    </Button>
+                {(joinInitiative, { loading, error }) => (
+                    <div>
+                        <Button
+                            className={"btn btn-highlight pr-25 pull-left"}
+                            onClick={(/*event*/) =>
+                                joinInitiative({variables: {input: initiativeInput}})
+                            }
+                        >
+                            <PersonAdd className={"mr-5"}/>
+                            <span>Maak deze speeltuin rookvrij</span>
+                        </Button>
+                        {loading && <p>Loading...</p>}
+                        {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                    </div>
                 )}
             </Mutation>
         );

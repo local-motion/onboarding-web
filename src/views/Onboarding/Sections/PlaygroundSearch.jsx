@@ -1,5 +1,6 @@
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
+import Dialog from '@material-ui/core/Dialog';
 //import { withNamespaces } from "react-i18next";
 
 //extra related to autosuggest demo + Material UI
@@ -34,8 +35,10 @@ const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
     // `data` is the result data (see above)
     props: ({ownProps, data}) => {
         if (data.loading) return {playgroundsLoading: true};
-        if (data.error) return {hasErrors: true};
-        if (data.error) return {hasErrors: true};
+        if(data.error) return {
+            hasErrors: true,
+            error: data.error.toString()
+        };
         return {
             playgrounds: data.playgrounds.map(playground => {
                 return {
@@ -196,6 +199,10 @@ class IntegrationAutosuggest extends React.Component {
 
         return (
             <div className={classes.root + " playground autosuggest"}>
+                {this.props.hasErrors === true &&
+                <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
+                }
+
                 <div className={classes.divider}/>
                 <Autosuggest
                     {...autosuggestProps}
