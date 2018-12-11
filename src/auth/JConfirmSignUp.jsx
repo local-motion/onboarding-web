@@ -16,7 +16,7 @@ export default class JConfirmSignUp extends Component {
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {message: '', error: ''}
+        this.state = {message: '', error: '', validatedCode: '', codeLength: 0}
     }
 
     changeState(state, data) {
@@ -24,6 +24,18 @@ export default class JConfirmSignUp extends Component {
         if (onStateChange) {
             onStateChange(state, data);
         }
+    }
+
+    validateCode(input) {
+        const RGEX = new RegExp(/([0-9])\d{5}/g);
+        const validatedResult = RGEX.test(input);
+
+        this.inputs.code = input;
+
+        this.setState({codeLength: input.toString().length });
+        validatedResult ?
+            this.setState({validateCode: "validated", error: ''}) :
+            this.setState({validateCode: "unvalidated", error: 'De code bestaat uit 6 cijfers'});
     }
 
     confirmSignUp() {
@@ -47,6 +59,7 @@ export default class JConfirmSignUp extends Component {
         logger.info('confirm sign up success with ' + username);
         this.setState({message: '', error: ''});
         this.changeState('signIn', username);
+        this.setState({codeLength: 0, error: '', validateCode: "unvalidated"});
     }
 
     handleError(err) {
@@ -67,10 +80,12 @@ export default class JConfirmSignUp extends Component {
             button: {width: '100%'},
             extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
             left: {float: "left"},
-            alert: {fontSize: '0.8em'}
+            alert: {fontSize: '0.8em'},
+            error: {fontSize: '0.8em', color: "red"},
+            message: {fontSize: '0.8em', color: "#333333"}
         };
 
-        const {message, error} = this.state;
+        const {message, error, validateCode, codeLength} = this.state;
 
         return (
             <div className={"secure-app-wrapper"}>
@@ -86,9 +101,10 @@ export default class JConfirmSignUp extends Component {
                                     placeholder="Username"
                                     defaultValue={authData || ''}
                                     style={style.input}
+                                    className={error === "Username cannot be empty" ? "input-container error" : "input-container" }
                                     onChange={event => this.inputs.username = event.target.value}
                                     disabled={!!authData}
-                                    autoComplete='off'
+                                    autoComplete='new-password'
                                 />
                             </div>
                             <div>
@@ -96,15 +112,28 @@ export default class JConfirmSignUp extends Component {
                                     type="text"
                                     placeholder="Code"
                                     style={style.input}
-                                    onChange={event => this.inputs.code = event.target.value}
+                                    className={
+                                        "input-container last " + (validateCode === "validated" ? 'success' : 'error') + (codeLength === 0 ? " untouched" : " dirty" )
+                                    }
+                                    onChange={
+                                        event => this.validateCode(event.target.value)
+                                    }
                                     autoFocus
                                     autoComplete='new-password'
+                                    inputProps={{
+                                        maxLength: "6",
+                                    }}
                                 />
+                                { error !== '' ? <span className={"error"} style={style.error}> {error} </span> : null }
+                                { message !== '' ? <span className={"message"} style={style.message}> {message} </span> : null }
+
                             </div>
                             <div>
                                 <Button
                                     style={style.button}
-                                    onClick={this.confirmSignUp}>
+                                    onClick={this.confirmSignUp}
+                                    disabled={ error !== '' ? true : false }
+                                >
                                     Bevestig
                                 </Button>
                             </div>
@@ -115,8 +144,6 @@ export default class JConfirmSignUp extends Component {
                                     Stuur code opnieuw
                                 </Button>
                             </div>
-                            {error && <p style={style.alert}>{error.message}</p>}
-                            {message && <p style={style.alert}>{message}</p>}
                         </form>
                         <div style={style.links}>
                             <div>
