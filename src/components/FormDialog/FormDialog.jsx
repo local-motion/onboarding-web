@@ -63,6 +63,7 @@ class FormDialog extends React.Component {
     };
 
     handlePlaygroundChange(playground) {
+        console.log("handlePlaygroundChange: ", playground);
         this.setState({
             playground: playground,
             map: {
@@ -73,26 +74,26 @@ class FormDialog extends React.Component {
     }
 
     handleCreatePlayground = (e) => {
+        console.log("handleCreatePlayground: ", e);
         this.setState({
             view: 'playground',
-            playground: {latLng: e.latLng}
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng(),
         });
     };
 
     render() {
         const {classes} = this.props;
-        const {map} = this.state;
-
-        console.log(this.state);
-
+        const {map } = this.state;
         const playground = {
             name: this.state.name,
-            lat: map.latlng.lat,
-            lng: map.latlng.lng,
+            lat: this.state.lat,
+            lng: this.state.lng,
             initiativeId: this.state.initiativeId,
             type: "smokefree",
             status: "not_started"
         };
+        console.log("Current playground information: ", playground);
 
         return (
             <div className={"FormDialog-container"}>
