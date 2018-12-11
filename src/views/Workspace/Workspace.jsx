@@ -9,7 +9,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
 // core components
-import { graphql } from "react-apollo";
+import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
@@ -25,23 +25,38 @@ import PhaseSustain from "./Sections/PhaseSustain.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
 
+const playgroundId = window.location.pathname.split("/").pop();
+
+const GET_PROFILE = gql`
+    {
+        profile {
+            id
+            username
+        }
+    }
+`;
+
 const GET_PLAYGROUND = gql`
     {
-        playground(id: "${window.location.pathname.split("/").pop()}") {
+        playground(id: "${playgroundId}") {
             id
             name
             status
             smokeFreeDate
             volunteerCount
             votes
+            managers {
+                id
+                username
+            }
         }
     }
 `;
 
-const playgroundRequest = graphql(GET_PLAYGROUND,{
-    props: ({ownProps, data }) => {
-        if(data.loading) return { playgroundsLoading: true };
-        if(data.error) return {
+const playgroundRequest = graphql(GET_PLAYGROUND, {
+    props: ({ownProps, data}) => {
+        if (data.loading) return {playgroundsLoading: true};
+        if (data.error) return {
             hasErrors: true,
             error: data.error.toString()
         };
@@ -50,23 +65,38 @@ const playgroundRequest = graphql(GET_PLAYGROUND,{
             playground.smokeFreeDate = new Date(playground.smokeFreeDate);
         }
         console.log("Get playground: ", playground);
-        return { playground: playground };
+        return {playground: playground};
+    }
+});
+
+const profileRequest = graphql(GET_PROFILE, {
+    props: ({ownProps, data}) => {
+        if (data.loading) return {profileLoading: true};
+        if (data.error) return {
+            hasErrors: true,
+            error: data.error.toString()
+        };
+        console.log("Get profile: ", data.profile);
+        const profile = data.profile || {};
+        return {
+            profile: profile
+        };
     }
 });
 
 class WorkspaceTemplate extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             phase: "0",
             view: "dashboard",
-            progress: ""
+            progress: "",
         };
     }
 
     switchPhase = (phase) => {
-        this.setState(state => ({ phase: phase }));
+        this.setState(state => ({phase: phase}));
     };
 
     renderPhase = (phase) => {
@@ -78,21 +108,24 @@ class WorkspaceTemplate extends React.Component {
             case "3":
                 return <PhaseSustain playground={this.props.playground}/>;
             default:
-                return <Dashboard/>;
+                return <Dashboard playground={this.props.playground} profile={this.props.profile} />;
         }
     };
 
     render() {
-        const { phase } = this.state;
-        const {playgroundsLoading, classes, playground, ...rest} = this.props;
+        const {phase} = this.state;
+        const {playgroundsLoading, profileLoading, classes, playground, ...rest} = this.props;
 
         if (playgroundsLoading) {
+            return "loading..";
+        }
+        if (profileLoading) {
             return "loading..";
         }
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
-                 <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
+                <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
                 }
 
                 <Header
@@ -110,7 +143,7 @@ class WorkspaceTemplate extends React.Component {
                           className={phase === "0" ? "phase-container empty" : "phase-container"}>
                     <div className={classes.container + " phase-wrapper"}>
                         {phase !== "0" ?
-                                <PhaseIndicator onSwitchPhase={this.switchPhase}/> : <div></div>
+                            <PhaseIndicator onSwitchPhase={this.switchPhase}/> : <div></div>
                         }
 
                     </div>
@@ -120,11 +153,12 @@ class WorkspaceTemplate extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2>{ phase === "0" ? " Overzichtpagina" : "Stap " + phase} </h2>
+                                <h2>{phase === "0" ? " Overzichtpagina" : "Stap " + phase} </h2>
                                 {!!playground && phase === "0" ?
                                     <div className={"explainer-actions"}>
                                         <h3>
-                                            Op deze pagina vind je alle informatie die je nodig hebt om {playground.name} rookvrij te maken.
+                                            Op deze pagina vind je alle informatie die je nodig hebt
+                                            om {playground.name} rookvrij te maken.
                                         </h3>
                                         <Button
                                             className={"btn btn-highlight"}
@@ -142,7 +176,7 @@ class WorkspaceTemplate extends React.Component {
                                             className={"btn btn-highlight"}
                                             onClick={() => this.switchPhase("0")}
                                             style={{textAlign: 'center'}}
-                                            >
+                                        >
                                             <span>Ga terug naar de startpagina</span>
                                         </Button>
                                     </div>
@@ -160,5 +194,5 @@ class WorkspaceTemplate extends React.Component {
     }
 }
 
-const Workspace = playgroundRequest(WorkspaceTemplate);
+const Workspace = profileRequest(playgroundRequest(WorkspaceTemplate));
 export default withStyles(componentsStyle)(Workspace);

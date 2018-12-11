@@ -14,6 +14,9 @@ import CollapseCard from "components/CustomCard/CollapseCard.jsx"
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import {Mutation} from "react-apollo";
 import gql from "graphql-tag";
+import PlaygroundManagers from "./PlaygroundManagers";
+
+import Amplify from "aws-amplify";
 
 
 const SET_MANAGER = gql`
@@ -24,17 +27,31 @@ const SET_MANAGER = gql`
   }
 `;
 
-
 class Dashboard extends React.Component {
+    // TODO: Manually updating memory model. Start using graphql subscriptions instead!
+    _addManager = userId => {
+        let user = Amplify.Auth.user;
+        this.props.playground.managers.push({
+            id: userId,
+            username: user.username
+        });
+    };
+
+    _onError = error => {
+        console.log("Could not change smoke-free date", error);
+    };
 
     render() {
-        const { classes, playground } = this.props;
-        const playgroundId = window.location.pathname.split("/").pop();
-        let queryInput = {
-            initiativeId: playgroundId
-        };
+        const { classes, playground, profile } = this.props;
+        const isManager = playground.managers && !!playground.managers.filter(manager => {
+            return manager.id === profile.id
+        }).length;
 
-        console.log(playground);
+        console.log(`Displaying dashboard for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${profile.id}`);
+
+        let queryInput = {
+            initiativeId: playground.id
+        };
         return(
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
@@ -44,6 +61,7 @@ class Dashboard extends React.Component {
                                       content={"Maak kennis met het team die deze speeltuin rookvrij maakt"}
                                       primaryCta={"Word lid"}
                                       MoreInformation={"Meer informatie"}
+                                      ExpandContent={<PlaygroundManagers playground={playground} profile={profile}/>}
                         />
                         <CollapseCard title={"Petities"}
                                       image={require("assets/img/backgrounds/petities.jpg")}
@@ -59,26 +77,29 @@ class Dashboard extends React.Component {
                                         text: "Doneer nu"
                                     }}
                         />
-                        <Mutation
-                            mutation={SET_MANAGER}
-                            update={null}
-                        >
-                            {(setManager, { loading, error }) => (
-                                <div>
-                                    <SimpleCard
-                                        title={"Claim speeltuin manager rol"}
-                                        image={require("assets/img/backgrounds/smokefree.jpg")}
-                                        content={"Hier kun je de manager rol claimen."}
-                                        primaryCta={{
-                                            click: (() => {setManager({ variables: { input: queryInput } })}),
-                                            text: "Claim manager rol"
-                                        }}
-                                    />
-                                    {loading && <p>Loading...</p>}
-                                    {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
-                                </div>
-                            )}
-                        </Mutation>
+                        {
+                            !isManager &&
+                            <Mutation mutation={SET_MANAGER} update={null} onError={this._onError}>
+                                {(setManager, { loading, error }) => (
+                                    <div>
+                                        <SimpleCard
+                                            title={"Speeltuin beheerder?"}
+                                            image={require("assets/img/backgrounds/smokefree.jpg")}
+                                            content={"Ben jij de officiele beheerder van deze speeltuin? Laat het ons weten..."}
+                                            primaryCta={{
+                                                click: (() => {
+                                                    setManager({ variables: { input: queryInput } })
+                                                    this._addManager(profile.id);
+                                                }),
+                                                text: "Ik ben de beheerder van deze speeltuin"
+                                            }}
+                                        />
+                                        {loading && <p>Loading...</p>}
+                                        {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                                    </div>
+                                )}
+                            </Mutation>
+                        }
                     </GridItem>
                 </GridContainer>
             </div>
