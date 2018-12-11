@@ -1,10 +1,11 @@
 query Query {
-    playground(id: "98b70cde-ef3c-40a8-b7d8-cc98b1868086") {
+    playground(id: "16e43fe5-724f-4720-bcca-34077eb49702") {
         id
         name
         lng
         lat
         status
+        smokeFreeDate
         volunteerCount
         votes
     }

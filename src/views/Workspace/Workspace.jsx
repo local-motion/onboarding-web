@@ -31,6 +31,7 @@ const GET_PLAYGROUND = gql`
             id
             name
             status
+            smokeFreeDate
             volunteerCount
             votes
         }
@@ -44,10 +45,12 @@ const playgroundRequest = graphql(GET_PLAYGROUND,{
             hasErrors: true,
             error: data.error.toString()
         };
-        console.log("data", data);
-        return {
-            playground: data.playground
-        };
+        const playground = data.playground;
+        if (playground.smokeFreeDate) {
+            playground.smokeFreeDate = new Date(playground.smokeFreeDate);
+        }
+        console.log("Get playground: ", playground);
+        return { playground: playground };
     }
 });
 
@@ -75,9 +78,9 @@ class WorkspaceTemplate extends React.Component {
             case "3":
                 return <PhaseSustain playground={this.props.playground}/>;
             default:
-                return <Dashboard />;
+                return <Dashboard/>;
         }
-    }
+    };
 
     render() {
         const { phase } = this.state;
