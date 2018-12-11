@@ -37,14 +37,21 @@ class SmokefreeDate extends React.Component {
                 {(setSmokeFreeDate, { loading, error }) => (
                     <div>
                     <DatePicker
-                        dateFormat="YYYY-m-dd"
+                        dateFormat="YYYY-MM-dd"
                         selected={this.state.startDate}
-                        onChange={() => setSmokeFreeDate({ variables: {
-                            input: {
-                                smokeFreeDate: this.state.startDate.getFullYear() + '-' + (this.state.startDate.getMonth()+1) + '-' + ("0" + this.state.startDate.getDate()).slice(-2),
-                                initiativeId: window.location.pathname.split("/").pop()
-                            }
-                        }})}
+                        onChange={(date) => {
+                            this.setState({
+                                startDate: date
+                            });
+
+                            setSmokeFreeDate({ variables: {
+                                input: {
+                                    smokeFreeDate: date.getFullYear() + '-' + ("0" + (date.getMonth()+1)).slice(-2) + '-' + ("0" + date.getDate()).slice(-2),
+                                    initiativeId: window.location.pathname.split("/").pop()
+                                }
+                            }})
+
+                        }}
                     />
                     {loading && <p>Loading...</p>}
                     {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
