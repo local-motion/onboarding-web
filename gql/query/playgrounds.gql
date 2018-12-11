@@ -5,6 +5,7 @@ query Query {
         lng
         lat
         status
+        smokeFreeDate
         volunteerCount
         votes
     }

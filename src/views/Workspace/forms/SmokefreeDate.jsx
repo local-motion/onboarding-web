@@ -23,30 +23,43 @@ class SmokefreeDate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: new Date()
+            startDate: props.startDate || new Date()
         };
     }
+
+    static _dateToString(date) {
+        let year = date.getFullYear();
+        let monthPadded = ("0" + (date.getMonth()+1)).slice(-2);
+        let dayPadded = ("0" + date.getDate()).slice(-2);
+        return year + '-' + monthPadded + '-' + dayPadded
+    }
+
+    _changeState = (date) => {
+        this.setState({
+            startDate: date
+        });
+        this.props.onChange(date)
+    };
+
+    _onError = error => {
+        console.log("Could not change smoke-free date", error);
+    };
 
     render() {
         const {classes} = this.props;
         return (
-            <Mutation
-                mutation={SET_SMOKEFREE_DATE}
-                update={null}
-            >
+            <Mutation mutation={SET_SMOKEFREE_DATE} update={null} onError={this._onError}>
                 {(setSmokeFreeDate, { loading, error }) => (
                     <div>
                     <DatePicker
                         dateFormat="YYYY-MM-dd"
                         selected={this.state.startDate}
                         onChange={(date) => {
-                            this.setState({
-                                startDate: date
-                            });
+                            this._changeState(date);
 
                             setSmokeFreeDate({ variables: {
                                 input: {
-                                    smokeFreeDate: date.getFullYear() + '-' + ("0" + (date.getMonth()+1)).slice(-2) + '-' + ("0" + date.getDate()).slice(-2),
+                                    smokeFreeDate: SmokefreeDate._dateToString(date),
                                     initiativeId: window.location.pathname.split("/").pop()
                                 }
                             }})
