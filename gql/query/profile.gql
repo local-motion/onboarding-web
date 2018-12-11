@@ -1,0 +1,6 @@
+query Query {
+    profile {
+        id
+        username
+    }
+}

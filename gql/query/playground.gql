@@ -1,5 +1,5 @@
 query Query {
-    playground(id: "16e43fe5-724f-4720-bcca-34077eb49702") {
+    playground(id: "aa5607c4-3410-45aa-8df0-a89c072d7eaf") {
         id
         name
         lng
@@ -8,5 +8,9 @@ query Query {
         smokeFreeDate
         volunteerCount
         votes
+        managers {
+            id
+            username
+        }
     }
 }
