@@ -16,7 +16,7 @@ export default class JConfirmSignUp extends Component {
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {message: '', error: ''}
+        this.state = {message: '', error: '', validatedCode: ''}
     }
 
     changeState(state, data) {
@@ -24,6 +24,12 @@ export default class JConfirmSignUp extends Component {
         if (onStateChange) {
             onStateChange(state, data);
         }
+    }
+
+    validateCode(input) {
+        const RGEX = new RegExp(/([0-9])\S{5}/g);
+        const validatedResult = RGEX.test(input);
+        validatedResult ? this.setState({validateCode: "validated"}) : this.setState({validateCode: "unvalidated"});
     }
 
     confirmSignUp() {
@@ -70,7 +76,7 @@ export default class JConfirmSignUp extends Component {
             alert: {fontSize: '0.8em'}
         };
 
-        const {message, error} = this.state;
+        const {message, error, validateCode} = this.state;
 
         return (
             <div className={"secure-app-wrapper"}>
@@ -96,9 +102,18 @@ export default class JConfirmSignUp extends Component {
                                     type="text"
                                     placeholder="Code"
                                     style={style.input}
-                                    onChange={event => this.inputs.code = event.target.value}
+                                    className={
+                                        "input-container " + (validateCode === "validated" ? 'success' : 'error')
+                                    }
+                                    onChange={
+                                        event => this.inputs.code = event.target.value &&
+                                        this.validateCode(event.target.value)
+                                    }
                                     autoFocus
                                     autoComplete='new-password'
+                                    inputProps={{
+                                        maxLength: "6",
+                                    }}
                                 />
                             </div>
                             <div>
