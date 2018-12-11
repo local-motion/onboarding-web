@@ -73,7 +73,7 @@ class WorkspaceTemplate extends React.Component {
             case "2":
                 return <PhaseExecute playground={this.props.playground}/>;
             case "3":
-                return <PhaseSustain />;
+                return <PhaseSustain playground={this.props.playground}/>;
             default:
                 return <Dashboard />;
         }
@@ -81,8 +81,11 @@ class WorkspaceTemplate extends React.Component {
 
     render() {
         const { phase } = this.state;
-        const {classes, playground, ...rest} = this.props;
+        const {playgroundsLoading, classes, playground, ...rest} = this.props;
 
+        if (playgroundsLoading) {
+            return "loading..";
+        }
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
@@ -90,7 +93,7 @@ class WorkspaceTemplate extends React.Component {
                 }
 
                 <Header
-                    brand="Speeltuin"
+                    brand={playground.name}
                     rightLinks={<HeaderLinks/>}
                     fixed
                     color="white"
