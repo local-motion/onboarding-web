@@ -63,8 +63,26 @@
                 input {
                     color: $lm-red-1;
                 }
+                &:before{
+                    border-bottom: 1px solid rgba(255, 0, 0, 0.42);
+                }
                 &:after{
                     border-bottom: 2px solid $lm-red-1;
+                }
+                &.untouched{
+                    input{
+                        color: initial;
+                    }
+                    &:after{
+                        border-bottom: 2px solid #303f9f;
+                    }
+                }
+            }
+            &.last{
+                &.error{
+                    input{
+                        margin: 0;
+                    }
                 }
             }
         }

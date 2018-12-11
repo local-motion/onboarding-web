@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
+import Error from "@material-ui/icons/Error";
 
 const logger = new Logger('JConfirmSignUp');
 
@@ -16,7 +17,7 @@ export default class JConfirmSignUp extends Component {
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {message: '', error: '', validatedCode: ''}
+        this.state = {message: '', error: '', validatedCode: '', codeLength: 0}
     }
 
     changeState(state, data) {
@@ -29,7 +30,11 @@ export default class JConfirmSignUp extends Component {
     validateCode(input) {
         const RGEX = new RegExp(/([0-9])\S{5}/g);
         const validatedResult = RGEX.test(input);
-        validatedResult ? this.setState({validateCode: "validated"}) : this.setState({validateCode: "unvalidated"});
+        this.setState({codeLength: input.toString().length });
+        console.log(this.state.codeLength);
+        validatedResult ?
+            this.setState({validateCode: "validated", error: ''}) :
+            this.setState({validateCode: "unvalidated", error: 'De code bestaat uit 6 cijfers'});
     }
 
     confirmSignUp() {
@@ -73,10 +78,11 @@ export default class JConfirmSignUp extends Component {
             button: {width: '100%'},
             extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
             left: {float: "left"},
-            alert: {fontSize: '0.8em'}
+            alert: {fontSize: '0.8em'},
+            error: {fontSize: '0.8em', color: "red"}
         };
 
-        const {message, error, validateCode} = this.state;
+        const {error, validateCode, codeLength} = this.state;
 
         return (
             <div className={"secure-app-wrapper"}>
@@ -92,9 +98,10 @@ export default class JConfirmSignUp extends Component {
                                     placeholder="Username"
                                     defaultValue={authData || ''}
                                     style={style.input}
+                                    className={error === "Username cannot be empty" ? "input-container error" : "input-container" }
                                     onChange={event => this.inputs.username = event.target.value}
                                     disabled={!!authData}
-                                    autoComplete='off'
+                                    autoComplete='new-password'
                                 />
                             </div>
                             <div>
@@ -103,7 +110,7 @@ export default class JConfirmSignUp extends Component {
                                     placeholder="Code"
                                     style={style.input}
                                     className={
-                                        "input-container " + (validateCode === "validated" ? 'success' : 'error')
+                                        "input-container last " + (validateCode === "validated" ? 'success' : 'error') + (codeLength === 0 ? " untouched" : " dirty" )
                                     }
                                     onChange={
                                         event => this.inputs.code = event.target.value &&
@@ -115,6 +122,8 @@ export default class JConfirmSignUp extends Component {
                                         maxLength: "6",
                                     }}
                                 />
+                                { error !== '' ? <span className={"error"} style={style.error}> Error: {error} </span> : null }
+
                             </div>
                             <div>
                                 <Button
@@ -130,8 +139,6 @@ export default class JConfirmSignUp extends Component {
                                     Stuur code opnieuw
                                 </Button>
                             </div>
-                            {error && <p style={style.alert}>{error.message}</p>}
-                            {message && <p style={style.alert}>{message}</p>}
                         </form>
                         <div style={style.links}>
                             <div>
