@@ -1,7 +1,7 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import {withNamespaces} from "react-i18next";
+import { withNamespaces } from "react-i18next";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
 import CustomDialog from 'components/Dialogs/CustomDialog.jsx';
@@ -73,8 +73,8 @@ class SmokefreeDate extends React.Component {
                                             smokeFreeDate: SmokefreeDate._dateToString(date),
                                             initiativeId: window.location.pathname.split("/").pop()
                                         }
-                                    }})
-
+                                    }
+                                });
                             }}
                         />
                         {loading && <p>Loading...</p>}
