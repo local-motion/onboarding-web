@@ -45,9 +45,6 @@ class SmokefreeDate extends React.Component {
         const errorString = error.toString();
         let errorTranslation = "";
         switch (errorString){
-            case "TypeError: Cannot read property 'data' of undefined":
-                errorTranslation = "Je hebt onvoldoende rechten om deze actie uit te voeren";
-                break;
             default:
                 errorTranslation = "Er is een fout opgetreden, probeer het later nog eens";
 
