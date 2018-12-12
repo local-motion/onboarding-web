@@ -78,7 +78,7 @@ class WorkspaceTemplate extends React.Component {
             case "3":
                 return <PhaseSustain playground={this.props.playground}/>;
             default:
-                return <Dashboard/>;
+                return <Dashboard playground={this.props.playground}/>;
         }
     };
 
