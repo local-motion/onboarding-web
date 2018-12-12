@@ -151,7 +151,7 @@ export default class JSignUp extends Component {
                                 </Button>
                             </div>
                         </form>
-                        {error && <p>{error}</p>}
+                        {error && <p className={"error"}>{error}</p>}
                         <div style={style.links} className={"extra-info"}>
                             <div style={style.left}>
                                 <button
