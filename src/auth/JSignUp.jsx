@@ -15,7 +15,13 @@ export default class JSignUp extends Component {
         this.signUp = this.signUp.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: ''}
+        this.state = {
+            error: '',
+            filledPass: false,
+            filledUsername: false,
+            filledEmail: false,
+            filled: false
+        }
     }
 
     changeState(state, data) {
@@ -43,11 +49,32 @@ export default class JSignUp extends Component {
     signUpError(err) {
         logger.info('sign up error', err);
         let message = err.message || err;
-        if (message.startsWith('Invalid phone number')) {
-            // reference: https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-attributes.html
-            message = 'Phone numbers must follow these formatting rules: A phone number must start with a plus (+) sign, followed immediately by the country code. A phone number can only contain the + sign and digits. You must remove any other characters from a phone number, such as parentheses, spaces, or dashes (-) before submitting the value to the service. For example, a United States-based phone number must follow this format: +14325551212.'
+        if( message.includes("password") ){
+            message = 'Je wachtwoord heeft minimaal 6 karakters en 1 cijfer nodig.';
         }
         this.setState({error: message});
+    }
+    isDirty(field, event){
+        const { filledUsername, filledPass, filledEmail } =  this.state;
+        switch (field){
+            case "username":
+                this.inputs.username = event;
+                this.inputs.username !== "" ? this.setState({filledUsername: true}) : this.setState({filledUsername: false});
+                break;
+            case "password":
+                this.inputs.password = event;
+                this.inputs.password !== "" ? this.setState({filledPass: true}) : this.setState({filledPass: false});
+                break;
+            case "email":
+                this.inputs.email = event;
+                this.inputs.email !== "" ? this.setState({filledEmail: true}) : this.setState({filledEmail: false});
+                break;
+            default: return "";
+        }
+        if ( filledUsername && filledPass && filledEmail  ){
+            this.setState({filled: true});
+        }
+        console.log(this.state, this.inputs);
     }
 
     render() {
@@ -68,6 +95,8 @@ export default class JSignUp extends Component {
 
         const {error} = this.state;
 
+        console.log(this.inputs);
+
         return (
             <div className={"secure-app-wrapper"}>
                 <div className={"secure-app-background"}></div>
@@ -82,7 +111,9 @@ export default class JSignUp extends Component {
                                     placeholder="Username"
                                     style={style.input}
                                     className={"code"}
-                                    onChange={event => this.inputs.username = event.target.value}
+                                    onChange={
+                                        event => this.isDirty("username", event.target.value)
+                                    }
                                     autoFocus
                                     autoComplete='off'
                                 />
@@ -91,7 +122,9 @@ export default class JSignUp extends Component {
                                 <Input
                                     type="password"
                                     placeholder="Password"
-                                    onChange={event => this.inputs.password = event.target.value}
+                                    onChange={
+                                        event => this.isDirty("password", event.target.value)
+                                    }
                                     style={style.input}
                                     autoComplete='off'
                                 />
@@ -101,19 +134,24 @@ export default class JSignUp extends Component {
                                     type="email"
                                     placeholder="Email address"
                                     style={style.input}
-                                    onChange={event => this.inputs.email = event.target.value}
+                                    onChange={
+                                        event => this.isDirty("email", event.target.value)
+                                    }
                                     autoComplete='off'
                                 />
                             </div>
                             <div>
                                 <Button
                                     style={style.button}
+                                    disabled={
+                                        !this.state.filled
+                                    }
                                     onClick={this.signUp}>
                                     Maak het account
                                 </Button>
                             </div>
-                            {error && <p>{error.message}</p>}
                         </form>
+                        {error && <p>{error}</p>}
                         <div style={style.links} className={"extra-info"}>
                             <div style={style.left}>
                                 <button
