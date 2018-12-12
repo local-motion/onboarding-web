@@ -79,9 +79,8 @@ class SmokefreeDate extends React.Component {
                         />
                         {loading && <p>Loading...</p>}
                         {error &&
-                        <CustomDalog title={"Er is een fout opgetreden"} content={errorMessage}></CustomDalog>
+                        <CustomDialog title={"Er is een fout opgetreden"} content={errorMessage}></CustomDialog>
                         }
-import {Mutation} from "react-apollo";
                     </div>
                 )}
             </Mutation>
