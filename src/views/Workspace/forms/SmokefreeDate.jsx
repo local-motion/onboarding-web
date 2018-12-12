@@ -57,9 +57,7 @@ class SmokefreeDate extends React.Component {
     };
 
     render() {
-        const {classes} = this.props;
         const { errorMessage } = this.state;
-        console.log(errorMessage);
         return (
             <Mutation mutation={SET_SMOKEFREE_DATE} update={null} onError={this._onError}>
                 {(setSmokeFreeDate, { loading, error }) => (
