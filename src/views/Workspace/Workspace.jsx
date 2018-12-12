@@ -104,7 +104,7 @@ class WorkspaceTemplate extends React.Component {
             case "1":
                 return <PhasePrepare playground={this.props.playground}/>;
             case "2":
-                return <PhaseExecute playground={this.props.playground}/>;
+                return <PhaseExecute playground={this.props.playground} profile={this.props.profile}/>;
             case "3":
                 return <PhaseSustain playground={this.props.playground}/>;
             default:

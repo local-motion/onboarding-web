@@ -1,13 +1,13 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import {withNamespaces} from "react-i18next";
+import { withNamespaces } from "react-i18next";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
-import Dialog from '@material-ui/core/Dialog';
+import CustomDialog from 'components/Dialogs/CustomDialog.jsx';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {Mutation} from "react-apollo";
+import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 // core components
 
@@ -23,7 +23,7 @@ class SmokefreeDate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: props.startDate || new Date()
+            startDate: props.startDate || new Date(),
         };
     }
 
@@ -42,11 +42,19 @@ class SmokefreeDate extends React.Component {
     };
 
     _onError = error => {
-        console.log("Could not change smoke-free date", error);
+        const errorString = error.toString();
+        let errorTranslation = "";
+        switch (errorString){
+            default:
+                errorTranslation = "Er is een fout opgetreden, probeer het later nog eens";
+
+        }
+
+        this.setState({errorMessage: errorTranslation});
     };
 
     render() {
-        const {classes} = this.props;
+        const { errorMessage } = this.state;
         return (
             <Mutation mutation={SET_SMOKEFREE_DATE} update={null} onError={this._onError}>
                 {(setSmokeFreeDate, { loading, error }) => (
@@ -55,19 +63,21 @@ class SmokefreeDate extends React.Component {
                             dateFormat="YYYY-MM-dd"
                             selected={this.state.startDate}
                             onChange={(date) => {
-                                setSmokeFreeDate({
-                                    variables: {
+                                this._changeState(date);
+
+                                setSmokeFreeDate({ variables: {
                                         input: {
                                             smokeFreeDate: SmokefreeDate._dateToString(date),
                                             initiativeId: window.location.pathname.split("/").pop()
                                         }
                                     }
                                 });
-                                this._changeState(date);
                             }}
                         />
                         {loading && <p>Loading...</p>}
-                        {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                        {error &&
+                        <CustomDialog title={"Er is een fout opgetreden"} content={errorMessage}></CustomDialog>
+                        }
                     </div>
                 )}
             </Mutation>

@@ -13,16 +13,20 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 class PhaseExecute extends React.Component {
 
     render() {
-        const {classes, playground} = this.props;
+        const {classes, playground, profile} = this.props;
         const onSmokeFreeDateChange = date => {
             console.log('Changed smoke-free date...', date);
             playground.smokeFreeDate = date;
         };
+        const isManager = playground.managers && !!playground.managers.filter(manager => {
+            return manager.id === profile.id
+        }).length;
+
         return (
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
                     <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
-                        {
+                        {   isManager &&
                             playground.smokeFreeDate &&
                             <CollapseCard title={`${playground.name} is rookvrij per ${playground.smokeFreeDate.toLocaleDateString()}`}
                                           image={require("assets/img/backgrounds/date.jpg")}
@@ -32,7 +36,7 @@ class PhaseExecute extends React.Component {
                             />
                         }
 
-                        {
+                        {   isManager &&
                             !playground.smokeFreeDate &&
                             <CollapseCard title={"Committeer aan een datum"}
                                           image={require("assets/img/backgrounds/date.jpg")}
