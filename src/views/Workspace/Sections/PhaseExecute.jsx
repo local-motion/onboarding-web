@@ -31,7 +31,7 @@ class PhaseExecute extends React.Component {
                             <CollapseCard title={`${playground.name} is rookvrij per ${playground.smokeFreeDate.toLocaleDateString()}`}
                                           image={require("assets/img/backgrounds/date.jpg")}
                                           content={"Is dit niet de juiste datum, verander deze hier"}
-                                          MoreInformation={"Meer informatie"}
+                                          MoreInformation={"Verander datum"}
                                           ExpandContent={<SmokefreeDate startDate={playground.smokeFreeDate} onChange={onSmokeFreeDateChange}/>}
                             />
                         }
@@ -41,7 +41,7 @@ class PhaseExecute extends React.Component {
                             <CollapseCard title={"Committeer aan een datum"}
                                           image={require("assets/img/backgrounds/date.jpg")}
                                           content={"Selecteer de datum waarop Speeltuin rookvrij moet zijn."}
-                                          MoreInformation={"Meer informatie"}
+                                          MoreInformation={"Stel een datum"}
                                           ExpandContent={<SmokefreeDate onChange={onSmokeFreeDateChange}/>}
                             />
                         }
