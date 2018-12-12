@@ -58,10 +58,11 @@ class SmokefreeDate extends React.Component {
         return (
             <Mutation mutation={SET_SMOKEFREE_DATE} update={null} onError={this._onError}>
                 {(setSmokeFreeDate, { loading, error }) => (
-                    <div>
+                    <div className={"card-datepicker"}>
                         <DatePicker
                             dateFormat="YYYY-MM-dd"
                             selected={this.state.startDate}
+                            minDate={new Date()}
                             onChange={(date) => {
                                 this._changeState(date);
 
