@@ -1,13 +1,13 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import {withNamespaces} from "react-i18next";
+import { withNamespaces } from "react-i18next";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
 import CustomDialog from 'components/Dialogs/CustomDialog.jsx';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {Mutation} from "react-apollo";
+import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 // core components
 
@@ -62,25 +62,25 @@ class SmokefreeDate extends React.Component {
             <Mutation mutation={SET_SMOKEFREE_DATE} update={null} onError={this._onError}>
                 {(setSmokeFreeDate, { loading, error }) => (
                     <div>
-                        <DatePicker
-                            dateFormat="YYYY-MM-dd"
-                            selected={this.state.startDate}
-                            onChange={(date) => {
-                                setSmokeFreeDate({
-                                    variables: {
-                                        input: {
-                                            smokeFreeDate: SmokefreeDate._dateToString(date),
-                                            initiativeId: window.location.pathname.split("/").pop()
-                                        }
-                                    }
-                                });
-                                this._changeState(date);
-                            }}
-                        />
-                        {loading && <p>Loading...</p>}
-                        {error &&
+                    <DatePicker
+                        dateFormat="YYYY-MM-dd"
+                        selected={this.state.startDate}
+                        onChange={(date) => {
+                            this._changeState(date);
+
+                            setSmokeFreeDate({ variables: {
+                                input: {
+                                    smokeFreeDate: SmokefreeDate._dateToString(date),
+                                    initiativeId: window.location.pathname.split("/").pop()
+                                }
+                            }})
+
+                        }}
+                    />
+                    {loading && <p>Loading...</p>}
+                    {error &&
                         <CustomDialog title={"Er is een fout opgetreden"} content={errorMessage}></CustomDialog>
-                        }
+                    }
                     </div>
                 )}
             </Mutation>
