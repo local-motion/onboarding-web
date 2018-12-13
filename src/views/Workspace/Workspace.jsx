@@ -125,7 +125,7 @@ class WorkspaceTemplate extends React.Component {
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
-                    <CustomDialog title={"Er is een fout opgetreden"} content={errorMessage}>{this.props.error}</CustomDialog>
+                    <CustomDialog title={"Er is een fout opgetreden"} content={this.props.error}></CustomDialog>
                 }
 
                 <Header
