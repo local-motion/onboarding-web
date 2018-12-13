@@ -72,11 +72,17 @@ export default class JConfirmSignUp extends Component {
         this.setState({message: '', error: err.message || err});
     }
 
-    isDirty(field, event){
+    isDirty(event){
         this.inputs.username = event;
         this.inputs.username !== "" ? this.setState({filledUsername: true}) : this.setState({filledUsername: false});
         if ( this.state.filledUsername && this.state.validateCode === "validated"){
             this.setState({filled: true});
+        }
+    }
+
+    catchEnterSubmit(e){
+        if(e.keyCode === 13 && e.shiftKey === false && this.state.filled) {
+            this.confirmSignUp();
         }
     }
 
@@ -107,7 +113,12 @@ export default class JConfirmSignUp extends Component {
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
                         <h2>Bevestig je account</h2>
-                        <form onSubmit={this.onSubmit} autoComplete={"off"}>
+                        <form
+                            onSubmit={e => { e.preventDefault(); }}
+                            onKeyDown={
+                                event => this.catchEnterSubmit(event)
+                            }
+                        >
                             <div>
                                 <Input
                                     type="text"
