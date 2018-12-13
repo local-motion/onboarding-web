@@ -16,7 +16,14 @@ export default class JConfirmSignUp extends Component {
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {message: '', error: '', validatedCode: '', codeLength: 0, filledUsername: false, filled: false}
+        this.state = {
+            message: '',
+            error: '',
+            validatedCode: '',
+            codeLength: 0,
+            filledUsername: false,
+            filled: false
+        }
     }
 
     changeState(state, data) {
@@ -32,15 +39,22 @@ export default class JConfirmSignUp extends Component {
 
         this.inputs.code = input;
 
-        this.setState({codeLength: input.toString().length });
+        this.setState({codeLength: input.toString().length});
         validatedResult ?
-            this.setState({validateCode: "validated", error: ''}) :
+            this.setState(
+                {validateCode: "validated", error: ''}
+                , () => {
+                    if (this.state.filledUsername) {
+                        this.setState({filled: true});
+                    }
+                }) :
             this.setState({validateCode: "unvalidated", error: 'De code bestaat uit 6 cijfers'});
 
 
-        if ( this.state.filledUsername && this.state.validateCode === "validated"){
+        if (this.state.filledUsername && this.state.validateCode === "validated") {
             this.setState({filled: true});
         }
+
     }
 
     confirmSignUp() {
@@ -72,16 +86,21 @@ export default class JConfirmSignUp extends Component {
         this.setState({message: '', error: err.message || err});
     }
 
-    isDirty(event){
+    isDirty(event) {
         this.inputs.username = event;
-        this.inputs.username !== "" ? this.setState({filledUsername: true}) : this.setState({filledUsername: false});
-        if ( this.state.filledUsername && this.state.validateCode === "validated"){
-            this.setState({filled: true});
-        }
+        this.inputs.username.toString().length > 0 ?
+            this.setState({filledUsername: true}, () => {
+                if (this.state.validateCode === "validated") {
+                    this.setState({filled: true});
+                }
+            }) :
+            this.setState({filledUsername: false}, () => {
+
+            });
     }
 
-    catchEnterSubmit(e){
-        if(e.keyCode === 13 && e.shiftKey === false && this.state.filled) {
+    catchEnterSubmit(e) {
+        if (e.keyCode === 13 && e.shiftKey === false && this.state.filled) {
             this.confirmSignUp();
         }
     }
@@ -114,7 +133,9 @@ export default class JConfirmSignUp extends Component {
                     <div style={style.container}>
                         <h2>Bevestig je account</h2>
                         <form
-                            onSubmit={e => { e.preventDefault(); }}
+                            onSubmit={e => {
+                                e.preventDefault();
+                            }}
                             onKeyDown={
                                 event => this.catchEnterSubmit(event)
                             }
@@ -125,7 +146,7 @@ export default class JConfirmSignUp extends Component {
                                     placeholder="Username"
                                     defaultValue={authData || ''}
                                     style={style.input}
-                                    className={error === "Username cannot be empty" ? "input-container error" : "input-container" }
+                                    className={error === "Username cannot be empty" ? "input-container error" : "input-container"}
                                     onChange={
                                         event => this.isDirty(event.target.value)
                                     }
@@ -139,7 +160,7 @@ export default class JConfirmSignUp extends Component {
                                     placeholder="Code"
                                     style={style.input}
                                     className={
-                                        "input-container last " + (validateCode === "validated" ? 'success' : 'error') + (codeLength === 0 ? " untouched" : " dirty" )
+                                        "input-container last " + (validateCode === "validated" ? 'success' : 'error') + (codeLength === 0 ? " untouched" : " dirty")
                                     }
                                     onChange={
                                         event => this.validateCode(event.target.value)
@@ -150,8 +171,9 @@ export default class JConfirmSignUp extends Component {
                                         maxLength: "6",
                                     }}
                                 />
-                                { error !== '' ? <span className={"error"} style={style.error}> {error} </span> : null }
-                                { message !== '' ? <span className={"message"} style={style.message}> {message} </span> : null }
+                                {error !== '' ? <span className={"error"} style={style.error}> {error} </span> : null}
+                                {message !== '' ?
+                                    <span className={"message"} style={style.message}> {message} </span> : null}
 
                             </div>
                             <div>
