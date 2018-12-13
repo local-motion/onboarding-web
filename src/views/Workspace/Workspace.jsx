@@ -4,7 +4,7 @@ import classNames from "classnames";
 // react components for routing our app without refresh
 // import {Link} from "react-router-dom";
 // @material-ui/core components
-import Dialog from '@material-ui/core/Dialog';
+import CustomDialog from 'components/Dialogs/CustomDialog.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
@@ -125,7 +125,7 @@ class WorkspaceTemplate extends React.Component {
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
-                <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
+                    <CustomDialog title={"Er is een fout opgetreden"} content={errorMessage}>{this.props.error}</CustomDialog>
                 }
 
                 <Header
