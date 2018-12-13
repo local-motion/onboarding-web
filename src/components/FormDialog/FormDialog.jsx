@@ -22,7 +22,6 @@ const CREATE_INITIATIVE = gql`
         }
     }
 `;
-
 class FormDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -34,16 +33,18 @@ class FormDialog extends React.Component {
                 latlng: {lat: 52.092876, lng: 5.10448},
                 zoom: 8
             },
-            initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                 // generate a uuid
                 var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
                 return v.toString(16);
             }),
             type: "smokefree",
             status: "not_started",
-            open: false
-        };
-    }
+            open: false,
+            duplicate: false,
+            error: '',
+        }
+    };
 
     handleClickOpen = () => {
         this.setState({open: true});
@@ -54,13 +55,31 @@ class FormDialog extends React.Component {
     };
 
     updateName = (eEvent) => {
+        this.duplicateCheck(eEvent.target.value);
         this.setState({
             name: eEvent.target.value
         });
+
     };
     loadWorkspace = (eEvent) => {
         window.location.href = `/workspace/${this.state.initiativeId}`;
     };
+
+    duplicateCheck = (playground) =>{
+        const playgroundList = this.props.playgrounds;
+        if (playgroundList.filter(e => e.name === playground).length > 0) {
+            this.setState({
+                duplicate: true,
+                error: 'Er bestaat al een speeltuin met deze naam.'
+            });
+        } else{
+            this.setState({
+                duplicate: false,
+                error: ''
+            });
+        }
+        console.log(this.state);
+    }
 
     handlePlaygroundChange(playground) {
         console.log("handlePlaygroundChange: ", playground);
@@ -82,9 +101,11 @@ class FormDialog extends React.Component {
         });
     };
 
+
     render() {
+
         const {classes} = this.props;
-        const {map } = this.state;
+        const {map, error} = this.state;
         const playground = {
             name: this.state.name,
             lat: this.state.lat,
@@ -93,7 +114,6 @@ class FormDialog extends React.Component {
             type: "smokefree",
             status: "not_started"
         };
-        console.log("Current playground information: ", playground);
 
         return (
             <div className={"FormDialog-container"}>
@@ -133,6 +153,7 @@ class FormDialog extends React.Component {
                                 onKeyUp={this.updateName}
                                 defaultValue={this.state.name}/>
                         </form>
+                        {error && <span className={"error alert"}>{error}</span>}
                     </DialogContent>
                     <DialogActions className={"dialog-actions"}>
                         <Button onClick={this.handleClose} color="primary">
@@ -146,7 +167,8 @@ class FormDialog extends React.Component {
                             {(joinInitiative) => (
                                 <Button
                                     onClick={() => joinInitiative({variables: {input: playground}})}
-                                    className={"btn btn-highlight"}
+                                    className={"btn btn-highlight" }
+                                    disabled={this.state.duplicate}
                                 >
                                     <span>Voeg een speeltuin toe</span>
                                 </Button>

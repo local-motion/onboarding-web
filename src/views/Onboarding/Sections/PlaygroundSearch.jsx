@@ -31,8 +31,6 @@ const GET_PLAYGROUNDS = gql`
 `;
 
 const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
-    // `ownProps` are the props passed into `IntegrationAutosuggest`
-    // `data` is the result data (see above)
     props: ({ownProps, data}) => {
         if (data.loading) return {playgroundsLoading: true};
         if(data.error) return {
@@ -186,7 +184,7 @@ class IntegrationAutosuggest extends React.Component {
     };
 
     render() {
-        const {classes, onPlaygroundChange} = this.props;
+        const {playgroundsLoading, classes, onPlaygroundChange} = this.props;
 
         const autosuggestProps = {
             renderInputComponent,
@@ -196,6 +194,10 @@ class IntegrationAutosuggest extends React.Component {
             getSuggestionValue,
             renderSuggestion
         };
+
+        if (playgroundsLoading) {
+            return "loading..";
+        }
 
         return (
             <div className={classes.root + " playground autosuggest"}>
