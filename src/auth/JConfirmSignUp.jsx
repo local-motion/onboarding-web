@@ -16,7 +16,7 @@ export default class JConfirmSignUp extends Component {
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {message: '', error: '', validatedCode: '', codeLength: 0}
+        this.state = {message: '', error: '', validatedCode: '', codeLength: 0, filledUsername: false, filled: false}
     }
 
     changeState(state, data) {
@@ -36,6 +36,11 @@ export default class JConfirmSignUp extends Component {
         validatedResult ?
             this.setState({validateCode: "validated", error: ''}) :
             this.setState({validateCode: "unvalidated", error: 'De code bestaat uit 6 cijfers'});
+
+
+        if ( this.state.filledUsername && this.state.validateCode === "validated"){
+            this.setState({filled: true});
+        }
     }
 
     confirmSignUp() {
@@ -69,7 +74,10 @@ export default class JConfirmSignUp extends Component {
 
     isDirty(field, event){
         this.inputs.username = event;
-        this.inputs.username !== "" ? this.setState({usernameFilled: true}) : this.setState({usernameFilled: false});
+        this.inputs.username !== "" ? this.setState({filledUsername: true}) : this.setState({filledUsername: false});
+        if ( this.state.filledUsername && this.state.validateCode === "validated"){
+            this.setState({filled: true});
+        }
     }
 
     render() {
@@ -107,7 +115,9 @@ export default class JConfirmSignUp extends Component {
                                     defaultValue={authData || ''}
                                     style={style.input}
                                     className={error === "Username cannot be empty" ? "input-container error" : "input-container" }
-                                    onChange={event => this.inputs.username = event.target.value}
+                                    onChange={
+                                        event => this.isDirty(event.target.value)
+                                    }
                                     disabled={!!authData}
                                     autoComplete='new-password'
                                 />
@@ -137,7 +147,9 @@ export default class JConfirmSignUp extends Component {
                                 <Button
                                     style={style.button}
                                     onClick={this.confirmSignUp}
-                                    disabled={ error !== '' }
+                                    disabled={
+                                        !this.state.filled
+                                    }
                                 >
                                     Bevestig
                                 </Button>
