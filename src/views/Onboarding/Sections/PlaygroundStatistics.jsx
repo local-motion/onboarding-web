@@ -1,7 +1,7 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Dialog from '@material-ui/core/Dialog';
+import CustomDialog from 'components/Dialogs/CustomDialog.jsx';
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -73,7 +73,7 @@ class PlaygroundStatistics extends React.Component {
         return (
             <div className={classes.section + " playground-statistics wrapper"}>
                 {this.props.hasErrors === true &&
-                <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
+                    <CustomDialog title={"Er is een fout opgetreden"} content={errorMessage}>{this.props.error}</CustomDialog>
                 }
                 <div className={classes.container + " playground-statistics container"}>
                     <h2 className="playground-statistics title">
