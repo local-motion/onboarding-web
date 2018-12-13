@@ -78,6 +78,7 @@ export default class JSignUp extends Component {
     }
     catchEnterSubmit(e){
         if(e.keyCode === 13 && e.shiftKey === false && this.state.filled) {
+            console.log("signup");
             this.signUp();
         }
     }
@@ -110,7 +111,6 @@ export default class JSignUp extends Component {
                     <div style={style.container}>
                         <h2>Schrijf je in</h2>
                         <form
-                            onSubmit={this.onSubmit}
                             onKeyDown={
                                 event => this.catchEnterSubmit(event)
                             }

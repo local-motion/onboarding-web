@@ -15,7 +15,7 @@ export default class JForgotPassword extends Component {
         this.sendCode = this.sendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: ''}
+        this.state = {error: '', usernameFilled: false}
     }
 
     changeState(state, data) {
@@ -41,6 +41,18 @@ export default class JForgotPassword extends Component {
     handleError(err) {
         logger.info('forgot password send code error', err);
         this.setState({error: err.message || err});
+    }
+
+    catchEnterSubmit(e){
+        if(e.keyCode === 13 && e.shiftKey === false && this.state.usernameFilled) {
+            console.log('sendcode');
+            this.sendCode();
+        }
+    }
+
+    isDirty(field, event){
+        this.inputs.username = event;
+        this.inputs.username !== "" ? this.setState({usernameFilled: true}) : this.setState({usernameFilled: false});
     }
 
     render() {
@@ -71,21 +83,34 @@ export default class JForgotPassword extends Component {
                         <div>
                             <h2>Je wachtwoord vergeten?</h2>
                         </div>
-                        <form style={style} autoComplete={"new-password"}>
+                        <form
+                            style={style}
+                            onSubmit={e => { e.preventDefault(); }}
+                            onKeyDown={
+                                event => this.catchEnterSubmit(event)
+                            }
+                        >
                             <div>
                                 <Input
                                     type="text"
                                     style={style.input}
                                     placeholder="Username"
                                     defaultValue={authData || ''}
-                                    onChange={event => this.inputs.username = event.target.value}
+                                    onChange={
+                                        event => this.isDirty(event.target.value)
+                                    }
                                     autoFocus
                                     autoComplete='new-password'
                                 />
                             </div>
                             <div>
-                                <Button style={style.button} onClick={this.sendCode}>Verstuur wachtwoord reset
-                                    code</Button>
+                                <Button
+                                    style={style.button}
+                                    onClick={this.sendCode}
+                                    disabled={!this.state.usernameFilled}
+                                >
+                                    Verstuur wachtwoord reset code
+                                </Button>
                             </div>
                             {error && <div style={style.alert}>{error}</div>}
                         </form>
