@@ -50,7 +50,7 @@ export default class JForgotPassword extends Component {
         }
     }
 
-    isDirty(field, event){
+    isDirty(event){
         this.inputs.username = event;
         this.inputs.username !== "" ? this.setState({usernameFilled: true}) : this.setState({usernameFilled: false});
     }
