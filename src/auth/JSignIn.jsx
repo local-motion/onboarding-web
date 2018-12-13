@@ -70,7 +70,6 @@ export default class JSignIn extends Component {
     }
 
     catchEnterSubmit(e){
-        console.log(e.keyCode);
         if(e.keyCode === 13 && e.shiftKey === false) {
             this.signIn();
         }

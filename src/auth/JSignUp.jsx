@@ -76,6 +76,11 @@ export default class JSignUp extends Component {
         }
         console.log(this.state, this.inputs);
     }
+    catchEnterSubmit(e){
+        if(e.keyCode === 13 && e.shiftKey === false && this.state.filled) {
+            this.signUp();
+        }
+    }
 
     render() {
         const {authState} = this.props;
@@ -104,7 +109,12 @@ export default class JSignUp extends Component {
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
                         <h2>Schrijf je in</h2>
-                        <form onSubmit={this.onSubmit} style={style} autoComplete={"off"}>
+                        <form
+                            onSubmit={this.onSubmit}
+                            onKeyDown={
+                                event => this.catchEnterSubmit(event)
+                            }
+                        >
                             <div>
                                 <Input
                                     type="text"
