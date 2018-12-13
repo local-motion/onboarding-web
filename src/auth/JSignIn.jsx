@@ -16,7 +16,7 @@ export default class JSignIn extends Component {
         this.checkContact = this.checkContact.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: ''}
+        this.state = {error: '', signInPage: true}
     }
 
     changeState(state, data) {

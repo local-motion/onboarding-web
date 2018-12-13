@@ -67,6 +67,11 @@ export default class JConfirmSignUp extends Component {
         this.setState({message: '', error: err.message || err});
     }
 
+    isDirty(field, event){
+        this.inputs.username = event;
+        this.inputs.username !== "" ? this.setState({usernameFilled: true}) : this.setState({usernameFilled: false});
+    }
+
     render() {
         const {authState, authData} = this.props;
         if (authState !== 'confirmSignUp') {
@@ -132,7 +137,7 @@ export default class JConfirmSignUp extends Component {
                                 <Button
                                     style={style.button}
                                     onClick={this.confirmSignUp}
-                                    disabled={ error !== '' ? true : false }
+                                    disabled={ error !== '' }
                                 >
                                     Bevestig
                                 </Button>
