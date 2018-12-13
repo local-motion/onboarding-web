@@ -73,7 +73,7 @@ class PlaygroundStatistics extends React.Component {
         return (
             <div className={classes.section + " playground-statistics wrapper"}>
                 {this.props.hasErrors === true &&
-                    <CustomDialog title={"Er is een fout opgetreden"} content={errorMessage}>{this.props.error}</CustomDialog>
+                    <CustomDialog title={"Er is een fout opgetreden"} content={this.props.error}></CustomDialog>
                 }
                 <div className={classes.container + " playground-statistics container"}>
                     <h2 className="playground-statistics title">
