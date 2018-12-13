@@ -56,7 +56,7 @@ const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
 class PlaygroundStatistics extends React.Component {
 
     render() {
-        const {statsLoading, progress, t, classes, playground, defaultView} = this.props;
+        const {statsLoading, progress, t, classes, playground, defaultView, playgrounds} = this.props;
         const generalStatistics = defaultView;
 
         const defaultPlayground = {
@@ -111,7 +111,7 @@ class PlaygroundStatistics extends React.Component {
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"}/>
                                 </div>
                                 <div style={{display: generalStatistics ? 'block' : 'none'}}>
-                                    <FormDialog/>
+                                    <FormDialog playgrounds={playgrounds}/>
                                 </div>
                                 <div style={{display: generalStatistics ? 'none' : 'block'}}>
                                     <JoinInitiative playground={playground}/>
