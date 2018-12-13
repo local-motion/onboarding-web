@@ -69,6 +69,13 @@ export default class JSignIn extends Component {
             });
     }
 
+    catchEnterSubmit(e){
+        console.log(e.keyCode);
+        if(e.keyCode === 13 && e.shiftKey === false) {
+            this.signIn();
+        }
+    }
+
     render() {
         const {authState, authData} = this.props;
         if (!['signIn', 'signedOut', 'signedUp'].includes(authState)) {
@@ -93,7 +100,12 @@ export default class JSignIn extends Component {
                 <div className={"secure-app-container"}>
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div className={"signin-wrapper"}>
-                        <form style={style}>
+                        <form
+                            style={style}
+                            onKeyDown={
+                                event => this.catchEnterSubmit(event)
+                            }
+                        >
                             <Input
                                 type="text"
                                 placeholder="Username"
@@ -114,24 +126,27 @@ export default class JSignIn extends Component {
                             >
                                 Sign In
                             </Button>
+                        </form>
                             <div style={style.links} className={"extra-info"}>
                                 <div style={style.left}>
                                     <button
                                         style={style.extraButton}
-                                        onClick={() => this.changeState('signUp')}>
+                                        onClick={() => this.changeState('signUp')}
+                                    >
                                         Maak een account
                                     </button>
                                 </div>
                                 <div style={style.left}>
                                     <button style={style.extraButton}
-                                            onClick={() => this.changeState('forgotPassword')}>
+                                            onClick={() => this.changeState('forgotPassword')}
+                                    >
                                         Wachtwoord vergeten?
                                     </button>
                                 </div>
                             </div>
                             {/*<Federated federated={federated_data} onStateChange={this.changeState} />*/}
                             {error && <div style={style.alert}>{error}</div>}
-                        </form>
+
                     </div>
                 </div>
             </div>
