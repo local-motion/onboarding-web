@@ -14,17 +14,16 @@ import {setContext} from "apollo-link-context";
 import indexRoutes from "routes/index.jsx";
 import "assets/scss/material-kit-react.css?v=1.2.0";
 
-
 import Amplify from "aws-amplify";
 import {withAuthenticator} from 'aws-amplify-react';
 
-import JSignOut from "auth/JSignOut";
 import JSignUp from "auth/JSignUp";
 import JSignIn from "auth/JSignIn";
 import JConfirmSignUp from "auth/JConfirmSignUp";
 import JConfirmSignIn from "auth/JConfirmSignIn";
 import JForgotPassword from "./auth/JForgotPassword";
 import JForgotPasswordReset from "./auth/JForgotPasswordReset";
+
 
 const environments = {
     "techoverflow-ta.aws.abnamro.org": {
@@ -133,16 +132,6 @@ const App = class App extends React.Component {
 
         return (
             <div>
-                {
-                    <div>Hello, {authData.username}</div>
-                }
-                <JSignOut/>
-                {
-                    !isAuthenticated() &&
-                    <button onClick={this.props.OAuthSignIn}>
-                        Sign in with AWS
-                    </button>
-                }
                 <ApolloProvider client={client}>
                     <I18nextProvider i18n={i18n}>
                         <Router history={hist}>
