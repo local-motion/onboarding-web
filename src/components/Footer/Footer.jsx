@@ -30,29 +30,34 @@ function Footer({...props}) {
                     <List className={classes.list}>
                         <ListItem className={classes.inlineBlock}>
                             <a
-                                href="https://localmotion.community"
+                                href="/about"
                                 className={classes.block}
-                                target="_blank"
                             >
-                                Rookvrije Generatie
+                                Wie zijn wij
                             </a>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
                             <a
-                                href="https://localmotion.community/presentation"
+                                href="/terms"
                                 className={classes.block}
-                                target="_blank"
                             >
                                 Algemene voorwaarden
                             </a>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
                             <a
-                                href="https://www.longfonds.nl/rookvrije-generatie"
+                                href="/privacy"
                                 className={classes.block}
-                                target="_blank"
                             >
                                 Privacy statement
+                            </a>
+                        </ListItem>
+                        <ListItem className={classes.inlineBlock}>
+                            <a
+                                href="/contact"
+                                className={classes.block}
+                            >
+                                Contact
                             </a>
                         </ListItem>
                     </List>
