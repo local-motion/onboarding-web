@@ -69,7 +69,7 @@ export default class JSignUp extends Component {
         const {filledUsername, filledPass, filledEmail, acceptedTerms} = this.state;
         if (filledUsername && filledPass && filledEmail && acceptedTerms) {
             this.setState({filled: true});
-        }else{
+        } else {
             this.setState({filled: false});
         }
     }
@@ -99,10 +99,11 @@ export default class JSignUp extends Component {
             case "email":
                 this.inputs.email = event;
                 this.inputs.email !== "" ? this.setState({filledEmail: true}, () => {
-                    this.isFilled();
-                }) : this.setState({filledEmail: false}, () => {
-                    this.isFilled();
-                });
+                        this.isFilled();
+                    }) :
+                    this.setState({filledEmail: false}, () => {
+                        this.isFilled();
+                    });
                 break;
             default:
                 return "";

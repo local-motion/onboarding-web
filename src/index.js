@@ -79,7 +79,8 @@ console.log("Using settings:", settings);
 const uri = process.env.ONBOARDING_API || settings.api.onboarding;
 console.log('Using Onboarding API at ' + uri);
 
-const isAuthenticated = () => Amplify.Auth.user != null;
+// IsAuthenticated can be called to see if user is authenticated
+// const isAuthenticated = () => Amplify.Auth.user != null;
 const oauth = {
     awsCognito: {
         domain: settings.aws.cognito.domain,
