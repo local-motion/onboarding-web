@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const logger = new Logger('JSignUp');
 
@@ -17,12 +19,17 @@ export default class JSignUp extends Component {
         this.inputs = {};
         this.state = {
             error: '',
+            acceptedTerms: false,
             filledPass: false,
             filledUsername: false,
             filledEmail: false,
             filled: false
         }
     }
+
+    handleChange = name => event => {
+        this.setState({ [name]: event.target.checked });
+    };
 
     changeState(state, data) {
         const {onStateChange} = this.props;
@@ -101,7 +108,6 @@ export default class JSignUp extends Component {
 
         const {error} = this.state;
 
-        console.log(this.inputs);
 
         return (
             <div className={"secure-app-wrapper"}>
@@ -150,6 +156,18 @@ export default class JSignUp extends Component {
                                     autoComplete='off'
                                 />
                             </div>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={this.state.acceptedTerms}
+                                        onChange={this.handleChange('acceptedTerms')}
+                                        color="primary"
+                                        value="accepted"
+                                    />
+                                }
+                                label={["Ik ga akkoord met de ", <a href={"/terms"}>algemene voorwaarden</a>, " en de ", <a href={"/privacy"}>privacy verklaring</a>]}
+                            />
+
                             <div>
                                 <Button
                                     style={style.button}
