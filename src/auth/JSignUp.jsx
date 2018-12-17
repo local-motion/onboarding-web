@@ -28,7 +28,10 @@ export default class JSignUp extends Component {
     }
 
     handleChange = name => event => {
-        this.setState({ [name]: event.target.checked });
+
+        this.setState({[name]: event.target.checked}, () => {
+            this.isFilled();
+        });
     };
 
     changeState(state, data) {
@@ -56,36 +59,59 @@ export default class JSignUp extends Component {
     signUpError(err) {
         logger.info('sign up error', err);
         let message = err.message || err;
-        if( message.includes("password") ){
+        if (message.includes("password")) {
             message = 'Je wachtwoord heeft minimaal 6 karakters en 1 cijfer nodig.';
         }
         this.setState({error: message});
     }
-    isDirty(field, event){
-        const { filledUsername, filledPass, filledEmail } =  this.state;
-        switch (field){
+
+    isFilled() {
+        const {filledUsername, filledPass, filledEmail, acceptedTerms} = this.state;
+        if (filledUsername && filledPass && filledEmail && acceptedTerms) {
+            this.setState({filled: true});
+        }else{
+            this.setState({filled: false});
+        }
+    }
+
+    isDirty(field, event) {
+        switch (field) {
             case "username":
                 this.inputs.username = event;
-                this.inputs.username !== "" ? this.setState({filledUsername: true}) : this.setState({filledUsername: false});
+                this.inputs.username !== "" ?
+                    this.setState({filledUsername: true}, () => {
+                        this.isFilled();
+                    }) :
+                    this.setState({filledUsername: false}, () => {
+                        this.isFilled();
+                    });
                 break;
             case "password":
                 this.inputs.password = event;
-                this.inputs.password !== "" ? this.setState({filledPass: true}) : this.setState({filledPass: false});
+                this.inputs.password !== "" ?
+                    this.setState({filledPass: true}, () => {
+                        this.isFilled();
+                    }) :
+                    this.setState({filledPass: false}, () => {
+                        this.isFilled();
+                    });
                 break;
             case "email":
                 this.inputs.email = event;
-                this.inputs.email !== "" ? this.setState({filledEmail: true}) : this.setState({filledEmail: false});
+                this.inputs.email !== "" ? this.setState({filledEmail: true}, () => {
+                    this.isFilled();
+                }) : this.setState({filledEmail: false}, () => {
+                    this.isFilled();
+                });
                 break;
-            default: return "";
+            default:
+                return "";
         }
-        if ( filledUsername && filledPass && filledEmail  ){
-            this.setState({filled: true});
-        }
-        console.log(this.state, this.inputs);
+
     }
-    catchEnterSubmit(e){
-        if(e.keyCode === 13 && e.shiftKey === false && this.state.filled) {
-            console.log("signup");
+
+    catchEnterSubmit(e) {
+        if (e.keyCode === 13 && e.shiftKey === false && this.state.filled) {
             this.signUp();
         }
     }
@@ -165,7 +191,8 @@ export default class JSignUp extends Component {
                                         value="accepted"
                                     />
                                 }
-                                label={["Ik ga akkoord met de ", <a href={"/terms"}>algemene voorwaarden</a>, " en de ", <a href={"/privacy"}>privacy verklaring</a>]}
+                                label={["Ik ga akkoord met de ", <a href={"/terms"}>algemene voorwaarden</a>, " en de ",
+                                    <a href={"/privacy"}>privacy verklaring</a>]}
                             />
 
                             <div>
