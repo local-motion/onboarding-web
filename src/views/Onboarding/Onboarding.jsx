@@ -19,7 +19,45 @@ import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
 import CallToAction from "./Sections/CallToAction";
+import gql from "graphql-tag";
+import {graphql} from "react-apollo";
 
+const GET_PLAYGROUNDS = gql`
+  {
+    playgrounds {
+      id
+      name
+      lat
+      lng
+      status
+      volunteerCount
+      votes
+    }
+  }
+`;
+
+const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
+    props: ({ownProps, data}) => {
+        if (data.loading) return {playgroundsLoading: true};
+        if(data.error) return {
+            hasErrors: true,
+            error: data.error.toString()
+        };
+        return {
+            playgrounds: data.playgrounds.map(playground => {
+                return {
+                    id: playground.id,
+                    name: playground.name,
+                    lat: playground.lat,
+                    lng: playground.lng,
+                    vol: playground.volunteerCount,
+                    votes: playground.votes,
+                    slug: playground.name + " Rookvrij"
+                };
+            })
+        };
+    }
+});
 
 class Onboarding extends React.Component {
     constructor(props) {
@@ -51,15 +89,8 @@ class Onboarding extends React.Component {
         });
     }
 
-/*    handleCreatePlayground = (e) => {
-        this.setState({
-            view: 'playground',
-            playground: { latLng: e.latLng }
-        });
-    }*/
-
     render() {
-        const {classes, ...rest } = this.props;
+        const {playgrounds, classes, ...rest } = this.props;
         const {playground, map} = this.state;
 
         return (
@@ -84,34 +115,36 @@ class Onboarding extends React.Component {
                 </Parallax>
 
                 <div className={classNames(classes.main, classes.mainRaised) + " onboarding-container"}>
-                  <GridContainer className={"grid-container"}>
-                    <GridItem xs={12} sm={12} md={6} className={"playground-map-container"}>
-                      <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange}/>
-                      <PlaygroundMap
-                        isMarkerShown
-                        viewOnly={true}
-                        onPlaygroundChange={this.handlePlaygroundChange}
-                        center={map.latlng}
-                        zoom={map.zoom}
-                      />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
-                        <div>
-                            <PlaygroundStatistics
-                                playground={playground}
-                                onBackButton={this.handlePlaygroundChange}
-                                defaultView={playground.default}
+                    <GridContainer className={"grid-container"}>
+                        <GridItem xs={12} sm={12} md={6} className={"playground-map-container"}>
+                            <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange} playgrounds={playgrounds}/>
+                            <PlaygroundMap
+                                isMarkerShown
+                                viewOnly={true}
+                                onPlaygroundChange={this.handlePlaygroundChange}
+                                center={map.latlng}
+                                zoom={map.zoom}
                             />
-                        </div>
-                    </GridItem>
-                  </GridContainer>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
+                            <div>
+                                <PlaygroundStatistics
+                                    playgrounds={playgrounds}
+                                    playground={playground}
+                                    onBackButton={this.handlePlaygroundChange}
+                                    defaultView={playground.default}
+                                />
+                            </div>
+                        </GridItem>
+                    </GridContainer>
                 </div>
                 <Footer />
             </div>
-    );
-  }
+        );
+    }
 }
 
+const OnboardingWithPlaygrounds = withPlaygrounds(Onboarding);
 export default withStyles(componentsStyle)(
-    withNamespaces("translations")(Onboarding)
+    withNamespaces("translations")(OnboardingWithPlaygrounds)
 );

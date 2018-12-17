@@ -101,6 +101,9 @@ This CSS resource incorporates links to font software which is the valuable copy
     span{
         color: white;
     }
+    &:disabled{
+        background: #ccc;
+    }
 }
 
 .socialIcon {
