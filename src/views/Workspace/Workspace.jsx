@@ -85,14 +85,34 @@ const profileRequest = graphql(GET_PROFILE, {
 });
 
 class WorkspaceTemplate extends React.Component {
+    state = {
+        mappedPhase : '',
+        phase: "0",
+        view: "dashboard",
+        progress: "",
+    };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            phase: "0",
-            view: "dashboard",
-            progress: "",
-        };
+    mapSteps = (playground) => {
+        let mappedStatus = '';
+        switch (playground.status) {
+            case 'not_started':
+                mappedStatus = 'Voorbereiding';
+                break;
+            case 'in_progress':
+                mappedStatus = 'Uitvoering';
+                break;
+            case 'finished':
+                mappedStatus = 'Onderhouden';
+                break;
+            default:
+                mappedStatus = '0';
+
+        }
+        this.setState({
+            mappedPhase: mappedStatus
+        }, () => {
+            this.setState(state => ({phase: mappedStatus}));
+        });
     }
 
     switchPhase = (phase) => {
@@ -122,10 +142,11 @@ class WorkspaceTemplate extends React.Component {
         if (profileLoading) {
             return "loading..";
         }
+
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
-                <CustomDialog title={"Er is een fout opgetreden"} content={this.props.error}></CustomDialog>
+                    <CustomDialog title={"Er is een fout opgetreden"} content={this.props.error}></CustomDialog>
                 }
 
                 <Header
@@ -165,10 +186,10 @@ class WorkspaceTemplate extends React.Component {
                                         </h3>
                                         <Button
                                             className={"btn btn-highlight"}
-                                            onClick={() => this.switchPhase("Voorbereiding")}
+                                            onClick={() => this.mapSteps(playground)}
                                             style={{textAlign: 'center'}}
                                         >
-                                            <span>Ga naar Stap 1</span>
+                                            <span>Ga naar de actieve stap</span>
                                         </Button>
                                     </div>
 
