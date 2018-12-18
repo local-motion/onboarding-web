@@ -44,14 +44,41 @@ const styles = theme => ({
 });
 
 function getSteps() {
-    return ['1', '2', '3'];
+    return ['Voorbereiding', 'Uitvoering', 'Onderhouden'];
 }
 
 class PhaseIndicator extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.handlePlaygroundState = this.handlePlaygroundState.bind(this.props.playground);
+    }
+
     state = {
         activeStep: 0,
         completed: {},
     };
+
+    handlePlaygroundState(playground) {
+        let mappedStatus = '';
+        switch (playground.status) {
+            case 'not_started':
+                mappedStatus = 'Voorbereiding';
+                break;
+            case 'in_progress':
+                mappedStatus = 'Uitvoering';
+                break;
+            case 'finished':
+                mappedStatus = 'Onderhouden';
+                break;
+            default:
+                mappedStatus = '0';
+
+        }
+        this.setState({
+            activeStep: mappedStatus
+        });
+    }
 
 
     render() {
@@ -73,10 +100,11 @@ class PhaseIndicator extends React.Component {
             <Stepper nonLinear activeStep={activeStep} className={classes.stepper} connector={connector}>
                 {steps.map((label, index) => {
                     return (
-                        <Step key={index} className={"lm-step"} onClick={ this.props.onSwitchPhase.bind(this, label) }>
+                        <Step key={index} className={"lm-step"} onClick={this.props.onSwitchPhase.bind(this, label)}>
 
-                            <StepButton className={this.state.activeStep === index ? "active lm-step-button" : "inactive lm-step-button"}
-                                        completed={this.state.completed[index]}
+                            <StepButton
+                                className={this.state.activeStep === index ? "active lm-step-button" : "inactive lm-step-button"}
+                                completed={this.state.completed[index]}
                             >
                             </StepButton>
                         </Step>

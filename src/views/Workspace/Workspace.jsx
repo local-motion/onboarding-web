@@ -85,14 +85,34 @@ const profileRequest = graphql(GET_PROFILE, {
 });
 
 class WorkspaceTemplate extends React.Component {
+    state = {
+        mappedPhase : '',
+        phase: "0",
+        view: "dashboard",
+        progress: "",
+    };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            phase: "0",
-            view: "dashboard",
-            progress: "",
-        };
+    mapSteps = (playground) => {
+        let mappedStatus = '';
+        switch (playground.status) {
+            case 'not_started':
+                mappedStatus = 'Voorbereiding';
+                break;
+            case 'in_progress':
+                mappedStatus = 'Uitvoering';
+                break;
+            case 'finished':
+                mappedStatus = 'Onderhouden';
+                break;
+            default:
+                mappedStatus = '0';
+
+        }
+        this.setState({
+            mappedPhase: mappedStatus
+        }, () => {
+            this.setState(state => ({phase: mappedStatus}));
+        });
     }
 
     switchPhase = (phase) => {
@@ -101,14 +121,14 @@ class WorkspaceTemplate extends React.Component {
 
     renderPhase = (phase) => {
         switch (phase) {
-            case "1":
+            case "Voorbereiding":
                 return <PhasePrepare playground={this.props.playground}/>;
-            case "2":
+            case "Uitvoering":
                 return <PhaseExecute playground={this.props.playground} profile={this.props.profile}/>;
-            case "3":
+            case "Onderhouden":
                 return <PhaseSustain playground={this.props.playground}/>;
             default:
-                return <Dashboard playground={this.props.playground} profile={this.props.profile} />;
+                return <Dashboard playground={this.props.playground} profile={this.props.profile}/>;
         }
     };
 
@@ -122,6 +142,7 @@ class WorkspaceTemplate extends React.Component {
         if (profileLoading) {
             return "loading..";
         }
+
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
@@ -143,7 +164,10 @@ class WorkspaceTemplate extends React.Component {
                           className={phase === "0" ? "phase-container empty" : "phase-container"}>
                     <div className={classes.container + " phase-wrapper"}>
                         {phase !== "0" ?
-                            <PhaseIndicator onSwitchPhase={this.switchPhase}/> : <div></div>
+                            <PhaseIndicator
+                                onSwitchPhase={this.switchPhase}
+                                playground={this.props.playground}
+                            /> : <div></div>
                         }
 
                     </div>
@@ -162,10 +186,10 @@ class WorkspaceTemplate extends React.Component {
                                         </h3>
                                         <Button
                                             className={"btn btn-highlight"}
-                                            onClick={() => this.switchPhase("1")}
+                                            onClick={() => this.mapSteps(playground)}
                                             style={{textAlign: 'center'}}
                                         >
-                                            <span>Ga naar Stap 1</span>
+                                            <span>Ga naar de actieve stap</span>
                                         </Button>
                                     </div>
 
