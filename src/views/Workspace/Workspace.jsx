@@ -101,14 +101,14 @@ class WorkspaceTemplate extends React.Component {
 
     renderPhase = (phase) => {
         switch (phase) {
-            case "1":
+            case "Voorbereiding":
                 return <PhasePrepare playground={this.props.playground}/>;
-            case "2":
+            case "Uitvoering":
                 return <PhaseExecute playground={this.props.playground} profile={this.props.profile}/>;
-            case "3":
+            case "Onderhouden":
                 return <PhaseSustain playground={this.props.playground}/>;
             default:
-                return <Dashboard playground={this.props.playground} profile={this.props.profile} />;
+                return <Dashboard playground={this.props.playground} profile={this.props.profile}/>;
         }
     };
 
@@ -125,7 +125,7 @@ class WorkspaceTemplate extends React.Component {
         return (
             <div className={"workspace-wrapper"}>
                 {this.props.hasErrors === true &&
-                    <CustomDialog title={"Er is een fout opgetreden"} content={this.props.error}></CustomDialog>
+                <CustomDialog title={"Er is een fout opgetreden"} content={this.props.error}></CustomDialog>
                 }
 
                 <Header
@@ -143,7 +143,10 @@ class WorkspaceTemplate extends React.Component {
                           className={phase === "0" ? "phase-container empty" : "phase-container"}>
                     <div className={classes.container + " phase-wrapper"}>
                         {phase !== "0" ?
-                            <PhaseIndicator onSwitchPhase={this.switchPhase}/> : <div></div>
+                            <PhaseIndicator
+                                onSwitchPhase={this.switchPhase}
+                                playground={this.props.playground}
+                            /> : <div></div>
                         }
 
                     </div>
@@ -162,7 +165,7 @@ class WorkspaceTemplate extends React.Component {
                                         </h3>
                                         <Button
                                             className={"btn btn-highlight"}
-                                            onClick={() => this.switchPhase("1")}
+                                            onClick={() => this.switchPhase("Voorbereiding")}
                                             style={{textAlign: 'center'}}
                                         >
                                             <span>Ga naar Stap 1</span>
