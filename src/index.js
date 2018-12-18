@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Redirect } from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import {createBrowserHistory} from "history";
 import {Route, Router, Switch} from "react-router-dom";
 import {I18nextProvider} from "react-i18next";
@@ -23,6 +23,8 @@ import JConfirmSignUp from "auth/JConfirmSignUp";
 import JConfirmSignIn from "auth/JConfirmSignIn";
 import JForgotPassword from "./auth/JForgotPassword";
 import JForgotPasswordReset from "./auth/JForgotPasswordReset";
+
+import CookieConsent from "react-cookie-consent";
 
 
 const environments = {
@@ -139,15 +141,28 @@ const App = class App extends React.Component {
                             <Switch>
                                 <Route exact path="/onboarding/logout" render={() => {
                                     console.log("User logged out, redirecting to map of the Netherlands.");
-                                    return <Redirect to='/' />
+                                    return <Redirect to='/'/>
                                 }}/>
                                 {indexRoutes.map((prop, key) => {
-                                    return <Route path={prop.path} key={key} component={prop.component} />;
+                                    return <Route path={prop.path} key={key} component={prop.component}/>;
                                 })}
                             </Switch>
                         </Router>
                     </I18nextProvider>
                 </ApolloProvider>
+                <CookieConsent
+                    location="bottom"
+                    buttonText="Accepteren"
+                    cookieName="myAwesomeCookieName2"
+                    style={{background: "#2B373B"}}
+                    buttonStyle={{color: "#4e503b", fontSize: "13px"}}
+                    expires={150}
+                >
+                    Deze website gebruikt cookies om te kunnen functioneren.{" "}
+                        <span style={{fontSize: "10px"}}>
+                            Door gebruik te maken van de site stemt u in met het plaatsen van dergelijke cookies
+                        </span>
+                </CookieConsent>
             </div>
         )
     }
