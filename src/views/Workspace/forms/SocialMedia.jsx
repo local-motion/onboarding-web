@@ -22,7 +22,7 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 
 class SocialMedia extends React.Component {
     render() {
-        const shareUrl = window.location;
+        const shareUrl = window.location.href;
         var details = {
             title: `Help make ${this.props.playground.name} smoke free.`,
             description: `I've joined the campaign to help make ${this.props.playground.name} smoke free.`,
