@@ -21,6 +21,7 @@ class Contact extends React.Component {
 
                 <Header
                     brand={"Rookvrije generatie"}
+                    brandLink={"/"}
                     rightLinks={<HeaderLinks/>}
                     fixed
                     color="white"
