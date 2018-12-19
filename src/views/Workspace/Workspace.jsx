@@ -153,6 +153,7 @@ class WorkspaceTemplate extends React.Component {
                     brand={playground.name}
                     rightLinks={<HeaderLinks/>}
                     fixed
+                    textBrand
                     color="white"
                     changeColorOnScroll={{
                         height: 50,
