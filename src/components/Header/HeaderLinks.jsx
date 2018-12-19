@@ -13,47 +13,63 @@ import {AccountCircle, Menu} from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
+import Hidden from "@material-ui/core/Hidden";
 
 import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 import JSignOut from "../../auth/JSignOut";
 
 function HeaderLinks({...props}) {
+    console.log(props);
     const {classes} = props;
     return (
         <List className={classes.list}>
             <ListItem className={classes.listItem}>
-                <CustomDropdown
-                    noLiPadding
-                    buttonText=""
-                    buttonProps={{
-                        className: classes.navLink,
-                        color: "transparent"
-                    }}
-                    buttonIcon={Menu}
-                    dropdownList={[
-                        <Link to="/" className={classes.dropdownLink}>
-                            Playgrounds in the Netherlands
-                        </Link>,
+                <Hidden smDown>
+                    <CustomDropdown
+                        noLiPadding
+                        buttonText=""
+                        buttonProps={{
+                            className: classes.navLink,
+                            color: "transparent"
+                        }}
+                        buttonIcon={Menu}
+                        dropdownList={[
+                            <Link to="/" className={classes.dropdownLink}>
+                                Playgrounds in the Netherlands
+                            </Link>,
 
-                    ]}
-                />
+                        ]}
+                    />
+                </Hidden>
+                <Hidden mdUp implementation="css">
+                    <Link to="/" className={classes.dropdownLink}>
+                        Playgrounds in the Netherlands
+                    </Link>
+                </Hidden>
             </ListItem>
             <ListItem className={classes.listItem}>
-                <CustomDropdown
-                    noLiPadding
-                    buttonText=""
-                    buttonProps={{
-                        className: classes.navLink,
-                        color: "transparent"
-                    }}
-                    buttonIcon={AccountCircle}
-                    dropdownList={[
-                        <JSignOut/>,
-                    ]}
-                />
+                <Hidden smDown implementation="css">
+                    <CustomDropdown
+                        noLiPadding
+                        buttonText=""
+                        buttonProps={{
+                            className: classes.navLink,
+                            color: "transparent"
+                        }}
+                        buttonIcon={AccountCircle}
+                        dropdownList={[
+                            <JSignOut/>,
+                        ]}
+                    />
+                </Hidden>
+                <Hidden mdUp>
+                    <JSignOut layout={"list"}/>
+                </Hidden>
 
             </ListItem>
         </List>
+
+
     );
 }
 
