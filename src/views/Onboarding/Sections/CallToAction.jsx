@@ -14,13 +14,13 @@ class CallToAction extends React.Component {
             <GridContainer>
                 <GridItem xs={12} sm={12} md={12} className={"onboarding-header-container"}>
                     <div className={classes.brand + " onboarding-header"}>
-                        <h1 className={"grunge-title"}>
+                        <h2 className={"grunge-title"}>
                             {t("onboarding.playground.calltoaction.title.name", {
                                 playgroundName: playground.name
                             })}
                             <span className="lm-red-1"> {t("onboarding.playground.calltoaction.smokefree")}</span>
-                        </h1>
-                        <h2 className={classes.subtitle + " subtitle"}>
+                        </h2>
+                        <h3 className={classes.subtitle + " subtitle"}>
                             {t("onboarding.playground.calltoaction.subtitle", {
                                 playgroundName: playground.name
                             })}
@@ -29,7 +29,7 @@ class CallToAction extends React.Component {
                                     <span>{t("onboarding.playground.calltoaction.subtitle.cta.default")}</span> :
                                     <span>{t("onboarding.playground.calltoaction.subtitle.cta.specific")}</span>
                             }
-                        </h2>
+                        </h3>
                     </div>
                 </GridItem>
             </GridContainer>
