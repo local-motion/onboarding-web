@@ -1,5 +1,5 @@
 .onboarding-header{
-    h2,h3{
+    h3{
         max-width: 100% !important;
     }
     h2{
@@ -7,6 +7,9 @@
         line-height: 1.15em;
         @include breakpoint-max($breakpoints-sm){
             font-size: 1.9rem;
+        }
+        @include breakpoint-max($breakpoints-lg){
+            width: 75%;
         }
     }
 }
