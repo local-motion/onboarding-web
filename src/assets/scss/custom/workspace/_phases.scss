@@ -5,7 +5,19 @@
             height: 200px !important;
         }
     }
+    .stepper-container{
+        justify-content: space-between;
+        padding: 0;
+    }
+    .lm-step-connector{
+        @include breakpoint-max($breakpoints-sm){
+            display: none;
+        }
+    }
     .lm-step {
+        @include breakpoint-max($breakpoints-sm){
+            padding: 0;
+        }
         svg {
             width: 100px;
             height: 100px;

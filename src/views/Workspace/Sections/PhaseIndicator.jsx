@@ -87,6 +87,7 @@ class PhaseIndicator extends React.Component {
         const {activeStep} = this.state;
         const connector = (
             <StepConnector
+                className={"lm-step-connector"}
                 classes={{
                     active: classes.connectorActive,
                     completed: classes.connectorCompleted,
@@ -97,7 +98,7 @@ class PhaseIndicator extends React.Component {
         );
 
         return (
-            <Stepper nonLinear activeStep={activeStep} className={classes.stepper} connector={connector}>
+            <Stepper nonLinear activeStep={activeStep} className={classes.stepper + " stepper-container"} connector={connector}>
                 {steps.map((label, index) => {
                     return (
                         <Step key={index} className={"lm-step"} onClick={this.props.onSwitchPhase.bind(this, label)}>
