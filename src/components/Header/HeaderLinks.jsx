@@ -58,7 +58,7 @@ function HeaderLinks({...props}) {
                         }}
                         buttonIcon={AccountCircle}
                         dropdownList={[
-                            <JSignOut/>,
+                            <JSignOut/>
                         ]}
                     />
                 </Hidden>

@@ -20,9 +20,9 @@ export default class JSignOut extends Component {
         const {layout} = this.props;
         return (
             <div>
-                <a href={"#"} style={{textDecoration: 'underline', padding: '10px 20px', display: (layout !== 'list' ? 'none' : 'inline-block') }} onClick={this.signOut}>
+                <div style={{textDecoration: 'underline', padding: '10px 20px', cursor: "pointer", display: (layout !== 'list' ? 'none' : 'inline-block') }} onClick={this.signOut}>
                     Uitloggen
-                </a>
+                </div>
                 <Button style={{textDecoration: 'underline', display: (layout === 'list' ? 'none' : 'inline-block') }} onClick={this.signOut}>
                     Sign Out
                 </Button>
