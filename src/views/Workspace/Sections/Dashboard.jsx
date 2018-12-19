@@ -15,6 +15,7 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 import {Mutation} from "react-apollo";
 import gql from "graphql-tag";
 import PlaygroundManagers from "./PlaygroundManagers";
+import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import Amplify from "aws-amplify";
 
@@ -68,6 +69,7 @@ class Dashboard extends React.Component {
                                       content={"Help mee met deze speeltuin rookvrij te maken door de petitie te tekenen"}
                                       primaryCta={"Teken Petitie"}
                                       MoreInformation={"Meer informatie"}
+                                      ExpandContent={<PlaygroundVotes playground={playground} />}
                         />
                         <SimpleCard title={"Donaties"}
                                     image={require("assets/img/backgrounds/donaties.jpg")}
