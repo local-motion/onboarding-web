@@ -68,6 +68,7 @@ class Header extends React.Component {
             rightLinks,
             leftLinks,
             brandLink,
+            textBrand,
             brand,
             fixed,
             absolute
@@ -78,7 +79,8 @@ class Header extends React.Component {
             [classes.absolute]: absolute,
             [classes.fixed]: fixed
         });
-        const brandComponent = brandLink ? <a href={brandLink}><h1 className={"grunge-title"}>{brand}</h1></a> : <h1 className={"grunge-title"}>{brand}</h1>;
+        const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />;
+        const brandComponent = brandLink ? <a href={brandLink}>{brandContent}</a> : <div>{brandContent}</div>;
         return (
             <AppBar className={appBarClasses + " lm-header"}>
                 <Toolbar className={classes.container}>
@@ -147,6 +149,7 @@ Header.propTypes = {
     leftLinks: PropTypes.node,
     brand: PropTypes.string,
     brandLink: PropTypes.string,
+    textBrand: PropTypes.bool,
     fixed: PropTypes.bool,
     absolute: PropTypes.bool,
     // this will cause the sidebar to change the color from
