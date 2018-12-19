@@ -13,7 +13,7 @@
 .playground-map-container{
     padding: 0 !important;
     @include breakpoint-max($breakpoints-lg){
-        min-height: 50vw !important;
+        min-height: 400px !important;
     }
     @include breakpoint-max($breakpoints-sm){
         min-height: 100vw !important;
