@@ -19,7 +19,6 @@ import headerLinksStyle from "assets/jss/material-kit-react/components/headerLin
 import JSignOut from "../../auth/JSignOut";
 
 function HeaderLinks({...props}) {
-    console.log(props);
     const {classes} = props;
     return (
         <List className={classes.list}>
