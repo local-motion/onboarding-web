@@ -38,9 +38,9 @@ class PhaseExecute extends React.Component {
 
                         {   isManager &&
                             !playground.smokeFreeDate &&
-                            <CollapseCard title={"Committeer aan een datum"}
+                            <CollapseCard title={"Zet in de agenda"}
                                           image={require("assets/img/backgrounds/date.jpg")}
-                                          content={"Selecteer de datum waarop Speeltuin rookvrij moet zijn."}
+                                          content={"Selecteer de datum waarop Speeltuin rookvrij wordt."}
                                           MoreInformation={"Stel een datum"}
                                           ExpandContent={<SmokefreeDate onChange={onSmokeFreeDateChange}/>}
                             />
