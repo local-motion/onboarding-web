@@ -10,7 +10,6 @@ import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/p
 import DefaultStatistic from "components/PlaygroundStatistic/DefaultStatistic.jsx";
 import PlaygroundStatistic from "components/PlaygroundStatistic/PlaygroundStatistic.jsx";
 import ArrowBack from "@material-ui/icons/ArrowBack";
-import FormDialog from "components/FormDialog/FormDialog.jsx";
 import Button from "@material-ui/core/Button/Button";
 import JoinInitiative from "./JoinInitiative.jsx"
 
@@ -110,9 +109,7 @@ class PlaygroundStatistics extends React.Component {
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"vol"}/>
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"}/>
                                 </div>
-                                <div style={{display: generalStatistics ? 'block' : 'none'}}>
-                                    <FormDialog playgrounds={playgrounds}/>
-                                </div>
+
                                 <div style={{display: generalStatistics ? 'none' : 'block'}}>
                                     <JoinInitiative playground={playground}/>
                                     <Button

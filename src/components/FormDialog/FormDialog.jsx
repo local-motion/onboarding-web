@@ -118,11 +118,10 @@ class FormDialog extends React.Component {
         return (
             <div className={"FormDialog-container"}>
                 <Button
-                    className={"btn btn-highlight pr-25"}
+                    className={"btn btn-highlight map-add"}
                     onClick={this.handleClickOpen}
                 >
-                    <AddLocation className={"mr-15"}/>
-                    <span>Voeg een speeltuin toe</span>
+                    <AddLocation/>
                 </Button>
                 <Dialog
                     open={this.state.open}
