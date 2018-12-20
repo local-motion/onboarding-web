@@ -210,7 +210,7 @@ class IntegrationAutosuggest extends React.Component {
                     {...autosuggestProps}
                     inputProps={{
                         classes,
-                        placeholder: "Enter a playground",
+                        placeholder: "Vul hier de naam van een speeltuin in om te zoeken",
                         value: this.state.popper,
                         onChange: this.handleChange("popper"),
                         inputRef: node => {

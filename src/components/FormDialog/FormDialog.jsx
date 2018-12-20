@@ -133,8 +133,7 @@ class FormDialog extends React.Component {
                     <DialogTitle id="form-dialog-title">Voeg een speeltuin toe</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Je staat op het punt om een speeltuin toe te voegen. We willen alleen nog weten van je hoe
-                            deze speeltuin heet.
+                            Je staat op het punt om een speeltuin toe te voegen. We willen alleen nog van je weten wat de naam is van deze speeltuin.
                         </DialogContentText>
                         <PlaygroundMap
                             className={"playground-container"}
@@ -148,7 +147,7 @@ class FormDialog extends React.Component {
                         <form className={"form"}>
                             <TextField
                                 className={classes.textField + " form-control"}
-                                label="Hoe heet de speeltuin?"
+                                label="Wat is de naam van de speeltuin?"
                                 pattern="/^\w{4,}$/"
                                 onKeyUp={this.updateName}
                                 defaultValue={this.state.name}/>

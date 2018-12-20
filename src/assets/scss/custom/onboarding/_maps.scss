@@ -1,7 +1,8 @@
 /*Within this file the styling of the playground map will be placed*/
 
 .playground.autosuggest {
-    position: relative;
+    position: absolute;
+    width: 100%;
     z-index: 10;
     background: white;
     opacity: 0.9;
@@ -21,9 +22,6 @@
     .playground-map{
         width: 100%;
         min-height: 400px;
-        position: absolute;
-        top: 0;
-        left: 0;
     }
 }
 
