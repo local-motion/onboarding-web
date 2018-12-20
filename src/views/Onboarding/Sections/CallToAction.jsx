@@ -9,26 +9,21 @@ class CallToAction extends React.Component {
     render() {
         const {playground, t, classes} = this.props;
         const isDefault = playground.default;
+        const defaultSet = isDefault ? "default" : "specific"
 
         return (
             <GridContainer>
                 <GridItem xs={12} sm={12} md={12} className={"onboarding-header-container"}>
                     <div className={classes.brand + " onboarding-header"}>
                         <h2 className={"grunge-title"}>
-                            {t("onboarding.playground.calltoaction.title.name", {
-                                playgroundName: playground.name
-                            })}
+                            {t("onboarding.playground.calltoaction.title.name." + defaultSet + ".first", {playgroundName: playground.name})}
                             <span className="lm-red-1"> {t("onboarding.playground.calltoaction.smokefree")}</span>
+                            <span> {t("onboarding.playground.calltoaction.title.name." + defaultSet + ".last")}</span>
                         </h2>
                         <h3 className={classes.subtitle + " subtitle"}>
                             {t("onboarding.playground.calltoaction.subtitle", {
                                 playgroundName: playground.name
                             })}
-                            {
-                                isDefault ?
-                                    <span>{t("onboarding.playground.calltoaction.subtitle.cta.default")}</span> :
-                                    <span>{t("onboarding.playground.calltoaction.subtitle.cta.specific")}</span>
-                            }
                         </h3>
                     </div>
                 </GridItem>

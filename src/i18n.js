@@ -49,17 +49,19 @@ i18n.use(LanguageDetector).init({
     },
     nl: {
         translations: {
-            "playground.default.area": "Nederland",
+            "playground.default.area": "Speeltuinen in Nederland",
             "header.brand": "Rookvrije speeltuin",
             "footer.attribution":
                 "Rookvrije speeltuinen is een initiatief van het Longfonds en ABN AMRO",
             "onboarding.playground.calltoaction.button": "Doe mee",
 
             "onboarding.playground.calltoaction.smokefree": "rookvrij",
-            "onboarding.playground.calltoaction.title.name": "Maak {{playgroundName}}",
+            "onboarding.playground.calltoaction.title.name.default.first": "Welke speeltuin wil je",
+            "onboarding.playground.calltoaction.title.name.default.last": "maken",
+            "onboarding.playground.calltoaction.title.name.specific.first": "Wat goed dat je {{playgroundName}}",
+            "onboarding.playground.calltoaction.title.name.specific.last": "wilt maken",
             "onboarding.playground.calltoaction.subtitle":
-                "Help met " +
-                "{{playgroundName}} rookvrij te maken.",
+                "Vul hieronder de naam in van de speeltuin of selecteer de speeltuin via de kaart.",
             "onboarding.playground.calltoaction.subtitle.cta.default":
                 " Kies of schrijf een speeltuin in via de kaart.",
             "onboarding.playground.calltoaction.subtitle.cta.specific":
@@ -74,7 +76,7 @@ i18n.use(LanguageDetector).init({
                 "Voortgang",
             "onboarding.playground.progress.intro.default":
                 "Het is tijd om" +
-                " {{cityArea}} rookvrij te maken," +
+                " alle speeltuinen in Nederland rookvrij te maken," +
                 " om dit voor elkaar te krijgen moeten we nog" +
                 " {{playgroundCount}} speeltuinen rookvrij maken.",
             "onboarding.playground.progress.intro.specific":
