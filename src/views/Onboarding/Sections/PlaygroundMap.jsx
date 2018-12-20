@@ -138,6 +138,7 @@ const PlaygroundMap = compose(
                 }
             </MarkerClusterer>
         </GoogleMap>
+
     </div>
 ));
 
