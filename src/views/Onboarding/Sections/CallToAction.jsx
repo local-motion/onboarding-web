@@ -24,9 +24,6 @@ class CallToAction extends React.Component {
                             {t("onboarding.playground.calltoaction.subtitle", {
                                 playgroundName: playground.name
                             })}
-                            {
-                                <span>{t("onboarding.playground.calltoaction.subtitle.cta." + defaultSet)}</span>
-                            }
                         </h3>
                     </div>
                 </GridItem>
