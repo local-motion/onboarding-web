@@ -55,7 +55,7 @@ const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
 class PlaygroundStatistics extends React.Component {
 
     render() {
-        const {statsLoading, progress, t, classes, playground, defaultView, playgrounds} = this.props;
+        const {statsLoading, progress, t, classes, playground, defaultView} = this.props;
         const generalStatistics = defaultView;
 
         const defaultPlayground = {
