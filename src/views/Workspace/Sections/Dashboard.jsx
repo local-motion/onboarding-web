@@ -3,7 +3,6 @@ import React from "react";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Dialog from '@material-ui/core/Dialog';
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -18,6 +17,7 @@ import PlaygroundManagers from "./PlaygroundManagers";
 import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import Amplify from "aws-amplify";
+import ErrorDialog from "../../ErrorDialog";
 
 
 const SET_MANAGER = gql`
@@ -97,7 +97,7 @@ class Dashboard extends React.Component {
                                             }}
                                         />
                                         {loading && <p>Loading...</p>}
-                                        {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                                        {error && <ErrorDialog error={error}/>}
                                     </div>
                                 )}
                             </Mutation>

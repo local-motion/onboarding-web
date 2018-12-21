@@ -1,7 +1,7 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Dialog from '@material-ui/core/Dialog';
+import ErrorDialog from '../../ErrorDialog.jsx';
 // core components
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -21,7 +21,6 @@ const SET_SMOKEFREE = gql`
 `;
 
 class PhasePrepare extends React.Component {
-
     render() {
         const {classes} = this.props;
         const playgroundId = window.location.pathname.split("/").pop();
@@ -49,10 +48,7 @@ class PhasePrepare extends React.Component {
                                       ExpandContent={<SocialMedia playground={this.props.playground}/>}
                         />
 
-                        <Mutation
-                            mutation={SET_SMOKEFREE}
-                            update={null}
-                        >
+                        <Mutation mutation={SET_SMOKEFREE} update={null}>
                             {(setSmokeFree, { loading, error }) => (
                                 <div>
                                     <SimpleCard
@@ -65,7 +61,7 @@ class PhasePrepare extends React.Component {
                                         }}
                                     />
                                     {loading && <p>Loading...</p>}
-                                    {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                                    {error && <ErrorDialog error={error}/>}
                                 </div>
                             )}
                         </Mutation>

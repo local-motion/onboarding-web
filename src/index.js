@@ -6,6 +6,8 @@ import {Route, Router, Switch} from "react-router-dom";
 import {I18nextProvider} from "react-i18next";
 import i18n from "./i18n";
 import {ApolloClient} from 'apollo-client';
+import {ApolloLink} from 'apollo-link';
+import {onError} from "apollo-link-error";
 import {HttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ApolloProvider} from 'react-apollo';
@@ -112,10 +114,24 @@ const App = class App extends React.Component {
         console.log('Auth: ', auth);
         console.log('Auth data: ', authData);
         if (!authData) {
-            return "Logging in failed: " + (auth && auth.state);
+            return "Login failed: " + (auth && auth.state);
         }
 
-        const httpLink = new HttpLink({uri: uri});
+        const errorLink = onError(apolloError => {
+            const graphQLErrors = apolloError.graphQLErrors;
+            const networkError = apolloError.networkError;
+            if (graphQLErrors) {
+                graphQLErrors.map(({ message, locations, path, extensions }) =>
+                    console.log(`[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(locations)}, Path: ${path}, Extensions: ${JSON.stringify(extensions)}`)
+
+                    // TODO: Consider using extensions.code === 'UNAUTHENTICATED' to trigger JWT refresh
+                );
+            }
+
+            if (networkError) {
+                console.log(`[Network error]: ${networkError}`);
+            }
+        });
         const authLink = setContext(async (req, {headers}) => {
             let session = authData.getSignInUserSession();
             let idToken = session.getIdToken();
@@ -127,10 +143,28 @@ const App = class App extends React.Component {
                 },
             };
         });
-        const link = authLink.concat(httpLink);
+        const httpLink = new HttpLink({uri: uri});
         const client = new ApolloClient({
-            link: link,
+            defaultOptions: {
+                watchQuery: {
+                    fetchPolicy: 'cache-and-network',
+                    errorPolicy: 'all',
+                },
+                query: {
+                    fetchPolicy: 'cache-and-network',
+                    errorPolicy: 'all',
+                },
+                mutate: {
+                    errorPolicy: 'all',
+                },
+            },
+            link: ApolloLink.from([
+                errorLink,
+                authLink,
+                httpLink
+            ]),
             cache: new InMemoryCache(),
+            connectToDevTools: true,
         });
 
         return (
