@@ -1,6 +1,6 @@
 server {
-
-
+ ${AUTHSWITCH}auth_basic           "Alfatest of LocalMotion";
+ ${AUTHSWITCH}auth_basic_user_file /etc/nginx/conf.d/.htpasswd;
   listen 80;
   server_tokens off;
 
