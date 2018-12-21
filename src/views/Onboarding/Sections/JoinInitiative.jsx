@@ -1,7 +1,6 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Dialog from '@material-ui/core/Dialog';
 // @material-ui/icons
 // core components
 import Button from "@material-ui/core/Button/Button";
@@ -11,6 +10,7 @@ import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/p
 import {withNamespaces} from "react-i18next";
 import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
+import ErrorDialog from "../../ErrorDialog";
 
 
 const JOIN_INITIATIVE = gql`
@@ -25,10 +25,10 @@ class JoinInitiative extends React.Component {
 
     loadWorkspace = (eEvent) => {
         window.location.href = `/workspace/${this.props.playground.id}`;
-    }
+    };
 
     render() {
-        const {classes, playground} = this.props;
+        const {playground} = this.props;
         if (playground.default) return null;
 
         let initiativeInput = {
@@ -36,10 +36,7 @@ class JoinInitiative extends React.Component {
         };
 
         return (
-            <Mutation
-                mutation={JOIN_INITIATIVE}
-                update={this.loadWorkspace}
-            >
+            <Mutation mutation={JOIN_INITIATIVE} update={this.loadWorkspace}>
                 {(joinInitiative, { loading, error }) => (
                     <div>
                         <Button
@@ -52,7 +49,7 @@ class JoinInitiative extends React.Component {
                             <span>Maak deze speeltuin rookvrij</span>
                         </Button>
                         {loading && <p>Loading...</p>}
-                        {error && <Dialog open={true} className={classes.container}>{error.toString()}</Dialog>}
+                        {error && <ErrorDialog error={error}/>}
                     </div>
                 )}
             </Mutation>
