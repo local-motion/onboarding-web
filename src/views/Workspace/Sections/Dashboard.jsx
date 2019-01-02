@@ -18,6 +18,7 @@ import PlaygroundManagers from "./PlaygroundManagers";
 import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import Amplify from "aws-amplify";
+import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 
 
 const SET_MANAGER = gql`
@@ -104,6 +105,7 @@ class Dashboard extends React.Component {
                         }
                     </GridItem>
                 </GridContainer>
+                <PlaygroundChatBox/>
             </div>
         );
     }
