@@ -23,7 +23,8 @@ class ChatBox extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getMessages()
+    const playgroundId = window.location.pathname.split("/").pop();
+    this.props.setActiveChatbox(playgroundId)
   }
 
   render() {

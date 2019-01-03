@@ -1,4 +1,4 @@
-import { RECEIVE_CHAT_MESSAGES, RETRIEVE_CHAT_MESSAGES, SUBMIT_CHAT_MESSAGE, EDIT_CHAT_MESSAGE, SUBMIT_BOT_MESSAGE } from "../actions/chatActions";
+import { SET_ACTIVE_CHATBOX, FETCHING_MESSAGES, RECEIVE_CHAT_MESSAGES, RETRIEVE_CHAT_MESSAGES, SUBMIT_CHAT_MESSAGE, EDIT_CHAT_MESSAGE, SUBMIT_BOT_MESSAGE } from "../actions/chatActions";
 
 /* 
 Chat item definition:
@@ -9,7 +9,9 @@ Chat item definition:
 
 
 const initialState = {
+  chatboxId: null,
   messages: [],
+  fetching: false,
   editText: '',
 }
 
@@ -36,11 +38,21 @@ const chatReducer = (state = initialState, action) => {
           },
         ],
       }
+    case FETCHING_MESSAGES:
+      return {
+        ...state,
+        fetching: true
+      }
+    case SET_ACTIVE_CHATBOX:
+      return {
+        ...state,
+        chatboxId: action.chatboxId
+      }
     case RECEIVE_CHAT_MESSAGES:
       return {
         ...state,
-        // messages: action.messages.map(message => ({author: 'Jaap', timestamp: new Date().getTime(), text: message}))
-        messages: action.messages
+        messages: action.messages,
+        fetching: false
       }
     case SUBMIT_CHAT_MESSAGE:
       return {

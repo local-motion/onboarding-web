@@ -1,10 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import ChatBox from './views/ChatBox';
-import { postChatMessage, retrieveChatMessages, submitChatMessage, editChatMessage, submitBotMessage } from './actions/chatActions';
+import { activateChatbox, postChatMessage, submitChatMessage, editChatMessage, submitBotMessage } from './actions/chatActions';
 
-const chatBox = ({postChatMessage, chatMessages, messageText, onChangeHandler, onSubmitHandler, submitBotMessage, getMessages}) => 
-    (<ChatBox postChatMessage= {postChatMessage} chatMessages={chatMessages} messageText={messageText} onChangeHandler={onChangeHandler} onSubmitHandler={onSubmitHandler} submitBotMessage={submitBotMessage} getMessages={getMessages}/>)
+const chatBox = (props) => (<ChatBox {...props}/>)
 
 const mapStateToProps = state => {
     return {
@@ -19,7 +18,7 @@ const mapDispatchToProps = dispatch => {
         onChangeHandler:    event => dispatch(editChatMessage(event.target.value)),
         onTextKeyPress:     event => event.key === 'Enter' && dispatch(submitChatMessage()),
         submitBotMessage:   message => dispatch(submitBotMessage(message)),
-        getMessages:        () => dispatch(retrieveChatMessages()),
+        setActiveChatbox:   chatboxId => dispatch(activateChatbox(chatboxId))
       }
 }
 
