@@ -1,8 +1,8 @@
 import { uuid } from "../scripts/Generics";
+import {Auth} from "aws-amplify";
 
 
 // Action type definitions
-export const RETRIEVE_CHAT_MESSAGES = 'RETRIEVE_CHAT_MESSAGES'
 export const RECEIVE_CHAT_MESSAGES = 'RECEIVE_CHAT_MESSAGES'
 export const EDIT_CHAT_MESSAGE = 'EDIT_CHAT_MESSAGE'
 export const SUBMIT_CHAT_MESSAGE = 'SUBMIT_CHAT_MESSAGE'
@@ -12,13 +12,22 @@ export const SIGNAL_ERROR = 'SIGNAL_ERROR'
 
 export const SET_ACTIVE_CHATBOX = 'SET_ACTIVE_CHATBOX'
 export const FETCHING_MESSAGES = 'FETCHING_MESSAGES'
+export const POSTED_MESSAGE = 'POSTED_MESSAGE'
+
 
 // Actions
 export const activateChatbox = chatboxId => {
   return dispatch => {
-    console.log('active chatbox: ' + chatboxId)
-    dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
-    dispatch(fetchChatMessages(chatboxId))
+
+  
+    Auth.currentAuthenticatedUser().then(user => {
+      const jwtToken = user.signInUserSession.idToken.jwtToken
+      console.log('active chatbox: ' + chatboxId)
+      console.log("JWT token: " + jwtToken)
+      dispatch({type: SET_ACTIVE_CHATBOX, chatboxId, jwtToken})
+      dispatch(fetchChatMessages(chatboxId))
+      });
+
   }
 }
 
@@ -27,7 +36,11 @@ export const fetchChatMessages = () => {
     const chatboxId = getState().chat.chatboxId
     console.log('fetching chat messages for ' + chatboxId)
     dispatch({type: FETCHING_MESSAGES})
-    return fetch('http://localhost:8086/api/chatbox/' + chatboxId).then(
+    return fetch('http://localhost:8086/api/chatbox/' + chatboxId, {
+      headers: {
+        Authorization: "Bearer " + getState().chat.jwtToken
+      }
+    }).then(
       response => response.json().then(json => dispatch(receiveChatMessage(json), error => alert('oh no error!' + error))),
       error => dispatch(signalError(error))
     )
@@ -51,15 +64,18 @@ export function postChatMessage(text) {
 
     const chatMessage = {
       messageId: uuid(),
-      name: 'Dimitri',
-      message: getState().chat.editText
+      author: 'Dimitri',
+      text: getState().chat.editText
     }
-    
+
+    dispatch({type: POSTED_MESSAGE})
+
     return fetch('http://localhost:8086/api/chatbox/' + chatboxId, {
         method: 'POST',
         body: JSON.stringify(chatMessage),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: "Bearer " + getState().chat.jwtToken
         }
       })
       .then(response => response.json())

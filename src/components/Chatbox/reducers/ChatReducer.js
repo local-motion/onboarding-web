@@ -1,15 +1,17 @@
-import { SET_ACTIVE_CHATBOX, FETCHING_MESSAGES, RECEIVE_CHAT_MESSAGES, RETRIEVE_CHAT_MESSAGES, SUBMIT_CHAT_MESSAGE, EDIT_CHAT_MESSAGE, SUBMIT_BOT_MESSAGE } from "../actions/chatActions";
+import { POSTED_MESSAGE, SET_ACTIVE_CHATBOX, FETCHING_MESSAGES, RECEIVE_CHAT_MESSAGES, SUBMIT_CHAT_MESSAGE, EDIT_CHAT_MESSAGE, SUBMIT_BOT_MESSAGE } from "../actions/chatActions";
 
 /* 
 Chat item definition:
-  - author
-  - timestamp
+  - messageId
+  - author (set by server)
+  - creationTime (set by server)
   - text
 */
 
 
 const initialState = {
   chatboxId: null,
+  jwtToken: null,
   messages: [],
   fetching: false,
   editText: '',
@@ -17,36 +19,21 @@ const initialState = {
 
 const chatReducer = (state = initialState, action) => {
   switch (action.type) {
-    case RETRIEVE_CHAT_MESSAGES:
-      return {
-        ...state,
-        messages: [
-          {
-            author: 'John',
-            timestamp: new Date().getTime(),
-            text: 'Hi'
-          },
-          {
-            author: 'John',
-            timestamp: new Date().getTime(),
-            text: "I'm John"
-          },
-          {
-            author: 'John',
-            timestamp: new Date().getTime(),
-            text: 'How are you?'
-          },
-        ],
-      }
     case FETCHING_MESSAGES:
       return {
         ...state,
         fetching: true
       }
+    case POSTED_MESSAGE:
+      return {
+        ...state,
+        editText: ''
+      }
     case SET_ACTIVE_CHATBOX:
       return {
         ...state,
-        chatboxId: action.chatboxId
+        chatboxId: action.chatboxId,
+        jwtToken: action.jwtToken
       }
     case RECEIVE_CHAT_MESSAGES:
       return {
