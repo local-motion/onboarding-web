@@ -11,6 +11,7 @@ export const POST_CHAT_MESSAGE = 'POST_CHAT_MESSAGE'
 export const SIGNAL_ERROR = 'SIGNAL_ERROR'
 
 export const SET_ACTIVE_CHATBOX = 'SET_ACTIVE_CHATBOX'
+export const SET_UNACTIVE_CHATBOX = 'SET_UNACTIVE_CHATBOX'
 export const FETCHING_MESSAGES = 'FETCHING_MESSAGES'
 export const POSTED_MESSAGE = 'POSTED_MESSAGE'
 
@@ -24,36 +25,69 @@ export const activateChatbox = chatboxId => {
       const jwtToken = user.signInUserSession.idToken.jwtToken
       console.log('active chatbox: ' + chatboxId)
       console.log("JWT token: " + jwtToken)
+
       dispatch({type: SET_ACTIVE_CHATBOX, chatboxId, jwtToken})
-      dispatch(fetchChatMessages(chatboxId))
+      dispatch(fetchChatMessages())
       });
 
   }
 }
 
-export const fetchChatMessages = () => {
+export const deactivateChatbox = chatboxId => (
+  {type: SET_UNACTIVE_CHATBOX, chatboxId}
+)
+
+export const fetchChatMessages = (reload=false) => {
   return (dispatch, getState) => {
-    const chatboxId = getState().chat.chatboxId
-    console.log('fetching chat messages for ' + chatboxId)
-    dispatch({type: FETCHING_MESSAGES})
-    return fetch('http://localhost:8086/api/chatbox/' + chatboxId, {
-      headers: {
-        Authorization: "Bearer " + getState().chat.jwtToken
+    const chatState = getState().chat
+    const chatboxId = chatState.chatboxId
+
+    if (chatboxId !== null) {
+      const lastMessageId = (!reload && chatState.messages.length > 0) ? chatState.messages[chatState.messages.length-1].messageId : null;
+      var url;
+      if (lastMessageId === null) {
+        console.log('fetching chat messages for ' + chatboxId)
+        url = 'http://localhost:8086/api/chatbox/' + chatboxId
       }
-    }).then(
-      response => response.json().then(json => dispatch(receiveChatMessage(json), error => alert('oh no error!' + error))),
-      error => dispatch(signalError(error))
-    )
+      else {
+        console.log('fetching chat messages for ' + chatboxId + ' since ' + lastMessageId)
+        url = 'http://localhost:8086/api/chatbox/' + chatboxId + "?since=" + lastMessageId
+      }
+
+
+      dispatch({type: FETCHING_MESSAGES})
+      return fetch(url, {
+        headers: {
+          Authorization: "Bearer " + getState().chat.jwtToken
+        }
+      }).then(
+        response => {
+          if (lastMessageId === null) {
+            response.json().then(json => dispatch(receiveChatMessage(chatboxId, json), error => alert('oh no error!' + error)))
+          }
+          else {
+            response.json().then(json => dispatch(receiveChatMessage(chatboxId, json, true), error => alert('oh no error!' + error)))
+          }
+          // Keep polling if this is still the active chatbox
+          if (chatboxId === getState().chat.chatboxId) {
+              setTimeout(() => dispatch(fetchChatMessages()), 2000)
+          }
+        },
+        error => dispatch(signalError(error))
+      )
+    }
   }
 }
 
 
-export const receiveChatMessage = messages => {
+export const receiveChatMessage = (chatboxId, messages, append=false) => {
   console.log('receiving...' + JSON.stringify(messages))
 
   return ({
   type: RECEIVE_CHAT_MESSAGES,
-  messages
+  chatboxId,
+  messages,
+  append
   })
 }
 

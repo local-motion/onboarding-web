@@ -15,28 +15,44 @@ const styles = theme => ({
 
 class ChatBox extends React.Component {
 
+  chatboxId = null;
+
   onSubmitHandler = () => {
     if (this.props.messageText !== '') {
-      respond(message => this.props.submitBotMessage(message))
+      // respond(message => this.props.submitBotMessage(message))
       this.props.onSubmitHandler()
     }
   }
 
   componentDidMount() {
-    const playgroundId = window.location.pathname.split("/").pop();
-    this.props.setActiveChatbox(playgroundId)
+    this.chatboxId = window.location.pathname.split("/").pop();
+    this.props.setActiveChatbox(this.chatboxId)
+    this.setScrollState()
+  }
+
+  componentDidUpdate() {
+    this.setScrollState()
+  }
+
+  componentWillUnmount() {
+    this.props.deactivateChatbox(this.chatboxId)
+  }
+
+  setScrollState() {
+    var element = document.getElementById("chatPane");
+    element.scrollTop = element.scrollHeight;
   }
 
   render() {
     const {chatMessages=[], messageText='', onChangeHandler, onTextKeyPress, submitBotMessage} = this.props
 
-    if (chatMessages.length === 0) {
-      greet(message => submitBotMessage(message))
-    }
+    // if (chatMessages.length === 0) {
+    //   greet(message => submitBotMessage(message))
+    // }
 
     return (
     <div>
-      <div className={this.props.classes.pane}>
+      <div id="chatPane" className={this.props.classes.pane}>
         <ChatMessageList items={chatMessages}/>
       </div>
       <ChatMessageEntryBox onSubmitClick={this.onSubmitHandler} onTextChange={onChangeHandler} text={messageText} onTextKeyPress={onTextKeyPress}/>

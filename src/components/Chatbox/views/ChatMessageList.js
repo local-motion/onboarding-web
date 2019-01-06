@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const ChatMessageList = ({items=[]}) => (
     <List>
-        {items.map(item => <ChatMessageItem key={item.timestamp} {...item}/>)}
+        {items.map(item => <ChatMessageItem key={item.creationTime} {...item}/>)}
     </List>
 
 )

@@ -1,4 +1,4 @@
-import { POSTED_MESSAGE, SET_ACTIVE_CHATBOX, FETCHING_MESSAGES, RECEIVE_CHAT_MESSAGES, SUBMIT_CHAT_MESSAGE, EDIT_CHAT_MESSAGE, SUBMIT_BOT_MESSAGE } from "../actions/chatActions";
+import { POSTED_MESSAGE, SET_ACTIVE_CHATBOX, SET_UNACTIVE_CHATBOX, FETCHING_MESSAGES, RECEIVE_CHAT_MESSAGES, SUBMIT_CHAT_MESSAGE, EDIT_CHAT_MESSAGE, SUBMIT_BOT_MESSAGE } from "../actions/chatActions";
 
 /* 
 Chat item definition:
@@ -35,12 +35,21 @@ const chatReducer = (state = initialState, action) => {
         chatboxId: action.chatboxId,
         jwtToken: action.jwtToken
       }
-    case RECEIVE_CHAT_MESSAGES:
+    case SET_UNACTIVE_CHATBOX:
+      const newActiveChatebox = action.chatboxId === state.chatboxId ? null : state.chatboxId
       return {
         ...state,
-        messages: action.messages,
-        fetching: false
+        chatboxId: newActiveChatebox
       }
+    case RECEIVE_CHAT_MESSAGES:
+      if (action.chatboxId === state.chatboxId)
+        return {
+          ...state,
+          messages: action.append ? state.messages.concat(action.messages) : action.messages,
+          fetching: false
+        }
+      else
+        return state        // Active chatbox has changed since these messages were fetched
     case SUBMIT_CHAT_MESSAGE:
       return {
         ...state,
