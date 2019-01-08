@@ -2,7 +2,7 @@ import React from 'react';
 import ChatMessageList from './ChatMessageList';
 import ChatMessageEntryBox from './ChatMessageEntryBox';
 import { withStyles } from '@material-ui/core/styles';
-import { greet, respond } from '../scripts/chatbot';
+// import { greet, respond } from '../scripts/chatbot';
 
 
 const styles = theme => ({
@@ -44,7 +44,8 @@ class ChatBox extends React.Component {
   }
 
   render() {
-    const {chatMessages=[], messageText='', onChangeHandler, onTextKeyPress, submitBotMessage} = this.props
+    // const {chatMessages=[], messageText='', onChangeHandler, onTextKeyPress, submitBotMessage} = this.props
+    const {chatMessages=[], messageText='', onChangeHandler, onTextKeyPress} = this.props
 
     // if (chatMessages.length === 0) {
     //   greet(message => submitBotMessage(message))
