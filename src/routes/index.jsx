@@ -1,10 +1,10 @@
 import Workspace from "views/Workspace/Workspace.jsx";
 import Onboarding from "views/Onboarding/Onboarding.jsx";
-import About from "views/about/About.jsx";
-import Contact from "views/about/Contact.jsx";
-import FAQ from "views/about/FAQ.jsx";
-import Terms from "views/legal/Terms.jsx";
-import Privacy from "views/legal/Privacy.jsx";
+import About from "views/About/About.jsx";
+import Contact from "views/About/Contact.jsx";
+import FAQ from "views/About/FAQ.jsx";
+import Terms from "views/Legal/Terms.jsx";
+import Privacy from "views/Legal/Privacy.jsx";
 
 export default [
 
