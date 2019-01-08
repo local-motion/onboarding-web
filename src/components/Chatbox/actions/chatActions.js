@@ -47,11 +47,11 @@ export const fetchChatMessages = (reload=false) => {
       var url;
       if (lastMessageId === null) {
         console.log('fetching chat messages for ' + chatboxId)
-        url = 'http://localhost:8086/api/chatbox/' + chatboxId
+        url = (getState().environmentProperties.api.chatbox + "/") + chatboxId
       }
       else {
         console.log('fetching chat messages for ' + chatboxId + ' since ' + lastMessageId)
-        url = 'http://localhost:8086/api/chatbox/' + chatboxId + "?since=" + lastMessageId
+        url = (getState().environmentProperties.api.chatbox  + "/") + chatboxId + "?since=" + lastMessageId
       }
 
 
@@ -98,13 +98,12 @@ export function postChatMessage(text) {
 
     const chatMessage = {
       messageId: uuid(),
-      author: 'Dimitri',
       text: getState().chat.editText
     }
 
     dispatch({type: POSTED_MESSAGE})
 
-    return fetch('http://localhost:8086/api/chatbox/' + chatboxId, {
+    return fetch(getState().environmentProperties.api.chatbox + '/' + chatboxId, {
         method: 'POST',
         body: JSON.stringify(chatMessage),
         headers: {
