@@ -28,6 +28,11 @@ import JForgotPasswordReset from "./auth/JForgotPasswordReset";
 
 import CookieConsent from "react-cookie-consent";
 
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk';
+import rootReducer from './RootReducer';
+import { publishEnvironment } from "./GlobalActions";
 
 const environments = {
     "techoverflow-ta.aws.abnamro.org": {
@@ -42,7 +47,8 @@ const environments = {
             }
         },
         api: {
-            onboarding: "https://techoverflow-ta.aws.abnamro.org/api/graphql"
+            onboarding: "https://techoverflow-ta.aws.abnamro.org/api/graphql",
+            chatbox: "https://techoverflow-ta.aws.abnamro.org/api/chatbox",
         }
     },
     "techoverflow-d.aws.nl.eu.abnamro.com": {
@@ -57,7 +63,8 @@ const environments = {
             }
         },
         api: {
-            onboarding: "https://techoverflow-d.aws.nl.eu.abnamro.com/api/graphql"
+            onboarding: "https://techoverflow-d.aws.nl.eu.abnamro.com/api/graphql",
+            chatbox: "https://techoverflow-d.aws.nl.eu.abnamro.com/api/chatbox",
         }
     },
     "localhost": {
@@ -72,7 +79,8 @@ const environments = {
             }
         },
         api: {
-            onboarding: "http://localhost:8086/api/graphql"
+            onboarding: "http://localhost:8086/api/graphql",
+            chatbox: "http://localhost:8086/api/chatbox",
         }
     }
 };
@@ -211,8 +219,11 @@ const SecuredApp = withAuthenticator(App, false, [
     <JConfirmSignUp/>,
 ]);
 
+const store = createStore(rootReducer, applyMiddleware(thunk))
+store.dispatch(publishEnvironment(settings))
+
 const Wrapped = [
-    <SecuredApp className={"secure-app"}/>
+    <Provider store={store}><SecuredApp className={"secure-app"}/></Provider>
 ];
 
 ReactDOM.render(

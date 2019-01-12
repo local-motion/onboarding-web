@@ -17,6 +17,7 @@ import PlaygroundManagers from "./PlaygroundManagers";
 import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import Amplify from "aws-amplify";
+import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 import AlertDialog from "../../AlertDialog.jsx";
 
 
@@ -104,6 +105,7 @@ class Dashboard extends React.Component {
                         }
                     </GridItem>
                 </GridContainer>
+                <PlaygroundChatBox/>
             </div>
         );
     }
