@@ -20,7 +20,7 @@ class PlaygroundStatistic extends React.Component {
         return (
             <div className={"statistic-container " + name}>
                 <h2 className={classes.statTitle + " grunge-title"}>
-                    <span className={classes.stat}>{playground[stat]}</span>Dimitri zegt
+                    <span className={classes.stat}>{playground[stat]}</span>
                     {t(
                         `onboarding.playground.${stat}.title`
                     )}
