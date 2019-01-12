@@ -1,7 +1,6 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import ErrorDialog from '../../ErrorDialog.jsx';
 // core components
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -11,6 +10,7 @@ import SimpleCard from "components/CustomCard/Card.jsx";
 import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import SocialMedia from "../forms/SocialMedia.jsx";
+import AlertDialog from "../../AlertDialog.jsx";
 
 const SET_SMOKEFREE = gql`
   mutation DecideToBecomeSmokeFree($input: DecideToBecomeSmokeFreeCommand!) {
@@ -61,7 +61,7 @@ class PhasePrepare extends React.Component {
                                         }}
                                     />
                                     {loading && <p>Loading...</p>}
-                                    {error && <ErrorDialog error={error}/>}
+                                    {error && <AlertDialog apolloError={error}/>}
                                 </div>
                             )}
                         </Mutation>

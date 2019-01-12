@@ -17,7 +17,7 @@ import PlaygroundManagers from "./PlaygroundManagers";
 import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import Amplify from "aws-amplify";
-import ErrorDialog from "../../ErrorDialog";
+import AlertDialog from "../../AlertDialog.jsx";
 
 
 const SET_MANAGER = gql`
@@ -97,7 +97,7 @@ class Dashboard extends React.Component {
                                             }}
                                         />
                                         {loading && <p>Loading...</p>}
-                                        {error && <ErrorDialog error={error}/>}
+                                        {error && <AlertDialog apolloError={error}/>}
                                     </div>
                                 )}
                             </Mutation>

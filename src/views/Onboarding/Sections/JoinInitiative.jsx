@@ -10,7 +10,7 @@ import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/p
 import {withNamespaces} from "react-i18next";
 import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
-import ErrorDialog from "../../ErrorDialog";
+import AlertDialog from "../../AlertDialog.jsx";
 
 
 const JOIN_INITIATIVE = gql`
@@ -49,7 +49,7 @@ class JoinInitiative extends React.Component {
                             <span>Maak deze speeltuin rookvrij</span>
                         </Button>
                         {loading && <p>Loading...</p>}
-                        {error && <ErrorDialog error={error}/>}
+                        {error && <AlertDialog apolloError={error}/>}
                     </div>
                 )}
             </Mutation>
