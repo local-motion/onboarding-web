@@ -44,14 +44,14 @@ export default class JConfirmSignUp extends Component {
             this.setState(
                 {validateCode: "validated", error: ''}
                 , () => {
-                    if (this.state.filledUsername) {
+                    if (this.props.authData || this.state.filledUsername) {
                         this.setState({filled: true});
                     }
                 }) :
             this.setState({validateCode: "unvalidated", error: 'De code bestaat uit 6 cijfers'});
 
 
-        if (this.state.filledUsername && this.state.validateCode === "validated") {
+        if ((this.props.authData || this.state.filledUsername) && this.state.validateCode === "validated") {
             this.setState({filled: true});
         }
 
