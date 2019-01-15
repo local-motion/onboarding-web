@@ -192,8 +192,8 @@ export default class JSignUp extends Component {
                                         value="accepted"
                                     />
                                 }
-                                label={["Ik ga akkoord met de ", <a href={"/terms"}>algemene voorwaarden</a>, " en de ",
-                                    <a href={"/privacy"}>privacy verklaring</a>]}
+                                label={["Ik ga akkoord met de ", <a href={"/terms"}>Gebruiksvoorwaarden</a>, " en de ",
+                                    <a href={"/privacy"}>Privacyverklaring</a>]}
                             />
 
                             <div>

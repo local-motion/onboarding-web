@@ -34,7 +34,7 @@ function HeaderLinks({...props}) {
                         buttonIcon={Menu}
                         dropdownList={[
                             <Link to="/" className={classes.dropdownLink}>
-                                Playgrounds in the Netherlands
+                                Overzicht van speeltuinen
                             </Link>,
 
                         ]}
@@ -42,7 +42,7 @@ function HeaderLinks({...props}) {
                 </Hidden>
                 <Hidden mdUp implementation="css">
                     <Link to="/" className={classes.dropdownLink}>
-                        Playgrounds in the Netherlands
+                        Overzicht van speeltuinen
                     </Link>
                 </Hidden>
             </ListItem>
@@ -57,7 +57,7 @@ function HeaderLinks({...props}) {
                         }}
                         buttonIcon={AccountCircle}
                         dropdownList={[
-                            <JSignOut/>
+                            <JSignOut/>, 'Uitschrijven'
                         ]}
                     />
                 </Hidden>
