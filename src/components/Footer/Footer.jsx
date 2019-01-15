@@ -33,7 +33,7 @@ function Footer({...props}) {
                                 href="/about"
                                 className={classes.block}
                             >
-                                Wie zijn wij
+                                Over rookvrij spelen
                             </a>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
@@ -41,7 +41,7 @@ function Footer({...props}) {
                                 href="/terms"
                                 className={classes.block}
                             >
-                                Algemene voorwaarden
+                                Gebruiksvoorwaarden
                             </a>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
@@ -49,7 +49,15 @@ function Footer({...props}) {
                                 href="/privacy"
                                 className={classes.block}
                             >
-                                Privacy statement
+                                Privacy
+                            </a>
+                        </ListItem>
+                        <ListItem className={classes.inlineBlock}>
+                            <a
+                                href="/faq"
+                                className={classes.block}
+                            >
+                                Veelgestelde vragen
                             </a>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>

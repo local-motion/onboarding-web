@@ -34,16 +34,66 @@ class Terms extends React.Component {
                 <div className={classes.mainDown}>
                   <GridContainer className={"grid-container"}>
                     <GridItem xs={12} sm={12} md={6} className={classes.container}>
-                        <h2>Terms of use</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar metus et turpis dictum, at lobortis quam sagittis. Sed finibus felis sed pulvinar gravida. Nullam eu placerat tellus, nec placerat est. Donec lacinia tortor eros, vitae varius dui placerat quis. Pellentesque eu metus ligula. Praesent venenatis mollis libero id volutpat. Praesent sit amet convallis ligula. Aliquam eget scelerisque sapien.</p>
 
-                        <p>Donec lacinia massa sit amet vestibulum interdum. Ut sit amet nisi massa. Vestibulum elit nulla, ornare ut dapibus auctor, lobortis quis libero. Aenean quis efficitur orci. Ut ut eros quam. Morbi eget efficitur orci. Vestibulum felis sem, gravida et consequat et, convallis non est. In ipsum lacus, interdum nec tincidunt eget, viverra id nisi. Duis blandit vitae quam et ornare. Aliquam sed dolor ullamcorper, laoreet dui eu, gravida nibh. Suspendisse imperdiet, neque quis semper pulvinar, felis nisi bibendum nisi, non elementum diam turpis quis ipsum. Aenean sollicitudin eleifend ullamcorper. Mauris iaculis aliquet orci, non auctor ipsum finibus id. Morbi faucibus, est in fringilla luctus, nisi orci scelerisque ipsum, ut gravida odio felis a mauris. Nunc ac lacinia magna.</p>
+                        <h2>Gebruiksvoorwaarden Platform RookvrijSpelen.nl</h2>
+<p>Aan het gebruik van dit platform zijn onderstaande voorwaarden verbonden. Door het Platform Rookvrij Spelen te gebruiken, ga je hiermee akkoord.</p>
 
-                        <p>Curabitur commodo convallis ultrices. Etiam elit sem, hendrerit at congue ultrices, gravida non lorem. Nulla commodo suscipit est. Duis dictum odio nec volutpat ullamcorper. Quisque dignissim justo at purus interdum auctor. Suspendisse finibus accumsan elit, quis tempor urna egestas id. Pellentesque placerat, quam non convallis luctus, quam dolor pellentesque turpis, ultrices vehicula velit velit ut magna. Mauris ac eros commodo, euismod nibh consectetur, porttitor nibh. Phasellus quis nunc eget velit elementum facilisis. Nam convallis mi a metus vestibulum, sed vulputate velit imperdiet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+<h3>Toepasselijkheid</h3>
+<p>Deze Gebruiksvoorwaarden gelden tussen jou als bezoeker en/of gebruiker van het Platform en ABN AMRO N.V. en het Longfonds als gezamenlijke eigenaren van het Platform. Door gebruik van het Platform ga je akkoord met deze Gebruiksvoorwaarden.</p>
+<p>Deze Gebruiksvoorwaarden gelden wanneer je het Platform bezoekt en wanneer je reviews, klachten, reacties, berichten, meldingen, vragen of andere bijdragen op of via het Platform plaatst.</p>
 
-                        <p>Nunc aliquam leo eget ligula imperdiet pretium. In commodo tortor nec metus bibendum, nec gravida enim condimentum. Duis enim felis, maximus a maximus non, mollis ac nulla. Aliquam nec mauris dui. Curabitur vulputate eros ut pharetra sagittis. Ut id arcu ut arcu imperdiet sollicitudin id sed ipsum. Donec lacus nulla, commodo in eros quis, venenatis placerat tortor. Pellentesque faucibus sed leo et efficitur. Nam eleifend orci a semper rutrum. Curabitur in tempor purus. Duis ullamcorper ut felis in gravida.</p>
+<h3>Aanmelding en Registratie</h3>
+<p>Bij aanmelding op het Platform kies je een strikt persoonlijke inlognaam en wachtwoord en geef je jouw e-mailadres door voor toegang tot het Platform. Het is belangrijk om de toegang tot deze gegevens af te schermen voor onbevoegden. In het bijzonder dien je jouw wachtwoord strikt geheim te houden. Wij gaan ervan uit dat alles dat gebeurt vanaf jouw account na aanmelding met jouw gebruikersnaam en wachtwoord, onder jouw leiding en toezicht gebeurt. Je bent dus aansprakelijk voor al deze handelingen, behalve in de overmachtssituatie waarin onbevoegden buiten jou om toegang hebben gekregen tot je wachtwoord. </p>
+<p>Als je het vermoeden hebt dat jouw inloggegevens bij een onbevoegde derde bekend (kunnen) zijn, wijzig dan per direct jouw wachtwoord. Dit kun je doen door in te loggen op het Platform en vervolgens in het menu te kiezen voor de optie “wachtwoord wijzigen”.  Stel ons daarnaast zo spoedig mogelijk op de hoogte. Dit kan middels de contact link die onderaan elk scherm in het Platform aanwezig is.</p>
 
-                        <p>Quisque placerat enim eu enim semper finibus. Sed porttitor vehicula pharetra. Curabitur porttitor sapien at faucibus faucibus. Maecenas leo neque, consectetur ac urna commodo, consequat rhoncus ligula. Vivamus imperdiet enim nec est rhoncus fermentum. Pellentesque pretium ac erat at viverra. Morbi est eros, accumsan in viverra euismod, finibus vitae ipsum. Integer posuere, nulla eu egestas ultrices, diam lorem congue ante, quis mollis turpis mauris ac ante. Pellentesque convallis, tellus ut efficitur rutrum, ex mi molestie turpis, ac condimentum nisi elit eget diam. Aenean nec aliquet diam. Duis mattis tellus vel arcu efficitur, nec feugiat sem molestie. Vestibulum faucibus, justo sit amet semper elementum, dolor neque eleifend arcu, vel dapibus erat purus quis dolor. Curabitur tempus sed ex nec finibus.</p>
+<h3>Gedragsregels</h3>
+<p>Wanneer je gebruik maakt van het Platform, houd je dan aan onderstaande gedragsregels. Het is niet toegestaan het Platform te gebruiken op een manier die in strijd is met welke wet- en regelgeving dan ook.</p>
+<p>Daarnaast is het verboden via het Platform:
+<ul>
+<li>informatie te verspreiden of op te slaan die smadelijk, discriminerend, lasterlijk of racistisch is;</li>
+<li>informatie te verspreiden in strijd met enig intellectueel eigendomsrecht, of hyperlinks naar dergelijke informatie te plaatsen;</li>
+<li>informatie te verspreiden die erotisch of pornografisch is (ook indien deze op zich legaal is);</li>
+<li>onfatsoenlijk taalgebruik te gebruiken;</li>
+<li>de persoonlijke levenssfeer van derden te schenden, bijvoorbeeld door het zonder toestemming of noodzaak verspreiden van persoonsgegevens van andere personen of het (herhaaldelijk) lastigvallen van andere personen met door dezen ongewenste (commerciële) communicatie;</li>
+<li>anderen behulpzaam te zijn bij het schenden van de rechten van derden of bij onrechtmatig handelen, zoals door linken naar hacktools of uitleg over computercriminaliteit die kennelijk is bedoeld om de lezer in staat te stellen de omschreven criminele gedragingen te (doen) plegen en niet om zich daartegen te kunnen verdedigen;</li>
+<li>en verder al datgene te doen wat in strijd is met de <a href='https://nl.wikipedia.org/wiki/Nettiquette'>nettiquette</a>.</li>
+</ul>
+</p>
+
+<p>Bij constatering van een overtreding van deze Gebruiksvoorwaarden, hebben wij het recht om bijdragen te redigeren of te verwijderen die (vermoedelijk) in strijd zijn met de letter of de geest van deze gebruiksvoorwaarden. Wij kunnen deelnemers die deze gebruikersvoorwaarden overtreden, uitsluiten van verder gebruik van het Platform.</p>
+<p>Indien naar ons oordeel hinder, schade of een ander gevaar ontstaat voor de computersystemen of het netwerk en/of van de dienstverlening via internet - in het bijzonder door overmatig verzenden van e-mail of andere gegevens, lekken van persoonsgegevens of activiteiten van virussen, Trojans en vergelijkbare software, - zijn wij gerechtigd alle maatregelen te nemen die wij redelijkerwijs nodig achten om dit gevaar af te wenden dan wel te voorkomen.</p>
+<p>Jij bent verantwoordelijk voor de content die je plaatst. Je vrijwaart ons dan ook van alle claims van derden die hiermee in verband staan.</p>
+<p>Denk eraan dat wij ook aangifte kunnen doen van strafbare feiten.</p>
+<p>Wil je bezwaar aantekenen tegen geplaatste teksten, andere uitingen of via het Platform verzonden berichten van andere gebruikers, dan kun je gebruik maken van de feedback knop die rechtsonder op elk scherm in het Platform aanwezig is. Je bezwaar wordt behandeld door een moderator van het Longfonds. Bezwaren worden in beginsel binnen 5 dagen in behandeling genomen. We streven ernaar ieder bezwaar binnen 30 dagen af te handelen. Omschrijf en onderbouw je bezwaar bij voorkeur met kopie van de bijdrage.</p>
+
+<h3>(Her)gebruik van bijdragen</h3>
+<p>Zonder onze voorafgaande toestemming is het niet toegestaan om informatie op of bijdragen aan het Platform te kopiëren, bewerken of publiceren, of samenvattingen of overzichten van de bijdragen aan het Platform te publiceren.</p>
+
+<h3>Aansprakelijkheid</h3>
+<p>Je bent zelf verantwoordelijk voor deelname aan het Platform en daaruit voortvloeiende acties. Je bent aansprakelijk voor alle gevolgen van jouw activiteiten op of naar aanleiding van gebruik van het Platform. Ook ben je aansprakelijk voor gevolgen door het onbevoegd gebruik van jouw inloggegevens wanneer je daar niet tijdig melding van hebt gemaakt, zoals in deze Gebruiksvoorwaarden beschreven.</p>
+<p>Je vrijwaart ons van aansprakelijkheid voor enige schade die je ondervindt door gebruik van (de informatie op) het Platform en je aanvaardt de verplichting tot schadeloosstelling van ABN AMRO en het Longfonds, als deze afzonderlijk of gezamenlijk schade lijden, doordat je je niet houdt aan hetgeen beschreven in deze gebruiksvoorwaarden.</p>
+<p>Wij zijn niet aansprakelijk voor een (tijdelijke) onmogelijkheid om het Platform te gebruiken.</p>
+
+<h3>Privacy</h3>
+<p>Informatie over de wijze waarop wij omgaan met de door jou verstrekte persoonsgegevens is vastgelegd in onze Privacyverklaring.</p>
+
+<h3>Opzeggen account</h3>
+<p>Je kunt jouw account op het platform verwijderen door gebruik te maken van de uitschrijven-optie in het profielmenu.</p>
+
+<h3>Toepasselijk recht</h3>
+<p>Deze Gebruiksvoorwaarden vallen onder Nederlands recht.</p>
+
+<h3>Wijzigingen</h3>
+<p>We behoudens ons het recht voor om wijzigingen in deze Gebruiksvoorwaarden aan te brengen.</p>
+
+<h3>Contact</h3>
+<p>Voor vragen over deze gebruiksvoorwaarden kun je contact met ons opnemen via de <a href='/contact'>contact</a> link die onderaan elk scherm in het Platform aanwezig is.</p>
+ 
+
+
+
+
+
                     </GridItem>
                   </GridContainer>
                 </div>

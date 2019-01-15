@@ -34,16 +34,26 @@ class About extends React.Component {
                 <div className={classes.mainDown}>
                   <GridContainer className={"grid-container"}>
                     <GridItem xs={12} sm={12} md={6} className={classes.container}>
-                        <h2>Over ons</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar metus et turpis dictum, at lobortis quam sagittis. Sed finibus felis sed pulvinar gravida. Nullam eu placerat tellus, nec placerat est. Donec lacinia tortor eros, vitae varius dui placerat quis. Pellentesque eu metus ligula. Praesent venenatis mollis libero id volutpat. Praesent sit amet convallis ligula. Aliquam eget scelerisque sapien.</p>
+                        <h2>Over Rookvrij Spelen</h2>
 
-                        <p>Donec lacinia massa sit amet vestibulum interdum. Ut sit amet nisi massa. Vestibulum elit nulla, ornare ut dapibus auctor, lobortis quis libero. Aenean quis efficitur orci. Ut ut eros quam. Morbi eget efficitur orci. Vestibulum felis sem, gravida et consequat et, convallis non est. In ipsum lacus, interdum nec tincidunt eget, viverra id nisi. Duis blandit vitae quam et ornare. Aliquam sed dolor ullamcorper, laoreet dui eu, gravida nibh. Suspendisse imperdiet, neque quis semper pulvinar, felis nisi bibendum nisi, non elementum diam turpis quis ipsum. Aenean sollicitudin eleifend ullamcorper. Mauris iaculis aliquet orci, non auctor ipsum finibus id. Morbi faucibus, est in fringilla luctus, nisi orci scelerisque ipsum, ut gravida odio felis a mauris. Nunc ac lacinia magna.</p>
+<p>Dit platform is een initiatief van het Longfonds en ABN AMRO. Met Rookvrij Spelen willen we je helpen om een speeltuin bij jou in de buurt rookvrij te maken. Dat doen we door je handige tools & tips aan te bieden. Door je in contact te brengen met het bestuur van de speeltuin én met buurtgenoten die je willen helpen.<br />
+Hoe meer mensen een speeltuin rookvrij willen hebben, hoe groter de kans dat het bestuur van de speeltuinvereniging dit onderwerp op de agenda zet en hier mee aan de slag gaat.</p>
 
-                        <p>Curabitur commodo convallis ultrices. Etiam elit sem, hendrerit at congue ultrices, gravida non lorem. Nulla commodo suscipit est. Duis dictum odio nec volutpat ullamcorper. Quisque dignissim justo at purus interdum auctor. Suspendisse finibus accumsan elit, quis tempor urna egestas id. Pellentesque placerat, quam non convallis luctus, quam dolor pellentesque turpis, ultrices vehicula velit velit ut magna. Mauris ac eros commodo, euismod nibh consectetur, porttitor nibh. Phasellus quis nunc eget velit elementum facilisis. Nam convallis mi a metus vestibulum, sed vulputate velit imperdiet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+<h3>Op weg naar een Rookvrije Generatie</h3>
+<p>Het rookvrij maken van speelplekken maakt deel uit van de beweging ‘op weg naar een Rookvrije Generatie’. Deze beweging is een gezamenlijk initiatief van het Longfonds, KWF Kankerbestrijding en de Hartstichting. In elke fase van het opgroeien willen we kinderen beschermen tegen tabaksrook en de verleiding om te gaan roken. Zodat ze opgroeien als een generatie die zélf kan en zal kiezen voor een gezonde, rookvrije toekomst.</p>
 
-                        <p>Nunc aliquam leo eget ligula imperdiet pretium. In commodo tortor nec metus bibendum, nec gravida enim condimentum. Duis enim felis, maximus a maximus non, mollis ac nulla. Aliquam nec mauris dui. Curabitur vulputate eros ut pharetra sagittis. Ut id arcu ut arcu imperdiet sollicitudin id sed ipsum. Donec lacus nulla, commodo in eros quis, venenatis placerat tortor. Pellentesque faucibus sed leo et efficitur. Nam eleifend orci a semper rutrum. Curabitur in tempor purus. Duis ullamcorper ut felis in gravida.</p>
+<h3>Waarom is het zo belangrijk dat kinderen rookvrij kunnen spelen?</h3>
+<p>
+Iedereen wil dat kinderen spelen in een gezonde en veilige omgeving. Jonge longen zijn kwetsbaar. Zien roken, doet roken. Als kinderen anderen zien roken, lijkt dat normaal en misschien zelfs aantrekkelijk. Een rookvrije speeltuin geeft het goede voorbeeld aan kinderen. 
+<ul>
+<li>Roken is de belangrijkste te voorkomen oorzaak van ziekte en sterfte in Nederland.</li>
+<li>Roken is erg verslavend. Kinderen zijn extra gevoelig voor verslaving: hoe jonger je begint met roken, hoe lastiger het is om te stoppen.</li>
+<li>Roken begint vaak op jonge leeftijd. Twee derde van rokers is begonnen voor zijn 18e.</li>
+<li>Iedere week raken honderden kinderen verslaafd aan roken.</li>
+</ul>
+<b>Wil je dat kinderen rookvrij kunnen spelen? Zet dan hier de eerste stap!</b>
+</p>
 
-                        <p>Quisque placerat enim eu enim semper finibus. Sed porttitor vehicula pharetra. Curabitur porttitor sapien at faucibus faucibus. Maecenas leo neque, consectetur ac urna commodo, consequat rhoncus ligula. Vivamus imperdiet enim nec est rhoncus fermentum. Pellentesque pretium ac erat at viverra. Morbi est eros, accumsan in viverra euismod, finibus vitae ipsum. Integer posuere, nulla eu egestas ultrices, diam lorem congue ante, quis mollis turpis mauris ac ante. Pellentesque convallis, tellus ut efficitur rutrum, ex mi molestie turpis, ac condimentum nisi elit eget diam. Aenean nec aliquet diam. Duis mattis tellus vel arcu efficitur, nec feugiat sem molestie. Vestibulum faucibus, justo sit amet semper elementum, dolor neque eleifend arcu, vel dapibus erat purus quis dolor. Curabitur tempus sed ex nec finibus.</p>
                     </GridItem>
                   </GridContainer>
                 </div>
