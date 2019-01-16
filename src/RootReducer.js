@@ -2,8 +2,9 @@ import chatReducer from "./components/Chatbox/reducers/ChatReducer";
 import { PUBLISH_ENVIRONMENT, PUBLISH_GRAPHQLCLIENT } from "./GlobalActions";
 import { errorReducer } from "./api/ErrorReducer";
 import { loadingReducer } from "./api/LoadingReducer";
+import playgroundReducer from "./components/Playground/PlaygroundReducer";
 
-const rootReducer = (state = {playgrounds: []}, action) => {
+const rootReducer = (state = {}, action) => {
   switch (action.type) {
     case PUBLISH_ENVIRONMENT:
       return {
@@ -15,18 +16,11 @@ const rootReducer = (state = {playgrounds: []}, action) => {
         ...state,
         graphQLClient: action.client
       }
-    case 'GET_PLAYGROUNDS_SUCCESS':
-      console.log("received playground data in reducer:")
-      console.log(action.payload)
-      return {
-        ...state,
-        playgrounds: action.payload.data.playgrounds,
-        loading:  loadingReducer(state.loading, action),
-      }
     default:
       return  ({
         ...state,
         chat:     chatReducer(state.chat, action),
+        playgrounds: playgroundReducer(state.playgrounds, action),
         loading:  loadingReducer(state.loading, action),
         error:    errorReducer(state.error, action),
         })

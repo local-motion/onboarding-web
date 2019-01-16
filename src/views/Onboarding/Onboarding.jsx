@@ -16,7 +16,7 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 
 import PlaygroundSearch from "./Sections/PlaygroundSearch";
-import PlaygroundMap, { PlaygroundMapII } from "./Sections/PlaygroundMap";
+import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
 import CallToAction from "./Sections/CallToAction";
 import gql from "graphql-tag";
@@ -119,7 +119,7 @@ class Onboarding extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={6} className={"playground-map-container"}>
                             <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange} playgrounds={playgrounds}/>
-                            <PlaygroundMapII
+                            <PlaygroundMap
                                 isMarkerShown
                                 viewOnly={true}
                                 onPlaygroundChange={this.handlePlaygroundChange}
