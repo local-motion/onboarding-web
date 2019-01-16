@@ -159,11 +159,13 @@ const App = class App extends React.Component {
         const client = new ApolloClient({
             defaultOptions: {
                 watchQuery: {
-                    fetchPolicy: 'cache-and-network',
+                    fetchPolicy: 'network-only',
+                    // fetchPolicy: 'cache-and-network',
                     errorPolicy: 'all',
                 },
                 query: {
-                    fetchPolicy: 'cache-and-network',
+                    fetchPolicy: 'network-only',
+                    // fetchPolicy: 'cache-and-network',
                     errorPolicy: 'all',
                 },
                 mutate: {

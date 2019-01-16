@@ -12,6 +12,9 @@ import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerC
 import markerGray from "assets/img/markers/playground_gray.png";
 import markerGreen from "assets/img/markers/playground_green.png";
 // import markerPink from "assets/img/markers/playground_pink.png";
+import { connect } from 'react-redux'
+import { fetchPlaygrounds } from "../../../GlobalActions";
+import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
 
 const MAP_API_KEY = "AIzaSyCsy6bZ_CvGdeFBOTSDkN0gPqVK9iKDfQ8";
 
@@ -67,10 +70,8 @@ const PlaygroundMap = compose(
         mapElement: <div style={{height: `100%`}}/>
     }),
     withStateHandlers(
-        () => ({
-            isMarkerShown: false,
-            newPin: null,
-        }), {
+        () => ({ isMarkerShown: false, newPin: null }), 
+        {
             onMapClick: () => (e) => ({
                 newPin: e.latLng,
                 isMarkerShown: true
@@ -145,3 +146,79 @@ const PlaygroundMap = compose(
 const PlaygroundMapWithData = withPlaygrounds(PlaygroundMap);
 
 export default withStyles(componentsStyle)(PlaygroundMapWithData);
+
+//
+
+class PlaygroundMap2 extends React.Component {
+
+    componentDidMount() {
+        this.props.fetchPlaygrounds()
+      }
+
+    render() {
+        return (<PlaygroundMap {...this.props} />)
+    }
+}
+
+const mapStateToProps = state => {
+    const loadingSelector = createLoadingSelector(['GET_PLAYGROUNDS']);
+    const errorMessageSelector = createErrorMessageSelector(['GET_PLAYGROUNDS']);
+
+    return {
+        playgroundsLoading: loadingSelector(state),
+        hasErrors: errorMessageSelector(state) !== '',
+        error: errorMessageSelector(state),
+        playgrounds: state.playgrounds.map(playground => {
+            return {
+                id: playground.id,
+                name: playground.name,
+                lat: playground.lat,
+                lng: playground.lng,
+                vol: playground.volunteerCount,
+                votes: playground.votes,
+                slug: playground.name + " Rookvrij",
+                zoom: 18,
+                default: false,
+            };
+        })
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchPlaygrounds:    () =>     dispatch(fetchPlaygrounds()),
+      }
+}
+
+export const PlaygroundMapII = connect(mapStateToProps, mapDispatchToProps)(PlaygroundMap2)
+
+
+
+// const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
+//     // `ownProps` are the props passed into `MyComponentWithData`
+//     // `data` is the result data (see above)
+//     props: ({ownProps, data}) => {
+//         if(data.loading) return {playgroundsLoading: true};
+//         if(data.error) {
+//             return {
+//                 hasErrors: true,
+//                 error: data.error.toString()
+//             };
+//         }
+//         return {
+//             playgrounds: data.playgrounds.map(playground => {
+//                 return {
+//                     id: playground.id,
+//                     name: playground.name,
+//                     lat: playground.lat,
+//                     lng: playground.lng,
+//                     vol: playground.volunteerCount,
+//                     votes: playground.votes,
+//                     slug: playground.name + " Rookvrij",
+//                     zoom: 18,
+//                     default: false,
+//                 };
+//             })
+//         };
+//     }
+// });
