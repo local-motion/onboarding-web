@@ -145,21 +145,21 @@ const App = class App extends React.Component {
             return "Login failed: " + (auth && auth.state);
         }
 
-        const errorLink = onError(apolloError => {
-            const graphQLErrors = apolloError.graphQLErrors;
-            const networkError = apolloError.networkError;
-            if (graphQLErrors) {
-                graphQLErrors.map(({ message, locations, path, extensions }) =>
-                    console.log(`[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(locations)}, Path: ${path}, Extensions: ${JSON.stringify(extensions)}`)
+        // const errorLink = onError(apolloError => {
+        //     const graphQLErrors = apolloError.graphQLErrors;
+        //     const networkError = apolloError.networkError;
+        //     if (graphQLErrors) {
+        //         graphQLErrors.map(({ message, locations, path, extensions }) =>
+        //             console.log(`[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(locations)}, Path: ${path}, Extensions: ${JSON.stringify(extensions)}`)
 
-                    // TODO: Consider using extensions.code === 'UNAUTHENTICATED' to trigger JWT refresh
-                );
-            }
+        //             // TODO: Consider using extensions.code === 'UNAUTHENTICATED' to trigger JWT refresh
+        //         );
+        //     }
 
-            if (networkError) {
-                console.log(`[Network error]: ${networkError}`);
-            }
-        });
+        //     if (networkError) {
+        //         console.log(`[Network error]: ${networkError}`);
+        //     }
+        // });
         const authLink = setContext(async (req, {headers}) => {
             let session = authData.getSignInUserSession();
             let idToken = session.getIdToken();
@@ -189,7 +189,7 @@ const App = class App extends React.Component {
                 },
             },
             link: ApolloLink.from([
-                errorLink,
+                // errorLink,
                 authLink,
                 httpLink
             ]),

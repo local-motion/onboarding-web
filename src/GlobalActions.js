@@ -1,8 +1,10 @@
-import gql from 'graphql-tag';
-
-
 export const PUBLISH_ENVIRONMENT = 'PUBLISH_ENVIRONMENT'
 export const PUBLISH_GRAPHQLCLIENT = 'PUBLISH_GRAPHQLCLIENT'
+
+export const REQUEST_POSTFIX = '_REQUEST'
+export const SUCCESS_POSTFIX = '_SUCCESS'
+export const FAILURE_POSTFIX = '_FAILURE'
+
 
 export const publishEnvironment = environmentProperties => (
     {type: PUBLISH_ENVIRONMENT, environmentProperties}
@@ -13,35 +15,31 @@ export const publishGraphQLClient = client => (
   )
 
 
-  const GET_PLAYGROUNDS = gql`
-  {
-    playgrounds {
-      id
-      name
-      lng
-      lat
-      status
-      volunteerCount
-      votes
-    }
-  }
-`;
-
-
-
-
-
-
-export const fetchPlaygrounds = () => {
+export const fetchGraphQL = (baseActionIdentifier, graphQLQuery) => {
   return (dispatch, getState) => {
       const graphQLClient = getState().graphQLClient;
-      dispatch({type: 'GET_PLAYGROUNDS_REQUEST'})
+      dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
 
       return graphQLClient.query({
-        query: GET_PLAYGROUNDS
+        query: graphQLQuery
       })
-        .then(data => dispatch({ type: 'GET_PLAYGROUNDS_SUCCESS', payload: data }))
-        .catch(error => dispatch({ type: 'GET_PLAYGROUNDS_FAILURE', payload: error, error: true }));
+        .then(data => dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data }))
+        .catch(error => dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, error: true }));
+      
+    }
+  }
+
+export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables) => {
+  return (dispatch, getState) => {
+      const graphQLClient = getState().graphQLClient;
+      dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
+
+      return graphQLClient.mutate({
+        mutation: graphQLMutation,
+        variables
+      })
+        .then(data => dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data }))
+        .catch(error => dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, error: true }));
       
     }
   }
