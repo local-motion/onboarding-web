@@ -1,5 +1,5 @@
 import chatReducer from "components/Chatbox/reducers/ChatReducer";
-import { PUBLISH_ENVIRONMENT } from "GlobalActions";
+import { PUBLISH_ENVIRONMENT, PUBLISH_GRAPHQLCLIENT } from "GlobalActions";
 
 const rootReducer = (state = {}, action) => {
   console.log("root reducer for: " + JSON.stringify(action))
@@ -9,6 +9,11 @@ const rootReducer = (state = {}, action) => {
       return {
         ...state,
         environmentProperties: action.environmentProperties
+      }
+    case PUBLISH_GRAPHQLCLIENT:
+      return {
+        ...state,
+        graphQLClient: action.client
       }
     default:
       return  ({

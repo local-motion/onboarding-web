@@ -32,7 +32,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
 import rootReducer from './RootReducer';
-import { publishEnvironment } from "./GlobalActions";
+import { publishEnvironment, publishGraphQLClient } from "./GlobalActions";
 
 const environments = {
     "techoverflow-p.aws.abnamro.org": {
@@ -129,6 +129,10 @@ Amplify.configure({
     }
 });
 
+// Set up the Redux store
+const store = createStore(rootReducer, applyMiddleware(thunk))
+store.dispatch(publishEnvironment(settings))
+
 let hist = createBrowserHistory();
 const rootEl = document.querySelector("#root");
 
@@ -191,6 +195,8 @@ const App = class App extends React.Component {
             connectToDevTools: true,
         });
 
+        store.dispatch(publishGraphQLClient(client))            // Register the graphQL client in the global state
+
         return (
             <div>
                 <ApolloProvider client={client}>
@@ -211,7 +217,7 @@ const App = class App extends React.Component {
                 <CookieConsent
                     location="bottom"
                     buttonText="Accepteren"
-                    cookieName="myAwesomeCookieName2"
+                    cookieName="CookiesAccepted"
                     style={{background: "#2B373B"}}
                     buttonStyle={{color: "#4e503b", fontSize: "13px"}}
                     expires={150}
@@ -235,8 +241,7 @@ const SecuredApp = withAuthenticator(App, false, [
     <JConfirmSignUp/>,
 ]);
 
-const store = createStore(rootReducer, applyMiddleware(thunk))
-store.dispatch(publishEnvironment(settings))
+
 
 const Wrapped = [
     <Provider store={store}><SecuredApp className={"secure-app"}/></Provider>
