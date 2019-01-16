@@ -41,6 +41,7 @@ class JoinInitiative extends React.Component {
                     <div>
                         <Button
                             className={"btn btn-highlight pr-25 pull-left"}
+                            disabled={loading}
                             onClick={(/*event*/) =>
                                 joinInitiative({variables: {input: initiativeInput}})
                             }
@@ -48,7 +49,6 @@ class JoinInitiative extends React.Component {
                             <PersonAdd className={"mr-5"}/>
                             <span>Maak deze speeltuin rookvrij</span>
                         </Button>
-                        {loading && <p>Loading...</p>}
                         {error && <AlertDialog apolloError={error}/>}
                     </div>
                 )}
