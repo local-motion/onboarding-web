@@ -34,7 +34,7 @@
     "classnames": "2.2.6",
     "cognito-user-pool": "0.2.4",
     "graphql": "14.1.1",
-    "graphql-tag": "2.10.0",
+    "graphql-tag": "2.10.1",
     "history": "4.7.2",
     "i18next": "13.1.2",
     "i18next-browser-languagedetector": "2.2.4",
