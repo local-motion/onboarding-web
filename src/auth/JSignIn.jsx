@@ -123,7 +123,7 @@ export default class JSignIn extends Component {
                                 style={style.button}
                                 onClick={this.signIn}
                             >
-                                Sign In
+                                Inloggen
                             </Button>
                         </form>
                             <div style={style.links} className={"extra-info"}>
