@@ -45,7 +45,6 @@ const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
             error: data.error.toString()
         };
 
-        console.log(data.progress);
         return {
             progress: data.progress
         };

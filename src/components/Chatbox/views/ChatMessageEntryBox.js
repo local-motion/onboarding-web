@@ -7,7 +7,7 @@ const ChatMessageEntryBox = ({onSubmitClick, onTextChange, text}) => {
     return (
         <div>
         <TextField value={text} onChange={onTextChange} onKeyPress={onKeyPress}></TextField>
-        <Button variant="raised" color="primary" onClick={() => onSubmitClick()}>
+        <Button variant="contained" color="primary" onClick={() => onSubmitClick()}>
         Send
         </Button>
         </div>

@@ -39,14 +39,21 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
         variables
       })
         .then(data => {
-          console.log('graphQL mutation success:')
-          console.log(data)
-          dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, variables })
+          if (data.errors && data.errors[0]) {
+            console.log('graphQL mutation success with error:')
+            console.log(data)
+              dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: {code: data.errors[0].code, message: data.errors[0].niceMessage}})
+          }
+          else {
+            console.log('graphQL mutation success:')
+            console.log(data)
+              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, variables })
+          }
         })
         .catch(error => {
           console.log('graphQL mutation error:')
           console.log(error)
-          dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, error: true })
+          dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error})
         });
       
     }

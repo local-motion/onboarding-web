@@ -21,7 +21,7 @@ import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
 import CallToAction from "./Sections/CallToAction";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
-import FormDialog from "components/FormDialog/FormDialog.jsx";
+import AddPlayground from "./Sections/AddPlayground";
 
 const GET_PLAYGROUNDS = gql`
   {
@@ -126,7 +126,7 @@ class Onboarding extends React.Component {
                                 center={map.latlng}
                                 zoom={map.zoom}
                             />
-                            <FormDialog playgrounds={playgrounds}/>
+                            <AddPlayground playgrounds={playgrounds}/>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
                             <div>

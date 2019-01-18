@@ -7,7 +7,6 @@ import {I18nextProvider} from "react-i18next";
 import i18n from "./i18n";
 import {ApolloClient} from 'apollo-client';
 import {ApolloLink} from 'apollo-link';
-import {onError} from "apollo-link-error";
 import {HttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ApolloProvider} from 'react-apollo';
