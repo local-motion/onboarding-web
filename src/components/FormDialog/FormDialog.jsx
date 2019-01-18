@@ -14,6 +14,8 @@ import AddLocation from "@material-ui/icons/AddLocation";
 import PlaygroundMap from "../../views/Onboarding/Sections/PlaygroundMap";
 import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
+import { createInitiative } from '../Playground/PlaygroundActions';
+import { connect } from 'react-redux'
 
 const CREATE_INITIATIVE = gql`
     mutation CreateInitiative($input: CreateInitiativeInput!) {
@@ -172,6 +174,16 @@ class FormDialog extends React.Component {
                                 </Button>
                             )}
                         </Mutation>
+
+                        <Button
+                                    // onClick={() => this.props.createInitiative((this.state.name, this.state.lat, this.state.lng))}
+                                    onClick={() => this.props.createInitiative(playground.name, playground.lat, playground.lng)}
+                                    className={"btn btn-highlight" }
+                                    disabled={this.state.duplicate}
+                                >
+                                    <span>Voeg een speeltuin toe - redux</span>
+                        </Button>
+
                     </DialogActions>
                 </Dialog>
             </div>
@@ -179,6 +191,28 @@ class FormDialog extends React.Component {
     }
 }
 
+
+const mapStateToProps = state => {
+    // const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
+    // const errorMessageSelector = createErrorMessageSelector([GET_PLAYGROUNDS]);
+
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        createInitiative:    (name, lat, lng) =>     dispatch(createInitiative(name, lat, lng)),
+      }
+}
+
+const connectedFormDialog = connect(mapStateToProps, mapDispatchToProps)(FormDialog);
+
+
+
+
+// const formDialog =  withStyles(componentsStyle)(
+//     withNamespaces("translations")(FormDialog)
+// );
+
 export default withStyles(componentsStyle)(
-    withNamespaces("translations")(FormDialog)
+    withNamespaces("translations")(connectedFormDialog)
 );

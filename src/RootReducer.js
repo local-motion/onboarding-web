@@ -3,6 +3,7 @@ import { PUBLISH_ENVIRONMENT, PUBLISH_GRAPHQLCLIENT } from "./GlobalActions";
 import { errorReducer } from "./api/ErrorReducer";
 import { loadingReducer } from "./api/LoadingReducer";
 import playgroundReducer from "./components/Playground/PlaygroundReducer";
+import navigationReducer from "./navigation/NavigationReducer";
 
 const rootReducer = (state = {}, action) => {
   switch (action.type) {
@@ -21,6 +22,7 @@ const rootReducer = (state = {}, action) => {
         ...state,
         chat:     chatReducer(state.chat, action),
         playgrounds: playgroundReducer(state.playgrounds, action),
+        navigation: navigationReducer(state.navigation, action),
         loading:  loadingReducer(state.loading, action),
         error:    errorReducer(state.error, action),
         })

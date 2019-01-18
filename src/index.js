@@ -33,6 +33,7 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
 import rootReducer from './RootReducer';
 import { publishEnvironment, publishGraphQLClient } from "./GlobalActions";
+import NavigationListener from "./navigation/NavigationListener";
 
 const environments = {
     "techoverflow-p.aws.abnamro.org": {
@@ -131,6 +132,7 @@ Amplify.configure({
 
 // Set up the Redux store
 const store = createStore(rootReducer, applyMiddleware(thunk))
+store.subscribe((new NavigationListener(store)).onStateChange)
 store.dispatch(publishEnvironment(settings))
 
 let hist = createBrowserHistory();

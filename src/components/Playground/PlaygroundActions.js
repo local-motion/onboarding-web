@@ -23,14 +23,23 @@ const getPlaygroundsQuery = gql`
 const createInitiativeQuery = gql`
     mutation CreateInitiative($input: CreateInitiativeInput!) {
         createInitiative(input: $input) {
-            id
+          id
+          name
+          lng
+          lat
+          status
+          volunteerCount
+          votes
         }
     }
 `;
 
 export const fetchPlaygrounds = () => fetchGraphQL(GET_PLAYGROUNDS, getPlaygroundsQuery)
-export const createInitiative = (name, lat, lng) => 
-  mutationGraphQL(CREATE_INITIATIVE, createInitiativeQuery, {
+export const createInitiative = (name, lat, lng) => {
+
+  console.log("NAME: " + name + " lat: " + lat + " lng: " + lng)
+
+  return mutationGraphQL(CREATE_INITIATIVE, createInitiativeQuery, {
     input: {
       initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         // generate a uuid
@@ -44,6 +53,7 @@ export const createInitiative = (name, lat, lng) =>
       status: "not_started",
     }
   })
+}
     
     
 
