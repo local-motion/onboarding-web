@@ -36,9 +36,6 @@ const createInitiativeQuery = gql`
 
 export const fetchPlaygrounds = () => fetchGraphQL(GET_PLAYGROUNDS, getPlaygroundsQuery)
 export const createInitiative = (name, lat, lng) => {
-
-  console.log("NAME: " + name + " lat: " + lat + " lng: " + lng)
-
   return mutationGraphQL(CREATE_INITIATIVE, createInitiativeQuery, {
     input: {
       initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

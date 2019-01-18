@@ -11,20 +11,13 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 import withStyles from "@material-ui/core/styles/withStyles";
 import {withNamespaces} from "react-i18next";
 import AddLocation from "@material-ui/icons/AddLocation";
-import PlaygroundMap from "../../views/Onboarding/Sections/PlaygroundMap";
-import gql from "graphql-tag";
-import {Mutation} from "react-apollo";
-import { createInitiative } from '../Playground/PlaygroundActions';
+import PlaygroundMap from "./PlaygroundMap";
+import { createInitiative, CREATE_INITIATIVE } from '../../../components/Playground/PlaygroundActions';
 import { connect } from 'react-redux'
+import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
+import { clearError } from '../../../api/ApiActions';
 
-const CREATE_INITIATIVE = gql`
-    mutation CreateInitiative($input: CreateInitiativeInput!) {
-        createInitiative(input: $input) {
-            id
-        }
-    }
-`;
-class FormDialog extends React.Component {
+class AddPlayground extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,21 +28,24 @@ class FormDialog extends React.Component {
                 latlng: {lat: 52.092876, lng: 5.10448},
                 zoom: 8
             },
-            initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                // generate a uuid
-                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
-                return v.toString(16);
-            }),
-            type: "smokefree",
-            status: "not_started",
             open: false,
             duplicate: false,
             error: '',
         }
     };
 
+    isValidState = () => {
+        return !this.state.duplicate && !this.props.loading && this.state.name && this.state.lat && this.state.lng
+    }
+
+    submit = () => {
+        if (this.isValidState)
+            this.props.createInitiative(this.state.name, this.state.lat, this.state.lng)
+    }
+
     handleClickOpen = () => {
-        this.setState({open: true});
+        this.props.clearError()
+        this.setState({open: true, name: '', duplicate: false, error: '', lat: '', lng: ''});
     };
 
     handleClose = () => {
@@ -57,14 +53,14 @@ class FormDialog extends React.Component {
     };
 
     updateName = (eEvent) => {
-        this.duplicateCheck(eEvent.target.value);
-        this.setState({
-            name: eEvent.target.value
-        });
-
-    };
-    loadWorkspace = (eEvent) => {
-        window.location.href = `/workspace/${this.state.initiativeId}`;
+        if (eEvent.key === 'Enter')
+            this.submit()
+        else {
+            this.duplicateCheck(eEvent.target.value);
+            this.setState({
+                name: eEvent.target.value
+            });
+        }
     };
 
     duplicateCheck = (playground) =>{
@@ -80,22 +76,13 @@ class FormDialog extends React.Component {
                 error: ''
             });
         }
-        console.log(this.state);
     }
 
     handlePlaygroundChange(playground) {
-        console.log("handlePlaygroundChange: ", playground);
-        this.setState({
-            playground: playground,
-            map: {
-                latlng: {lat: playground.lat, lng: playground.lng},
-                zoom: 18
-            }
-        });
+        // Do nothing as we do not allow to select a playground in this view
     }
 
     handleCreatePlayground = (e) => {
-        console.log("handleCreatePlayground: ", e);
         this.setState({
             view: 'playground',
             lat: e.latLng.lat(),
@@ -105,17 +92,9 @@ class FormDialog extends React.Component {
 
 
     render() {
-
         const {classes} = this.props;
-        const {map, error} = this.state;
-        const playground = {
-            name: this.state.name,
-            lat: this.state.lat,
-            lng: this.state.lng,
-            initiativeId: this.state.initiativeId,
-            type: "smokefree",
-            status: "not_started"
-        };
+        const {map} = this.state;
+        const error = this.state.error || this.props.error
 
         return (
             <div className={"FormDialog-container"}>
@@ -160,28 +139,12 @@ class FormDialog extends React.Component {
                             Annuleren
                         </Button>
 
-                        <Mutation
-                            mutation={CREATE_INITIATIVE}
-                            update={this.loadWorkspace}
-                        >
-                            {(joinInitiative) => (
-                                <Button
-                                    onClick={() => joinInitiative({variables: {input: playground}})}
-                                    className={"btn btn-highlight" }
-                                    disabled={this.state.duplicate}
-                                >
-                                    <span>Voeg een speeltuin toe</span>
-                                </Button>
-                            )}
-                        </Mutation>
-
                         <Button
-                                    // onClick={() => this.props.createInitiative((this.state.name, this.state.lat, this.state.lng))}
-                                    onClick={() => this.props.createInitiative(playground.name, playground.lat, playground.lng)}
-                                    className={"btn btn-highlight" }
-                                    disabled={this.state.duplicate}
-                                >
-                                    <span>Voeg een speeltuin toe - redux</span>
+                                onClick={() => this.submit()}
+                                className={"btn btn-highlight" }
+                                disabled={!this.isValidState()}
+                            >
+                                    <span>Voeg een speeltuin toe</span>
                         </Button>
 
                     </DialogActions>
@@ -193,26 +156,21 @@ class FormDialog extends React.Component {
 
 
 const mapStateToProps = state => {
-    // const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
-    // const errorMessageSelector = createErrorMessageSelector([GET_PLAYGROUNDS]);
-
+    const loadingSelector = createLoadingSelector([CREATE_INITIATIVE]);
+    const errorMessageSelector = createErrorMessageSelector([CREATE_INITIATIVE]);
+    return {
+        loading: loadingSelector(state),
+        error: errorMessageSelector(state),
+    }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         createInitiative:    (name, lat, lng) =>     dispatch(createInitiative(name, lat, lng)),
+        clearError:          () =>                   dispatch(clearError(CREATE_INITIATIVE))
       }
 }
 
-const connectedFormDialog = connect(mapStateToProps, mapDispatchToProps)(FormDialog);
+const connectedAddPlayground = connect(mapStateToProps, mapDispatchToProps)(AddPlayground);
 
-
-
-
-// const formDialog =  withStyles(componentsStyle)(
-//     withNamespaces("translations")(FormDialog)
-// );
-
-export default withStyles(componentsStyle)(
-    withNamespaces("translations")(connectedFormDialog)
-);
+export default withStyles(componentsStyle)(withNamespaces("translations")(connectedAddPlayground));

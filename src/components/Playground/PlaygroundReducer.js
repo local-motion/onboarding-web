@@ -6,8 +6,6 @@ const playgroundReducer = (state = [], action) => {
     case GET_PLAYGROUNDS + SUCCESS_POSTFIX:
       return action.payload.data.playgrounds
     case CREATE_INITIATIVE + SUCCESS_POSTFIX:
-      console.log("reducer adding new playground:")
-      console.log(action.payload.data.createInitiative)
       return [action.payload.data.createInitiative, ...state]
     default:
       return state

@@ -9,8 +9,6 @@ const navigationReducer = (state = {location: ''}, action) => {
         location: action.location
       }
       case CREATE_INITIATIVE + SUCCESS_POSTFIX:
-      console.log('navigation reducer reducing:')
-      console.log(action)
       return {
         location: '/workspace/' + action.payload.data.createInitiative.id
       }
