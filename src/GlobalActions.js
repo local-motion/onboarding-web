@@ -38,7 +38,7 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
         mutation: graphQLMutation,
         variables
       })
-        .then(data => dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data }))
+        .then(data => dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, variables }))
         .catch(error => dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, error: true }));
       
     }
