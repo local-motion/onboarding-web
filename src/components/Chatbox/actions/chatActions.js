@@ -23,8 +23,6 @@ export const activateChatbox = chatboxId => {
   
     Auth.currentAuthenticatedUser().then(user => {
       const jwtToken = user.signInUserSession.idToken.jwtToken
-      console.log('active chatbox:  ' + chatboxId)
-      console.log("JWT token: " + jwtToken)
 
       dispatch({type: SET_ACTIVE_CHATBOX, chatboxId, jwtToken})
       dispatch(fetchChatMessages())

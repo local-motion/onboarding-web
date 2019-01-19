@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Redirect} from 'react-router-dom'
-import {createBrowserHistory} from "history";
+// import {createBrowserHistory} from "history";
 import {Route, Router, Switch} from "react-router-dom";
 import {I18nextProvider} from "react-i18next";
 import i18n from "./i18n";
@@ -33,6 +33,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './RootReducer';
 import { publishEnvironment, publishGraphQLClient } from "./GlobalActions";
 import NavigationListener from "./navigation/NavigationListener";
+import { history } from "./setup";
 
 const environments = {
     "techoverflow-p.aws.abnamro.org": {
@@ -134,7 +135,7 @@ const store = createStore(rootReducer, applyMiddleware(thunk))
 store.subscribe((new NavigationListener(store)).onStateChange)
 store.dispatch(publishEnvironment(settings))
 
-let hist = createBrowserHistory();
+// let hist = createBrowserHistory();
 const rootEl = document.querySelector("#root");
 
 const App = class App extends React.Component {
@@ -204,7 +205,7 @@ const App = class App extends React.Component {
             <div>
                 <ApolloProvider client={client}>
                     <I18nextProvider i18n={i18n}>
-                        <Router history={hist}>
+                        <Router history={history}>
                             <Switch>
                                 <Route exact path="/onboarding/logout" render={() => {
                                     console.log("User logged out, redirecting to map of the Netherlands.");

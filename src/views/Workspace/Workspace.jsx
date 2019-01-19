@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from 'react-redux'
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react components for routing our app without refresh
@@ -24,8 +25,10 @@ import PhaseSustain from "./Sections/PhaseSustain.jsx";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
-
-const playgroundId = window.location.pathname.split("/").pop();
+import { history } from "../../setup.js";
+import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
+import { GET_PLAYGROUND_DETAILS, fetchPlaygroundDetails } from "../../components/Playground/PlaygroundActions.js";
+import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 
 const GET_PROFILE = gql`
     {
@@ -36,38 +39,38 @@ const GET_PROFILE = gql`
     }
 `;
 
-const GET_PLAYGROUND = gql`
-    {
-        playground(id: "${playgroundId}") {
-            id
-            name
-            status
-            smokeFreeDate
-            volunteerCount
-            votes
-            managers {
-                id
-                username
-            }
-        }
-    }
-`;
+// const GET_PLAYGROUND = gql`
+//     {
+//         playground(id: "${playgroundId}") {
+//             id
+//             name
+//             status
+//             smokeFreeDate
+//             volunteerCount
+//             votes
+//             managers {
+//                 id
+//                 username
+//             }
+//         }
+//     }
+// `;
 
-const playgroundRequest = graphql(GET_PLAYGROUND, {
-    props: ({ownProps, data}) => {
-        if (data.loading) return {playgroundsLoading: true};
-        if (data.error) return {
-            hasErrors: true,
-            error: data.error.toString()
-        };
-        const playground = data.playground;
-        if (playground.smokeFreeDate) {
-            playground.smokeFreeDate = new Date(playground.smokeFreeDate);
-        }
-        console.log("Get playground: ", playground);
-        return {playground: playground};
-    }
-});
+// const playgroundRequest = graphql(GET_PLAYGROUND, {
+//     props: ({ownProps, data}) => {
+//         if (data.loading) return {playgroundsLoading: true};
+//         if (data.error) return {
+//             hasErrors: true,
+//             error: data.error.toString()
+//         };
+//         const playground = data.playground;
+//         if (playground.smokeFreeDate) {
+//             playground.smokeFreeDate = new Date(playground.smokeFreeDate);
+//         }
+//         console.log("Get playground: ", playground);
+//         return {playground: playground};
+//     }
+// });
 
 const profileRequest = graphql(GET_PROFILE, {
     props: ({ownProps, data}) => {
@@ -83,6 +86,9 @@ const profileRequest = graphql(GET_PROFILE, {
         };
     }
 });
+
+const getPlaygroundId = () => history.location.pathname.split("/").pop()
+
 
 class WorkspaceTemplate extends React.Component {
     state = {
@@ -132,9 +138,16 @@ class WorkspaceTemplate extends React.Component {
         }
     };
 
+    componentDidMount() {
+        this.props.fetchPlaygroundDetails()
+      }
+
+
     render() {
         const {phase} = this.state;
-        const {playgroundsLoading, profileLoading, classes, playground, ...rest} = this.props;
+        const {loading, profileLoading, classes, playground, ...rest} = this.props;
+        
+        const playgroundsLoading = this.props.loading;
 
         if (playgroundsLoading) {
             return "loading..";
@@ -219,5 +232,16 @@ class WorkspaceTemplate extends React.Component {
     }
 }
 
-const Workspace = profileRequest(playgroundRequest(WorkspaceTemplate));
-export default withStyles(componentsStyle)(Workspace);
+const mapStateToProps = state => ({
+    loading: isLoading(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
+    playground: getPlaygroundDetails(state, getPlaygroundId()),
+    error: getFetchError(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
+})
+
+const mapDispatchToProps = dispatch => ({
+    fetchPlaygroundDetails:    () =>     dispatch(fetchPlaygroundDetails(getPlaygroundId())),
+})
+
+const Workspace = profileRequest(WorkspaceTemplate);
+export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(Workspace));
+

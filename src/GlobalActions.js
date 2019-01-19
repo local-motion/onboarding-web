@@ -15,21 +15,22 @@ export const publishGraphQLClient = client => (
   )
 
 
-export const fetchGraphQL = (baseActionIdentifier, graphQLQuery) => {
+export const fetchGraphQL = (baseActionIdentifier, graphQLQuery, variables={}, fetchId) => {
   return (dispatch, getState) => {
       const graphQLClient = getState().graphQLClient;
-      dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
+      dispatch({type: baseActionIdentifier + REQUEST_POSTFIX, fetchId, timestamp: Date.now()})
 
       return graphQLClient.query({
-        query: graphQLQuery
+        query: graphQLQuery,
+        variables
       })
-        .then(data => dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data }))
-        .catch(error => dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, error: true }));
+        .then(data => dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, fetchId, timestamp: Date.now() }))
+        .catch(error => dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, fetchId,  timestamp: Date.now() }));
       
     }
   }
 
-export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables) => {
+export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables={}) => {
   return (dispatch, getState) => {
       const graphQLClient = getState().graphQLClient;
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
