@@ -11,6 +11,7 @@ import {withNamespaces} from "react-i18next";
 import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
 import AlertDialog from "../../AlertDialog.jsx";
+import { history } from "../../../setup.js";
 
 
 const JOIN_INITIATIVE = gql`
@@ -24,7 +25,8 @@ const JOIN_INITIATIVE = gql`
 class JoinInitiative extends React.Component {
 
     loadWorkspace = (eEvent) => {
-        window.location.href = `/workspace/${this.props.playground.id}`;
+        // window.location.href = `/workspace/${this.props.playground.id}`;
+        history.push(`/workspace/${this.props.playground.id}`)
     };
 
     render() {

@@ -13,6 +13,7 @@ import markerGreen from "assets/img/markers/playground_green.png";
 import { connect } from 'react-redux'
 import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
 import { fetchPlaygrounds, GET_PLAYGROUNDS } from "../../../components/Playground/PlaygroundActions";
+import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
 const MAP_API_KEY = "AIzaSyCsy6bZ_CvGdeFBOTSDkN0gPqVK9iKDfQ8";
 
@@ -37,7 +38,7 @@ const mapStateToProps = state => {
         playgroundsLoading: loadingSelector(state),
         hasErrors: errorMessageSelector(state) !== '',
         error: errorMessageSelector(state),
-        playgrounds: state.playgrounds.map(playground => {
+        playgrounds: getAllPlaygrounds(state).map(playground => {
             return {
                 id: playground.id,
                 name: playground.name,

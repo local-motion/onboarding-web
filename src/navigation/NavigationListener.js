@@ -1,3 +1,4 @@
+import { history } from "../setup";
 
 
 export default class NavigationListener {
@@ -11,7 +12,8 @@ export default class NavigationListener {
                 const currentLocation = this.store.getState().navigation.location
                 if (currentLocation && currentLocation !== this.prevLocation) {
                     this.prevLocation = currentLocation
-                    window.location.href = currentLocation
+                    // window.location.href = currentLocation
+                    history.push(currentLocation)
                 }
             }
         }
