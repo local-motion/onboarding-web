@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { fetchGraphQL, mutationGraphQL } from '../../GlobalActions';
+import { getAllPlaygrounds, getPlaygroundDetails } from './PlaygroundReducer';
 
 
 export const GET_PLAYGROUNDS = 'GET_PLAYGROUNDS'
@@ -56,7 +57,15 @@ const createInitiativeQuery = gql`
     }
 `;
 
-export const fetchPlaygrounds = () => fetchGraphQL(GET_PLAYGROUNDS, getPlaygroundsQuery)
+export const ensurePlaygrounds = () => (dispatch, getState) => getAllPlaygrounds(getState()).length === 0 ? 
+                                                                dispatch(fetchPlaygrounds()) : null
+
+export const fetchPlaygrounds = () => {
+  return fetchGraphQL(GET_PLAYGROUNDS, getPlaygroundsQuery)
+}
+
+export const ensurePlaygroundDetails = (playgroundId) => (dispatch, getState) => !getPlaygroundDetails(getState(), playgroundId) ? 
+                                                                            dispatch(fetchPlaygroundDetails(playgroundId)) : null
 
 export const fetchPlaygroundDetails = (playgroundId) => fetchGraphQL(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId}, playgroundId)
 

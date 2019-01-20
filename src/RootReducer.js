@@ -5,6 +5,7 @@ import { loadingReducer } from "./api/LoadingReducer";
 import playgroundReducer from "./components/Playground/PlaygroundReducer";
 import navigationReducer from "./navigation/NavigationReducer";
 import { fetchDetailsReducer } from "./api/FetchDetailsReducer";
+import userProfileReducer from "./components/UserProfile/UserProfileReducer";
 
 const rootReducer = (state = {}, action) => {
   switch (action.type) {
@@ -21,12 +22,13 @@ const rootReducer = (state = {}, action) => {
     default:
       return  ({
         ...state,
-        chat:     chatReducer(state.chat, action),
-        playgrounds: playgroundReducer(state.playgrounds, action),
-        navigation: navigationReducer(state.navigation, action),
-        loading:  loadingReducer(state.loading, action),
-        error:    errorReducer(state.error, action),
-        fetchDetails: fetchDetailsReducer(state.fetchDetails, action)
+        userprofile:      userProfileReducer(state.userprofile, action),
+        chat:             chatReducer(state.chat, action),
+        playgrounds:      playgroundReducer(state.playgrounds, action),
+        navigation:       navigationReducer(state.navigation, action),
+        loading:          loadingReducer(state.loading, action),
+        error:            errorReducer(state.error, action),
+        fetchDetails:     fetchDetailsReducer(state.fetchDetails, action)
         })
   }
 }
