@@ -1,5 +1,6 @@
-import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE } from "./PlaygroundActions";
+import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE } from "./PlaygroundActions";
 import { SUCCESS_POSTFIX } from "../../GlobalActions";
+import { getUserProfile } from "../UserProfile/UserProfileReducer";
 
 
 // State definition
@@ -93,17 +94,11 @@ const playgroundReducer = (state = initialState, action) => {
       }
 
     case GET_PLAYGROUND_DETAILS + SUCCESS_POSTFIX:
-      const newPlaygroundDetails = {...state.playgroundDetails}
-      newPlaygroundDetails[playgroundIdToKey(action.payload.data.playground.id)] = 
-        { 
-          ...action.payload.data.playground, 
-          smokeFreeDate: action.payload.data.playground.smokeFreeDate ? new Date(action.payload.data.playground.smokeFreeDate) : null
-        }
-
-      return {
+        return {
         ...state,
-        playgroundDetails: newPlaygroundDetails,
+        playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, action.payload.data.playground),
       }
+
 
     case CREATE_INITIATIVE + SUCCESS_POSTFIX:
       return {
@@ -112,9 +107,28 @@ const playgroundReducer = (state = initialState, action) => {
       }
 
     case JOIN_INITIATIVE + SUCCESS_POSTFIX:
+      // TODO: Because of the async nature of Axon, the result will often not yet contain the user as a volunteer. So (for now) we need to fix this here.
       return {
         ...state,
         playgrounds: updatePlaygrounds(state.playgrounds, action.payload.data.joinInitiative)
+      }
+
+    case CLAIM_MANAGER_ROLE + SUCCESS_POSTFIX:
+      // Because of the async nature of Axon, the result will often not yet contain the user as a manager. So (for now) we need to fix this here.
+      const userProfile = action.miscAttributes.userProfile
+      console.log("userprofile:")
+      console.log(userProfile)
+      const playground = action.payload.data.claimManagerRole
+      var userListedAsManager = false
+      for (var i = 0; i < playground.managers.length; i++)
+        userListedAsManager |= playground.managers[i].id === userProfile.id
+
+      if (!userListedAsManager)
+        playground.managers.push(userProfile)
+
+      return {
+        ...state,
+        playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
       }
 
     default:
@@ -130,3 +144,13 @@ const playgroundIdToKey = (playgroundId) => 'P' + playgroundId.replace('-', '_')
 
 const updatePlaygrounds = (playgrounds, updatedPlayground) => 
                             playgrounds.map(playground => playground.id === updatedPlayground.id ? updatedPlayground : playground)
+
+const updatePlaygroundDetails = (playgroundDetails, updatedPlayground) => {
+  const newPlaygroundDetails = {...playgroundDetails}
+  newPlaygroundDetails[playgroundIdToKey(updatedPlayground.id)] = 
+    { 
+      ...updatedPlayground, 
+      smokeFreeDate: updatedPlayground.smokeFreeDate ? new Date(updatedPlayground.smokeFreeDate) : null
+    }
+  return newPlaygroundDetails
+}

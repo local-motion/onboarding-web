@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import { fetchGraphQL, mutationGraphQL } from '../../GlobalActions';
 import { getAllPlaygrounds, getPlaygroundDetails } from './PlaygroundReducer';
 import { createLoadingSelector } from '../../api/Selectors';
+import { getUserProfile } from '../UserProfile/UserProfileReducer';
 
 
 export const GET_PLAYGROUNDS = 'GET_PLAYGROUNDS'
@@ -10,6 +11,7 @@ export const GET_PLAYGROUND_DETAILS = 'GET_PLAYGROUND_DETAILS'
 
 export const CREATE_INITIATIVE = 'CREATE_INITIATIVE'
 export const JOIN_INITIATIVE = 'JOIN_INITIATIVE'
+export const CLAIM_MANAGER_ROLE = 'CLAIM_MANAGER_ROLE'
 
 
 const getPlaygroundsQuery = gql`
@@ -73,6 +75,25 @@ const joinInitiativeQuery = gql`
     }
 `;
 
+const claimManagerRoleQuery = gql`
+  mutation ClaimManagerRole($input: ClaimManagerRoleCommand!) {
+    claimManagerRole(input: $input) {
+      id
+      name
+      lng
+      lat
+      status
+      smokeFreeDate
+      volunteerCount
+      votes
+      managers {
+          id
+          username
+      }
+    }
+  }
+`;
+
 export const ensurePlaygrounds = () => (dispatch, getState) => {
 
   console.log("ensurePlaygrounds, loading: " + createLoadingSelector([GET_PLAYGROUNDS])(getState()))
@@ -115,6 +136,22 @@ export const joinInitiative = (initiativeId, onSuccessCallback) => {
     }
   },
   onSuccessCallback)
+}
+    
+// export const claimManagerRole = (initiativeId, onSuccessCallback) => (dispatch, getState) => {
+export const claimManagerRole = (initiativeId, onSuccessCallback) => {
+  return (dispatch, getState) => {
+  dispatch(mutationGraphQL(CLAIM_MANAGER_ROLE, claimManagerRoleQuery, {
+    input: {
+      initiativeId: initiativeId
+    }
+  },
+  onSuccessCallback,
+  {
+    userProfile: getUserProfile(getState())
+  }
+  ))
+}
 }
     
     

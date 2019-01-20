@@ -19,42 +19,61 @@ import PlaygroundVotes from "../Cards/PlaygroundVotes";
 import Amplify from "aws-amplify";
 import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 import AlertDialog from "../../AlertDialog.jsx";
+import { connect } from 'react-redux'
+import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
+import { claimManagerRole, CLAIM_MANAGER_ROLE } from "../../../components/Playground/PlaygroundActions";
 
 
-const SET_MANAGER = gql`
-  mutation ClaimManagerRole($input: ClaimManagerRoleCommand!) {
-    claimManagerRole(input: $input) {
-      id
+const mapStateToProps = state => {
+    const loadingSelector = createLoadingSelector([CLAIM_MANAGER_ROLE]);
+    const errorMessageSelector = createErrorMessageSelector([CLAIM_MANAGER_ROLE]);
+    return {
+        loading: loadingSelector(state),
+        error: errorMessageSelector(state),
     }
-  }
-`;
+}
+
+const mapDispatchToProps = dispatch => ({
+    claimManagerRole:    (initiativeId, onSuccessCallback) =>     dispatch(claimManagerRole(initiativeId, onSuccessCallback)),
+})
+
+// const SET_MANAGER = gql`
+//   mutation ClaimManagerRole($input: ClaimManagerRoleCommand!) {
+//     claimManagerRole(input: $input) {
+//       id
+//     }
+//   }
+// `;
 
 class Dashboard extends React.Component {
     // TODO: Manually updating memory model. Start using graphql subscriptions instead!
-    _addManager = userId => {
-        let user = Amplify.Auth.user;
-        this.props.playground.managers.push({
-            id: userId,
-            username: user.username
-        });
-    };
+    // _addManager = userId => {
+    //     let user = Amplify.Auth.user;
+    //     this.props.playground.managers.push({
+    //         id: userId,
+    //         username: user.username
+    //     });
+    // };
 
-    _onError = error => {
-        console.log("Could not change smoke-free date", error);
-    };
+    // _onError = error => {
+    //     console.log("Could not change smoke-free date", error);
+    // };
+
+    onClickClaim () {
+        this.props.claimManagerRole(this.props.playground.id)
+    }
 
     render() {
-        const { classes, playground, profile } = this.props;
+        const { classes, playground, profile, loading, error } = this.props;
         const isManager = playground.managers && !!playground.managers.filter(manager => {
             return manager.id === profile.id
         }).length;
 
         console.log(`Displaying dashboard for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${profile.id}`);
-        console.log(profile);
 
-        let queryInput = {
-            initiativeId: playground.id
-        };
+        // let queryInput = {
+        //     initiativeId: playground.id
+        // };
         return(
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
@@ -83,17 +102,18 @@ class Dashboard extends React.Component {
                         />
                         {
                             !isManager &&
-                            <Mutation mutation={SET_MANAGER} update={null} onError={this._onError}>
-                                {(setManager, { loading, error }) => (
+                            // <Mutation mutation={SET_MANAGER} update={null} onError={this._onError}>
+                            //     {(setManager, { loading, error }) => (
                                     <div>
                                         <SimpleCard
                                             title={"Speeltuin beheerder?"}
                                             image={require("assets/img/backgrounds/smokefree.jpg")}
                                             content={"Ben jij de officiele beheerder van deze speeltuin? Laat het ons weten..."}
                                             primaryCta={{
-                                                click: (() => {
-                                                    setManager({ variables: { input: queryInput } })
-                                                    this._addManager(profile.id);
+                                                click: (() => {this.onClickClaim()
+                                                // click: (() => {
+                                                //     setManager({ variables: { input: queryInput } })
+                                                //     this._addManager(profile.id);
                                                 }),
                                                 text: "Ik ben de beheerder van deze speeltuin"
                                             }}
@@ -101,8 +121,8 @@ class Dashboard extends React.Component {
                                         {loading && <p>Loading...</p>}
                                         {error && <AlertDialog apolloError={error}/>}
                                     </div>
-                                )}
-                            </Mutation>
+                            //     )}
+                            // </Mutation>
                         }
                     </GridItem>
                 </GridContainer>
@@ -112,4 +132,10 @@ class Dashboard extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(Dashboard);
+
+// export default withStyles(pillsStyle)(
+//     withNamespaces("translations")(connect(mapStateToProps, mapDispatchToProps)(JoinInitiative))
+// );
+
+export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(Dashboard));
+// export default withStyles(componentsStyle)(Dashboard);
