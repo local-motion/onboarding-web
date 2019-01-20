@@ -1,7 +1,6 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import CustomDialog from 'components/Dialogs/CustomDialog.jsx';
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -14,47 +13,18 @@ import Button from "@material-ui/core/Button/Button";
 import JoinInitiative from "./JoinInitiative.jsx"
 
 import {withNamespaces} from "react-i18next";
-import {graphql} from "react-apollo";
-import gql from "graphql-tag";
+import { getStatistics } from "../../../components/Playground/PlaygroundReducer.js";
+import { connect } from 'react-redux'
 
 
-const GET_SMOKEFREE_PROGRESS = gql`
-  {
-    progress {
-      smokeFree {
-        count
-        percentage
-      }
-      workingOnIt {
-        count
-        percentage
-      }
-      smoking {
-        count
-        percentage
-      }
-    }
-  }
-`;
-
-const withPlaygroundProgress = graphql(GET_SMOKEFREE_PROGRESS, {
-    props: ({ownProps, data}) => {
-        if (data.loading) return {statsLoading: true};
-        if(data.error) return {
-            hasErrors: true,
-            error: data.error.toString()
-        };
-
-        return {
-            progress: data.progress
-        };
-    }
-});
+const mapStateToProps = state => ({
+        progress: getStatistics(state).progress
+})
 
 class PlaygroundStatistics extends React.Component {
 
     render() {
-        const {statsLoading, progress, t, classes, playground, defaultView} = this.props;
+        const {progress, t, classes, playground, defaultView} = this.props;
         const generalStatistics = defaultView;
 
         const defaultPlayground = {
@@ -65,14 +35,8 @@ class PlaygroundStatistics extends React.Component {
             default: true,
         }
 
-        if (statsLoading || !progress) {
-            return "Loading...";
-        }
         return (
             <div className={classes.section + " playground-statistics wrapper"}>
-                {this.props.hasErrors === true &&
-                    <CustomDialog title={"Er is een fout opgetreden"} content={this.props.error}></CustomDialog>
-                }
                 <div className={classes.container + " playground-statistics container"}>
                     <h2 className="playground-statistics title">
                         {playground.name}
@@ -132,8 +96,6 @@ class PlaygroundStatistics extends React.Component {
     }
 }
 
-const SmokeFreePlaygroundProgress = withPlaygroundProgress(PlaygroundStatistics);
-
 export default withStyles(pillsStyle)(
-    withNamespaces("translations")(SmokeFreePlaygroundProgress)
+    withNamespaces("translations")(connect(mapStateToProps)(PlaygroundStatistics))
 );

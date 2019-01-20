@@ -19,46 +19,43 @@ import PlaygroundSearch from "./Sections/PlaygroundSearch";
 import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
 import CallToAction from "./Sections/CallToAction";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
 import AddPlayground from "./Sections/AddPlayground";
+import { connect } from 'react-redux'
+import { createLoadingSelector, createErrorMessageSelector } from "../../api/Selectors";
+import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
+import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 
-const GET_PLAYGROUNDS = gql`
-  {
-    playgrounds {
-      id
-      name
-      lat
-      lng
-      status
-      volunteerCount
-      votes
-    }
+
+const mapStateToProps = state => {
+    const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
+    const errorMessageSelector = createErrorMessageSelector([GET_PLAYGROUNDS]);
+
+    return {
+        playgroundsLoading: loadingSelector(state),
+        hasErrors: errorMessageSelector(state) !== '',
+        error: errorMessageSelector(state),
+        playgrounds: getAllPlaygrounds(state).map(playground => {
+            return {
+                id: playground.id,
+                name: playground.name,
+                lat: playground.lat,
+                lng: playground.lng,
+                vol: playground.volunteerCount,
+                votes: playground.votes,
+                slug: playground.name + " Rookvrij",
+                zoom: 18,
+                default: false,
+            };
+        })
   }
-`;
+}
 
-const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
-    props: ({ownProps, data}) => {
-        if (data.loading) return {playgroundsLoading: true};
-        if(data.error) return {
-            hasErrors: true,
-            error: data.error.toString()
-        };
-        return {
-            playgrounds: data.playgrounds.map(playground => {
-                return {
-                    id: playground.id,
-                    name: playground.name,
-                    lat: playground.lat,
-                    lng: playground.lng,
-                    vol: playground.volunteerCount,
-                    votes: playground.votes,
-                    slug: playground.name + " Rookvrij"
-                };
-            })
-        };
-    }
-});
+const mapDispatchToProps = dispatch => {
+    return {
+        ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
+      }
+}
+
 
 class Onboarding extends React.Component {
     constructor(props) {
@@ -78,6 +75,9 @@ class Onboarding extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.props.ensurePlaygrounds()
+    }
 
     handlePlaygroundChange(playground) {
         this.setState({
@@ -146,7 +146,6 @@ class Onboarding extends React.Component {
     }
 }
 
-const OnboardingWithPlaygrounds = withPlaygrounds(Onboarding);
 export default withStyles(componentsStyle)(
-    withNamespaces("translations")(OnboardingWithPlaygrounds)
+    withNamespaces("translations")(connect(mapStateToProps, mapDispatchToProps)(Onboarding))
 );

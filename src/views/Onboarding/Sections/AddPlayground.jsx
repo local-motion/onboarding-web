@@ -16,6 +16,7 @@ import { createInitiative, CREATE_INITIATIVE } from '../../../components/Playgro
 import { connect } from 'react-redux'
 import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
 import { clearError } from '../../../api/ApiActions';
+import { history } from '../../../setup';
 
 class AddPlayground extends React.Component {
     constructor(props) {
@@ -32,6 +33,7 @@ class AddPlayground extends React.Component {
             duplicate: false,
             error: '',
         }
+        this.submit.bind(this)
     };
 
     isValidState = () => {
@@ -40,7 +42,7 @@ class AddPlayground extends React.Component {
 
     submit = () => {
         if (this.isValidState)
-            this.props.createInitiative(this.state.name, this.state.lat, this.state.lng)
+            this.props.createInitiative(this.state.name, this.state.lat, this.state.lng, (data) => history.push('/workspace/' + data.createInitiative.id))
     }
 
     handleClickOpen = () => {
@@ -124,14 +126,12 @@ class AddPlayground extends React.Component {
                             onPlaygroundCreated={this.handleCreatePlayground}
 
                         />
-                        <form className={"form"}>
-                            <TextField
-                                className={classes.textField + " form-control"}
-                                label="Wat is de naam van de speeltuin?"
-                                pattern="/^\w{4,}$/"
-                                onKeyUp={this.updateName}
-                                defaultValue={this.state.name}/>
-                        </form>
+                        <TextField
+                            className={classes.textField + " form-control"}
+                            label="Wat is de naam van de speeltuin?"
+                            pattern="/^\w{4,}$/"
+                            onKeyUp={this.updateName}
+                            defaultValue={this.state.name}/>
                         {error && <span className={"error alert"}>{error}</span>}
                     </DialogContent>
                     <DialogActions className={"dialog-actions"}>
@@ -166,8 +166,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        createInitiative:    (name, lat, lng) =>     dispatch(createInitiative(name, lat, lng)),
-        clearError:          () =>                   dispatch(clearError(CREATE_INITIATIVE))
+        createInitiative:    (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
+        clearError:          () =>                                      dispatch(clearError(CREATE_INITIATIVE))
       }
 }
 
