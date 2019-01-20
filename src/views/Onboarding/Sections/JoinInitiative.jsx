@@ -8,57 +8,51 @@ import PersonAdd from "@material-ui/icons/PersonAdd";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 
 import {withNamespaces} from "react-i18next";
-import gql from "graphql-tag";
-import {Mutation} from "react-apollo";
 import AlertDialog from "../../AlertDialog.jsx";
 import { history } from "../../../setup.js";
+import { joinInitiative, JOIN_INITIATIVE } from "../../../components/Playground/PlaygroundActions.js";
+import { connect } from 'react-redux'
+import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
 
-
-const JOIN_INITIATIVE = gql`
-  mutation JoinInitiative($input: JoinInitiativeInput!) {
-    joinInitiative(input: $input) {
-      id
+const mapStateToProps = state => {
+    const loadingSelector = createLoadingSelector([JOIN_INITIATIVE]);
+    const errorMessageSelector = createErrorMessageSelector([JOIN_INITIATIVE]);
+    return {
+        loading: loadingSelector(state),
+        error: errorMessageSelector(state),
     }
-  }
-`;
+}
+
+const mapDispatchToProps = dispatch => ({
+        joinInitiative:    (initiativeId, onSuccessCallback) =>     dispatch(joinInitiative(initiativeId, onSuccessCallback)),
+})
 
 class JoinInitiative extends React.Component {
 
-    loadWorkspace = (eEvent) => {
-        // window.location.href = `/workspace/${this.props.playground.id}`;
-        history.push(`/workspace/${this.props.playground.id}`)
-    };
+    onJoinClicked = () => {
+        this.props.joinInitiative(this.props.playground.id, () => history.push(`/workspace/${this.props.playground.id}`) )
+    }
 
     render() {
-        const {playground} = this.props;
+        const {playground, loading, error} = this.props;
         if (playground.default) return null;
 
-        let initiativeInput = {
-            initiativeId: playground.id
-        };
-
         return (
-            <Mutation mutation={JOIN_INITIATIVE} update={this.loadWorkspace}>
-                {(joinInitiative, { loading, error }) => (
-                    <div>
-                        <Button
-                            className={"btn btn-highlight pr-25 pull-left"}
-                            disabled={loading}
-                            onClick={(/*event*/) =>
-                                joinInitiative({variables: {input: initiativeInput}})
-                            }
-                        >
-                            <PersonAdd className={"mr-5"}/>
-                            <span>Maak deze speeltuin rookvrij</span>
-                        </Button>
-                        {error && <AlertDialog apolloError={error}/>}
-                    </div>
-                )}
-            </Mutation>
+                <div>
+                    <Button
+                        className={"btn btn-highlight pr-25 pull-left"}
+                        disabled={loading}
+                        onClick={() => this.onJoinClicked()}
+                    >
+                        <PersonAdd className={"mr-5"}/>
+                        <span>Maak deze speeltuin rookvrij</span>
+                    </Button>
+                    {error && <AlertDialog apolloError={error}/>}
+                </div>
         );
     }
 }
 
 export default withStyles(pillsStyle)(
-    withNamespaces("translations")(JoinInitiative)
+    withNamespaces("translations")(connect(mapStateToProps, mapDispatchToProps)(JoinInitiative))
 );
