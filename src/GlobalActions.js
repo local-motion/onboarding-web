@@ -36,7 +36,7 @@ console.log("fetching " + baseActionIdentifier + " for " + fetchId)
     }
   }
 
-export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables={}, onSuccessCallback) => {
+export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables={}, onSuccessCallback, miscAttributes) => {
   return (dispatch, getState) => {
       const graphQLClient = getState().graphQLClient;
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
@@ -49,12 +49,12 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
           if (data.errors && data.errors[0]) {
             console.log('graphQL mutation success with error:')
             console.log(data)
-              dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: {code: data.errors[0].code, message: data.errors[0].niceMessage}})
+              dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: {code: data.errors[0].code, message: data.errors[0].niceMessage, miscAttributes}})
           }
           else {
             console.log('graphQL mutation success:')
             console.log(data)
-              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, variables })
+              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, variables, miscAttributes })
               if (onSuccessCallback)
                 onSuccessCallback(data.data)
           }
@@ -62,7 +62,7 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
         .catch(error => {
           console.log('graphQL mutation error:')
           console.log(error)
-          dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error})
+          dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, miscAttributes})
         });
       
     }

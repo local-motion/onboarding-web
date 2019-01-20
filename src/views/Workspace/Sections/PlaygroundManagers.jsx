@@ -16,13 +16,12 @@ class PlaygroundManagers extends React.Component {
     render() {
         const {playground, profile} = this.props;
         if (!playground || !profile) return "Loading...";
-        console.info(`Displaying ${playground.managers ? playground.managers.length : 0} managers for playground`, playground);
         return (
             <div>
                 <p>
                     Er zijn in totaal {playground.volunteerCount} vrijwilligers die helpen met rookvrij maken van deze speeltuin.
                 </p>
-                <div class="manager-container" className={playground.managers.length > 0 ? '' : 'hide'}>
+                <div className={playground.managers.length > 0 ? 'manager-container' : 'hide'}>
                     <h3 style={{fontSize: "18px"}}>
                         Beheerders van de speeltuin :
                     </h3>
