@@ -1,5 +1,8 @@
 export const PUBLISH_ENVIRONMENT = 'PUBLISH_ENVIRONMENT'
 export const PUBLISH_GRAPHQLCLIENT = 'PUBLISH_GRAPHQLCLIENT'
+export const NULL_ACTION = 'NULL_ACTION'
+
+export const nullAction = {type: NULL_ACTION}
 
 export const REQUEST_POSTFIX = '_REQUEST'
 export const SUCCESS_POSTFIX = '_SUCCESS'
@@ -16,6 +19,9 @@ export const publishGraphQLClient = client => (
 
 
 export const fetchGraphQL = (baseActionIdentifier, graphQLQuery, variables={}, fetchId) => {
+
+console.log("fetching " + baseActionIdentifier + " for " + fetchId)
+
   return (dispatch, getState) => {
       const graphQLClient = getState().graphQLClient;
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX, fetchId, timestamp: Date.now()})

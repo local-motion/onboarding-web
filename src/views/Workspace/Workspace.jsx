@@ -10,8 +10,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons
 // core components
-import {graphql} from "react-apollo";
-import gql from "graphql-tag";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -27,65 +25,11 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
 import { history } from "../../setup.js";
 import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
-import { GET_PLAYGROUND_DETAILS, fetchPlaygroundDetails } from "../../components/Playground/PlaygroundActions.js";
+import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails } from "../../components/Playground/PlaygroundActions.js";
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
+import { GET_USER_PROFILE, ensureUserProfile } from "../../components/UserProfile/UserProfileActions.js";
+import { getUserProfile } from "../../components/UserProfile/UserProfileReducer.js";
 
-const GET_PROFILE = gql`
-    {
-        profile {
-            id
-            username
-        }
-    }
-`;
-
-// const GET_PLAYGROUND = gql`
-//     {
-//         playground(id: "${playgroundId}") {
-//             id
-//             name
-//             status
-//             smokeFreeDate
-//             volunteerCount
-//             votes
-//             managers {
-//                 id
-//                 username
-//             }
-//         }
-//     }
-// `;
-
-// const playgroundRequest = graphql(GET_PLAYGROUND, {
-//     props: ({ownProps, data}) => {
-//         if (data.loading) return {playgroundsLoading: true};
-//         if (data.error) return {
-//             hasErrors: true,
-//             error: data.error.toString()
-//         };
-//         const playground = data.playground;
-//         if (playground.smokeFreeDate) {
-//             playground.smokeFreeDate = new Date(playground.smokeFreeDate);
-//         }
-//         console.log("Get playground: ", playground);
-//         return {playground: playground};
-//     }
-// });
-
-const profileRequest = graphql(GET_PROFILE, {
-    props: ({ownProps, data}) => {
-        if (data.loading) return {profileLoading: true};
-        if (data.error) return {
-            hasErrors: true,
-            error: data.error.toString()
-        };
-        console.log("Get profile: ", data.profile);
-        const profile = data.profile || {};
-        return {
-            profile: profile
-        };
-    }
-});
 
 const getPlaygroundId = () => history.location.pathname.split("/").pop()
 
@@ -130,31 +74,26 @@ class WorkspaceTemplate extends React.Component {
             case "Voorbereiding":
                 return <PhasePrepare playground={this.props.playground}/>;
             case "Uitvoering":
-                return <PhaseExecute playground={this.props.playground} profile={this.props.profile}/>;
+                return <PhaseExecute playground={this.props.playground} profile={this.props.userProfile}/>;
             case "Onderhouden":
                 return <PhaseSustain playground={this.props.playground}/>;
             default:
-                return <Dashboard playground={this.props.playground} profile={this.props.profile}/>;
+                return <Dashboard playground={this.props.playground} profile={this.props.userProfile}/>;
         }
     };
 
     componentDidMount() {
-        this.props.fetchPlaygroundDetails()
+        this.props.ensureUserProfile()
+        this.props.ensurePlaygroundDetails()
       }
 
 
     render() {
         const {phase} = this.state;
-        const {loading, profileLoading, classes, playground, ...rest} = this.props;
+        const {playground, userProfile, classes, ...rest} = this.props;
         
-        const playgroundsLoading = this.props.loading;
-
-        if (playgroundsLoading) {
+        if (!playground || !userProfile || this.props.playgroundLoading || this.props.profileLoading) 
             return "loading..";
-        }
-        if (profileLoading) {
-            return "loading..";
-        }
 
         return (
             <div className={"workspace-wrapper"}>
@@ -233,15 +172,20 @@ class WorkspaceTemplate extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    loading: isLoading(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
     playground: getPlaygroundDetails(state, getPlaygroundId()),
-    error: getFetchError(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
+    playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
+    playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
+
+    userProfile: getUserProfile(state),
+    userProfileLoading: isLoading(state, GET_USER_PROFILE),
+    userProfileError: getFetchError(state, GET_USER_PROFILE),
 })
 
 const mapDispatchToProps = dispatch => ({
-    fetchPlaygroundDetails:    () =>     dispatch(fetchPlaygroundDetails(getPlaygroundId())),
+    ensurePlaygroundDetails:    () =>     dispatch(ensurePlaygroundDetails(getPlaygroundId())),
+    ensureUserProfile:          () =>     dispatch(ensureUserProfile()),
 })
 
-const Workspace = profileRequest(WorkspaceTemplate);
-export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(Workspace));
+// const Workspace = profileRequest(WorkspaceTemplate);
+export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate));
 

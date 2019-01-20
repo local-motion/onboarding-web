@@ -50,6 +50,7 @@ class Dashboard extends React.Component {
         }).length;
 
         console.log(`Displaying dashboard for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${profile.id}`);
+        console.log(profile);
 
         let queryInput = {
             initiativeId: playground.id
@@ -105,7 +106,7 @@ class Dashboard extends React.Component {
                         }
                     </GridItem>
                 </GridContainer>
-                <PlaygroundChatBox/>
+                {/* <PlaygroundChatBox/> */}
             </div>
         );
     }

@@ -177,13 +177,12 @@ const App = class App extends React.Component {
         const client = new ApolloClient({
             defaultOptions: {
                 watchQuery: {
-                    fetchPolicy: 'network-only',
-                    // fetchPolicy: 'cache-and-network',
+                    fetchPolicy: 'no-cache',                // We are not using graphQL caching, but keep the state in the Redux store instead
                     errorPolicy: 'all',
                 },
                 query: {
-                    fetchPolicy: 'network-only',
-                    // fetchPolicy: 'cache-and-network',
+                    fetchPolicy: 'no-cache',                // We are not using graphQL caching, but keep the state in the Redux store instead
+                    // fetchPolicy: 'network-only',
                     errorPolicy: 'all',
                 },
                 mutate: {

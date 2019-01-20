@@ -12,7 +12,7 @@ import markerGreen from "assets/img/markers/playground_green.png";
 // import markerPink from "assets/img/markers/playground_pink.png";
 import { connect } from 'react-redux'
 import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
-import { fetchPlaygrounds, GET_PLAYGROUNDS } from "../../../components/Playground/PlaygroundActions";
+import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
 const MAP_API_KEY = "AIzaSyCsy6bZ_CvGdeFBOTSDkN0gPqVK9iKDfQ8";
@@ -22,7 +22,7 @@ const MAP_API_KEY = "AIzaSyCsy6bZ_CvGdeFBOTSDkN0gPqVK9iKDfQ8";
 class PlaygroundMap extends React.Component {
 
     componentDidMount() {
-        this.props.fetchPlaygrounds()
+        this.props.ensurePlaygrounds()
       }
 
     render() {
@@ -56,7 +56,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchPlaygrounds:    () =>     dispatch(fetchPlaygrounds()),
+        ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
       }
 }
 
