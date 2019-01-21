@@ -1,6 +1,5 @@
-import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE } from "./PlaygroundActions";
+import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE } from "./PlaygroundActions";
 import { SUCCESS_POSTFIX } from "../../GlobalActions";
-import { getUserProfile } from "../UserProfile/UserProfileReducer";
 
 
 // State definition
@@ -131,8 +130,21 @@ const playgroundReducer = (state = initialState, action) => {
         playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
       }
 
-    default:
-      return state
+      case SET_SMOKEFREE_DATE + SUCCESS_POSTFIX:
+        {
+        const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
+        if (playground) {
+          playground.smokeFreeDate = action.variables.input.smokeFreeDate
+          return {
+            ...state,
+            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
+          }
+        }
+        else
+          return state
+        }
+      default:
+        return state
   }
 }
 
