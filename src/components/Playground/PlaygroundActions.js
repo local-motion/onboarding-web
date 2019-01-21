@@ -12,6 +12,7 @@ export const GET_PLAYGROUND_DETAILS = 'GET_PLAYGROUND_DETAILS'
 export const CREATE_INITIATIVE = 'CREATE_INITIATIVE'
 export const JOIN_INITIATIVE = 'JOIN_INITIATIVE'
 export const CLAIM_MANAGER_ROLE = 'CLAIM_MANAGER_ROLE'
+export const SET_SMOKEFREE_DATE = 'SET_SMOKEFREE_DATE'
 
 
 const getPlaygroundsQuery = gql`
@@ -94,6 +95,14 @@ const claimManagerRoleQuery = gql`
   }
 `;
 
+const setSmokefreeDateQuery = gql`
+    mutation CommitToSmokeFreeDate($input: CommitToSmokeFreeDateCommand!) {
+        commitToSmokeFreeDate(input: $input) {
+            id
+        }
+    }
+`;
+
 export const ensurePlaygrounds = () => (dispatch, getState) => {
 
   console.log("ensurePlaygrounds, loading: " + createLoadingSelector([GET_PLAYGROUNDS])(getState()))
@@ -154,5 +163,12 @@ export const claimManagerRole = (initiativeId, onSuccessCallback) => {
 }
 }
     
-    
+export const setSmokefreeDate = (initiativeId, smokeFreeDate) => {
+  return mutationGraphQL(SET_SMOKEFREE_DATE, setSmokefreeDateQuery, {
+    input: {
+      initiativeId,
+      smokeFreeDate
+    }
+  })
+}
 
