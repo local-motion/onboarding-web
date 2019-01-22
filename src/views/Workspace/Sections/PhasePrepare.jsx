@@ -2,8 +2,6 @@ import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
-import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import SimpleCard from "components/CustomCard/Card.jsx";
@@ -11,22 +9,32 @@ import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import SocialMedia from "../forms/SocialMedia.jsx";
 import AlertDialog from "../../AlertDialog.jsx";
+import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
+import { connect } from 'react-redux'
+import { setDecideSmokefree, SET_DECIDE_SMOKEFREE } from "../../../components/Playground/PlaygroundActions.js";
 
-const SET_SMOKEFREE = gql`
-  mutation DecideToBecomeSmokeFree($input: DecideToBecomeSmokeFreeCommand!) {
-    decideToBecomeSmokeFree(input: $input) {
-      id
+const mapStateToProps = state => {
+    const loadingSelector = createLoadingSelector([SET_DECIDE_SMOKEFREE]);
+    const errorMessageSelector = createErrorMessageSelector([SET_DECIDE_SMOKEFREE]);
+    return {
+        loading: loadingSelector(state),
+        error: errorMessageSelector(state),
     }
-  }
-`;
+}
+
+const mapDispatchToProps = dispatch => ({
+    setDecideSmokefree:    (initiativeId) =>     dispatch(setDecideSmokefree(initiativeId)),
+})
+
 
 class PhasePrepare extends React.Component {
+
+    onClickDecideSmokefree() {
+        this.props.setDecideSmokefree(this.props.playground.id)
+    }
+
     render() {
-        const {classes} = this.props;
-        const playgroundId = window.location.pathname.split("/").pop();
-        let queryInput = {
-            initiativeId: playgroundId
-        };
+        const {loading, error, classes} = this.props
 
         return (
             <div className={classes.container + " information-wrapper"}>
@@ -48,23 +56,19 @@ class PhasePrepare extends React.Component {
                                       ExpandContent={<SocialMedia playground={this.props.playground}/>}
                         />
 
-                        <Mutation mutation={SET_SMOKEFREE} update={null}>
-                            {(setSmokeFree, { loading, error }) => (
                                 <div>
                                     <SimpleCard
                                         title={"Maak speeltuin rookvrij"}
                                         image={require("assets/img/backgrounds/smokefree.jpg")}
                                         content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
                                         primaryCta={{
-                                            click: (() => {setSmokeFree({ variables: { input: queryInput } })}),
+                                            click: (() => {this.onClickDecideSmokefree()}),
                                             text: "Maak rookvrij"
                                         }}
                                     />
                                     {loading && <p>Loading...</p>}
                                     {error && <AlertDialog apolloError={error}/>}
                                 </div>
-                            )}
-                        </Mutation>
                     </GridItem>
                 </GridContainer>
             </div>
@@ -72,4 +76,5 @@ class PhasePrepare extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(PhasePrepare);
+export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(PhasePrepare));
+

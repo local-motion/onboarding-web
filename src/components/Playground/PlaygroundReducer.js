@@ -1,4 +1,4 @@
-import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE } from "./PlaygroundActions";
+import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE } from "./PlaygroundActions";
 import { SUCCESS_POSTFIX } from "../../GlobalActions";
 
 
@@ -134,15 +134,34 @@ const playgroundReducer = (state = initialState, action) => {
         {
         const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
         if (playground) {
-          playground.smokeFreeDate = action.variables.input.smokeFreeDate
+          const updatedPlayground = {...playground, smokeFreeDate: action.variables.input.smokeFreeDate, status: 'finished'}
+          const updatedPlaygroundSummary = {...getPlaygroundSummary(state.playgrounds, playground.id), status: 'finished'}
           return {
             ...state,
-            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
+            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
+            playgrounds: updatePlaygrounds(state.playgrounds, updatedPlaygroundSummary)
           }
         }
         else
           return state
         }
+        
+      case SET_DECIDE_SMOKEFREE + SUCCESS_POSTFIX:
+        {
+        const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
+        if (playground && playground.status === 'not_started') {
+          const updatedPlayground = {...playground, status: 'in_progress'}
+          const updatedPlaygroundSummary = {...getPlaygroundSummary(state.playgrounds, playground.id), status: 'in_progress'}
+          return {
+            ...state,
+            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
+            playgrounds: updatePlaygrounds(state.playgrounds, updatedPlaygroundSummary)
+          }
+        }
+        else
+          return state
+        }
+
       default:
         return state
   }
@@ -162,7 +181,14 @@ const updatePlaygroundDetails = (playgroundDetails, updatedPlayground) => {
   newPlaygroundDetails[playgroundIdToKey(updatedPlayground.id)] = 
     { 
       ...updatedPlayground, 
-      smokeFreeDate: updatedPlayground.smokeFreeDate ? new Date(updatedPlayground.smokeFreeDate) : null
+      smokeFreeDate: updatedPlayground.smokeFreeDate ? new Date(updatedPlayground.smokeFreeDate) : null   // TODO check why this conversion is required
     }
   return newPlaygroundDetails
+}
+
+const getPlaygroundSummary = (playgrounds, id) => {
+  for (var i = 0; i < playgrounds.length; i++)
+    if (playgrounds[i].id === id)
+      return playgrounds[i]
+  return null
 }
