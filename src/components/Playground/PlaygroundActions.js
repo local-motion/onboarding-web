@@ -13,6 +13,7 @@ export const CREATE_INITIATIVE = 'CREATE_INITIATIVE'
 export const JOIN_INITIATIVE = 'JOIN_INITIATIVE'
 export const CLAIM_MANAGER_ROLE = 'CLAIM_MANAGER_ROLE'
 export const SET_SMOKEFREE_DATE = 'SET_SMOKEFREE_DATE'
+export const SET_DECIDE_SMOKEFREE = 'SET_DECIDE_SMOKEFREE'
 
 
 const getPlaygroundsQuery = gql`
@@ -103,6 +104,15 @@ const setSmokefreeDateQuery = gql`
     }
 `;
 
+const setDecideSmokefreeQuery = gql`
+  mutation DecideToBecomeSmokeFree($input: DecideToBecomeSmokeFreeCommand!) {
+    decideToBecomeSmokeFree(input: $input) {
+      id
+    }
+  }
+`;
+
+
 export const ensurePlaygrounds = () => (dispatch, getState) => {
 
   console.log("ensurePlaygrounds, loading: " + createLoadingSelector([GET_PLAYGROUNDS])(getState()))
@@ -168,6 +178,15 @@ export const setSmokefreeDate = (initiativeId, smokeFreeDate) => {
     input: {
       initiativeId,
       smokeFreeDate
+    }
+  })
+}
+
+    
+export const setDecideSmokefree = (initiativeId) => {
+  return mutationGraphQL(SET_DECIDE_SMOKEFREE, setDecideSmokefreeQuery, {
+    input: {
+      initiativeId
     }
   })
 }
