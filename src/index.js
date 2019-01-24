@@ -35,6 +35,22 @@ import rootReducer from './RootReducer';
 import { publishEnvironment } from "./GlobalActions";
 
 const environments = {
+    "techoverflow-p.aws.abnamro.org": {
+        aws: {
+            cognito: {
+                region: "eu-west-1",
+                userPoolId: "eu-west-1_GKcEm18s8",
+                userPoolWebClientId: "5aiel7vttkv6o359qpqbp5fuf0",
+                domain: "techoverflow-p.auth.eu-west-1.amazoncognito.com",
+                redirectSignIn: "https://techoverflow-p.aws.abnamro.org/onboarding/signin",
+                redirectSignOut: "https://techoverflow-p.aws.abnamro.org/onboarding/logout",
+            }
+        },
+        api: {
+            onboarding: "https://techoverflow-ta.aws.abnamro.org/api/graphql",
+            chatbox: "https://techoverflow-ta.aws.abnamro.org/api/chatbox",
+        }
+    },
     "techoverflow-ta.aws.abnamro.org": {
         aws: {
             cognito: {
