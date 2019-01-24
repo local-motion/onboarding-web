@@ -47,8 +47,8 @@ const environments = {
             }
         },
         api: {
-            onboarding: "https://techoverflow-ta.aws.abnamro.org/api/graphql",
-            chatbox: "https://techoverflow-ta.aws.abnamro.org/api/chatbox",
+            onboarding: "https://techoverflow-p.aws.abnamro.org/api/graphql",
+            chatbox: "https://techoverflow-p.aws.abnamro.org/api/chatbox",
         }
     },
     "techoverflow-ta.aws.abnamro.org": {
