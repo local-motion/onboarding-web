@@ -3,8 +3,6 @@ import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { compose, withStateHandlers, withProps } from "recompose";
-import { graphql } from "react-apollo";
-import gql from "graphql-tag";
 
 import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-maps";
 import { InfoBox } from "react-google-maps/lib/components/addons/InfoBox";
@@ -12,53 +10,62 @@ import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerC
 import markerGray from "assets/img/markers/playground_gray.png";
 import markerGreen from "assets/img/markers/playground_green.png";
 // import markerPink from "assets/img/markers/playground_pink.png";
+import { connect } from 'react-redux'
+import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
+import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
+import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
 const MAP_API_KEY = "AIzaSyCsy6bZ_CvGdeFBOTSDkN0gPqVK9iKDfQ8";
 
-const GET_PLAYGROUNDS = gql`
-  {
-    playgrounds {
-      id
-      name
-      lng
-      lat
-      status
-      volunteerCount
-      votes
-    }
-  }
-`;
 
-const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
-    // `ownProps` are the props passed into `MyComponentWithData`
-    // `data` is the result data (see above)
-    props: ({ownProps, data}) => {
-        if(data.loading) return {playgroundsLoading: true};
-        if(data.error) {
+
+class PlaygroundMap extends React.Component {
+
+    componentDidMount() {
+        this.props.ensurePlaygrounds()
+      }
+
+    render() {
+        return (<PlaygroundMapImpl {...this.props} />)
+    }
+}
+
+const mapStateToProps = state => {
+    const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
+    const errorMessageSelector = createErrorMessageSelector([GET_PLAYGROUNDS]);
+
+    return {
+        playgroundsLoading: loadingSelector(state),
+        hasErrors: errorMessageSelector(state) !== '',
+        error: errorMessageSelector(state),
+        playgrounds: getAllPlaygrounds(state).map(playground => {
             return {
-                hasErrors: true,
-                error: data.error.toString()
+                id: playground.id,
+                name: playground.name,
+                lat: playground.lat,
+                lng: playground.lng,
+                vol: playground.volunteerCount,
+                votes: playground.votes,
+                slug: playground.name + " Rookvrij",
+                zoom: 18,
+                default: false,
             };
-        }
-        return {
-            playgrounds: data.playgrounds.map(playground => {
-                return {
-                    id: playground.id,
-                    name: playground.name,
-                    lat: playground.lat,
-                    lng: playground.lng,
-                    vol: playground.volunteerCount,
-                    votes: playground.votes,
-                    slug: playground.name + " Rookvrij",
-                    zoom: 18,
-                    default: false,
-                };
-            })
-        };
-    }
-});
+        })
+  }
+}
 
-const PlaygroundMap = compose(
+const mapDispatchToProps = dispatch => {
+    return {
+        ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
+      }
+}
+
+export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(PlaygroundMap));
+
+
+
+
+const PlaygroundMapImpl = compose(
     withProps({
         googleMapURL:
             `https://maps.googleapis.com/maps/api/js?key=${MAP_API_KEY}&v=3.exp&libraries=geometry,drawing,places`,
@@ -67,10 +74,8 @@ const PlaygroundMap = compose(
         mapElement: <div style={{height: `100%`}}/>
     }),
     withStateHandlers(
-        () => ({
-            isMarkerShown: false,
-            newPin: null,
-        }), {
+        () => ({ isMarkerShown: false, newPin: null }), 
+        {
             onMapClick: () => (e) => ({
                 newPin: e.latLng,
                 isMarkerShown: true
@@ -142,6 +147,5 @@ const PlaygroundMap = compose(
     </div>
 ));
 
-const PlaygroundMapWithData = withPlaygrounds(PlaygroundMap);
 
-export default withStyles(componentsStyle)(PlaygroundMapWithData);
+

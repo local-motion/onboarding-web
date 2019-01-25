@@ -1,6 +1,73 @@
 export const PUBLISH_ENVIRONMENT = 'PUBLISH_ENVIRONMENT'
+export const PUBLISH_GRAPHQLCLIENT = 'PUBLISH_GRAPHQLCLIENT'
+export const NULL_ACTION = 'NULL_ACTION'
+
+export const nullAction = {type: NULL_ACTION}
+
+export const REQUEST_POSTFIX = '_REQUEST'
+export const SUCCESS_POSTFIX = '_SUCCESS'
+export const FAILURE_POSTFIX = '_FAILURE'
+
 
 export const publishEnvironment = environmentProperties => (
     {type: PUBLISH_ENVIRONMENT, environmentProperties}
   )
+
+export const publishGraphQLClient = client => (
+    {type: PUBLISH_GRAPHQLCLIENT, client}
+  )
+
+
+export const fetchGraphQL = (baseActionIdentifier, graphQLQuery, variables={}, fetchId) => {
+
+console.log("fetching " + baseActionIdentifier + " for " + fetchId)
+
+  return (dispatch, getState) => {
+      const graphQLClient = getState().graphQLClient;
+      dispatch({type: baseActionIdentifier + REQUEST_POSTFIX, fetchId, timestamp: Date.now()})
+
+      return graphQLClient.query({
+        query: graphQLQuery,
+        variables
+      })
+        .then(data => dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, fetchId, timestamp: Date.now() }))
+        .catch(error => dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, fetchId,  timestamp: Date.now() }));
+      
+    }
+  }
+
+export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables={}, onSuccessCallback, miscAttributes) => {
+  return (dispatch, getState) => {
+      const graphQLClient = getState().graphQLClient;
+      dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
+
+      return graphQLClient.mutate({
+        mutation: graphQLMutation,
+        variables
+      })
+        .then(data => {
+          if (data.errors && data.errors[0]) {
+            console.log('graphQL mutation success with error:')
+            console.log(data)
+              dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: {code: data.errors[0].code, message: data.errors[0].niceMessage, miscAttributes}})
+          }
+          else {
+            console.log('graphQL mutation success:')
+            console.log(data)
+              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, variables, miscAttributes })
+              if (onSuccessCallback)
+                onSuccessCallback(data.data)
+          }
+        })
+        .catch(error => {
+          console.log('graphQL mutation error:')
+          console.log(error)
+          dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, miscAttributes})
+        });
+      
+    }
+  }
+
+
+
 

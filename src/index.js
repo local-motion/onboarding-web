@@ -1,13 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Redirect} from 'react-router-dom'
-import {createBrowserHistory} from "history";
+// import {createBrowserHistory} from "history";
 import {Route, Router, Switch} from "react-router-dom";
 import {I18nextProvider} from "react-i18next";
 import i18n from "./i18n";
 import {ApolloClient} from 'apollo-client';
 import {ApolloLink} from 'apollo-link';
-import {onError} from "apollo-link-error";
 import {HttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ApolloProvider} from 'react-apollo';
@@ -32,7 +31,8 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
 import rootReducer from './RootReducer';
-import { publishEnvironment } from "./GlobalActions";
+import { publishEnvironment, publishGraphQLClient } from "./GlobalActions";
+import { history } from "./setup";
 
 const environments = {
     "techoverflow-p.aws.abnamro.org": {
@@ -129,7 +129,11 @@ Amplify.configure({
     }
 });
 
-let hist = createBrowserHistory();
+// Set up the Redux store
+const store = createStore(rootReducer, applyMiddleware(thunk))
+store.dispatch(publishEnvironment(settings))
+
+// let hist = createBrowserHistory();
 const rootEl = document.querySelector("#root");
 
 const App = class App extends React.Component {
@@ -141,21 +145,21 @@ const App = class App extends React.Component {
             return "Login failed: " + (auth && auth.state);
         }
 
-        const errorLink = onError(apolloError => {
-            const graphQLErrors = apolloError.graphQLErrors;
-            const networkError = apolloError.networkError;
-            if (graphQLErrors) {
-                graphQLErrors.map(({ message, locations, path, extensions }) =>
-                    console.log(`[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(locations)}, Path: ${path}, Extensions: ${JSON.stringify(extensions)}`)
+        // const errorLink = onError(apolloError => {
+        //     const graphQLErrors = apolloError.graphQLErrors;
+        //     const networkError = apolloError.networkError;
+        //     if (graphQLErrors) {
+        //         graphQLErrors.map(({ message, locations, path, extensions }) =>
+        //             console.log(`[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(locations)}, Path: ${path}, Extensions: ${JSON.stringify(extensions)}`)
 
-                    // TODO: Consider using extensions.code === 'UNAUTHENTICATED' to trigger JWT refresh
-                );
-            }
+        //             // TODO: Consider using extensions.code === 'UNAUTHENTICATED' to trigger JWT refresh
+        //         );
+        //     }
 
-            if (networkError) {
-                console.log(`[Network error]: ${networkError}`);
-            }
-        });
+        //     if (networkError) {
+        //         console.log(`[Network error]: ${networkError}`);
+        //     }
+        // });
         const authLink = setContext(async (req, {headers}) => {
             let session = authData.getSignInUserSession();
             let idToken = session.getIdToken();
@@ -171,11 +175,12 @@ const App = class App extends React.Component {
         const client = new ApolloClient({
             defaultOptions: {
                 watchQuery: {
-                    fetchPolicy: 'cache-and-network',
+                    fetchPolicy: 'no-cache',                // We are not using graphQL caching, but keep the state in the Redux store instead
                     errorPolicy: 'all',
                 },
                 query: {
-                    fetchPolicy: 'cache-and-network',
+                    fetchPolicy: 'no-cache',                // We are not using graphQL caching, but keep the state in the Redux store instead
+                    // fetchPolicy: 'network-only',
                     errorPolicy: 'all',
                 },
                 mutate: {
@@ -183,7 +188,7 @@ const App = class App extends React.Component {
                 },
             },
             link: ApolloLink.from([
-                errorLink,
+                // errorLink,
                 authLink,
                 httpLink
             ]),
@@ -191,11 +196,13 @@ const App = class App extends React.Component {
             connectToDevTools: true,
         });
 
+        store.dispatch(publishGraphQLClient(client))            // Register the graphQL client in the global state
+
         return (
             <div>
                 <ApolloProvider client={client}>
                     <I18nextProvider i18n={i18n}>
-                        <Router history={hist}>
+                        <Router history={history}>
                             <Switch>
                                 <Route exact path="/onboarding/logout" render={() => {
                                     console.log("User logged out, redirecting to map of the Netherlands.");
@@ -211,7 +218,7 @@ const App = class App extends React.Component {
                 <CookieConsent
                     location="bottom"
                     buttonText="Accepteren"
-                    cookieName="myAwesomeCookieName2"
+                    cookieName="CookiesAccepted"
                     style={{background: "#2B373B"}}
                     buttonStyle={{color: "#4e503b", fontSize: "13px"}}
                     expires={150}
@@ -235,8 +242,7 @@ const SecuredApp = withAuthenticator(App, false, [
     <JConfirmSignUp/>,
 ]);
 
-const store = createStore(rootReducer, applyMiddleware(thunk))
-store.dispatch(publishEnvironment(settings))
+
 
 const Wrapped = [
     <Provider store={store}><SecuredApp className={"secure-app"}/></Provider>

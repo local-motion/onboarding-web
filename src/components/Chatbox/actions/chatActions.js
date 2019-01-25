@@ -23,8 +23,6 @@ export const activateChatbox = chatboxId => {
   
     Auth.currentAuthenticatedUser().then(user => {
       const jwtToken = user.signInUserSession.idToken.jwtToken
-      console.log('active chatbox:  ' + chatboxId)
-      console.log("JWT token: " + jwtToken)
 
       dispatch({type: SET_ACTIVE_CHATBOX, chatboxId, jwtToken})
       dispatch(fetchChatMessages())
@@ -46,11 +44,9 @@ export const fetchChatMessages = (reload=false) => {
       const lastMessageId = (!reload && chatState.messages.length > 0) ? chatState.messages[chatState.messages.length-1].messageId : null;
       var url;
       if (lastMessageId === null) {
-        console.log('fetching chat messages for ' + chatboxId)
         url = (getState().environmentProperties.api.chatbox + "/") + chatboxId
       }
       else {
-        console.log('fetching chat messages for ' + chatboxId + ' since ' + lastMessageId)
         url = (getState().environmentProperties.api.chatbox  + "/") + chatboxId + "?since=" + lastMessageId
       }
 
@@ -81,7 +77,6 @@ export const fetchChatMessages = (reload=false) => {
 
 
 export const receiveChatMessage = (chatboxId, messages, append=false) => {
-  console.log('receiving...' + JSON.stringify(messages))
 
   return ({
   type: RECEIVE_CHAT_MESSAGES,

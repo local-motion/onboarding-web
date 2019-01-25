@@ -1,5 +1,3 @@
-import {graphql} from "react-apollo";
-import gql from "graphql-tag";
 import Dialog from '@material-ui/core/Dialog';
 //import { withNamespaces } from "react-i18next";
 
@@ -15,43 +13,43 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
 import {withStyles} from "@material-ui/core/styles";
+import { connect } from 'react-redux'
+import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
+import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
+import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
-const GET_PLAYGROUNDS = gql`
-  {
-    playgrounds {
-      id
-      name
-      lat
-      lng
-      status
-      volunteerCount
-      votes
-    }
+
+const mapStateToProps = state => {
+    const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
+    const errorMessageSelector = createErrorMessageSelector([GET_PLAYGROUNDS]);
+
+    return {
+        playgroundsLoading: loadingSelector(state),
+        hasErrors: errorMessageSelector(state) !== '',
+        error: errorMessageSelector(state),
+        playgrounds: getAllPlaygrounds(state).map(playground => {
+            return {
+                id: playground.id,
+                name: playground.name,
+                lat: playground.lat,
+                lng: playground.lng,
+                vol: playground.volunteerCount,
+                votes: playground.votes,
+                slug: playground.name + " Rookvrij",
+                zoom: 18,
+                default: false,
+            };
+        })
   }
-`;
+}
 
-const withPlaygrounds = graphql(GET_PLAYGROUNDS, {
-    props: ({ownProps, data}) => {
-        if (data.loading) return {playgroundsLoading: true};
-        if(data.error) return {
-            hasErrors: true,
-            error: data.error.toString()
-        };
-        return {
-            playgrounds: data.playgrounds.map(playground => {
-                return {
-                    id: playground.id,
-                    name: playground.name,
-                    lat: playground.lat,
-                    lng: playground.lng,
-                    vol: playground.volunteerCount,
-                    votes: playground.votes,
-                    slug: playground.name + " Rookvrij"
-                };
-            })
-        };
-    }
-});
+const mapDispatchToProps = dispatch => {
+    return {
+        ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
+      }
+}
+
+
 
 function renderInputComponent(inputProps) {
     const {
@@ -165,6 +163,10 @@ class IntegrationAutosuggest extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.props.ensurePlaygrounds()
+    }
+
     handleSuggestionsFetchRequested = ({value}) => {
         const playgrounds = this.props.playgrounds;
         this.setState({
@@ -260,5 +262,5 @@ IntegrationAutosuggest.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const playgroundSearch = withPlaygrounds(IntegrationAutosuggest);
-export default withStyles(styles)(playgroundSearch);
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(IntegrationAutosuggest));
+

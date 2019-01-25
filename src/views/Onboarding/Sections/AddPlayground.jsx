@@ -11,18 +11,14 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 import withStyles from "@material-ui/core/styles/withStyles";
 import {withNamespaces} from "react-i18next";
 import AddLocation from "@material-ui/icons/AddLocation";
-import PlaygroundMap from "../../views/Onboarding/Sections/PlaygroundMap";
-import gql from "graphql-tag";
-import {Mutation} from "react-apollo";
+import PlaygroundMap from "./PlaygroundMap";
+import { createInitiative, CREATE_INITIATIVE } from '../../../components/Playground/PlaygroundActions';
+import { connect } from 'react-redux'
+import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
+import { clearError } from '../../../api/ApiActions';
+import { history } from '../../../setup';
 
-const CREATE_INITIATIVE = gql`
-    mutation CreateInitiative($input: CreateInitiativeInput!) {
-        createInitiative(input: $input) {
-            id
-        }
-    }
-`;
-class FormDialog extends React.Component {
+class AddPlayground extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,21 +29,25 @@ class FormDialog extends React.Component {
                 latlng: {lat: 52.092876, lng: 5.10448},
                 zoom: 8
             },
-            initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                // generate a uuid
-                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
-                return v.toString(16);
-            }),
-            type: "smokefree",
-            status: "not_started",
             open: false,
             duplicate: false,
             error: '',
         }
+        this.submit.bind(this)
     };
 
+    isValidState = () => {
+        return !this.state.duplicate && !this.props.loading && this.state.name && this.state.lat && this.state.lng
+    }
+
+    submit = () => {
+        if (this.isValidState)
+            this.props.createInitiative(this.state.name, this.state.lat, this.state.lng, (data) => history.push('/workspace/' + data.createInitiative.id))
+    }
+
     handleClickOpen = () => {
-        this.setState({open: true});
+        this.props.clearError()
+        this.setState({open: true, name: '', duplicate: false, error: '', lat: '', lng: ''});
     };
 
     handleClose = () => {
@@ -55,14 +55,14 @@ class FormDialog extends React.Component {
     };
 
     updateName = (eEvent) => {
-        this.duplicateCheck(eEvent.target.value);
-        this.setState({
-            name: eEvent.target.value
-        });
-
-    };
-    loadWorkspace = (eEvent) => {
-        window.location.href = `/workspace/${this.state.initiativeId}`;
+        if (eEvent.key === 'Enter')
+            this.submit()
+        else {
+            this.duplicateCheck(eEvent.target.value);
+            this.setState({
+                name: eEvent.target.value
+            });
+        }
     };
 
     duplicateCheck = (playground) =>{
@@ -78,22 +78,13 @@ class FormDialog extends React.Component {
                 error: ''
             });
         }
-        console.log(this.state);
     }
 
     handlePlaygroundChange(playground) {
-        console.log("handlePlaygroundChange: ", playground);
-        this.setState({
-            playground: playground,
-            map: {
-                latlng: {lat: playground.lat, lng: playground.lng},
-                zoom: 18
-            }
-        });
+        // Do nothing as we do not allow to select a playground in this view
     }
 
     handleCreatePlayground = (e) => {
-        console.log("handleCreatePlayground: ", e);
         this.setState({
             view: 'playground',
             lat: e.latLng.lat(),
@@ -103,17 +94,9 @@ class FormDialog extends React.Component {
 
 
     render() {
-
         const {classes} = this.props;
-        const {map, error} = this.state;
-        const playground = {
-            name: this.state.name,
-            lat: this.state.lat,
-            lng: this.state.lng,
-            initiativeId: this.state.initiativeId,
-            type: "smokefree",
-            status: "not_started"
-        };
+        const {map} = this.state;
+        const error = this.state.error || this.props.error
 
         return (
             <div className={"FormDialog-container"}>
@@ -143,14 +126,12 @@ class FormDialog extends React.Component {
                             onPlaygroundCreated={this.handleCreatePlayground}
 
                         />
-                        <form className={"form"}>
-                            <TextField
-                                className={classes.textField + " form-control"}
-                                label="Wat is de naam van de speeltuin?"
-                                pattern="/^\w{4,}$/"
-                                onKeyUp={this.updateName}
-                                defaultValue={this.state.name}/>
-                        </form>
+                        <TextField
+                            className={classes.textField + " form-control"}
+                            label="Wat is de naam van de speeltuin?"
+                            pattern="/^\w{4,}$/"
+                            onKeyUp={this.updateName}
+                            defaultValue={this.state.name}/>
                         {error && <span className={"error alert"}>{error}</span>}
                     </DialogContent>
                     <DialogActions className={"dialog-actions"}>
@@ -158,20 +139,14 @@ class FormDialog extends React.Component {
                             Annuleren
                         </Button>
 
-                        <Mutation
-                            mutation={CREATE_INITIATIVE}
-                            update={this.loadWorkspace}
-                        >
-                            {(joinInitiative) => (
-                                <Button
-                                    onClick={() => joinInitiative({variables: {input: playground}})}
-                                    className={"btn btn-highlight" }
-                                    disabled={this.state.duplicate}
-                                >
+                        <Button
+                                onClick={() => this.submit()}
+                                className={"btn btn-highlight" }
+                                disabled={!this.isValidState()}
+                            >
                                     <span>Voeg een speeltuin toe</span>
-                                </Button>
-                            )}
-                        </Mutation>
+                        </Button>
+
                     </DialogActions>
                 </Dialog>
             </div>
@@ -179,6 +154,23 @@ class FormDialog extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(
-    withNamespaces("translations")(FormDialog)
-);
+
+const mapStateToProps = state => {
+    const loadingSelector = createLoadingSelector([CREATE_INITIATIVE]);
+    const errorMessageSelector = createErrorMessageSelector([CREATE_INITIATIVE]);
+    return {
+        loading: loadingSelector(state),
+        error: errorMessageSelector(state),
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        createInitiative:    (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
+        clearError:          () =>                                      dispatch(clearError(CREATE_INITIATIVE))
+      }
+}
+
+const connectedAddPlayground = connect(mapStateToProps, mapDispatchToProps)(AddPlayground);
+
+export default withStyles(componentsStyle)(withNamespaces("translations")(connectedAddPlayground));
