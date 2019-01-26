@@ -115,7 +115,7 @@ const setDecideSmokefreeQuery = gql`
 
 export const ensurePlaygrounds = () => (dispatch, getState) => {
 
-  console.log("ensurePlaygrounds, loading: " + createLoadingSelector([GET_PLAYGROUNDS])(getState()))
+  // console.log("ensurePlaygrounds, loading: " + createLoadingSelector([GET_PLAYGROUNDS])(getState()))
 
   return getAllPlaygrounds(getState()).length === 0 && !createLoadingSelector([GET_PLAYGROUNDS])(getState()) ? 
                                                                 dispatch(fetchPlaygrounds()) : null

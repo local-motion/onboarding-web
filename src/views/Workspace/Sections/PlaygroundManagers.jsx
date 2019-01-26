@@ -31,7 +31,7 @@ class PlaygroundManagers extends React.Component {
                                 <ListItemAvatar>
                                     <Avatar>{manager.username.charAt(0)}</Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary={manager.username} secondary={manager.id === profile.id ? '(You)' : ''}/>
+                                <ListItemText primary={manager.username} secondary={manager.id === profile.id ? '(Jij)' : ''}/>
                             </ListItem>
                         })}
                     </List>

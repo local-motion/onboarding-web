@@ -16,14 +16,7 @@ import indexRoutes from "routes/index.jsx";
 import "assets/scss/material-kit-react.css?v=1.2.0";
 
 import Amplify from "aws-amplify";
-import {withAuthenticator} from 'aws-amplify-react';
-
-import JSignUp from "auth/JSignUp";
-import JSignIn from "auth/JSignIn";
-import JConfirmSignUp from "auth/JConfirmSignUp";
-import JConfirmSignIn from "auth/JConfirmSignIn";
-import JForgotPassword from "./auth/JForgotPassword";
-import JForgotPasswordReset from "./auth/JForgotPasswordReset";
+import { Auth } from "aws-amplify";
 
 import CookieConsent from "react-cookie-consent";
 
@@ -33,6 +26,10 @@ import thunk from 'redux-thunk';
 import rootReducer from './RootReducer';
 import { publishEnvironment, publishGraphQLClient } from "./GlobalActions";
 import { history } from "./setup";
+import { getJwtToken } from "./components/UserProfile/UserProfileReducer";
+import CustomAuthenticator from "./auth/CustomAuthenticator";
+import { userSignedIn } from "./components/UserProfile/UserProfileActions";
+
 
 const environments = {
     "techoverflow-p.aws.abnamro.org": {
@@ -107,8 +104,6 @@ console.log("Using settings:", settings);
 const uri = process.env.ONBOARDING_API || settings.api.onboarding;
 console.log('Using Onboarding API at ' + uri);
 
-// IsAuthenticated can be called to see if user is authenticated
-// const isAuthenticated = () => Amplify.Auth.user != null;
 const oauth = {
     awsCognito: {
         domain: settings.aws.cognito.domain,
@@ -133,44 +128,39 @@ Amplify.configure({
 const store = createStore(rootReducer, applyMiddleware(thunk))
 store.dispatch(publishEnvironment(settings))
 
-// let hist = createBrowserHistory();
-const rootEl = document.querySelector("#root");
 
 const App = class App extends React.Component {
+
+    signInHandler = (username, password) => {
+        console.log("App1 button is clicked ");
+        Auth.signIn(username, password)
+            .then(user => {
+                console.log("Auth.signIn is success ", user);
+                store.dispatch(userSignedIn(user))
+                console.log("App1 signInHandler()");
+                this.hist.push("/");
+                
+            })
+            .catch(err => {/* this.signInError(err) */}); 
+    }
+
+    signOutHandler = () => {
+        console.log("Clicked on Logout");
+        this.setState({ status: "guest" });
+    }
+
     render() {
-        const {auth, authData} = this.props;
-        console.log('Auth: ', auth);
-        console.log('Auth data: ', authData);
-        if (!authData) {
-            return "Login failed: " + (auth && auth.state);
-        }
+        const authLink = setContext( (req, {headers}) => {
+            const jwtToken = getJwtToken(store.getState())
+            console.log("authlink fetching jwt token: ", jwtToken)
 
-        // const errorLink = onError(apolloError => {
-        //     const graphQLErrors = apolloError.graphQLErrors;
-        //     const networkError = apolloError.networkError;
-        //     if (graphQLErrors) {
-        //         graphQLErrors.map(({ message, locations, path, extensions }) =>
-        //             console.log(`[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(locations)}, Path: ${path}, Extensions: ${JSON.stringify(extensions)}`)
-
-        //             // TODO: Consider using extensions.code === 'UNAUTHENTICATED' to trigger JWT refresh
-        //         );
-        //     }
-
-        //     if (networkError) {
-        //         console.log(`[Network error]: ${networkError}`);
-        //     }
-        // });
-        const authLink = setContext(async (req, {headers}) => {
-            let session = authData.getSignInUserSession();
-            let idToken = session.getIdToken();
-            let jwtToken = idToken.getJwtToken();
             return {
-                ...headers,
                 headers: {
-                    Authorization: `Bearer ${jwtToken}`
-                },
-            };
-        });
+                    ...headers,
+                    Authorization: jwtToken ? `Bearer ${jwtToken}` : ''
+                }
+            }
+        })
         const httpLink = new HttpLink({uri: uri});
         const client = new ApolloClient({
             defaultOptions: {
@@ -208,6 +198,18 @@ const App = class App extends React.Component {
                                     console.log("User logged out, redirecting to map of the Netherlands.");
                                     return <Redirect to='/'/>
                                 }}/>
+                                <Route
+                                    path="/login"
+                                    exact
+                                    key="Login"
+                                    render={props => <CustomAuthenticator
+                                        {...props}
+                                        {...this.state}
+                                        goForward={this.signInHandler}
+                                        goBack={this.signOutHandler}>
+                                    </CustomAuthenticator>
+                                    }
+                                />
                                 {indexRoutes.map((prop, key) => {
                                     return <Route path={prop.path} key={key} component={prop.component}/>;
                                 })}
@@ -233,22 +235,28 @@ const App = class App extends React.Component {
     }
 };
 
-const SecuredApp = withAuthenticator(App, false, [
-    <JSignIn/>,
-    <JSignUp/>,
-    <JForgotPassword/>,
-    <JForgotPasswordReset/>,
-    <JConfirmSignIn/>,
-    <JConfirmSignUp/>,
-]);
-
-
-
 const Wrapped = [
-    <Provider store={store}><SecuredApp className={"secure-app"}/></Provider>
+    // <Provider store={store}><SecuredApp className={"secure-app"}/></Provider>
+    <Provider store={store}><App className={"secure-app"}/></Provider>
 ];
 
-ReactDOM.render(
-    Wrapped,
-    rootEl
-);
+
+// Before (re)loading this page/application, check whether there is a authenticated user (which includes the session)
+// We wait for the result of the authenticatedUser call before starting the react application, so all elements are
+// initialised with the proper userinfo (especially Apollo's authLink)
+Auth.currentAuthenticatedUser()
+    .then(user => {
+        console.log('Found authenticated user: ', user)
+        store.dispatch(userSignedIn(user))
+    })
+    .catch(error => {
+        console.log('No authenticated user', error)
+    })
+    .finally(() => {
+        const rootElement = document.querySelector("#root")
+        ReactDOM.render(
+            Wrapped,
+            rootElement
+        )
+    })
+

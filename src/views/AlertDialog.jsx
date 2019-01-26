@@ -36,7 +36,6 @@ class AlertDialog extends React.Component {
      * Finds the GraphQLError and returns the 'niceMessage' of the error's extensions.
      */
     extractMessageFromApolloError(apolloError) {
-        debugger;
         const graphQLErrors = apolloError.graphQLErrors;
         const networkError = apolloError.networkError;
 

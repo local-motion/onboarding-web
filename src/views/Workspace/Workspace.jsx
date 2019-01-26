@@ -92,8 +92,7 @@ class WorkspaceTemplate extends React.Component {
         const {phase} = this.state;
         const {playground, userProfile, classes, ...rest} = this.props;
 
-        console.log("playground")
-        console.log(playground)
+        console.log("playground: ", playground)
         
         if (!playground || !userProfile || this.props.playgroundLoading || this.props.profileLoading) 
             return "loading..";
