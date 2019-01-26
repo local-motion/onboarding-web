@@ -17,8 +17,19 @@ import Hidden from "@material-ui/core/Hidden";
 
 import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 import JSignOut from "../../auth/JSignOut";
+import { connect } from 'react-redux'
+import { Button } from "@material-ui/core";
+import { signOutUser } from "../UserProfile/UserProfileActions";
 
-function HeaderLinks({...props}) {
+const mapStateToProps = state => ({
+    // nothing to map
+})
+const mapDispatchToProps = dispatch => ({
+    signOutUser:    () =>     dispatch(signOutUser()),
+})
+
+// function HeaderLinks({...props}) {
+function HeaderLinks(props) {
     const {classes} = props;
     return (
         <List className={classes.list}>
@@ -57,7 +68,9 @@ function HeaderLinks({...props}) {
                         }}
                         buttonIcon={AccountCircle}
                         dropdownList={[
-                            <JSignOut/>, 'Uitschrijven'
+                            // <JSignOut/>, 'Uitschrijven'
+                            <Button onClick={props.signOutUser}>Uitloggen</Button>, 
+                            'Uitschrijven'
                         ]}
                     />
                 </Hidden>
@@ -72,4 +85,7 @@ function HeaderLinks({...props}) {
     );
 }
 
-export default withStyles(headerLinksStyle)(HeaderLinks);
+// export default withStyles(headerLinksStyle)(HeaderLinks);
+
+
+export default withStyles(headerLinksStyle)(connect(mapStateToProps, mapDispatchToProps)(HeaderLinks))

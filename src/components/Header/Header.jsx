@@ -14,6 +14,19 @@ import Drawer from "@material-ui/core/Drawer";
 import Menu from "@material-ui/icons/Menu";
 // core components
 import headerStyle from "assets/jss/material-kit-react/components/headerStyle.jsx";
+import { connect } from 'react-redux'
+import { getUserName } from "../UserProfile/UserProfileReducer";
+import { Button } from "@material-ui/core";
+import { signOutUser } from "../UserProfile/UserProfileActions";
+
+
+const mapStateToProps = state => ({
+    userName: getUserName(state)
+})
+const mapDispatchToProps = dispatch => ({
+    signOutUser:    () =>     dispatch(signOutUser()),
+})
+
 
 class Header extends React.Component {
     constructor(props) {
@@ -61,6 +74,11 @@ class Header extends React.Component {
         }
     }
 
+    signInClick = () => {
+      console.log("User CLicks on Sign In....");
+      this.props.history.push("/login");
+    }
+    
     render() {
         const {
             classes,
@@ -81,6 +99,21 @@ class Header extends React.Component {
         });
         const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />;
         const brandComponent = brandLink ? <a href={brandLink}>{brandContent}</a> : <div>{brandContent}</div>;
+
+
+        const {userName} = this.props
+        let signInButton = null;
+        if (!userName) {
+          signInButton = <Button
+            onClick={() => this.signInClick()}
+            className={"btn btn-highlight pr-25 pull-right"} >
+            <span>Sign In</span>
+          </Button>;
+        } else {
+          signInButton = <h6>Hi, {userName}</h6>;
+        }
+
+
         return (
             <AppBar className={appBarClasses + " lm-header"}>
                 <Toolbar className={classes.container}>
@@ -106,6 +139,7 @@ class Header extends React.Component {
                             <Menu/>
                         </IconButton>
                     </Hidden>
+                  {signInButton}
                 </Toolbar>
                 <Hidden mdUp implementation="css">
                     <Drawer
@@ -174,4 +208,6 @@ Header.propTypes = {
     })
 };
 
-export default withStyles(headerStyle)(Header);
+
+
+export default withStyles(headerStyle)(connect(mapStateToProps, mapDispatchToProps)(Header))

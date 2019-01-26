@@ -18,6 +18,7 @@ import AlertDialog from "../../AlertDialog.jsx";
 import { connect } from 'react-redux'
 import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
 import { claimManagerRole, CLAIM_MANAGER_ROLE } from "../../../components/Playground/PlaygroundActions";
+import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 
 
 const mapStateToProps = state => {
@@ -92,7 +93,7 @@ class Dashboard extends React.Component {
                         }
                     </GridItem>
                 </GridContainer>
-                {/* <PlaygroundChatBox/> */}
+                <PlaygroundChatBox/>
             </div>
         );
     }
