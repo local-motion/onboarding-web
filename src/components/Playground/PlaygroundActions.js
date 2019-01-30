@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { fetchGraphQL, mutationGraphQL } from '../../GlobalActions';
 import { getAllPlaygrounds, getPlaygroundDetails } from './PlaygroundReducer';
 import { createLoadingSelector } from '../../api/Selectors';
-import { getUserProfile } from '../UserProfile/UserProfileReducer';
+import { getUser } from '../UserProfile/UserProfileReducer';
 
 
 export const GET_PLAYGROUNDS = 'GET_PLAYGROUNDS'
@@ -157,7 +157,6 @@ export const joinInitiative = (initiativeId, onSuccessCallback) => {
   onSuccessCallback)
 }
     
-// export const claimManagerRole = (initiativeId, onSuccessCallback) => (dispatch, getState) => {
 export const claimManagerRole = (initiativeId, onSuccessCallback) => {
   return (dispatch, getState) => {
   dispatch(mutationGraphQL(CLAIM_MANAGER_ROLE, claimManagerRoleQuery, {
@@ -167,7 +166,7 @@ export const claimManagerRole = (initiativeId, onSuccessCallback) => {
   },
   onSuccessCallback,
   {
-    userProfile: getUserProfile(getState())
+    userProfile: getUser(getState())
   }
   ))
 }

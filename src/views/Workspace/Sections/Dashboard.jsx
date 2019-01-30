@@ -42,12 +42,12 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        const { classes, playground, profile, loading, error } = this.props;
-        const isManager = playground.managers && !!playground.managers.filter(manager => {
-            return manager.id === profile.id
+        const { classes, playground, user, loading, error } = this.props;
+        const isManager = user && playground.managers && !!playground.managers.filter(manager => {
+            return manager.id === user.id
         }).length;
 
-        console.log(`Displaying dashboard for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${profile.id}`);
+        console.log(`Displaying dashboard for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${user ? user.id : 'anonymous'}`);
 
         return(
             <div className={classes.container + " information-wrapper"}>
@@ -58,7 +58,7 @@ class Dashboard extends React.Component {
                                       content={"Maak kennis met het team die deze speeltuin rookvrij maakt"}
                                       primaryCta={"Word lid"}
                                       MoreInformation={"Meer informatie"}
-                                      ExpandContent={<PlaygroundManagers playground={playground} profile={profile}/>}
+                                      ExpandContent={<PlaygroundManagers playground={playground} user={user}/>}
                         />
                         <CollapseCard title={"Petities"}
                                       image={require("assets/img/backgrounds/petities.jpg")}

@@ -191,7 +191,7 @@ class IntegrationAutosuggest extends React.Component {
     }
 
     render() {
-        const {playgroundsLoading, classes, onPlaygroundChange} = this.props;
+        const {playgroundsLoading, classes} = this.props;
 
         const autosuggestProps = {
             renderInputComponent,
