@@ -2,7 +2,8 @@ import React from 'react';
 import ChatMessageList from './ChatMessageList';
 import ChatMessageEntryBox from './ChatMessageEntryBox';
 import { withStyles } from '@material-ui/core/styles';
-
+import { connect } from 'react-redux'
+import { getUser } from '../../UserProfile/UserProfileReducer';
 
 const styles = theme => ({
   pane: {
@@ -11,6 +12,10 @@ const styles = theme => ({
     overflow: 'auto',
   },
 });
+
+const mapStateToProps = state => ({
+  user: getUser(state)
+})
 
 class ChatBox extends React.Component {
 
@@ -42,17 +47,19 @@ class ChatBox extends React.Component {
   }
 
   render() {
-    const {chatMessages=[], messageText='', onChangeHandler, onTextKeyPress} = this.props
+    const {chatMessages=[], messageText='', onChangeHandler, onTextKeyPress, user} = this.props
 
     return (
     <div>
       <div id="chatPane" className={this.props.classes.pane}>
         <ChatMessageList items={chatMessages}/>
       </div>
-      <ChatMessageEntryBox onSubmitClick={this.onSubmitHandler} onTextChange={onChangeHandler} text={messageText} onTextKeyPress={onTextKeyPress}/>
+      {user &&
+        <ChatMessageEntryBox onSubmitClick={this.onSubmitHandler} onTextChange={onChangeHandler} text={messageText} onTextKeyPress={onTextKeyPress}/>
+      }
     </div>
   );
   }
 }
 
-export default withStyles(styles)(ChatBox)
+export default withStyles(styles)(connect(mapStateToProps)(ChatBox));

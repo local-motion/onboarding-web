@@ -100,6 +100,9 @@ class Header extends React.Component {
 
 
         const {user} = this.props
+
+console.log("header user: ", user)
+
         let signInButton = null;
         if (!user) {
           signInButton = <Button

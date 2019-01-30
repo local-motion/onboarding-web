@@ -13,6 +13,7 @@ import { history } from "../../../setup.js";
 import { joinInitiative, JOIN_INITIATIVE } from "../../../components/Playground/PlaygroundActions.js";
 import { connect } from 'react-redux'
 import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
+import { getUser } from "../../../components/UserProfile/UserProfileReducer.js";
 
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([JOIN_INITIATIVE]);
@@ -20,6 +21,7 @@ const mapStateToProps = state => {
     return {
         loading: loadingSelector(state),
         error: errorMessageSelector(state),
+        user: getUser(state)
     }
 }
 
@@ -33,20 +35,35 @@ class JoinInitiative extends React.Component {
         this.props.joinInitiative(this.props.playground.id, () => history.push(`/workspace/${this.props.playground.id}`) )
     }
 
+    onVisitClicked = () => {
+        history.push(`/workspace/${this.props.playground.id}`)
+    }
+
     render() {
-        const {playground, loading, error} = this.props;
+        const {playground, loading, error, user} = this.props;
         if (playground.default) return null;
 
         return (
                 <div>
-                    <Button
-                        className={"btn btn-highlight pr-25 pull-left"}
-                        disabled={loading}
-                        onClick={() => this.onJoinClicked()}
-                    >
-                        <PersonAdd className={"mr-5"}/>
-                        <span>Maak deze speeltuin rookvrij</span>
-                    </Button>
+                    { user ?
+                        <Button
+                            className={"btn btn-highlight pr-25 pull-left"}
+                            disabled={loading}
+                            onClick={() => this.onJoinClicked()}
+                        >
+                            <PersonAdd className={"mr-5"}/>
+                            <span>Maak deze speeltuin rookvrij</span>
+                        </Button>
+                    :
+                        <Button
+                            className={"btn btn-highlight pr-25 pull-left"}
+                            disabled={loading}
+                            onClick={() => this.onVisitClicked()}
+                        >
+                            <span>Bezoek deze speeltuin</span>
+                        </Button>
+                    }
+    
                     {error && <AlertDialog apolloError={error}/>}
                 </div>
         );

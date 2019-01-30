@@ -94,18 +94,20 @@ class AddPlayground extends React.Component {
 
 
     render() {
-        const {classes} = this.props;
+        const {classes, user} = this.props;
         const {map} = this.state;
         const error = this.state.error || this.props.error
 
         return (
             <div className={"FormDialog-container"}>
-                <Button
-                    className={"btn btn-highlight map-add"}
-                    onClick={this.handleClickOpen}
-                >
-                    <AddLocation/>
-                </Button>
+                { user &&
+                    <Button
+                        className={"btn btn-highlight map-add"}
+                        onClick={this.handleClickOpen}
+                    >
+                        <AddLocation/>
+                    </Button>
+                }
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}

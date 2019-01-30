@@ -1,5 +1,5 @@
 import { uuid } from "../scripts/Generics";
-import {Auth} from "aws-amplify";
+import { getJwtToken } from "../../UserProfile/UserProfileReducer";
 
 
 // Action type definitions
@@ -17,18 +17,9 @@ export const POSTED_MESSAGE = 'POSTED_MESSAGE'
 
 
 // Actions
-export const activateChatbox = chatboxId => {
-  return dispatch => {
-
-  
-    Auth.currentAuthenticatedUser().then(user => {
-      const jwtToken = user.signInUserSession.idToken.jwtToken
-
-      dispatch({type: SET_ACTIVE_CHATBOX, chatboxId, jwtToken})
+export const activateChatbox = chatboxId => dispatch => {
+      dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
       dispatch(fetchChatMessages())
-      });
-
-  }
 }
 
 export const deactivateChatbox = chatboxId => (
@@ -53,9 +44,6 @@ export const fetchChatMessages = (reload=false) => {
 
       dispatch({type: FETCHING_MESSAGES})
       return fetch(url, {
-        headers: {
-          Authorization: "Bearer " + getState().chat.jwtToken
-        }
       }).then(
         response => {
           if (lastMessageId === null) {
@@ -103,7 +91,7 @@ export function postChatMessage(text) {
         body: JSON.stringify(chatMessage),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: "Bearer " + getState().chat.jwtToken
+          Authorization: "Bearer " + getJwtToken(getState())
         }
       })
       .then(response => response.json())

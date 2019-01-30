@@ -8,6 +8,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { getUser } from '../UserProfile/UserProfileReducer';
+import { connect } from 'react-redux'
 
 const styles = {
     card: {
@@ -27,9 +29,13 @@ const styles = {
     }
 };
 
+const mapStateToProps = state => ({
+        user: getUser(state)
+})
+
 class MediaCard extends React.Component {
     render() {
-        const {classes, title, image, content, primaryCta, secondaryCta} = this.props;
+        const {classes, title, image, content, primaryCta, secondaryCta, user} = this.props;
         return (
             <Card className={classes.card + " card"}>
                 <CardActionArea>
@@ -48,7 +54,7 @@ class MediaCard extends React.Component {
                     </CardContent>
                 </CardActionArea>
                 <CardActions className={classes.cardActions + " card-actions"}>
-                    {primaryCta ? <Button size="small" color="primary" href={primaryCta.action} onClick={primaryCta.click}>{primaryCta.text}</Button> : null}
+                    {primaryCta ? <Button disabled={!user} size="small" color="primary" href={primaryCta.action} onClick={primaryCta.click}>{primaryCta.text}</Button> : null}
                     {secondaryCta ? <Button size="small" color="primary">{secondaryCta}</Button> : null}
                 </CardActions>
             </Card>
@@ -60,4 +66,4 @@ MediaCard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MediaCard);
+export default withStyles(styles)(connect(mapStateToProps)(MediaCard));

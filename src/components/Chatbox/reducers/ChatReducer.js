@@ -11,7 +11,6 @@ Chat item definition:
 
 const initialState = {
   chatboxId: null,
-  jwtToken: null,
   messages: [],
   fetching: false,
   editText: '',
@@ -33,7 +32,6 @@ const chatReducer = (state = initialState, action) => {
       return {
         ...state,
         chatboxId: action.chatboxId,
-        jwtToken: action.jwtToken
       }
     case SET_UNACTIVE_CHATBOX:
       const newActiveChatebox = action.chatboxId === state.chatboxId ? null : state.chatboxId
@@ -43,11 +41,14 @@ const chatReducer = (state = initialState, action) => {
       }
     case RECEIVE_CHAT_MESSAGES:
       if (action.chatboxId === state.chatboxId)
-        return {
-          ...state,
-          messages: action.append ? state.messages.concat(action.messages) : action.messages,
-          fetching: false
-        }
+        if (action.append && action.messages.length === 0)
+          return state// no new messages
+        else
+          return {
+            ...state,
+            messages: action.append ? state.messages.concat(action.messages) : action.messages,
+            fetching: false
+          }
       else
         return state        // Active chatbox has changed since these messages were fetched
     case SUBMIT_CHAT_MESSAGE:
