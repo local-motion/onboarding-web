@@ -19,7 +19,7 @@ export const POSTED_MESSAGE = 'POSTED_MESSAGE'
 // Actions
 export const activateChatbox = chatboxId => dispatch => {
       dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
-      dispatch(fetchChatMessages())
+      dispatch(fetchChatMessages(true))
 }
 
 export const deactivateChatbox = chatboxId => (

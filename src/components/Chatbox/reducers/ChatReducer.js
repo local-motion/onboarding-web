@@ -29,9 +29,13 @@ const chatReducer = (state = initialState, action) => {
         editText: ''
       }
     case SET_ACTIVE_CHATBOX:
+      console.log("activating chatbox: " + action.chatboxId)
       return {
         ...state,
         chatboxId: action.chatboxId,
+        messages: [],
+        fetching: false,
+        editText: '',
       }
     case SET_UNACTIVE_CHATBOX:
       const newActiveChatebox = action.chatboxId === state.chatboxId ? null : state.chatboxId
