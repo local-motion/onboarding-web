@@ -15,16 +15,14 @@ import Menu from "@material-ui/icons/Menu";
 // core components
 import headerStyle from "assets/jss/material-kit-react/components/headerStyle.jsx";
 import { connect } from 'react-redux'
-import { getUserName } from "../UserProfile/UserProfileReducer";
+import { getUser } from "../UserProfile/UserProfileReducer";
 import { Button } from "@material-ui/core";
-import { signOutUser } from "../UserProfile/UserProfileActions";
 
 
 const mapStateToProps = state => ({
-    userName: getUserName(state)
+    user: getUser(state)
 })
 const mapDispatchToProps = dispatch => ({
-    signOutUser:    () =>     dispatch(signOutUser()),
 })
 
 
@@ -101,16 +99,19 @@ class Header extends React.Component {
         const brandComponent = brandLink ? <a href={brandLink}>{brandContent}</a> : <div>{brandContent}</div>;
 
 
-        const {userName} = this.props
+        const {user} = this.props
+
+console.log("header user: ", user)
+
         let signInButton = null;
-        if (!userName) {
+        if (!user) {
           signInButton = <Button
             onClick={() => this.signInClick()}
             className={"btn btn-highlight pr-25 pull-right"} >
             <span>Sign In</span>
           </Button>;
         } else {
-          signInButton = <h6>Hi, {userName}</h6>;
+          signInButton = <h6>Hi, {user.name}</h6>;
         }
 
 

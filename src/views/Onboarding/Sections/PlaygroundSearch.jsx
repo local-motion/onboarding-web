@@ -1,5 +1,4 @@
 import Dialog from '@material-ui/core/Dialog';
-//import { withNamespaces } from "react-i18next";
 
 //extra related to autosuggest demo + Material UI
 import React from "react";
@@ -99,26 +98,20 @@ function renderSuggestion(suggestion, {query, isHighlighted}) {
     );
 }
 
-function getSuggestions(value, suggestionList) {
+function getSuggestions(value, suggestions) {
     const inputValue = deburr(value.trim()).toLowerCase();
-    const inputLength = inputValue.length;
-    const suggestions = suggestionList;
-
-    //console.log(value, suggestionList);
-
     let count = 0;
 
-    return inputLength === 0
+    return inputValue.length === 0
         ? []
         : suggestions.filter(suggestion => {
             const keep =
                 count < 5 &&
-                suggestion.name.slice(0, inputLength).toLowerCase() === inputValue;
-            if (keep) {
-                count += 1;
-            }
+                suggestion.name.toLowerCase().indexOf(inputValue) > -1
+            if (keep)
+                count++
 
-            return keep;
+                return keep
         });
 }
 
@@ -151,7 +144,6 @@ const styles = theme => ({
 });
 
 class IntegrationAutosuggest extends React.Component {
-    //cons
     constructor() {
         super();
 
@@ -180,13 +172,26 @@ class IntegrationAutosuggest extends React.Component {
         });
     };
     handleChange = name => (event, {newValue}) => {
-        this.setState({
-            [name]: newValue
-        });
+        if (event.key === 'Enter')
+            this.selectPlayground()
+        else
+            this.setState({
+                [name]: newValue
+            });
     };
 
+    // If the search field contains the full playground name then select this playground (will select the playground stats and entry options)
+    selectPlayground = () => {
+        const self = this;
+        window.setTimeout(function () {
+            const suggestion = self.state.popper;
+            let result = self.props.playgrounds.find(a => a.name === suggestion);
+            self.props.onPlaygroundChange.bind(self, result)();
+        }, 110);
+    }
+
     render() {
-        const {playgroundsLoading, classes, onPlaygroundChange} = this.props;
+        const {playgroundsLoading, classes} = this.props;
 
         const autosuggestProps = {
             renderInputComponent,
@@ -223,12 +228,7 @@ class IntegrationAutosuggest extends React.Component {
                         }
                     }}
                     onSuggestionSelected={() => {
-                        const self = this;
-                        window.setTimeout(function () {
-                            const suggestion = self.state.popper;
-                            let result = self.props.playgrounds.find(a => a.name === suggestion);
-                            onPlaygroundChange.bind(self, result)();
-                        }, 110);
+                        this.selectPlayground()
                     }}
                     theme={{
                         suggestionsList: classes.suggestionsList,

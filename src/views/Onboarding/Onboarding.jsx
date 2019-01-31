@@ -24,6 +24,7 @@ import { connect } from 'react-redux'
 import { createLoadingSelector, createErrorMessageSelector } from "../../api/Selectors";
 import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
+import { getUser } from "../../components/UserProfile/UserProfileReducer";
 
 
 const mapStateToProps = state => {
@@ -46,7 +47,8 @@ const mapStateToProps = state => {
                 zoom: 18,
                 default: false,
             };
-        })
+        }),
+        user: getUser(state)
   }
 }
 
@@ -91,7 +93,7 @@ class Onboarding extends React.Component {
     }
 
     render() {
-        const {playgrounds, classes, ...rest } = this.props;
+        const {playgrounds, classes, user, ...rest } = this.props;
         const {playground, map} = this.state;
 
         return (
@@ -126,7 +128,7 @@ class Onboarding extends React.Component {
                                 center={map.latlng}
                                 zoom={map.zoom}
                             />
-                            <AddPlayground playgrounds={playgrounds}/>
+                            <AddPlayground playgrounds={playgrounds} user={user}/>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
                             <div>

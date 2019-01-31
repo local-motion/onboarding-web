@@ -27,8 +27,7 @@ import { history } from "../../setup.js";
 import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
 import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails } from "../../components/Playground/PlaygroundActions.js";
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
-import { GET_USER_PROFILE, ensureUserProfile } from "../../components/UserProfile/UserProfileActions.js";
-import { getUserProfile } from "../../components/UserProfile/UserProfileReducer.js";
+import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 
 
 const getPlaygroundId = () => history.location.pathname.split("/").pop()
@@ -74,27 +73,26 @@ class WorkspaceTemplate extends React.Component {
             case "Voorbereiding":
                 return <PhasePrepare playground={this.props.playground}/>;
             case "Uitvoering":
-                return <PhaseExecute playground={this.props.playground} profile={this.props.userProfile}/>;
+                return <PhaseExecute playground={this.props.playground} user={this.props.user}/>;
             case "Onderhouden":
                 return <PhaseSustain playground={this.props.playground}/>;
             default:
-                return <Dashboard playground={this.props.playground} profile={this.props.userProfile}/>;
+                return <Dashboard playground={this.props.playground} user={this.props.user}/>;
         }
     };
 
     componentDidMount() {
-        this.props.ensureUserProfile()
         this.props.ensurePlaygroundDetails()
       }
 
 
     render() {
         const {phase} = this.state;
-        const {playground, userProfile, classes, ...rest} = this.props;
+        const {playground, user, classes, ...rest} = this.props;
 
         console.log("playground: ", playground)
         
-        if (!playground || !userProfile || this.props.playgroundLoading || this.props.profileLoading) 
+        if (!playground || this.props.playgroundLoading) 
             return "loading..";
 
         return (
@@ -178,16 +176,12 @@ const mapStateToProps = state => ({
     playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
     playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
 
-    userProfile: getUserProfile(state),
-    userProfileLoading: isLoading(state, GET_USER_PROFILE),
-    userProfileError: getFetchError(state, GET_USER_PROFILE),
+    user: getUser(state),
 })
 
 const mapDispatchToProps = dispatch => ({
     ensurePlaygroundDetails:    () =>     dispatch(ensurePlaygroundDetails(getPlaygroundId())),
-    ensureUserProfile:          () =>     dispatch(ensureUserProfile()),
 })
 
-// const Workspace = profileRequest(WorkspaceTemplate);
 export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate));
 

@@ -128,6 +128,46 @@ Amplify.configure({
 const store = createStore(rootReducer, applyMiddleware(thunk))
 store.dispatch(publishEnvironment(settings))
 
+// Set up the graphQL client
+const authLink = setContext( (req, {headers}) => {
+    const jwtToken = getJwtToken(store.getState())
+    console.log("authlink fetching jwt token: ", jwtToken)
+
+    return {
+        headers: {
+            ...headers,
+            Authorization: jwtToken ? `Bearer ${jwtToken}` : ''
+        }
+    }
+})
+const httpLink = new HttpLink({uri: uri});
+const client = new ApolloClient({
+    defaultOptions: {
+        watchQuery: {
+            fetchPolicy: 'no-cache',                // We are not using graphQL caching, but keep the state in the Redux store instead
+            errorPolicy: 'all',
+        },
+        query: {
+            fetchPolicy: 'no-cache',                // We are not using graphQL caching, but keep the state in the Redux store instead
+            // fetchPolicy: 'network-only',
+            errorPolicy: 'all',
+        },
+        mutate: {
+            errorPolicy: 'all',
+        },
+    },
+    link: ApolloLink.from([
+        // errorLink,
+        authLink,
+        httpLink
+    ]),
+    cache: new InMemoryCache(),
+    connectToDevTools: true,
+});
+
+store.dispatch(publishGraphQLClient(client))            // Register the graphQL client in the global state
+
+
 
 const App = class App extends React.Component {
 
@@ -150,44 +190,6 @@ const App = class App extends React.Component {
     }
 
     render() {
-        const authLink = setContext( (req, {headers}) => {
-            const jwtToken = getJwtToken(store.getState())
-            console.log("authlink fetching jwt token: ", jwtToken)
-
-            return {
-                headers: {
-                    ...headers,
-                    Authorization: jwtToken ? `Bearer ${jwtToken}` : ''
-                }
-            }
-        })
-        const httpLink = new HttpLink({uri: uri});
-        const client = new ApolloClient({
-            defaultOptions: {
-                watchQuery: {
-                    fetchPolicy: 'no-cache',                // We are not using graphQL caching, but keep the state in the Redux store instead
-                    errorPolicy: 'all',
-                },
-                query: {
-                    fetchPolicy: 'no-cache',                // We are not using graphQL caching, but keep the state in the Redux store instead
-                    // fetchPolicy: 'network-only',
-                    errorPolicy: 'all',
-                },
-                mutate: {
-                    errorPolicy: 'all',
-                },
-            },
-            link: ApolloLink.from([
-                // errorLink,
-                authLink,
-                httpLink
-            ]),
-            cache: new InMemoryCache(),
-            connectToDevTools: true,
-        });
-
-        store.dispatch(publishGraphQLClient(client))            // Register the graphQL client in the global state
-
         return (
             <div>
                 <ApolloProvider client={client}>

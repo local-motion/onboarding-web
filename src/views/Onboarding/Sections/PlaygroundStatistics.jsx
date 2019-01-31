@@ -65,7 +65,7 @@ class PlaygroundStatistics extends React.Component {
                                                       name={"workingonit"} measurement={"percentage"}/>
                                     <DefaultStatistic progress={progress.smoking} playground={playground}
                                                       name={"smoking"}
-                                                      measurement={"count"}/>
+                                                      measurement={"percentage"}/>
                                 </div>
                                 <div className="statistics-wrapper specific"
                                      style={{display: generalStatistics ? 'none' : 'block'}}>

@@ -1,6 +1,5 @@
 import gql from 'graphql-tag';
 import { fetchGraphQL } from '../../GlobalActions';
-import { getUserProfile } from './UserProfileReducer';
 import { Auth } from 'aws-amplify';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
@@ -17,19 +16,14 @@ const getUserProfileQuery = gql`
     }
 `;
 
-export const ensureUserProfile = () => (dispatch, getState) => !getUserProfile(getState()).id ? 
-                                                                dispatch(fetchUserProfile()) : null
-
 export const fetchUserProfile = () => {
   return fetchGraphQL(GET_USER_PROFILE, getUserProfileQuery)
 }
 
-    
-export const userSignedIn = cognitoUser => ({
-    type: USER_SIGNED_IN,
-    cognitoUser
-})
-
+export const userSignedIn = cognitoUser => (dispatch, getState) =>{
+    dispatch({ type: USER_SIGNED_IN, cognitoUser })
+    dispatch(fetchUserProfile())
+}
 
 export const signOutUser = () => (dispatch) => {
     Auth.signOut()

@@ -122,25 +122,26 @@ const PlaygroundMapImpl = compose(
                 enableRetinaIcons
                 gridSize={60}
             >
-                {!props.playgroundsLoading &&
-                props.playgrounds &&
-                props.playgrounds.map(playground => (
-                    <Marker
-                        onClick={
-                            props.onPlaygroundChange.bind(this, playground)
-                        }
-                        key={playground.id}
-                        position={{lat: playground.lat, lng: playground.lng}}
-                        icon={markerGreen}
-                    />
-                ))}
 
-                {props.isMarkerShown &&
-                    <Marker
-                        position={props.newPin}
-                        icon={markerGray}
-                    />
-                }
+            {!props.playgroundsLoading &&
+            props.playgrounds &&
+            props.playgrounds.map(playground => (
+                <Marker
+                    onClick={
+                        props.onPlaygroundChange.bind(this, playground)
+                    }
+                    key={playground.id}
+                    position={{lat: playground.lat, lng: playground.lng}}
+                    icon={markerGreen}
+                />
+            ))}
+
+            {props.isMarkerShown &&
+                <Marker
+                    position={props.newPin}
+                    icon={markerGray}
+                />
+            }
             </MarkerClusterer>
         </GoogleMap>
 

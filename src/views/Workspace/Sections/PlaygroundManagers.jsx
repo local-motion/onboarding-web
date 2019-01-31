@@ -14,8 +14,8 @@ import Avatar from '@material-ui/core/Avatar';
 
 class PlaygroundManagers extends React.Component {
     render() {
-        const {playground, profile} = this.props;
-        if (!playground || !profile) return "Loading...";
+        const {playground, user} = this.props;
+        if (!playground) return "Loading...";
         return (
             <div>
                 <p>
@@ -31,7 +31,7 @@ class PlaygroundManagers extends React.Component {
                                 <ListItemAvatar>
                                     <Avatar>{manager.username.charAt(0)}</Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary={manager.username} secondary={manager.id === profile.id ? '(Jij)' : ''}/>
+                                <ListItemText primary={manager.username} secondary={user && manager.id === user.id ? '(Jij)' : ''}/>
                             </ListItem>
                         })}
                     </List>
