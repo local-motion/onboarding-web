@@ -104,6 +104,7 @@ class Onboarding extends React.Component {
                     rightLinks={<HeaderLinks/>}
                     fixed
                     color="white"
+                    disableBackButton
                     changeColorOnScroll={{
                         height: 50,
                         color: "white"

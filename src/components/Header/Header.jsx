@@ -17,7 +17,8 @@ import headerStyle from "assets/jss/material-kit-react/components/headerStyle.js
 import { connect } from 'react-redux'
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { Button } from "@material-ui/core";
-
+import { ArrowLeftRounded } from "@material-ui/icons";
+import { Link } from 'react-router-dom'
 
 const mapStateToProps = state => ({
     user: getUser(state)
@@ -73,8 +74,7 @@ class Header extends React.Component {
     }
 
     signInClick = () => {
-      console.log("User CLicks on Sign In....");
-      this.props.history.push("/login");
+      this.props.history.push("/login")
     }
     
     render() {
@@ -87,37 +87,36 @@ class Header extends React.Component {
             textBrand,
             brand,
             fixed,
-            absolute
-        } = this.props;
+            absolute,
+            disableBackButton,
+            user
+        } = this.props
+
         const appBarClasses = classNames({
             [classes.appBar]: true,
             [classes[color]]: color,
             [classes.absolute]: absolute,
             [classes.fixed]: fixed
-        });
-        const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />;
-        const brandComponent = brandLink ? <a href={brandLink}>{brandContent}</a> : <div>{brandContent}</div>;
-
-
-        const {user} = this.props
-
-console.log("header user: ", user)
-
-        let signInButton = null;
-        if (!user) {
-          signInButton = <Button
-            onClick={() => this.signInClick()}
-            className={"btn btn-highlight pr-25 pull-right"} >
-            <span>Sign In</span>
-          </Button>;
-        } else {
-          signInButton = <h6>Hi, {user.name}</h6>;
-        }
-
+        })
+        const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />
+        const brandComponent = <div align='center'>{brandLink ? <Link to={brandLink}>{brandContent}</Link> : brandContent }</div>
 
         return (
             <AppBar className={appBarClasses + " lm-header"}>
                 <Toolbar className={classes.container}>
+
+                    { !disableBackButton &&
+                        <Button
+                            component={Link} to="/"
+                            // className={"btn btn-highlight pr-25 pull-right"} 
+                            color="default"
+
+                        >
+                            <ArrowLeftRounded/>
+                            <span>Kaart</span>
+                        </Button>
+                    }
+
                     {leftLinks !== undefined ? brandComponent : null}
                     <div className={classes.flex}>
                         {leftLinks !== undefined ? (
@@ -140,7 +139,17 @@ console.log("header user: ", user)
                             <Menu/>
                         </IconButton>
                     </Hidden>
-                  {signInButton}
+
+                    { !user &&
+                        <Button
+                            onClick={() => this.signInClick()}
+                            // className={"btn btn-highlight pr-25 pull-right"}
+                            color="default"
+                        >
+                            <span>Inloggen</span>
+                        </Button>
+                    }
+
                 </Toolbar>
                 <Hidden mdUp implementation="css">
                     <Drawer

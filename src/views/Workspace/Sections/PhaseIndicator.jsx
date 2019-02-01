@@ -13,26 +13,29 @@ import StepConnector from '@material-ui/core/StepConnector';
 const styles = theme => ({
     button: {
         marginRight: theme.spacing.unit,
+        bgColor: 'red',
+        color: 'black',
+
     },
     completed: {
         display: 'inline-block',
+    },
+    inactive: {
+        bgColor: 'red'
     },
     stepper: {
         background: "none"
     },
     connectorActive: {
         '& $connectorLine': {
-            borderColor: theme.palette.secondary.main,
         },
     },
     connectorCompleted: {
         '& $connectorLine': {
-            borderColor: theme.palette.primary.main,
         },
     },
     connectorDisabled: {
         '& $connectorLine': {
-            borderColor: theme.palette.grey[100],
         },
     },
     connectorLine: {
@@ -49,42 +52,9 @@ function getSteps() {
 
 class PhaseIndicator extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.handlePlaygroundState = this.handlePlaygroundState.bind(this.props.playground);
-    }
-
-    state = {
-        activeStep: 0,
-        completed: {},
-    };
-
-    handlePlaygroundState(playground) {
-        let mappedStatus = '';
-        switch (playground.status) {
-            case 'not_started':
-                mappedStatus = 'Voorbereiding';
-                break;
-            case 'in_progress':
-                mappedStatus = 'Uitvoering';
-                break;
-            case 'finished':
-                mappedStatus = 'Onderhouden';
-                break;
-            default:
-                mappedStatus = '0';
-
-        }
-        this.setState({
-            activeStep: mappedStatus
-        });
-    }
-
-
     render() {
-        const {classes} = this.props;
+        const {classes, selectedPhase, activePhase} = this.props;
         const steps = getSteps();
-        const {activeStep} = this.state;
         const connector = (
             <StepConnector
                 className={"lm-step-connector"}
@@ -98,14 +68,16 @@ class PhaseIndicator extends React.Component {
         );
 
         return (
-            <Stepper nonLinear activeStep={activeStep} className={classes.stepper + " stepper-container"} connector={connector}>
+            <Stepper nonLinear activeStep={selectedPhase} className={classes.stepper + " stepper-container"} connector={connector}>
                 {steps.map((label, index) => {
                     return (
-                        <Step key={index} className={"lm-step"} onClick={this.props.onSwitchPhase.bind(this, label)}>
-
+                        <Step key={index} className={"lm-step"} onClick={() => this.props.onSwitch(index)}>
                             <StepButton
-                                className={this.state.activeStep === index ? "active lm-step-button" : "inactive lm-step-button"}
-                                completed={this.state.completed[index]}
+                                className=  {   (activePhase    === index ? "active " : "inactive " ) +
+                                                (selectedPhase  === index ? "selected " : ""        ) +
+                                                "lm-step-button"
+                                            }
+                                disableTouchRipple
                             >
                             </StepButton>
                         </Step>

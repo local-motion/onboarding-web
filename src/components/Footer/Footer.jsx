@@ -5,12 +5,8 @@ import PropTypes from "prop-types";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 import {List, ListItem, withStyles} from "@material-ui/core";
-
-// @material-ui/icons
-import Favorite from "@material-ui/icons/Favorite";
-
+import { Link } from 'react-router-dom'
 import footerStyle from "assets/jss/material-kit-react/components/footerStyle.jsx";
-
 import {withNamespaces} from 'react-i18next';
 
 function Footer({...props}) {
@@ -29,44 +25,19 @@ function Footer({...props}) {
                 <div className={classes.left + " links-container"}>
                     <List className={classes.list}>
                         <ListItem className={classes.inlineBlock}>
-                            <a
-                                href="/about"
-                                className={classes.block}
-                            >
-                                Over rookvrij spelen
-                            </a>
+                            <Link to="/about" className={classes.block}>Over rookvrij spelen</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <a
-                                href="/terms"
-                                className={classes.block}
-                            >
-                                Gebruiksvoorwaarden
-                            </a>
+                            <Link to="/terms" className={classes.block}>Gebruiksvoorwaarden</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <a
-                                href="/privacy"
-                                className={classes.block}
-                            >
-                                Privacy
-                            </a>
+                            <Link to="/privacy" className={classes.block}>Privacy</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <a
-                                href="/faq"
-                                className={classes.block}
-                            >
-                                Veelgestelde vragen
-                            </a>
+                            <Link to="/faq" className={classes.block}>Veelgestelde vragen</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <a
-                                href="/contact"
-                                className={classes.block}
-                            >
-                                Contact
-                            </a>
+                            <Link to="/contact" className={classes.block}>Contact</Link>
                         </ListItem>
                     </List>
                 </div>

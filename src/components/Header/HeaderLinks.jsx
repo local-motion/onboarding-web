@@ -20,20 +20,23 @@ import JSignOut from "../../auth/JSignOut";
 import { connect } from 'react-redux'
 import { Button } from "@material-ui/core";
 import { signOutUser } from "../UserProfile/UserProfileActions";
+import { getUser } from "../UserProfile/UserProfileReducer";
 
 const mapStateToProps = state => ({
-    // nothing to map
+    user: getUser(state)
 })
 const mapDispatchToProps = dispatch => ({
     signOutUser:    () =>     dispatch(signOutUser()),
 })
 
-// function HeaderLinks({...props}) {
 function HeaderLinks(props) {
-    const {classes} = props;
+    const {classes, user} = props;
     return (
         <List className={classes.list}>
-            <ListItem className={classes.listItem}>
+
+             {/* For now do not include the menu as there are no items to display */}
+
+            {/* <ListItem className={classes.listItem}>
                 <Hidden smDown>
                     <CustomDropdown
                         noLiPadding
@@ -56,36 +59,32 @@ function HeaderLinks(props) {
                         Overzicht van speeltuinen
                     </Link>
                 </Hidden>
-            </ListItem>
-            <ListItem className={classes.listItem}>
-                <Hidden smDown implementation="css">
-                    <CustomDropdown
-                        noLiPadding
-                        buttonText=""
-                        buttonProps={{
-                            className: classes.navLink,
-                            color: "transparent"
-                        }}
-                        buttonIcon={AccountCircle}
-                        dropdownList={[
-                            // <JSignOut/>, 'Uitschrijven'
-                            <Button onClick={props.signOutUser}>Uitloggen</Button>, 
-                            'Uitschrijven'
-                        ]}
-                    />
-                </Hidden>
-                <Hidden mdUp>
-                    <JSignOut layout={"list"}/>
-                </Hidden>
+            </ListItem> */}
 
-            </ListItem>
+            { user &&
+                <ListItem className={classes.listItem}>
+                    <Hidden smDown implementation="css">
+                        <CustomDropdown
+                            noLiPadding
+                            buttonText=""
+                            buttonProps={{
+                                className: classes.navLink,
+                                color: "transparent"
+                            }}
+                            buttonIcon={AccountCircle}
+                            dropdownList={[
+                                <Button onClick={props.signOutUser}>Mijn profiel</Button>, 
+                                <Button onClick={props.signOutUser}>Uitloggen</Button>, 
+                            ]}
+                        />
+                    </Hidden>
+                    <Hidden mdUp>
+                        <JSignOut layout={"list"}/>
+                    </Hidden>
+                </ListItem>
+                }
         </List>
-
-
     );
 }
-
-// export default withStyles(headerLinksStyle)(HeaderLinks);
-
 
 export default withStyles(headerLinksStyle)(connect(mapStateToProps, mapDispatchToProps)(HeaderLinks))

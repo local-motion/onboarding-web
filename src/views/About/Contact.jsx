@@ -21,7 +21,6 @@ class Contact extends React.Component {
 
                 <Header
                     brand={"Rookvrije generatie"}
-                    brandLink={"/"}
                     rightLinks={<HeaderLinks/>}
                     fixed
                     color="white"
@@ -36,7 +35,8 @@ class Contact extends React.Component {
                   <GridContainer className={"grid-container"}>
                     <GridItem xs={12} sm={12} md={6} className={classes.container}>
                         <h2>Contact</h2>
-                        <p>Heb je vragen, ideeën of klachten? Neem gerust contact met ons op.</p>
+                        Heb je vragen, ideeën of klachten? Neem gerust contact met ons op.
+                        <br/><br/><br/>
                         <Button size="large"
                                 color="primary"
                                 className="btn btn-highlight"
