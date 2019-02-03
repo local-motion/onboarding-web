@@ -10,7 +10,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 // core components
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import {withNamespaces} from "react-i18next";
 
 /**
  * This dialog presents a message to the user and an OK button to confirm and close the dialog
@@ -29,7 +28,6 @@ class ConfirmationDialog extends React.Component {
     
     this.state = {
       open: props.open !== undefined ? props.open : true,
-      // open: true,
     }
   
   }
@@ -48,8 +46,6 @@ class ConfirmationDialog extends React.Component {
       <div>
         <Dialog
           open={this.state.open}
-          // open={this.props.open}
-          // open={true}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -71,6 +67,4 @@ class ConfirmationDialog extends React.Component {
   }
 }
 
-export default withStyles(componentsStyle)(
-    withNamespaces("translations")(ConfirmationDialog)
-);
+export default withStyles(componentsStyle)(ConfirmationDialog)

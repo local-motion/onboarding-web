@@ -8,17 +8,14 @@ import SimpleCard from "components/CustomCard/Card.jsx";
 import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import SocialMedia from "../forms/SocialMedia.jsx";
-import AlertDialog from "../../AlertDialog.jsx";
-import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
+import { createLoadingSelector } from "../../../api/Selectors";
 import { connect } from 'react-redux'
 import { setDecideSmokefree, SET_DECIDE_SMOKEFREE } from "../../../components/Playground/PlaygroundActions.js";
 
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([SET_DECIDE_SMOKEFREE]);
-    const errorMessageSelector = createErrorMessageSelector([SET_DECIDE_SMOKEFREE]);
     return {
         loading: loadingSelector(state),
-        error: errorMessageSelector(state),
     }
 }
 
@@ -34,7 +31,7 @@ class PhasePrepare extends React.Component {
     }
 
     render() {
-        const {loading, error, classes} = this.props
+        const {loading, classes} = this.props
 
         return (
             <div className={classes.container + " information-wrapper"}>
@@ -67,7 +64,6 @@ class PhasePrepare extends React.Component {
                                         }}
                                     />
                                     {loading && <p>Loading...</p>}
-                                    {error && <AlertDialog apolloError={error}/>}
                                 </div>
                     </GridItem>
                 </GridContainer>

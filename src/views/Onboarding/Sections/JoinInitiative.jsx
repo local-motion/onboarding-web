@@ -8,19 +8,16 @@ import PersonAdd from "@material-ui/icons/PersonAdd";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 
 import {withNamespaces} from "react-i18next";
-import AlertDialog from "../../AlertDialog.jsx";
 import { history } from "../../../setup.js";
 import { joinInitiative, JOIN_INITIATIVE } from "../../../components/Playground/PlaygroundActions.js";
 import { connect } from 'react-redux'
-import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
+import { createLoadingSelector } from '../../../api/Selectors';
 import { getUser } from "../../../components/UserProfile/UserProfileReducer.js";
 
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([JOIN_INITIATIVE]);
-    const errorMessageSelector = createErrorMessageSelector([JOIN_INITIATIVE]);
     return {
         loading: loadingSelector(state),
-        error: errorMessageSelector(state),
         user: getUser(state)
     }
 }
@@ -40,7 +37,7 @@ class JoinInitiative extends React.Component {
     }
 
     render() {
-        const {playground, loading, error, user} = this.props;
+        const {playground, loading, user} = this.props;
         if (playground.default) return null;
 
         return (
@@ -64,7 +61,6 @@ class JoinInitiative extends React.Component {
                         </Button>
                     }
     
-                    {error && <AlertDialog apolloError={error}/>}
                 </div>
         );
     }

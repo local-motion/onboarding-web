@@ -22,12 +22,14 @@ import { Link } from 'react-router-dom'
 import EuroIcon from '@material-ui/icons/EuroSymbol';
 import GroupIcon from '@material-ui/icons/Group';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import ConfirmationDialog from "../../views/General/ConfirmationDialog";
+import { openConfirmationDialog } from "../ConfirmationDialog/ConfirmationDialogActions";
 
 const mapStateToProps = state => ({
     user: getUser(state)
 })
 const mapDispatchToProps = dispatch => ({
+    openPetitionDialog:    () => dispatch(openConfirmationDialog('Petitie tekenen', 'Het is helaas nog niet mogelijk om petities te tekenen')),
+    openDonationDialog:    () => dispatch(openConfirmationDialog('Doneren', 'Het is helaas nog niet mogelijk te doneren')),
 })
 
 const toolbarButtonStyles = {
@@ -45,36 +47,14 @@ const lastToolbarButtonStyles = {
 const LastToolbarButton = withStyles(lastToolbarButtonStyles)(props => (<Button {...props} />))
 
 
-
-
 class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             mobileOpen: false, 
-            petitionDialogOpen: false,
-            donationDialogOpen: false,
         };
         this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
         this.headerColorChange = this.headerColorChange.bind(this);
-        this.openPetitionDialog = this.openPetitionDialog.bind(this);
-        this.closePetitionDialog = this.closePetitionDialog.bind(this);
-        this.openDonationDialog = this.openDonationDialog.bind(this);
-        this.closeDonationDialog = this.closeDonationDialog.bind(this);
-    }
-
-    openPetitionDialog = () => {
-        this.setState({ petitionDialogOpen: true })
-    }
-    closePetitionDialog() {
-        this.setState({ petitionDialogOpen: false })
-    }
-
-    openDonationDialog = () => {
-        this.setState({ donationDialogOpen: true })
-    }
-    closeDonationDialog() {
-        this.setState({ donationDialogOpen: false })
     }
 
     handleDrawerToggle() {
@@ -129,7 +109,9 @@ class Header extends React.Component {
             fixed,
             absolute,
             disableBackButton,
-            user
+            user,
+            openPetitionDialog,
+            openDonationDialog
         } = this.props
 
         const appBarClasses = classNames({
@@ -141,8 +123,6 @@ class Header extends React.Component {
         const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />
         const brandComponent = <div align='center'>{brandLink ? <Link to={brandLink}>{brandContent}</Link> : brandContent }</div>
 
-        const {petitionDialogOpen, donationDialogOpen} = this.state
-
         return (
             <AppBar className={appBarClasses + " lm-header"}>
                 <Toolbar className={classes.container}>
@@ -150,7 +130,6 @@ class Header extends React.Component {
                     { !disableBackButton &&
                         <Button
                             component={Link} to="/"
-                            // className={"btn btn-highlight pr-25 pull-right"} 
                             color="default"
 
                         >
@@ -170,39 +149,21 @@ class Header extends React.Component {
                         )}
                     </div>
 
+                    <ToolbarButton color="default" className={classes.button}>
+                        <GroupIcon className={classes.rightIcon} />
+                        &nbsp;19
+                    </ToolbarButton>
 
+                    <ToolbarButton color="default" className={classes.button} onClick={openPetitionDialog}>
+                        <ThumbUpIcon className={classes.rightIcon} />
+                        &nbsp;235
+                    </ToolbarButton>
 
-            <ToolbarButton color="default" className={classes.button}>
-                <GroupIcon className={classes.rightIcon} />
-                &nbsp;19
-            </ToolbarButton>
+                    <LastToolbarButton color="default" className={classes.button} onClick={openDonationDialog}>
+                        <EuroIcon className={classes.rightIcon} />
+                    &nbsp;53.60
+                    </LastToolbarButton>
 
-            <ToolbarButton color="default" className={classes.button} onClick={() => this.openPetitionDialog()}>
-                <ThumbUpIcon className={classes.rightIcon} />
-                &nbsp;235
-            </ToolbarButton>
-
-            <LastToolbarButton color="default" className={classes.button} onClick={() => this.openDonationDialog()}>
-                <EuroIcon className={classes.rightIcon} />
-               &nbsp;53.60
-            </LastToolbarButton>
-
-            { petitionDialogOpen &&
-                <ConfirmationDialog
-                    title='Petitie tekenen'
-                    message='Het is helaas nog niet mogelijk om petities te tekenen'
-                    buttonMessage='Vooruit dan maar'
-                    onClose={this.closePetitionDialog}
-                />
-            }
-
-            { donationDialogOpen &&
-                <ConfirmationDialog
-                    title='Doneren'
-                    message='Het is helaas nog niet mogelijk te doneren'
-                    onClose={this.closeDonationDialog}
-                />
-            }
 
                     <Hidden smDown implementation="css">
                         {rightLinks}
