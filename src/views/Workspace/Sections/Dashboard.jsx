@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
                         }
                     </GridItem>
                 </GridContainer>
-                <PlaygroundChatBox/>
+                {/* <PlaygroundChatBox/> */}
             </div>
         );
     }

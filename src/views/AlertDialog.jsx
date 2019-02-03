@@ -55,6 +55,10 @@ class AlertDialog extends React.Component {
     this.setState({ open: false });
   };
 
+  componentWillUnmount() {
+    this.handleClose()
+  }
+
   render() {
 
     const {errorMessage, apolloError} = this.props
