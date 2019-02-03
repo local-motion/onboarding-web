@@ -21,22 +21,13 @@ import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
 import CallToAction from "./Sections/CallToAction";
 import AddPlayground from "./Sections/AddPlayground";
 import { connect } from 'react-redux'
-import { createLoadingSelector, createErrorMessageSelector } from "../../api/Selectors";
-import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
+import { ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
 
 
-const mapStateToProps = state => {
-    const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
-    const errorMessageSelector = createErrorMessageSelector([GET_PLAYGROUNDS]);
-
-    return {
-        playgroundsLoading: loadingSelector(state),
-        hasErrors: errorMessageSelector(state) !== '',
-        error: errorMessageSelector(state),
-        playgrounds: getAllPlaygrounds(state).map(playground => {
-            return {
+const mapStateToProps = state => ({
+        playgrounds: getAllPlaygrounds(state).map(playground => ({
                 id: playground.id,
                 name: playground.name,
                 lat: playground.lat,
@@ -46,11 +37,10 @@ const mapStateToProps = state => {
                 slug: playground.name + " Rookvrij",
                 zoom: 18,
                 default: false,
-            };
-        }),
+            })
+        ),
         user: getUser(state)
-  }
-}
+})
 
 const mapDispatchToProps = dispatch => {
     return {

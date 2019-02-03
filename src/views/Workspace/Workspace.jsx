@@ -30,11 +30,24 @@ import { getPlaygroundDetails } from "../../components/Playground/PlaygroundRedu
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 
 
+
+const mapStateToProps = state => ({
+    playground: getPlaygroundDetails(state, getPlaygroundId()),
+    playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
+    playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
+
+    user: getUser(state),
+})
+
+const mapDispatchToProps = dispatch => ({
+    ensurePlaygroundDetails:    () =>     dispatch(ensurePlaygroundDetails(getPlaygroundId())),
+})
+
+
 const getPlaygroundId = () => history.location.pathname.split("/").pop()
 
 const playgroundStatuses = ['not_started', 'in_progress', 'finished']
 const playgroundLabels = ['Voorbereiding', 'Uitvoering', 'Onderhouden']
-
 
 class WorkspaceTemplate extends React.Component {
     state = {
@@ -81,10 +94,6 @@ class WorkspaceTemplate extends React.Component {
 
         return (
             <div className={"workspace-wrapper"}>
-                {this.props.hasErrors === true &&
-                    <CustomDialog title={"Er is een fout opgetreden"} content={this.props.error}></CustomDialog>
-                }
-
                 <Header
                     brand={playground.name}
                     rightLinks={<HeaderLinks/>}
@@ -160,17 +169,4 @@ class WorkspaceTemplate extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-    playground: getPlaygroundDetails(state, getPlaygroundId()),
-    playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
-    playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
-
-    user: getUser(state),
-})
-
-const mapDispatchToProps = dispatch => ({
-    ensurePlaygroundDetails:    () =>     dispatch(ensurePlaygroundDetails(getPlaygroundId())),
-})
-
 export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate));
-

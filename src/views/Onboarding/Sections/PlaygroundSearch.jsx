@@ -1,6 +1,3 @@
-import Dialog from '@material-ui/core/Dialog';
-
-//extra related to autosuggest demo + Material UI
 import React from "react";
 import PropTypes from "prop-types";
 import deburr from "lodash/deburr";
@@ -13,33 +10,28 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
 import {withStyles} from "@material-ui/core/styles";
 import { connect } from 'react-redux'
-import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
+import { createLoadingSelector } from "../../../api/Selectors";
 import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
 
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
-    const errorMessageSelector = createErrorMessageSelector([GET_PLAYGROUNDS]);
 
     return {
         playgroundsLoading: loadingSelector(state),
-        hasErrors: errorMessageSelector(state) !== '',
-        error: errorMessageSelector(state),
-        playgrounds: getAllPlaygrounds(state).map(playground => {
-            return {
-                id: playground.id,
-                name: playground.name,
-                lat: playground.lat,
-                lng: playground.lng,
-                vol: playground.volunteerCount,
-                votes: playground.votes,
-                slug: playground.name + " Rookvrij",
-                zoom: 18,
-                default: false,
-            };
-        })
-  }
+        playgrounds: getAllPlaygrounds(state).map(playground => ({
+            id: playground.id,
+            name: playground.name,
+            lat: playground.lat,
+            lng: playground.lng,
+            vol: playground.volunteerCount,
+            votes: playground.votes,
+            slug: playground.name + " Rookvrij",
+            zoom: 18,
+            default: false,
+        })  )
+    }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -208,10 +200,6 @@ class IntegrationAutosuggest extends React.Component {
 
         return (
             <div className={classes.root + " playground autosuggest"}>
-                {this.props.hasErrors === true &&
-                <Dialog open={true} className={classes.container}>{this.props.error}</Dialog>
-                }
-
                 <div className={classes.divider}/>
                 <Autosuggest
                     {...autosuggestProps}

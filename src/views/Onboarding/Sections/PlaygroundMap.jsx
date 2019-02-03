@@ -5,14 +5,12 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 import { compose, withStateHandlers, withProps } from "recompose";
 
 import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-maps";
-import { InfoBox } from "react-google-maps/lib/components/addons/InfoBox";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import markerGray from "assets/img/markers/playground_gray.png";
 import markerGreen from "assets/img/markers/playground_green.png";
 // import markerPink from "assets/img/markers/playground_pink.png";
 import { connect } from 'react-redux'
-import { createLoadingSelector, createErrorMessageSelector } from "../../../api/Selectors";
-import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
+import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
 const MAP_API_KEY = "AIzaSyCsy6bZ_CvGdeFBOTSDkN0gPqVK9iKDfQ8";
@@ -30,29 +28,19 @@ class PlaygroundMap extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
-    const errorMessageSelector = createErrorMessageSelector([GET_PLAYGROUNDS]);
-
-    return {
-        playgroundsLoading: loadingSelector(state),
-        hasErrors: errorMessageSelector(state) !== '',
-        error: errorMessageSelector(state),
-        playgrounds: getAllPlaygrounds(state).map(playground => {
-            return {
-                id: playground.id,
-                name: playground.name,
-                lat: playground.lat,
-                lng: playground.lng,
-                vol: playground.volunteerCount,
-                votes: playground.votes,
-                slug: playground.name + " Rookvrij",
-                zoom: 18,
-                default: false,
-            };
-        })
-  }
-}
+const mapStateToProps = state => ({
+    playgrounds: getAllPlaygrounds(state).map(playground => ({
+            id: playground.id,
+            name: playground.name,
+            lat: playground.lat,
+            lng: playground.lng,
+            vol: playground.volunteerCount,
+            votes: playground.votes,
+            slug: playground.name + " Rookvrij",
+            zoom: 18,
+            default: false,
+    }) )
+})
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -91,19 +79,6 @@ const PlaygroundMapImpl = compose(
     withGoogleMap
 )(props => (
     <div>
-        { props.hasErrors === true &&
-            <InfoBox
-                defaultPosition={new window.google.maps.LatLng(props.center.lat, props.center.lng - 1)}
-                options={{closeBoxURL: ``, enableEventPropagation: true}}
-            >
-                <div style={{backgroundColor: `white`, opacity: 0.75, padding: `12px`}}>
-                    <div style={{fontSize: `16px`, fontColor: `darkred`}}>
-                        {props.error}
-                    </div>
-                </div>
-            </InfoBox>
-        }
-
         <GoogleMap
             zoom={props.zoom}
             center={props.center}
@@ -123,8 +98,7 @@ const PlaygroundMapImpl = compose(
                 gridSize={60}
             >
 
-            {!props.playgroundsLoading &&
-            props.playgrounds &&
+            { props.playgrounds &&
             props.playgrounds.map(playground => (
                 <Marker
                     onClick={
