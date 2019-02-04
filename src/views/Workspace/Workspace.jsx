@@ -5,7 +5,6 @@ import classNames from "classnames";
 // react components for routing our app without refresh
 // import {Link} from "react-router-dom";
 // @material-ui/core components
-import CustomDialog from 'components/Dialogs/CustomDialog.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 // @material-ui/icons

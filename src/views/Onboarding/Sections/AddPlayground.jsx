@@ -14,8 +14,7 @@ import AddLocation from "@material-ui/icons/AddLocation";
 import PlaygroundMap from "./PlaygroundMap";
 import { createInitiative, CREATE_INITIATIVE } from '../../../components/Playground/PlaygroundActions';
 import { connect } from 'react-redux'
-import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
-import { clearError } from '../../../api/ApiActions';
+import { createLoadingSelector } from '../../../api/Selectors';
 import { history } from '../../../setup';
 
 class AddPlayground extends React.Component {
