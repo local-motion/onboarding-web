@@ -17,20 +17,41 @@ import headerStyle from "assets/jss/material-kit-react/components/headerStyle.js
 import { connect } from 'react-redux'
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { Button } from "@material-ui/core";
-
+import { ArrowLeftRounded } from "@material-ui/icons";
+import { Link } from 'react-router-dom'
+import EuroIcon from '@material-ui/icons/EuroSymbol';
+import GroupIcon from '@material-ui/icons/Group';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import { openConfirmationDialog } from "../ConfirmationDialog/ConfirmationDialogActions";
 
 const mapStateToProps = state => ({
     user: getUser(state)
 })
 const mapDispatchToProps = dispatch => ({
+    openPetitionDialog:    () => dispatch(openConfirmationDialog('Petitie tekenen', 'Het is helaas nog niet mogelijk om petities te tekenen')),
+    openDonationDialog:    () => dispatch(openConfirmationDialog('Doneren', 'Het is helaas nog niet mogelijk te doneren')),
 })
+
+const toolbarButtonStyles = {
+    root: {
+        marginRight: 12,
+    },
+  }
+const ToolbarButton = withStyles(toolbarButtonStyles)(props => (<Button {...props} />))
+
+const lastToolbarButtonStyles = {
+    root: {
+        marginRight:  50,
+    },
+  }
+const LastToolbarButton = withStyles(lastToolbarButtonStyles)(props => (<Button {...props} />))
 
 
 class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mobileOpen: false
+            mobileOpen: false, 
         };
         this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
         this.headerColorChange = this.headerColorChange.bind(this);
@@ -73,8 +94,7 @@ class Header extends React.Component {
     }
 
     signInClick = () => {
-      console.log("User CLicks on Sign In....");
-      this.props.history.push("/login");
+      this.props.history.push("/login")
     }
     
     render() {
@@ -87,37 +107,37 @@ class Header extends React.Component {
             textBrand,
             brand,
             fixed,
-            absolute
-        } = this.props;
+            absolute,
+            disableBackButton,
+            user,
+            openPetitionDialog,
+            openDonationDialog
+        } = this.props
+
         const appBarClasses = classNames({
             [classes.appBar]: true,
             [classes[color]]: color,
             [classes.absolute]: absolute,
             [classes.fixed]: fixed
-        });
-        const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />;
-        const brandComponent = brandLink ? <a href={brandLink}>{brandContent}</a> : <div>{brandContent}</div>;
-
-
-        const {user} = this.props
-
-console.log("header user: ", user)
-
-        let signInButton = null;
-        if (!user) {
-          signInButton = <Button
-            onClick={() => this.signInClick()}
-            className={"btn btn-highlight pr-25 pull-right"} >
-            <span>Sign In</span>
-          </Button>;
-        } else {
-          signInButton = <h6>Hi, {user.name}</h6>;
-        }
-
+        })
+        const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />
+        const brandComponent = <div align='center'>{brandLink ? <Link to={brandLink}>{brandContent}</Link> : brandContent }</div>
 
         return (
             <AppBar className={appBarClasses + " lm-header"}>
                 <Toolbar className={classes.container}>
+
+                    { !disableBackButton &&
+                        <Button
+                            component={Link} to="/"
+                            color="default"
+
+                        >
+                            <ArrowLeftRounded/>
+                            <span>Kaart</span>
+                        </Button>
+                    }
+
                     {leftLinks !== undefined ? brandComponent : null}
                     <div className={classes.flex}>
                         {leftLinks !== undefined ? (
@@ -128,6 +148,23 @@ console.log("header user: ", user)
                             brandComponent
                         )}
                     </div>
+
+                    <ToolbarButton color="default" className={classes.button}>
+                        <GroupIcon className={classes.rightIcon} />
+                        &nbsp;19
+                    </ToolbarButton>
+
+                    <ToolbarButton color="default" className={classes.button} onClick={openPetitionDialog}>
+                        <ThumbUpIcon className={classes.rightIcon} />
+                        &nbsp;235
+                    </ToolbarButton>
+
+                    <LastToolbarButton color="default" className={classes.button} onClick={openDonationDialog}>
+                        <EuroIcon className={classes.rightIcon} />
+                    &nbsp;53.60
+                    </LastToolbarButton>
+
+
                     <Hidden smDown implementation="css">
                         {rightLinks}
                     </Hidden>
@@ -140,7 +177,17 @@ console.log("header user: ", user)
                             <Menu/>
                         </IconButton>
                     </Hidden>
-                  {signInButton}
+
+
+                    { !user &&
+                        <Button
+                            onClick={() => this.signInClick()}
+                            color="default"
+                        >
+                            <span>Inloggen</span>
+                        </Button>
+                    }
+
                 </Toolbar>
                 <Hidden mdUp implementation="css">
                     <Drawer

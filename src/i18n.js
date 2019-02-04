@@ -1,7 +1,8 @@
 import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
+// import LanguageDetector from "i18next-browser-languagedetector";
 
-i18n.use(LanguageDetector).init({
+// i18n.use(LanguageDetector).init({
+i18n.use('nl').init({
   resources: {
     en: {
       translations: {

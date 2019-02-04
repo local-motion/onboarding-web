@@ -14,6 +14,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Link } from 'react-router-dom'
 
 class FAQ extends React.Component {
 
@@ -24,7 +25,6 @@ class FAQ extends React.Component {
 
                 <Header
                     brand={"Rookvrije generatie"}
-                    brandLink={"/"}
                     rightLinks={<HeaderLinks/>}
                     fixed
                     color="white"
@@ -39,7 +39,8 @@ class FAQ extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={6} className={classes.container}>
                             <h2>Veelgestelde vragen</h2>
-                            <p>Hieronder een antwoord op veelgestelde vragen. Staat jouw vraag er niet bij, stuur ons dan gerust een <a href='/contact'>berichtje</a>.</p>
+                            Hieronder een antwoord op veelgestelde vragen. Staat jouw vraag er niet bij, stuur ons dan gerust een <Link to='/contact'>berichtje</Link>.
+                            <br/> <br/>
                             <div className={"faq-container"}>
                                 <ExpansionPanel>
                                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
@@ -57,7 +58,7 @@ class FAQ extends React.Component {
                                         <Typography className={classes.heading}>Waarom is Rookvrij Spelen nodig?</Typography>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
-                                        <Typography>
+                                        <Typography component='span'>
                                         Hoe meer rookvrije speelplekken hoe beter. Een rookvrije speeltuin geeft het goede voorbeeld aan kinderen en dat is belangrijk:
                                         <ul>
                                             <li>Jonge longen zijn kwetsbaar. Zien roken, doet roken.</li>
@@ -76,7 +77,7 @@ class FAQ extends React.Component {
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                         <Typography>
-                                        Dit platform is een initiatief van het Longfonds en ABN AMRO.<p />
+                                        Dit platform is een initiatief van het Longfonds en ABN AMRO.<br />
                                         Het rookvrij maken van speelplekken maakt onderdeel uit van de beweging ‘<a href='https://rookvrijegeneratie.nl'>op weg naar een Rookvrije Generatie</a>’. Deze beweging is een gezamenlijk initiatief van het Longfonds, KWF Kankerbestrijding en de Hartstichting. Het doel: ieder kind dat geboren wordt, moet de kans krijgen om volledig rookvrij op te groeien.  Inmiddels hebben al veel partijen zich aangesloten bij de Rookvrije Generatie: speeltuinen, maar ook sportverenigingen, scholen, bedrijven, gemeenten en zorginstellingen. Ook de overgrote meerderheid van de Nederlanders steunt het doel van de Rookvrije Generatie.
                                         </Typography>
                                     </ExpansionPanelDetails>
@@ -107,7 +108,9 @@ class FAQ extends React.Component {
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                         <Typography>
-                                        Jouw privacy vinden we heel belangrijk. We gaan daarom zorgvuldig om met je (persoons)gegevens. Gegevens zijn veilig opgeslagen en worden niet gedeeld met derden. Lees hier meer over in onze <a href='/privacy'>privacyverklaring</a>.
+                                        Jouw privacy vinden we heel belangrijk. We gaan daarom zorgvuldig om met je (persoons)gegevens. 
+                                        Gegevens zijn veilig opgeslagen en worden niet gedeeld met derden. 
+                                        Lees hier meer over in onze <Link to='/privacy'>privacyverklaring</Link>.
                                         </Typography>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>

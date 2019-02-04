@@ -29,6 +29,8 @@ import { history } from "./setup";
 import { getJwtToken } from "./components/UserProfile/UserProfileReducer";
 import CustomAuthenticator from "./auth/CustomAuthenticator";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
+import WrappedConfirmationDialog from "./components/ConfirmationDialog/WrappedConfirmationDialog";
+import { closeConfirmationDialog } from "./components/ConfirmationDialog/ConfirmationDialogActions";
 
 
 const environments = {
@@ -127,6 +129,11 @@ Amplify.configure({
 // Set up the Redux store
 const store = createStore(rootReducer, applyMiddleware(thunk))
 store.dispatch(publishEnvironment(settings))
+
+// Trigger a close of the confirmation dialog each time the history changes
+window.onpopstate = () => {
+    store.dispatch(closeConfirmationDialog())
+}
 
 // Set up the graphQL client
 const authLink = setContext( (req, {headers}) => {
@@ -232,6 +239,9 @@ const App = class App extends React.Component {
                             Door gebruik te maken van de site stemt u in met het plaatsen van dergelijke cookies
                         </span>
                 </CookieConsent>
+
+                <WrappedConfirmationDialog/>
+                
             </div>
         )
     }

@@ -14,8 +14,7 @@ import AddLocation from "@material-ui/icons/AddLocation";
 import PlaygroundMap from "./PlaygroundMap";
 import { createInitiative, CREATE_INITIATIVE } from '../../../components/Playground/PlaygroundActions';
 import { connect } from 'react-redux'
-import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
-import { clearError } from '../../../api/ApiActions';
+import { createLoadingSelector } from '../../../api/Selectors';
 import { history } from '../../../setup';
 
 class AddPlayground extends React.Component {
@@ -46,7 +45,6 @@ class AddPlayground extends React.Component {
     }
 
     handleClickOpen = () => {
-        this.props.clearError()
         this.setState({open: true, name: '', duplicate: false, error: '', lat: '', lng: ''});
     };
 
@@ -65,9 +63,9 @@ class AddPlayground extends React.Component {
         }
     };
 
-    duplicateCheck = (playground) =>{
+    duplicateCheck = (playgroundName) =>{
         const playgroundList = this.props.playgrounds;
-        if (playgroundList.filter(e => e.name === playground).length > 0) {
+        if (playgroundList.filter(e => e.name.toLowerCase().trim() === playgroundName.toLowerCase().trim()).length > 0) {
             this.setState({
                 duplicate: true,
                 error: 'Er bestaat al een speeltuin met deze naam.'
@@ -96,7 +94,7 @@ class AddPlayground extends React.Component {
     render() {
         const {classes, user} = this.props;
         const {map} = this.state;
-        const error = this.state.error || this.props.error
+        const error = this.state.error
 
         return (
             <div className={"FormDialog-container"}>
@@ -159,17 +157,14 @@ class AddPlayground extends React.Component {
 
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([CREATE_INITIATIVE]);
-    const errorMessageSelector = createErrorMessageSelector([CREATE_INITIATIVE]);
     return {
         loading: loadingSelector(state),
-        error: errorMessageSelector(state),
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         createInitiative:    (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
-        clearError:          () =>                                      dispatch(clearError(CREATE_INITIATIVE))
       }
 }
 

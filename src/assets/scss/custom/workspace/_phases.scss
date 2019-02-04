@@ -36,6 +36,12 @@
                     color: $lm-red-1;
                 }
             }
+            &.selected {
+                svg {
+                    width: 130px;
+                    height: 130px;
+                }
+            }
         }
     }
 

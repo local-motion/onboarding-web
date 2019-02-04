@@ -52,7 +52,7 @@ class CustomDropdown extends React.Component {
       noLiPadding
     } = this.props;
     const caretClasses = classNames({
-      [classes.caret]: true,
+      [classes.caret]: false,
       [classes.caretActive]: open,
       [classes.caretRTL]: rtlActive
     });

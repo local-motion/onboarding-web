@@ -14,19 +14,16 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 import PlaygroundManagers from "./PlaygroundManagers";
 import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
-import AlertDialog from "../../AlertDialog.jsx";
 import { connect } from 'react-redux'
-import { createLoadingSelector, createErrorMessageSelector } from '../../../api/Selectors';
+import { createLoadingSelector } from '../../../api/Selectors';
 import { claimManagerRole, CLAIM_MANAGER_ROLE } from "../../../components/Playground/PlaygroundActions";
 import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 
 
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([CLAIM_MANAGER_ROLE]);
-    const errorMessageSelector = createErrorMessageSelector([CLAIM_MANAGER_ROLE]);
     return {
         loading: loadingSelector(state),
-        error: errorMessageSelector(state),
     }
 }
 
@@ -42,7 +39,7 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        const { classes, playground, user, loading, error } = this.props;
+        const { classes, playground, user, loading } = this.props;
         const isManager = user && playground.managers && !!playground.managers.filter(manager => {
             return manager.id === user.id
         }).length;
@@ -88,7 +85,6 @@ class Dashboard extends React.Component {
                                             }}
                                         />
                                         {loading && <p>Loading...</p>}
-                                        {error && <AlertDialog apolloError={error}/>}
                                     </div>
                         }
                     </GridItem>
