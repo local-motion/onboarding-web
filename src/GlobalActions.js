@@ -1,4 +1,6 @@
 import { openConfirmationDialog } from "./components/ConfirmationDialog/ConfirmationDialogActions";
+import { truncate } from "fs";
+import { createUser } from "./components/UserProfile/UserProfileActions";
 
 export const PUBLISH_ENVIRONMENT = 'PUBLISH_ENVIRONMENT'
 export const PUBLISH_GRAPHQLCLIENT = 'PUBLISH_GRAPHQLCLIENT'
@@ -20,7 +22,7 @@ export const publishGraphQLClient = client => (
   )
 
 
-export const fetchGraphQL = (baseActionIdentifier, graphQLQuery, variables={}, fetchId) => {
+export const fetchGraphQL = (baseActionIdentifier, graphQLQuery, variables={}, fetchId, invokeErrorHandlers=true) => {
 
 console.log("fetching " + baseActionIdentifier + " for " + fetchId)
 
@@ -32,13 +34,70 @@ console.log("fetching " + baseActionIdentifier + " for " + fetchId)
         query: graphQLQuery,
         variables
       })
-        .then(data => dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, fetchId, timestamp: Date.now() }))
-        .catch(error => {
-          dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, fetchId,  timestamp: Date.now() })
-          dispatch(openGraphQLErrorMessageDialog(error))
+        .then(data => {
+          if (data.data)
+              // result -> call went ok
+            dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, fetchId, timestamp: Date.now() })
+          else {
+              // no result -> an error must have occurred
+            console.log('No data received: ', data)
+
+            if (data.errors && data.errors[0]) {
+              // error info is available -> handle
+              let errorHandled = false
+              const error = data.errors[0]
+
+              if (invokeErrorHandlers) {
+                const context = {baseActionIdentifier, graphQLQuery, variables, fetchId, dispatch, getState, invokeErrorHandlers}
+                for (var i = 0; i < errorHandlers.length && !errorHandled; i++) {
+                  console.log("invoking error handler: ", errorHandlers[i])
+                  errorHandled = errorHandlers[i](error, context)
+                }
+              }
+
+              if (!errorHandled) {
+                console.log("Unhandled error: ", error)
+                dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, fetchId,  timestamp: Date.now() })
+                dispatch(openGraphQLErrorMessageDialog(error))
+              }
+            }
+            else {
+              // Unknown error
+              console.log("Unknown error: ", data)
+              dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, fetchId,  timestamp: Date.now() })
+              dispatch(openGraphQLErrorMessageDialog("Unknown error"))
+          }
+          }
         })
     }
   }
+
+
+
+const noUserProfileErrorHandler = (error, context) => {
+  if (error.code === 'NO_PROFILE') {
+    // try to create a user profile and then retry the original query
+
+      console.log("Error: No user profile -> Trying to create one...")
+
+      const { dispatch } = context
+      dispatch(createUser(
+        () => {
+
+          console.log("User profile created-> Retrying original query")
+
+
+          // on success retry the original query, without invoking the errorHandlers this time to avoid infinite loops
+          dispatch(fetchGraphQL(context.baseActionIdentifier, context.graphQLQuery, context.variables={}, context.fetchId, false))
+        }
+      ))
+    return true 
+  }
+  else
+    return false
+}
+
+const errorHandlers = [noUserProfileErrorHandler]
 
 export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables={}, onSuccessCallback, miscAttributes) => {
   return (dispatch, getState) => {
