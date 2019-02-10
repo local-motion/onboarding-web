@@ -1,5 +1,5 @@
 import { SUCCESS_POSTFIX } from "../../GlobalActions";
-import { GET_USER_PROFILE, USER_SIGNED_IN, USER_SIGNED_OUT } from "./UserProfileActions";
+import { GET_USER_PROFILE, USER_SIGNED_IN, USER_SIGNED_OUT, CREATE_USER_PROFILE, DELETE_USER_PROFILE } from "./UserProfileActions";
 
 
 // State definition
@@ -27,7 +27,7 @@ export const getJwtToken = (state) => state.userprofile.cognitoUser ? state.user
 const userProfileReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_USER_PROFILE + SUCCESS_POSTFIX:
-    console.log("reducer received user profile:", action.payload.data.profile)
+      console.log("reducer received user profile:", action.payload.data.profile)
       return {
           ...state,
           user: {
@@ -35,6 +35,20 @@ const userProfileReducer = (state = initialState, action) => {
             name: action.payload.data.profile.username,
           }
         }
+    
+    case CREATE_USER_PROFILE + SUCCESS_POSTFIX:
+      console.log("reducer received created user profile:", action.payload.data.profile)
+      return {
+          ...state,
+          user: {
+            id: action.payload.data.createUser.id,
+            name: action.payload.data.createUser.username,
+          }
+        }
+    
+    case DELETE_USER_PROFILE + SUCCESS_POSTFIX:
+      console.log("reducer received deleted user profile:")
+      return initialState
     
     case USER_SIGNED_IN:
       console.log("reducer received user signin:", action.cognitoUser)

@@ -19,7 +19,7 @@ import headerLinksStyle from "assets/jss/material-kit-react/components/headerLin
 import JSignOut from "../../auth/JSignOut";
 import { connect } from 'react-redux'
 import { Button } from "@material-ui/core";
-import { signOutUser } from "../UserProfile/UserProfileActions";
+import { signOutUser, deleteUser } from "../UserProfile/UserProfileActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
 
 const mapStateToProps = state => ({
@@ -27,6 +27,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
     signOutUser:    () =>     dispatch(signOutUser()),
+    deleteUser:    () =>     dispatch(deleteUser()),
 })
 
 function HeaderLinks(props) {
@@ -73,7 +74,8 @@ function HeaderLinks(props) {
                             }}
                             buttonIcon={AccountCircle}
                             dropdownList={[
-                                <Button onClick={props.signOutUser}>Mijn profiel</Button>, 
+                                <Button >Mijn profiel</Button>, 
+                                <Button onClick={props.deleteUser}>Uitschrijven</Button>, 
                                 <Button onClick={props.signOutUser}>Uitloggen</Button>, 
                             ]}
                         />

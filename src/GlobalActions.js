@@ -1,5 +1,4 @@
 import { openConfirmationDialog } from "./components/ConfirmationDialog/ConfirmationDialogActions";
-import { truncate } from "fs";
 import { createUser } from "./components/UserProfile/UserProfileActions";
 
 export const PUBLISH_ENVIRONMENT = 'PUBLISH_ENVIRONMENT'
@@ -119,7 +118,7 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
             console.log('graphQL mutation success: ', data)
               dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, variables, miscAttributes })
               if (onSuccessCallback)
-                onSuccessCallback(data.data)
+                onSuccessCallback(data.data, dispatch, getState)
           }
         })
         .catch(error => {
