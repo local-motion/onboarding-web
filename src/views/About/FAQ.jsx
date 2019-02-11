@@ -84,7 +84,7 @@ class FAQ extends React.Component {
                                 </ExpansionPanel>
                                 <ExpansionPanel>
                                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                                        <Typography className={classes.heading}>Waarom is de ABN AMRO hierbij betrokken?</Typography>
+                                        <Typography className={classes.heading}>Waarom is ABN AMRO hierbij betrokken?</Typography>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                         <Typography>
