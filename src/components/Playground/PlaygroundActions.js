@@ -45,6 +45,10 @@ const getPlaygroundDetailsQuery = gql`
                 id
                 username
             }
+            volunteers {
+                userId
+                userName
+            }
         }
     }
 `;
