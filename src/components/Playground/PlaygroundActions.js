@@ -45,6 +45,10 @@ const getPlaygroundDetailsQuery = gql`
                 id
                 username
             }
+            volunteers {
+                userId
+                userName
+            }
         }
     }
 `;
@@ -59,7 +63,15 @@ const createInitiativeQuery = gql`
           status
           volunteerCount
           votes
-        }
+          volunteers {
+            userId
+            userName
+          }
+          managers {
+              id
+              username
+          }
+            }
     }
 `;
 
@@ -73,7 +85,15 @@ const joinInitiativeQuery = gql`
           status
           volunteerCount
           votes
-        }
+          volunteers {
+            userId
+            userName
+          }
+          managers {
+              id
+              username
+          }
+            }
     }
 `;
 
@@ -88,6 +108,10 @@ const claimManagerRoleQuery = gql`
       smokeFreeDate
       volunteerCount
       votes
+      volunteers {
+        userId
+        userName
+      }
       managers {
           id
           username
