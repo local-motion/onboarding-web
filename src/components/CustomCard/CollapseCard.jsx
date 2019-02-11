@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
+import { getUser } from '../UserProfile/UserProfileReducer';
+import { connect } from 'react-redux'
 
 const styles = theme => ({
     card: {
@@ -38,6 +40,10 @@ const styles = theme => ({
     }
 });
 
+const mapStateToProps = state => ({
+    user: getUser(state)
+})
+
 class CollapseMediaCard extends React.Component {
     state = { expanded: false };
     handleExpandClick = () => {
@@ -45,7 +51,7 @@ class CollapseMediaCard extends React.Component {
     };
 
     render() {
-        const {classes, title, image, content, primaryCta, MoreInformation, ExpandContent} = this.props;
+        const {classes, title, image, content, primaryCta, MoreInformation, ExpandContent, user} = this.props;
         return (
             <Card className={classes.card + " card"}>
                 <CardActionArea>
@@ -64,7 +70,7 @@ class CollapseMediaCard extends React.Component {
                     </CardContent>
                 </CardActionArea>
                 <CardActions className={"card-actions"}>
-                    {primaryCta ? <Button size="small" color="primary">{primaryCta}</Button> : null}
+                    {primaryCta ? <Button disabled={!user} size="small" color="primary">{primaryCta}</Button> : null}
                     {MoreInformation ? <Button size="small" color="primary" onClick={this.handleExpandClick}>{MoreInformation}</Button> : null}
                     <IconButton
                         className={classnames(classes.expand, {
@@ -90,4 +96,4 @@ CollapseMediaCard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(CollapseMediaCard);
+export default withStyles(styles)(connect(mapStateToProps)(CollapseMediaCard));

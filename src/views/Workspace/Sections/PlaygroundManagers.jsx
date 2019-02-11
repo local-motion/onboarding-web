@@ -10,28 +10,36 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import deepPurple from '@material-ui/core/colors/deepPurple';
 
+const styles = {
+    avatar: {
+      margin: 10,
+    },
+    purpleAvatar: {
+      margin: 0,
+      color: '#fff',
+      backgroundColor: deepPurple[500],
+    },
+  }
 
 class PlaygroundManagers extends React.Component {
     render() {
-        const {playground, user} = this.props;
+        const {playground, user, classes} = this.props;
         if (!playground) return "Loading...";
         return (
             <div>
-                <p>
-                    Er zijn in totaal {playground.volunteerCount} vrijwilligers die helpen met rookvrij maken van deze speeltuin.
-                </p>
-                <div className={playground.managers.length > 0 ? 'manager-container' : 'hide'}>
-                    <h3 style={{fontSize: "18px"}}>
-                        Beheerders van de speeltuin :
-                    </h3>
+                <div className={playground.volunteers.length > 0 ? 'manager-container' : 'hide'}>
                     <List>
-                        {playground.managers.map(function (manager, index) {
+                        {playground.volunteers.map(function (volunteer, index) {
+                            const volunteerIsManager = playground.managers.filter(manager => manager.id === volunteer.userId).length > 0
                             return <ListItem key={index}>
                                 <ListItemAvatar>
-                                    <Avatar>{manager.username.charAt(0)}</Avatar>
+                                    <Avatar className={user && volunteer.userId === user.id ? classes.purpleAvatar : classes.avatar }>
+                                        {volunteer.userName.charAt(0)}
+                                    </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary={manager.username} secondary={user && manager.id === user.id ? '(Jij)' : ''}/>
+                                <ListItemText primary={volunteer.userName} secondary={volunteerIsManager ? '(Beheerder)' : ''}/>
                             </ListItem>
                         })}
                     </List>
@@ -41,6 +49,6 @@ class PlaygroundManagers extends React.Component {
     }
 }
 
-export default withStyles(pillsStyle)(
+export default withStyles(styles)(withStyles(pillsStyle)(
     withNamespaces("translations")(PlaygroundManagers)
-);
+))
