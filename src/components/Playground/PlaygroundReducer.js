@@ -1,5 +1,6 @@
 import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE } from "./PlaygroundActions";
 import { SUCCESS_POSTFIX } from "../../GlobalActions";
+import { getUser } from "../UserProfile/UserProfileReducer";
 
 
 // State definition
@@ -84,7 +85,7 @@ export const getStatistics = (state) => {
 
 // Reducer
 
-const playgroundReducer = (state = initialState, action) => {
+const playgroundReducer = (state = initialState, action, baseState) => {
   switch (action.type) {
     case GET_PLAYGROUNDS + SUCCESS_POSTFIX:
       return {
@@ -107,9 +108,26 @@ const playgroundReducer = (state = initialState, action) => {
 
     case JOIN_INITIATIVE + SUCCESS_POSTFIX:
       // TODO: Because of the async nature of Axon, the result will often not yet contain the user as a volunteer. So (for now) we need to fix this here.
-      return {
-        ...state,
-        playgrounds: updatePlaygrounds(state.playgrounds, action.payload.data.joinInitiative)
+      {
+        const userProfile = getUser(baseState)
+        console.log("userprofile: ", userProfile)
+        const playground = action.payload.data.joinInitiative
+
+        var userListedAsVolunteer = false
+        for (let i = 0; i < playground.volunteers.length; i++)
+          userListedAsVolunteer |= playground.volunteers[i].userId === userProfile.id
+  
+        if (!userListedAsVolunteer) {
+          playground.volunteers.push({userId: userProfile.id, userName: userProfile.name})
+          playground.volunteerCount++
+        }
+
+        console.log("volunteer joined, integrating: ", playground)
+
+        return {
+          ...state,
+          playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
+        }
       }
 
     case CLAIM_MANAGER_ROLE + SUCCESS_POSTFIX:
@@ -119,7 +137,7 @@ const playgroundReducer = (state = initialState, action) => {
       console.log(userProfile)
       const playground = action.payload.data.claimManagerRole
       var userListedAsManager = false
-      for (var i = 0; i < playground.managers.length; i++)
+      for (let i = 0; i < playground.managers.length; i++)
         userListedAsManager |= playground.managers[i].id === userProfile.id
 
       if (!userListedAsManager)

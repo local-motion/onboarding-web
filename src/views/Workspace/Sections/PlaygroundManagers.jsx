@@ -26,6 +26,7 @@ const styles = {
 class PlaygroundManagers extends React.Component {
     render() {
         const {playground, user, classes} = this.props;
+        console.log("displaying volunteers for: ", playground)
         if (!playground) return "Loading...";
         return (
             <div>

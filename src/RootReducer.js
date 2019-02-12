@@ -24,7 +24,7 @@ const rootReducer = (state = {}, action) => {
         ...state,
         userprofile:        userProfileReducer(state.userprofile, action),
         chat:               chatReducer(state.chat, action),
-        playgrounds:        playgroundReducer(state.playgrounds, action),
+        playgrounds:        playgroundReducer(state.playgrounds, action, state),
         loading:            loadingReducer(state.loading, action),
         error:              errorReducer(state.error, action),
         confirmationdialog: confirmationDialogReducer(state.confirmationdialog, action),
