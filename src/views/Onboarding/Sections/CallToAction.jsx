@@ -2,7 +2,7 @@ import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import {withNamespaces} from "react-i18next";
+import {withTranslation} from "react-i18next";
 import componentsStyle from "../../../assets/jss/material-kit-react/views/components";
 
 class CallToAction extends React.Component {
@@ -33,5 +33,5 @@ class CallToAction extends React.Component {
 }
 
 export default withStyles(componentsStyle)(
-    withNamespaces("translations")(CallToAction)
+    withTranslation("translations")(CallToAction)
 );

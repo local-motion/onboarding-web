@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button/Button";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 
-import {withNamespaces} from "react-i18next";
+import {withTranslation} from "react-i18next";
 import { history } from "../../../setup.js";
 import { joinInitiative, JOIN_INITIATIVE } from "../../../components/Playground/PlaygroundActions.js";
 import { connect } from 'react-redux'
@@ -67,5 +67,5 @@ class JoinInitiative extends React.Component {
 }
 
 export default withStyles(pillsStyle)(
-    withNamespaces("translations")(connect(mapStateToProps, mapDispatchToProps)(JoinInitiative))
+    withTranslation("translations")(connect(mapStateToProps, mapDispatchToProps)(JoinInitiative))
 );

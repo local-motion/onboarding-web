@@ -12,7 +12,7 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import Button from "@material-ui/core/Button/Button";
 import JoinInitiative from "./JoinInitiative.jsx"
 
-import {withNamespaces} from "react-i18next";
+import {withTranslation} from "react-i18next";
 import { getStatistics } from "../../../components/Playground/PlaygroundReducer.js";
 import { connect } from 'react-redux'
 
@@ -97,5 +97,5 @@ class PlaygroundStatistics extends React.Component {
 }
 
 export default withStyles(pillsStyle)(
-    withNamespaces("translations")(connect(mapStateToProps)(PlaygroundStatistics))
+    withTranslation("translations")(connect(mapStateToProps)(PlaygroundStatistics))
 );

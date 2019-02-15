@@ -1,7 +1,7 @@
 import React from "react";
 // material-ui components
 import withStyles from "@material-ui/core/styles/withStyles";
-import {withNamespaces} from "react-i18next";
+import {withTranslation} from "react-i18next";
 
 const style = {
     statTitle: {
@@ -31,5 +31,5 @@ class PlaygroundStatistic extends React.Component {
 }
 
 export default withStyles(style)(
-    withNamespaces("translations")(PlaygroundStatistic)
+    withTranslation("translations")(PlaygroundStatistic)
 );

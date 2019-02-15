@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {withNamespaces} from "react-i18next";
+import {withTranslation} from "react-i18next";
 import AddLocation from "@material-ui/icons/AddLocation";
 import PlaygroundMap from "./PlaygroundMap";
 import { createInitiative, CREATE_INITIATIVE } from '../../../components/Playground/PlaygroundActions';
@@ -170,4 +170,4 @@ const mapDispatchToProps = dispatch => {
 
 const connectedAddPlayground = connect(mapStateToProps, mapDispatchToProps)(AddPlayground);
 
-export default withStyles(componentsStyle)(withNamespaces("translations")(connectedAddPlayground));
+export default withStyles(componentsStyle)(withTranslation("translations")(connectedAddPlayground));
