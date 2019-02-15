@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {withNamespaces} from "react-i18next";
+import {withTranslation} from "react-i18next";
 
 class FormDialog extends React.Component {
     constructor(props) {
@@ -55,5 +55,5 @@ class FormDialog extends React.Component {
 }
 
 export default withStyles(componentsStyle)(
-    withNamespaces("translations")(FormDialog)
+    withTranslation("translations")(FormDialog)
 );

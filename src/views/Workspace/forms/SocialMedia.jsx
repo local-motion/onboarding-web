@@ -17,7 +17,7 @@ import {
     WorkplaceIcon
 } from 'react-share';
 // core components
-import { withNamespaces } from "react-i18next";
+import { withTranslation } from "react-i18next";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 
 class SocialMedia extends React.Component {
@@ -61,5 +61,5 @@ class SocialMedia extends React.Component {
 }
 
 export default withStyles(componentsStyle)(
-    withNamespaces("translations")(SocialMedia)
+    withTranslation("translations")(SocialMedia)
 );

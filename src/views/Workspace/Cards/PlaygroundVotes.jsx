@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 // core components
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
-import {withNamespaces} from "react-i18next";
+import {withTranslation} from "react-i18next";
 
 
 class PlaygroundVotes extends React.Component {
@@ -25,5 +25,5 @@ class PlaygroundVotes extends React.Component {
 }
 
 export default withStyles(pillsStyle)(
-    withNamespaces("translations")(PlaygroundVotes)
+    withTranslation("translations")(PlaygroundVotes)
 );

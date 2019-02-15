@@ -7,7 +7,7 @@ import classNames from "classnames";
 import {List, ListItem, withStyles} from "@material-ui/core";
 import { Link } from 'react-router-dom'
 import footerStyle from "assets/jss/material-kit-react/components/footerStyle.jsx";
-import {withNamespaces} from 'react-i18next';
+import {withTranslation} from 'react-i18next';
 
 function Footer({...props}) {
     const {t, classes, whiteFont} = props;
@@ -82,5 +82,5 @@ Footer.propTypes = {
     whiteFont: PropTypes.bool
 };
 
-const translatedFooter = withNamespaces("translations")(Footer)
+const translatedFooter = withTranslation("translations")(Footer)
 export default withStyles(footerStyle)(translatedFooter);

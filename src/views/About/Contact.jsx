@@ -2,7 +2,7 @@ import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import { withNamespaces } from "react-i18next";
+import { withTranslation } from "react-i18next";
 
 import Header from "components/Header/Header.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -54,5 +54,5 @@ class Contact extends React.Component {
 }
 
 export default withStyles(componentsStyle)(
-    withNamespaces("translations")(Contact)
+    withTranslation("translations")(Contact)
 );
