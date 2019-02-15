@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "private": true,
   "main": "dist/index.js",
-  "homepage": "/",
+  "homepage": "https://github.com/local-motion/onboarding-web/",
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
