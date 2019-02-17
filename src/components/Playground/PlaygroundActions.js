@@ -14,6 +14,7 @@ export const JOIN_INITIATIVE = 'JOIN_INITIATIVE'
 export const CLAIM_MANAGER_ROLE = 'CLAIM_MANAGER_ROLE'
 export const SET_SMOKEFREE_DATE = 'SET_SMOKEFREE_DATE'
 export const SET_DECIDE_SMOKEFREE = 'SET_DECIDE_SMOKEFREE'
+export const SET_CHECKBOX = 'SET_CHECKBOX'
 
 
 const getPlaygroundsQuery = gql`
@@ -41,6 +42,8 @@ const getPlaygroundDetailsQuery = gql`
             smokeFreeDate
             volunteerCount
             votes
+            jointChecklistItems
+            ownChecklistItems
             managers {
                 id
                 username
@@ -61,17 +64,20 @@ const createInitiativeQuery = gql`
           lng
           lat
           status
+          smokeFreeDate
           volunteerCount
           votes
-          volunteers {
-            userId
-            userName
-          }
+          jointChecklistItems
+          ownChecklistItems
           managers {
               id
               username
           }
-            }
+          volunteers {
+              userId
+              userName
+          }
+        }
     }
 `;
 
@@ -83,17 +89,20 @@ const joinInitiativeQuery = gql`
           lng
           lat
           status
+          smokeFreeDate
           volunteerCount
           votes
-          volunteers {
-            userId
-            userName
-          }
+          jointChecklistItems
+          ownChecklistItems
           managers {
               id
               username
           }
-            }
+          volunteers {
+              userId
+              userName
+          }
+        }
     }
 `;
 
@@ -108,13 +117,15 @@ const claimManagerRoleQuery = gql`
       smokeFreeDate
       volunteerCount
       votes
-      volunteers {
-        userId
-        userName
-      }
+      jointChecklistItems
+      ownChecklistItems
       managers {
           id
           username
+      }
+      volunteers {
+          userId
+          userName
       }
     }
   }
@@ -131,6 +142,14 @@ const setSmokefreeDateQuery = gql`
 const setDecideSmokefreeQuery = gql`
   mutation DecideToBecomeSmokeFree($input: DecideToBecomeSmokeFreeCommand!) {
     decideToBecomeSmokeFree(input: $input) {
+      id
+    }
+  }
+`;
+
+const updateCheckboxQuery = gql`
+  mutation UpdateChecklist($input: UpdateChecklistCommand!) {
+    updateChecklist(input: $input) {
       id
     }
   }
@@ -211,6 +230,17 @@ export const setDecideSmokefree = (initiativeId) => {
     input: {
       initiativeId
     }
+  })
+}
+
+export const setCheckbox = (initiativeId, checklistItem, isChecked, user) => {
+  return mutationGraphQL(SET_CHECKBOX, updateCheckboxQuery, {
+    input: {
+      initiativeId,
+      actor: user.id,
+      checklistItem,
+      isChecked: isChecked ? "True" : "False"
+      }
   })
 }
 
