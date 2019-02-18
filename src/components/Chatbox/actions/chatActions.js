@@ -54,7 +54,7 @@ export const fetchChatMessages = (reload=false) => {
           }
           // Keep polling if this is still the active chatbox
           if (chatboxId === getState().chat.chatboxId) {
-              setTimeout(() => dispatch(fetchChatMessages()), 2000)
+              setTimeout(() => dispatch(fetchChatMessages()), 20000)
           }
         },
         error => dispatch(signalError(error))
@@ -83,10 +83,13 @@ export function postChatMessage(text) {
       messageId: uuid(),
       text: getState().chat.editText
     }
+    console.log("POSTING: ", chatMessage)
 
     dispatch({type: POSTED_MESSAGE})
 
-    return fetch(getState().environmentProperties.api.chatbox + '/' + chatboxId, {
+    const url = getState().environmentProperties.api.chatbox + '/' + chatboxId
+    console.log("to url: " + url)
+    return fetch(url, {
         method: 'POST',
         body: JSON.stringify(chatMessage),
         headers: {
