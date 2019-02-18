@@ -54,7 +54,7 @@ export const fetchChatMessages = (reload=false) => {
           }
           // Keep polling if this is still the active chatbox
           if (chatboxId === getState().chat.chatboxId) {
-              setTimeout(() => dispatch(fetchChatMessages()), 20000)
+              setTimeout(() => dispatch(fetchChatMessages()), 3000)
           }
         },
         error => dispatch(signalError(error))
