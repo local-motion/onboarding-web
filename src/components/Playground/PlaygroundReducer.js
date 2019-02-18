@@ -1,4 +1,4 @@
-import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE } from "./PlaygroundActions";
+import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE, SET_CHECKBOX } from "./PlaygroundActions";
 import { SUCCESS_POSTFIX } from "../../GlobalActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
 
@@ -174,6 +174,28 @@ const playgroundReducer = (state = initialState, action, baseState) => {
             ...state,
             playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
             playgrounds: updatePlaygrounds(state.playgrounds, updatedPlaygroundSummary)
+          }
+        }
+        else
+          return state
+        }
+
+      case SET_CHECKBOX + SUCCESS_POSTFIX:
+        {
+        const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
+        if (playground) {
+          const checklistItem = action.variables.input.checklistItem
+          const checked = action.variables.input.checked
+          const jointChecklistItems = playground.jointChecklistItems.filter(item => item !== checklistItem)
+          const ownChecklistItems = playground.jointChecklistItems.filter(item => item !== checklistItem)
+          if (checked) {
+            jointChecklistItems.push(checklistItem)
+            ownChecklistItems.push(checklistItem)
+          }
+          const updatedPlayground = {...playground, jointChecklistItems, ownChecklistItems}
+          return {
+            ...state,
+            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
           }
         }
         else

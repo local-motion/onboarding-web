@@ -233,13 +233,14 @@ export const setDecideSmokefree = (initiativeId) => {
   })
 }
 
-export const setCheckbox = (initiativeId, checklistItem, isChecked, user) => {
+export const setCheckbox = (initiativeId, checklistItem, checked, user) => {
   return mutationGraphQL(SET_CHECKBOX, updateCheckboxQuery, {
     input: {
       initiativeId,
       actor: user.id,
       checklistItem,
-      isChecked: isChecked ? "True" : "False"
+      // checked: checked ? "True" : "False"
+      checked
       }
   })
 }
