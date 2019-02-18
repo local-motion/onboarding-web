@@ -43,6 +43,13 @@ class PhaseSustain extends React.Component {
                                       content={"Ontdek het laatste nieuws over deze speeltuin"}
                                       MoreInformation={"Meer informatie"}
                         />
+
+                        <CollapseCard title={"En verder..."}
+                                      image={require("assets/img/backgrounds/social.jpg")}
+                                      content={"Ontdek het laatste nieuws over deze speeltuin"}
+                                      MoreInformation={"Meer informatie"}
+                        />
+
                     </GridItem>
                 </GridContainer>
             </div>

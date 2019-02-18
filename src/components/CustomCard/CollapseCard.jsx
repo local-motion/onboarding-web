@@ -54,7 +54,7 @@ class CollapseMediaCard extends React.Component {
         const {classes, title, image, content, primaryCta, MoreInformation, ExpandContent, user} = this.props;
         return (
             <Card className={classes.card + " card"}>
-                <CardActionArea>
+                <CardActionArea onClick={this.handleExpandClick}>
                     <CardMedia
                         className={classes.media}
                         image={image}

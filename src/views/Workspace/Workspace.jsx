@@ -67,6 +67,7 @@ class WorkspaceTemplate extends React.Component {
     }
 
     componentDidMount() {
+        console.log("ensuring playground details")
         this.props.ensurePlaygroundDetails()
       }
 

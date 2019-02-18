@@ -13,21 +13,20 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
 class PhaseExecute extends React.Component {
 
     render() {
-        const {classes, playground, user} = this.props;
+        const {classes, playground} = this.props;
         const onSmokeFreeDateChange = date => {
             console.log('Changed smoke-free date...', date);
             playground.smokeFreeDate = date;
         };
-        const isManager = user && playground.managers && !!playground.managers.filter(manager => {
-            return manager.id === user.id
-        }).length;
+        // const isManager = user && playground.managers && !!playground.managers.filter(manager => {
+        //     return manager.id === user.id
+        // }).length;
 
         return (
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
                     <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
-                        {   isManager &&
-                            playground.smokeFreeDate &&
+                        {  playground.smokeFreeDate &&
                             <CollapseCard title={`${playground.name} is rookvrij per ${playground.smokeFreeDate.toLocaleDateString()}`}
                                           image={require("assets/img/backgrounds/date.jpg")}
                                           content={"Is dit niet de juiste datum, verander deze hier"}
@@ -36,8 +35,7 @@ class PhaseExecute extends React.Component {
                             />
                         }
 
-                        {   isManager &&
-                            !playground.smokeFreeDate &&
+                        {   !playground.smokeFreeDate &&
                             <CollapseCard title={"Zet in de agenda"}
                                           image={require("assets/img/backgrounds/date.jpg")}
                                           content={"Selecteer de datum waarop Speeltuin rookvrij wordt."}
@@ -54,6 +52,22 @@ class PhaseExecute extends React.Component {
                                         text: "Deel datum"
                                     }}
                         />
+
+                        <CollapseCard title={"Laat het zien"}
+                                        image={require("assets/img/backgrounds/date.jpg")}
+                                        content={"Selecteer de datum waarop Speeltuin rookvrij wordt."}
+                                        MoreInformation={"Stel een datum"}
+                                        ExpandContent={<SmokefreeDate onChange={onSmokeFreeDateChange}/>}
+                        />
+
+                        <CollapseCard title={"Feestje!"}
+                                        image={require("assets/img/backgrounds/party.jpg")}
+                                        content={"Open de rookvrije speeltuin met een straatfeest"}
+                                        MoreInformation={"Stel een datum"}
+                                        ExpandContent={<SmokefreeDate onChange={onSmokeFreeDateChange}/>}
+                        />
+
+
                     </GridItem>
                 </GridContainer>
             </div>
