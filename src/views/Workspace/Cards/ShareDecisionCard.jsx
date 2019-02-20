@@ -23,7 +23,7 @@ class ShareDecisionCard extends React.Component {
                         <ConnectedCheckbox playground={playground} checklistItem="press_announcement" label="Publiceer een persbericht" />
                         <Button 
                             variant="contained" size="small" color="primary" 
-                            href={"/documents/persbericht.docx"}
+                            href={"/documents/persberichtaankondiging.docx"}
                         >
                             Voorbeeld
                         </Button>

@@ -4,6 +4,7 @@ import { Button, Typography } from "@material-ui/core";
 import ContentDialog from "../../../components/Dialogs/ContentDialog";
 import { connect } from 'react-redux'
 import { claimManagerRole } from "../../../components/Playground/PlaygroundActions";
+import { isUserManagerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 const mapStateToProps = state => ({
 })
@@ -71,14 +72,18 @@ class GetSupportCard extends React.Component {
                             title="Hoe vind ik de beheerder?"
                             content={tipsContent}
                             />
-
-                        <br /><br />
-                        <Button 
-                            variant="contained" size="small" color="primary" 
-                            onClick={() => this.props.claimManagerRole(playground.id)}
-                        >
-                            Ik ben de beheerder van deze speeltuin
-                        </Button>
+                        { !(user && isUserManagerOfPlayground(user, playground)) &&
+                        <div>
+                            <br /><br />
+                            <Button 
+                                variant="contained" size="small" color="primary" 
+                                disabled={!user}
+                                onClick={() => this.props.claimManagerRole(playground.id)}
+                            >
+                                Ik ben de beheerder van deze speeltuin
+                            </Button>
+                        </div>
+                        }
                     </div>
                 }
             />

@@ -73,9 +73,9 @@ class WorkspaceTemplate extends React.Component {
 
     getPhaseComponents() {
         return [
-            <PhasePrepare playground={this.props.playground}/>,
+            <PhasePrepare playground={this.props.playground} user={this.props.user}/>,
             <PhaseExecute playground={this.props.playground} user={this.props.user}/>,
-            <PhaseSustain playground={this.props.playground}/>
+            <PhaseSustain playground={this.props.playground} user={this.props.user}/>
         ]
     }
 
