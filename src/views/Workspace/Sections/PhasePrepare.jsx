@@ -13,6 +13,7 @@ import { connect } from 'react-redux'
 import { setDecideSmokefree, SET_DECIDE_SMOKEFREE } from "../../../components/Playground/PlaygroundActions.js";
 import Flyers from "../forms/Flyers.jsx";
 import { getUser } from "../../../components/UserProfile/UserProfileReducer.js";
+import GetSupportCard from "../Cards/GetSupportCard.jsx";
 
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([SET_DECIDE_SMOKEFREE]);
@@ -40,15 +41,15 @@ class PhasePrepare extends React.Component {
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
                     <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
-                        <SimpleCard title={"Deel via email"}
+                        {/* <SimpleCard title={"Deel via email"}
                                     image={require("assets/img/backgrounds/email.jpg")}
                                     content={"Ken jij meer mensen die " + playground.name + " rookvrij willen krijgen? Nodig ze uit via email."}
                                     primaryCta={{
                                         action: "mailto:?subject=Maak%20speeltuin%20rookvrij&body=Ik%20wil%20graag%20speeltuin%20rookvrij%20maken.%0AHelp%20jij%20met%20me%20mee%3F",
                                         text: "Verstuur een email"
                                     }}
-                        />
-
+                        /> */}
+                        <GetSupportCard {...this.props}/>
                         <CollapseCard title={"Deel via social media"}
                                       image={require("assets/img/backgrounds/social.jpg")}
                                       content={"Laat je volgers weten dat je Speeltuin rookvrij wilt maken."}

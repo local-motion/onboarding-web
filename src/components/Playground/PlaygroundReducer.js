@@ -17,7 +17,7 @@ const initialState = {
         name: [string]
         lat: [latitude, float]
         lng: [longitude, float]
-        vol: [volunteer count, integer]
+        volunteerCount: [volunteer count, integer]
         votes: [nr of signed petitions, integer]
         status:  ["not_started|"in_progress"|"finished"]
         smokeFreeDate: [timestamp]
