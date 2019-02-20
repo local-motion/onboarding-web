@@ -7,9 +7,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-// import SimpleCard from "components/CustomCard/Card.jsx"
-// import CollapseCard from "components/CustomCard/CollapseCard.jsx"
-
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import ShareSmokefreeCard from "../Cards/ShareSmokefreeCard.jsx";
 import ValidateCard from "../Cards/ValidateCard.jsx";
