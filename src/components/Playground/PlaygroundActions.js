@@ -239,7 +239,6 @@ export const setCheckbox = (initiativeId, checklistItem, checked, user) => {
       initiativeId,
       actor: user.id,
       checklistItem,
-      // checked: checked ? "True" : "False"
       checked
       }
   })
