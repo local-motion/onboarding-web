@@ -6,8 +6,10 @@ import { Button, Typography } from "@material-ui/core";
 
 class GetSupportCard extends React.Component {
     render() {
-        const {playground, user} = this.props;
-        if (!playground) return "Loading...";
+        const {playground, user} = this.props
+        
+        if (!playground) return "Loading..."
+
         const inviteButtonHref = "mailto:?subject=Maak%20speeltuin%20rookvrij&body=Ik%20wil%20graag%20speeltuin%20rookvrij%20maken.%0AHelp%20jij%20met%20me%20mee%3F"
         const inviteButtonLabel = "Verstuur een email"
         const targetNrOfVolunteers = 2

@@ -4,16 +4,15 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import SimpleCard from "components/CustomCard/Card.jsx";
-import CollapseCard from "components/CustomCard/CollapseCard.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import SocialMedia from "../forms/SocialMedia.jsx";
 import { createLoadingSelector } from "../../../api/Selectors";
 import { connect } from 'react-redux'
 import { setDecideSmokefree, SET_DECIDE_SMOKEFREE } from "../../../components/Playground/PlaygroundActions.js";
-import Flyers from "../forms/Flyers.jsx";
 import { getUser } from "../../../components/UserProfile/UserProfileReducer.js";
 import GetSupportCard from "../Cards/GetSupportCard.jsx";
+import FlyersCard from "../Cards/FlyersCard.jsx";
+import InvolveManagerCard from "../Cards/InvolveManagerCard.jsx";
+import DecideSmokefreeCard from "../Cards/DecideSmokefreeCard.jsx";
 
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([SET_DECIDE_SMOKEFREE]);
@@ -35,7 +34,7 @@ class PhasePrepare extends React.Component {
     }
 
     render() {
-        const {classes, playground} = this.props
+        const {classes} = this.props
 
         return (
             <div className={classes.container + " information-wrapper"}>
@@ -50,31 +49,33 @@ class PhasePrepare extends React.Component {
                                     }}
                         /> */}
                         <GetSupportCard {...this.props}/>
-                        <CollapseCard title={"Deel via social media"}
+                        {/* <CollapseCard title={"Deel via social media"}
                                       image={require("assets/img/backgrounds/social.jpg")}
                                       content={"Laat je volgers weten dat je Speeltuin rookvrij wilt maken."}
                                       MoreInformation={"Meer informatie"}
                                       ExpandContent={<SocialMedia playground={playground}/>}
-                        />
+                        /> */}
 
-                        <CollapseCard title={"Flyers verspreiden"}
+                        {/* <CollapseCard title={"Flyers verspreiden"}
                                       image={require("assets/img/backgrounds/flyer.jpg")}
                                       content={"Deel flyers uit in de buurt om de mensen nee te nemen in dit initiatief"}
                                       MoreInformation={"Meer informatie"}
                                       ExpandContent={<Flyers {...this.props}/>}
-                        />
+                        /> */}
+                        <FlyersCard  {...this.props}/>
 
-                        <SimpleCard
+                        {/* <SimpleCard
                             title={"Betrek de beheerder"}
-                            image={require("assets/img/backgrounds/smokefree.jpg")}
+                            image={require("assets/img/backgrounds/gardeningtools.jpg")}
                             content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
                             primaryCta={{
                                 click: (() => {this.onClickDecideSmokefree()}),
                                 text: "Maak rookvrij"
                             }}
-                        />
-
-                        <SimpleCard
+                        /> */}
+                        <InvolveManagerCard  {...this.props}/>
+                        
+                        {/* <SimpleCard
                             title={"Maak speeltuin rookvrij"}
                             image={require("assets/img/backgrounds/commitment.jpg")}
                             content={"Beslis hier of de speeltuin rookvrij wordt gemaakt."}
@@ -82,7 +83,8 @@ class PhasePrepare extends React.Component {
                                 click: (() => {this.onClickDecideSmokefree()}),
                                 text: "Maak rookvrij"
                             }}
-                        />
+                        /> */}
+                        <DecideSmokefreeCard {...this.props} />
 
                     </GridItem>
                 </GridContainer>

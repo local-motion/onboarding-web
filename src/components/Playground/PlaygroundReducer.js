@@ -22,6 +22,8 @@ const initialState = {
         status:  ["not_started|"in_progress"|"finished"]
         smokeFreeDate: [timestamp]
         managers: [array of {id: [string], username: [string]} ]
+        jointChecklistItems: [list of strings, each indicating a checklist items that is checked, view is playground as a whole, last checklist action determines the state]
+        ownChecklistItems: [list of strings, each indicating a checklist items that is checked, view is the checks placed by the logged on user]
     }
 }
 */
@@ -32,6 +34,11 @@ const initialState = {
 
 export const getAllPlaygrounds = (state) => state.playgrounds.playgrounds
 export const getPlaygroundDetails = (state, playgroundId) => state.playgrounds.playgroundDetails[playgroundIdToKey(playgroundId)]
+export const isCurrentUserManagerOfPlayground = (state, playgroundId) => isUserManagerOfPlayground(getUser(state), getPlaygroundDetails(state, playgroundId))
+
+// Public utilities
+export const isUserManagerOfPlayground = (user, playground) => playground.managers.filter(manager => manager.id === user.id).length > 0
+
 
 /// The statistics selector returns a structure like this:
 /*
@@ -187,7 +194,7 @@ const playgroundReducer = (state = initialState, action, baseState) => {
           const checklistItem = action.variables.input.checklistItem
           const checked = action.variables.input.checked
           const jointChecklistItems = playground.jointChecklistItems.filter(item => item !== checklistItem)
-          const ownChecklistItems = playground.jointChecklistItems.filter(item => item !== checklistItem)
+          const ownChecklistItems = playground.ownChecklistItems.filter(item => item !== checklistItem)
           if (checked) {
             jointChecklistItems.push(checklistItem)
             ownChecklistItems.push(checklistItem)

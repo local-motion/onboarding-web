@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import FaceIcon from '@material-ui/icons/Face';
 import IconButton from '@material-ui/core/IconButton';
 import { getUser } from '../UserProfile/UserProfileReducer';
 import { connect } from 'react-redux'
@@ -39,6 +40,12 @@ const styles = theme => ({
     expandOpen: {
         transform: 'rotate(180deg)'
     },
+    managerPassiveIcon: {
+        color: 'red',
+    },
+    managerActiveIcon: {
+        color: 'green',
+    },
     doneIcon: {
         color: 'green',
     },
@@ -57,7 +64,8 @@ class WorkspaceCard extends React.Component {
     };
 
     render() {
-        const {classes, title, image, content, primaryCta, MoreInformation, expandContent, enableActions, done, user} = this.props;
+        const {classes, title, image, content, primaryCta, MoreInformation, expandContent, enableActions, done, managerOnly, userIsManager, user} = this.props;
+
         return (
             <Card className={classes.card + " card"}>
                 <CardActionArea onClick={this.handleExpandClick}>
@@ -84,6 +92,11 @@ class WorkspaceCard extends React.Component {
                 <IconButton disabled={true} >
                     <CheckCircleIcon  className={done ? classes.doneIcon : classes.notDoneIcon}/>
                 </IconButton>
+                { managerOnly &&
+                    <IconButton disabled={true} >
+                        <FaceIcon  className={userIsManager ? classes.managerActiveIcon : classes.managerPassiveIcon}/>
+                    </IconButton>
+                }
                 <IconButton
                     className={classnames(classes.expand, {
                         [classes.expandOpen]: this.state.expanded,
