@@ -5,6 +5,7 @@ import ContentDialog from "../../../components/Dialogs/ContentDialog";
 import { connect } from 'react-redux'
 import { isUserManagerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { setSmokefreeDate } from "../../../components/Playground/PlaygroundActions";
 
 const mapStateToProps = state => ({
