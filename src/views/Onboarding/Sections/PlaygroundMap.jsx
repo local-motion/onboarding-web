@@ -8,7 +8,8 @@ import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-map
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import markerGray from "assets/img/markers/playground_gray.png";
 import markerGreen from "assets/img/markers/playground_green.png";
-// import markerPink from "assets/img/markers/playground_pink.png";
+import markerWhite from "assets/img/markers/playground_white.png";
+import markerBlue from "assets/img/markers/playground_blue.png";
 import { connect } from 'react-redux'
 import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
@@ -37,6 +38,7 @@ const mapStateToProps = state => ({
             vol: playground.volunteerCount,
             votes: playground.votes,
             slug: playground.name + " Rookvrij",
+            status: playground.status,
             zoom: 18,
             default: false,
     }) )
@@ -99,16 +101,19 @@ const PlaygroundMapImpl = compose(
             >
 
             { props.playgrounds &&
-            props.playgrounds.map(playground => (
+            props.playgrounds.map(playground => {
+                console.log("plaground:", playground)
+                return (
                 <Marker
                     onClick={
                         props.onPlaygroundChange.bind(this, playground)
                     }
                     key={playground.id}
                     position={{lat: playground.lat, lng: playground.lng}}
-                    icon={markerGreen}
+                    icon={playground.status === "not_started" ? markerWhite : (playground.status === "in_progress" ? markerBlue : markerGreen)}
                 />
-            ))}
+            ) })
+            }
 
             {props.isMarkerShown &&
                 <Marker

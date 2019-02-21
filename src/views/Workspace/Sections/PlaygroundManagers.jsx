@@ -4,7 +4,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 // core components
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
-import {withTranslation} from "react-i18next";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -50,6 +49,4 @@ class PlaygroundManagers extends React.Component {
     }
 }
 
-export default withStyles(styles)(withStyles(pillsStyle)(
-    withTranslation("translations")(PlaygroundManagers)
-))
+export default withStyles(styles)(withStyles(pillsStyle)(PlaygroundManagers))

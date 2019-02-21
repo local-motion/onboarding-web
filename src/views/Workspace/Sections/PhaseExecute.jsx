@@ -4,69 +4,26 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import SimpleCard from "components/CustomCard/Card.jsx";
-import CollapseCard from "components/CustomCard/CollapseCard.jsx";
-import SmokefreeDate from "../forms/SmokefreeDate.jsx";
-
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import SetADateCard from "../Cards/SetADateCard.jsx";
+import ShareDecisionCard from "../Cards/ShareDecisionCard.jsx";
+import MakeItVisibleCard from "../Cards/MakeItVisibleCard.jsx";
+import PartyCard from "../Cards/PartyCard.jsx";
 
 class PhaseExecute extends React.Component {
 
     render() {
-        const {classes, playground} = this.props;
-        const onSmokeFreeDateChange = date => {
-            console.log('Changed smoke-free date...', date);
-            playground.smokeFreeDate = date;
-        };
-        // const isManager = user && playground.managers && !!playground.managers.filter(manager => {
-        //     return manager.id === user.id
-        // }).length;
+        const {classes} = this.props;
 
         return (
             <div className={classes.container + " information-wrapper"}>
                 <GridContainer className={"information-container"}>
                     <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
-                        {  playground.smokeFreeDate &&
-                            <CollapseCard title={`${playground.name} is rookvrij per ${playground.smokeFreeDate.toLocaleDateString()}`}
-                                          image={require("assets/img/backgrounds/date.jpg")}
-                                          content={"Is dit niet de juiste datum, verander deze hier"}
-                                          MoreInformation={"Verander datum"}
-                                          ExpandContent={<SmokefreeDate startDate={playground.smokeFreeDate} onChange={onSmokeFreeDateChange}/>}
-                            />
-                        }
 
-                        {   !playground.smokeFreeDate &&
-                            <CollapseCard title={"Zet in de agenda"}
-                                          image={require("assets/img/backgrounds/date.jpg")}
-                                          content={"Selecteer de datum waarop Speeltuin rookvrij wordt."}
-                                          MoreInformation={"Stel een datum"}
-                                          ExpandContent={<SmokefreeDate onChange={onSmokeFreeDateChange}/>}
-                            />
-                        }
-
-                        <SimpleCard title={"Deel beslissing via Social"}
-                                    image={require("assets/img/backgrounds/social.jpg")}
-                                    content={"Laat iedereen weten dat er een datum is dat Speeltuin rookvrij word"}
-                                    primaryCta={{
-                                        action: "#",
-                                        text: "Deel datum"
-                                    }}
-                        />
-
-                        <CollapseCard title={"Laat het zien"}
-                                        image={require("assets/img/backgrounds/date.jpg")}
-                                        content={"Selecteer de datum waarop Speeltuin rookvrij wordt."}
-                                        MoreInformation={"Stel een datum"}
-                                        ExpandContent={<SmokefreeDate onChange={onSmokeFreeDateChange}/>}
-                        />
-
-                        <CollapseCard title={"Feestje!"}
-                                        image={require("assets/img/backgrounds/party.jpg")}
-                                        content={"Open de rookvrije speeltuin met een straatfeest"}
-                                        MoreInformation={"Stel een datum"}
-                                        ExpandContent={<SmokefreeDate onChange={onSmokeFreeDateChange}/>}
-                        />
-
+                        <SetADateCard {...this.props} />
+                        <ShareDecisionCard {...this.props} />
+                        <MakeItVisibleCard {...this.props} />
+                        <PartyCard {...this.props} />
 
                     </GridItem>
                 </GridContainer>

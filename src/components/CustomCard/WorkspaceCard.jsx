@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import FaceIcon from '@material-ui/icons/Face';
 import IconButton from '@material-ui/core/IconButton';
 import { getUser } from '../UserProfile/UserProfileReducer';
 import { connect } from 'react-redux'
@@ -37,29 +39,33 @@ const styles = theme => ({
     },
     expandOpen: {
         transform: 'rotate(180deg)'
-    }
+    },
+    managerPassiveIcon: {
+        color: 'red',
+    },
+    managerActiveIcon: {
+        color: 'green',
+    },
+    doneIcon: {
+        color: 'green',
+    },
+    notDoneIcon: {
+    },
 });
 
 const mapStateToProps = state => ({
     user: getUser(state)
 })
 
-
-/*
-
-        DEPRECATED: Use CustomCard/WorkspaceCard instead
-
-*/
-
-
-class CollapseMediaCard extends React.Component {
+class WorkspaceCard extends React.Component {
     state = { expanded: false };
     handleExpandClick = () => {
         this.setState(state => ({ expanded: !state.expanded }));
     };
 
     render() {
-        const {classes, title, image, content, primaryCta, MoreInformation, ExpandContent, user} = this.props;
+        const {classes, title, image, content, primaryCta, MoreInformation, expandContent, enableActions, done, managerOnly, userIsManager, user} = this.props;
+
         return (
             <Card className={classes.card + " card"}>
                 <CardActionArea onClick={this.handleExpandClick}>
@@ -77,22 +83,32 @@ class CollapseMediaCard extends React.Component {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
-                <CardActions className={"card-actions"}>
-                    {primaryCta ? <Button disabled={!user} size="small" color="primary">{primaryCta}</Button> : null}
-                    {MoreInformation ? <Button size="small" color="primary" onClick={this.handleExpandClick}>{MoreInformation}</Button> : null}
-                    <IconButton
-                        className={classnames(classes.expand, {
-                            [classes.expandOpen]: this.state.expanded,
-                        })}
-                        onClick={this.handleExpandClick}
-                        aria-expanded={this.state.expanded}
-                        aria-label="Show more">
-                        <ExpandMoreIcon />
+                { enableActions &&
+                    <CardActions className={"card-actions"}>
+                        {primaryCta ? <Button disabled={!user} size="small" color="primary" href={primaryCta.action} onClick={primaryCta.click}>{primaryCta.text}</Button> : null}
+                        {MoreInformation ? <Button size="small" color="primary" onClick={this.handleExpandClick}>{MoreInformation}</Button> : null}
+                    </CardActions>
+                }
+                <IconButton disabled={true} >
+                    <CheckCircleIcon  className={done ? classes.doneIcon : classes.notDoneIcon}/>
+                </IconButton>
+                { managerOnly &&
+                    <IconButton disabled={true} >
+                        <FaceIcon  className={userIsManager ? classes.managerActiveIcon : classes.managerPassiveIcon}/>
                     </IconButton>
-                </CardActions>
+                }
+                <IconButton
+                    className={classnames(classes.expand, {
+                        [classes.expandOpen]: this.state.expanded,
+                    })}
+                    onClick={this.handleExpandClick}
+                    aria-expanded={this.state.expanded}
+                    aria-label="Show more">
+                    <ExpandMoreIcon />
+                </IconButton>
                 <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                        {ExpandContent}
+                        {expandContent}
                     </CardContent>
                 </Collapse>
             </Card>
@@ -100,8 +116,8 @@ class CollapseMediaCard extends React.Component {
     }
 }
 
-CollapseMediaCard.propTypes = {
+WorkspaceCard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(connect(mapStateToProps)(CollapseMediaCard));
+export default withStyles(styles)(connect(mapStateToProps)(WorkspaceCard))

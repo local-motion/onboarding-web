@@ -33,6 +33,13 @@ const mapStateToProps = state => ({
         user: getUser(state)
 })
 
+
+/*
+
+        DEPRECATED: Use CustomCard/WorkspaceCard instead
+
+*/
+
 class MediaCard extends React.Component {
     render() {
         const {classes, title, image, content, primaryCta, secondaryCta, user} = this.props;
