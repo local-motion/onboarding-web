@@ -15,7 +15,6 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import PhaseIndicator from "./Sections/PhaseIndicator.jsx";
-import Dashboard from "./Sections/Dashboard.jsx";
 import PhasePrepare from "./Sections/PhasePrepare.jsx";
 import PhaseExecute from "./Sections/PhaseExecute.jsx";
 import PhaseSustain from "./Sections/PhaseSustain.jsx";
@@ -46,21 +45,22 @@ const mapDispatchToProps = dispatch => ({
 
 const playgroundStatuses = ['not_started', 'in_progress', 'finished']
 const playgroundLabels = ['Voorbereiding', 'Uitvoering', 'Onderhouden']
-const phaseIndicators = ['prepare', 'execute', 'sustain']
 
 class WorkspaceTemplate extends React.Component {
 
-    getStatusLabelAndIndex() {
+    getStatusIndex() {
         const playgroundStatus = this.props.playground ? this.props.playground.status : ''
 
         const result = playgroundStatuses.find(element => element === playgroundStatus)
-        const index = result ? playgroundStatuses.indexOf(result) : -1
-        
-        return result ? { status: playgroundLabels[index], index: index } :{ status: 'unknown', index: -1 }
+        return result ? playgroundStatuses.indexOf(result) : -1
     }
 
     selectPhase = (phaseIdx) => {
-        history.push('/workspace/' + this.props.match.params.initiativeId + (phaseIdx !== null ? '/phase/' + (phaseIdx+1) : ''))
+        history.push('/workspace/' + this.props.match.params.initiativeId + '/phase/' + (phaseIdx+1) )
+    }
+
+    gotoWorkspaceWelcomePage = () => {
+        history.push('/workspace/' + this.props.match.params.initiativeId)
     }
 
     componentDidMount() {
@@ -79,10 +79,8 @@ class WorkspaceTemplate extends React.Component {
     render() {
         const {playground, user, classes, ...rest} = this.props;
 
-        const activePhaseIdx = this.getStatusLabelAndIndex().index              // the active phase represents the current state of this playground
-        const selectedPhase = this.props.match.params.phaseId - 1               // The phase that the user has selected, if any
-        const phasesView = !!this.props.match.params.phaseId                    // true if phase has been selected resulting in the phases view, otherwise the dashbaord is displayed
-        const phaseIdx = phasesView ? selectedPhase : activePhaseIdx            // the phase that will be displayed in the phases view
+        const activePhaseIdx = this.getStatusIndex()                            // the active phase represents the current state of this playground
+        const phaseIdx = this.props.match.params.phaseId - 1                    // The phase that the user has selected, if any
         const phase = playgroundLabels[phaseIdx]                                // the label of phase that is displayed in the phases view
 
 
@@ -104,16 +102,13 @@ class WorkspaceTemplate extends React.Component {
                     {...rest}
                 />
                 <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")}
-                          className={ !phasesView ? "phase-container empty" : "phase-container"}>
+                          className={"phase-container"}>
                     <div className={classes.container + " phase-wrapper"}>
-                        { phasesView &&
-                            <PhaseIndicator
-                                onSwitch={this.selectPhase}
-                                selectedPhase={phaseIdx}
-                                activePhase={activePhaseIdx}
-                            />
-                        }
-
+                        <PhaseIndicator
+                            onSwitch={this.selectPhase}
+                            selectedPhase={phaseIdx}
+                            activePhase={activePhaseIdx}
+                        />
                     </div>
                 </Parallax>
 
@@ -121,34 +116,17 @@ class WorkspaceTemplate extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2>{ !phasesView ? " Overzichtpagina" : "Stap " + phase} </h2>
-                                {!!playground && !phasesView ?
-                                    <div className={"explainer-actions"}>
-                                        <h3>
-                                            Op deze pagina vind je alle informatie die je nodig hebt
-                                            om {playground.name} rookvrij te maken.
-                                        </h3>
-                                        <Button
-                                            className={"btn btn-highlight"}
-                                            onClick={() => this.selectPhase(activePhaseIdx)}
-                                            style={{textAlign: 'center'}}
-                                        >
-                                            <span>Ga naar de actieve stap</span>
-                                        </Button>
-                                    </div>
-
-                                    :
+                                <h2> {"Stap " + phase} </h2>
                                     <div className={"explainer-actions"}>
                                         <h3>Welkom bij Stap {phase}</h3>
                                         <Button
                                             className={"btn btn-highlight"}
-                                            onClick={() => this.selectPhase(null)}
+                                            onClick={() => this.gotoWorkspaceWelcomePage()}
                                             style={{textAlign: 'center'}}
                                         >
                                             <span>Ga terug naar de startpagina</span>
                                         </Button>
                                     </div>
-                                }
                             </div>
                         </GridItem>
                     </GridContainer>
@@ -158,7 +136,6 @@ class WorkspaceTemplate extends React.Component {
                     <Route exact path='/workspace/:initiativeId/phase/1' render={() => ( <PhasePrepare playground={this.props.playground} user={this.props.user}/> )}/>
                     <Route exact path='/workspace/:initiativeId/phase/2' render={() => ( <PhaseExecute playground={this.props.playground} user={this.props.user}/> )}/>
                     <Route exact path='/workspace/:initiativeId/phase/3' render={() => ( <PhaseSustain playground={this.props.playground} user={this.props.user}/> )}/>
-                    <Route exact path='/workspace/:initiativeId'         render={() => ( <Dashboard    playground={this.props.playground} user={this.props.user}/> )}/>
                 </Switch>
 
                 <Footer/>

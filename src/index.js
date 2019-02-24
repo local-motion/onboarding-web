@@ -12,7 +12,6 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ApolloProvider} from 'react-apollo';
 import {setContext} from "apollo-link-context";
 
-import indexRoutes from "routes/index.jsx";
 import "assets/scss/material-kit-react.css?v=1.2.0";
 
 import Amplify from "aws-amplify";
@@ -41,6 +40,7 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import Welcome from "views/Information/Welcome";
+import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome";
 
 
 const environments = {
@@ -226,11 +226,6 @@ const App = class App extends React.Component {
                                     </CustomAuthenticator>
                                     }
                                 />
-                                {/* {indexRoutes.map((prop, key) => {
-                                    return <Route exact path={prop.path} key={key} component={prop.component}/>;
-                                })} */}
-
-
 
                                 <Route exact path="/about" key="Who are we" component={About}/>
                                 <Route exact path="/contact" key="Contact us" component={Contact}/>
@@ -239,7 +234,7 @@ const App = class App extends React.Component {
                                 <Route exact path="/terms" key="Terms of Use" component={Terms}/>
                                 <Route exact path="/welcome" key="Welcome" component={Welcome}/>
                                 
-                                <Route exact path="/workspace/:initiativeId" key="Workspace" component={Workspace}/>
+                                <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
                                 <Route exact path="/workspace/:initiativeId/phase/:phaseId" key="Workspace" component={Workspace}/>
 
                                 <Route exact path="/" key="Onboarding" component={Onboarding}/>
