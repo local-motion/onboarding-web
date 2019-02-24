@@ -29,6 +29,7 @@ class ChatBox extends React.Component {
 
   componentDidMount() {
     this.chatboxId = window.location.pathname.split("/").pop();
+    // this.chatboxId = this.props.match.params.initiativeId
     this.props.setActiveChatbox(this.chatboxId)
     this.setScrollState()
   }

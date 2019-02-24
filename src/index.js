@@ -32,6 +32,16 @@ import { userSignedIn } from "./components/UserProfile/UserProfileActions";
 import WrappedConfirmationDialog from "./components/ConfirmationDialog/WrappedConfirmationDialog";
 import { closeConfirmationDialog } from "./components/ConfirmationDialog/ConfirmationDialogActions";
 
+// Components to route to
+import Workspace from "views/Workspace/Workspace.jsx";
+import Onboarding from "views/Onboarding/Onboarding.jsx";
+import About from "views/About/About.jsx";
+import Contact from "views/About/Contact.jsx";
+import FAQ from "views/About/FAQ.jsx";
+import Terms from "views/Legal/Terms.jsx";
+import Privacy from "views/Legal/Privacy.jsx";
+import Welcome from "views/Information/Welcome";
+
 
 const environments = {
     "techoverflow-p.aws.abnamro.org": {
@@ -176,6 +186,7 @@ store.dispatch(publishGraphQLClient(client))            // Register the graphQL 
 
 
 
+
 const App = class App extends React.Component {
 
     signInHandler = (username, password) => {
@@ -203,10 +214,6 @@ const App = class App extends React.Component {
                     <I18nextProvider i18n={i18n}>
                         <Router history={history}>
                             <Switch>
-                                <Route exact path="/onboarding/logout" render={() => {
-                                    console.log("User logged out, redirecting to map of the Netherlands.");
-                                    return <Redirect to='/'/>
-                                }}/>
                                 <Route
                                     path="/login"
                                     exact
@@ -219,9 +226,27 @@ const App = class App extends React.Component {
                                     </CustomAuthenticator>
                                     }
                                 />
-                                {indexRoutes.map((prop, key) => {
-                                    return <Route path={prop.path} key={key} component={prop.component}/>;
-                                })}
+                                {/* {indexRoutes.map((prop, key) => {
+                                    return <Route exact path={prop.path} key={key} component={prop.component}/>;
+                                })} */}
+
+
+
+                                <Route exact path="/about" key="Who are we" component={About}/>
+                                <Route exact path="/contact" key="Contact us" component={Contact}/>
+                                <Route exact path="/privacy" key="Privacy Statement" component={Privacy}/>
+                                <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
+                                <Route exact path="/terms" key="Terms of Use" component={Terms}/>
+                                <Route exact path="/welcome" key="Welcome" component={Welcome}/>
+                                
+                                <Route exact path="/workspace/:initiativeId" key="Workspace" component={Workspace}/>
+                                <Route exact path="/workspace/:initiativeId/phase/:phaseId" key="Workspace" component={Workspace}/>
+
+                                <Route exact path="/" key="Onboarding" component={Onboarding}/>
+
+                                { /* If none of the paths match, redirect to /*/ }
+                                <Route path="/" render={ () => (<Redirect to='/'/>) } />
+
                             </Switch>
                         </Router>
                     </I18nextProvider>

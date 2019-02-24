@@ -27,31 +27,28 @@ import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
 import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails } from "../../components/Playground/PlaygroundActions.js";
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
+import {Route, Switch} from "react-router-dom";
 
 
 
-const mapStateToProps = state => ({
-    playground: getPlaygroundDetails(state, getPlaygroundId()),
-    playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
-    playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, getPlaygroundId()),
+const mapStateToProps = (state, ownProps) => ({
+    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),
+    playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, ownProps.match.params.initiativeId),
+    playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, ownProps.match.params.initiativeId),
 
     user: getUser(state),
 })
 
 const mapDispatchToProps = dispatch => ({
-    ensurePlaygroundDetails:    () =>     dispatch(ensurePlaygroundDetails(getPlaygroundId())),
+    ensurePlaygroundDetails:    (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
 })
 
 
-const getPlaygroundId = () => history.location.pathname.split("/").pop()
-
 const playgroundStatuses = ['not_started', 'in_progress', 'finished']
 const playgroundLabels = ['Voorbereiding', 'Uitvoering', 'Onderhouden']
+const phaseIndicators = ['prepare', 'execute', 'sustain']
 
 class WorkspaceTemplate extends React.Component {
-    state = {
-        selectedPhase: null
-    }
 
     getStatusLabelAndIndex() {
         const playgroundStatus = this.props.playground ? this.props.playground.status : ''
@@ -63,12 +60,12 @@ class WorkspaceTemplate extends React.Component {
     }
 
     selectPhase = (phaseIdx) => {
-        this.setState({ selectedPhase: phaseIdx })
+        history.push('/workspace/' + this.props.match.params.initiativeId + (phaseIdx !== null ? '/phase/' + (phaseIdx+1) : ''))
     }
 
     componentDidMount() {
-        console.log("ensuring playground details")
-        this.props.ensurePlaygroundDetails()
+        console.log("ensuring playground details of " + this.props.match.params.initiativeId)
+        this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId)
       }
 
     getPhaseComponents() {
@@ -82,9 +79,9 @@ class WorkspaceTemplate extends React.Component {
     render() {
         const {playground, user, classes, ...rest} = this.props;
 
-        const activePhaseIdx = this.getStatusLabelAndIndex().index              // the phase represents the current state of this playground
-        const {selectedPhase} = this.state;                                     // The phase that the user has selected, if any
-        const phasesView = selectedPhase !== null                               // true if phase has been selected resulting in the phases view, otherwise the dashbaord is displayed
+        const activePhaseIdx = this.getStatusLabelAndIndex().index              // the active phase represents the current state of this playground
+        const selectedPhase = this.props.match.params.phaseId - 1               // The phase that the user has selected, if any
+        const phasesView = !!this.props.match.params.phaseId                    // true if phase has been selected resulting in the phases view, otherwise the dashbaord is displayed
         const phaseIdx = phasesView ? selectedPhase : activePhaseIdx            // the phase that will be displayed in the phases view
         const phase = playgroundLabels[phaseIdx]                                // the label of phase that is displayed in the phases view
 
@@ -112,7 +109,6 @@ class WorkspaceTemplate extends React.Component {
                         { phasesView &&
                             <PhaseIndicator
                                 onSwitch={this.selectPhase}
-                                playground={this.props.playground}
                                 selectedPhase={phaseIdx}
                                 activePhase={activePhaseIdx}
                             />
@@ -158,10 +154,12 @@ class WorkspaceTemplate extends React.Component {
                     </GridContainer>
                 </div>
 
-                { phasesView ? 
-                    this.getPhaseComponents()[phaseIdx] : 
-                    <Dashboard playground={this.props.playground} user={this.props.user}/>
-                }
+                <Switch>
+                    <Route exact path='/workspace/:initiativeId/phase/1' render={() => ( <PhasePrepare playground={this.props.playground} user={this.props.user}/> )}/>
+                    <Route exact path='/workspace/:initiativeId/phase/2' render={() => ( <PhaseExecute playground={this.props.playground} user={this.props.user}/> )}/>
+                    <Route exact path='/workspace/:initiativeId/phase/3' render={() => ( <PhaseSustain playground={this.props.playground} user={this.props.user}/> )}/>
+                    <Route exact path='/workspace/:initiativeId'         render={() => ( <Dashboard    playground={this.props.playground} user={this.props.user}/> )}/>
+                </Switch>
 
                 <Footer/>
             </div>

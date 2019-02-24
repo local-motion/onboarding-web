@@ -5,6 +5,7 @@ import Contact from "views/About/Contact.jsx";
 import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
+import Welcome from "../views/Information/Welcome";
 
 export default [
 
@@ -14,7 +15,8 @@ export default [
     {path: "/faq", name: "Frequently Asked Questions", component: FAQ},
     {path: "/terms", name: "Terms of Use", component: Terms},
 
-    {path: "/workspace", name: "Workspace", component: Workspace},
+    {path: "/welcome", name: "Welcome", component: Welcome},
+    {path: "/workspace/:initiativeId", name: "Workspace", component: Workspace},
 
     {path: "/", name: "Onboarding", component: Onboarding},
 
