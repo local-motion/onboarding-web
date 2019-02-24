@@ -41,6 +41,7 @@ import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import Welcome from "views/Information/Welcome";
 import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome";
+import Team from "./views/Workspace/Sections/Team";
 
 
 const environments = {
@@ -235,6 +236,7 @@ const App = class App extends React.Component {
                                 <Route exact path="/welcome" key="Welcome" component={Welcome}/>
                                 
                                 <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
+                                <Route exact path="/workspace/:initiativeId/team" key="Team" component={Team}/>
                                 <Route exact path="/workspace/:initiativeId/phase/:phaseId" key="Workspace" component={Workspace}/>
 
                                 <Route exact path="/" key="Onboarding" component={Onboarding}/>

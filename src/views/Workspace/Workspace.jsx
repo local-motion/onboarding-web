@@ -68,15 +68,7 @@ class WorkspaceTemplate extends React.Component {
         this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId)
       }
 
-    getPhaseComponents() {
-        return [
-            <PhasePrepare playground={this.props.playground} user={this.props.user}/>,
-            <PhaseExecute playground={this.props.playground} user={this.props.user}/>,
-            <PhaseSustain playground={this.props.playground} user={this.props.user}/>
-        ]
-    }
-
-    render() {
+     render() {
         const {playground, user, classes, ...rest} = this.props;
 
         const activePhaseIdx = this.getStatusIndex()                            // the active phase represents the current state of this playground
@@ -91,6 +83,7 @@ class WorkspaceTemplate extends React.Component {
             <div className={"workspace-wrapper"}>
                 <Header
                     brand={playground.name}
+                    playground={playground}
                     rightLinks={<HeaderLinks/>}
                     fixed
                     textBrand

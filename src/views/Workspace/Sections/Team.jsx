@@ -8,15 +8,14 @@ import classNames from "classnames";
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import SimpleCard from "components/CustomCard/Card.jsx"
 import CollapseCard from "components/CustomCard/CollapseCard.jsx"
 
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import PlaygroundManagers from "./PlaygroundManagers";
-import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import { connect } from 'react-redux'
 import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails } from "../../../components/Playground/PlaygroundActions";
+import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
@@ -27,6 +26,8 @@ import { getPlaygroundDetails } from "../../../components/Playground/PlaygroundR
 import { isLoading, getFetchError } from "../../../api/FetchDetailsReducer";
 import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 import { history } from "../../../setup";
+import { Paper, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@material-ui/core";
+import { deepPurple } from "@material-ui/core/colors";
 
 const mapStateToProps = (state, ownProps) => ({
     playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),
@@ -41,9 +42,26 @@ const mapDispatchToProps = dispatch => ({
     ensurePlaygroundDetails:    (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
 })
 
-const playgroundStatuses = ['not_started', 'in_progress', 'finished']
+const styles = theme => ({
+    pane: {
+    //   height: '100%',
+      width: '100%',
+      overflow: 'auto',
+    },
+    paper: {
+      height: '300px',
+      width: '100%',
+    },
+    avatar: {
+        margin: 10,
+      },
+    purpleAvatar: {
+        margin: 0,
+        color: '#fff',
+        backgroundColor: deepPurple[500],
+      },  });
 
-class WorkspaceWelcome extends React.Component {
+class Team extends React.Component {
 
     onClickClaim () {
         this.props.claimManagerRole(this.props.playground.id)
@@ -52,12 +70,6 @@ class WorkspaceWelcome extends React.Component {
     componentDidMount() {
         console.log("ensuring playground details of " + this.props.match.params.initiativeId)
         this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId)
-    }
-
-    gotoActivePhase() {
-        const result = playgroundStatuses.find(element => element === this.props.playground.status)
-        const index = result ? playgroundStatuses.indexOf(result) : 0
-        history.push('/workspace/' + this.props.match.params.initiativeId + '/phase/' + (index + 1) )
     }
 
     render() {
@@ -78,14 +90,12 @@ class WorkspaceWelcome extends React.Component {
         const volunteerCount = playground.volunteers.length
         const userIsVolunteer = user && playground.volunteers.filter(volunteer => volunteer.userId === user.id).length > 0
         const contentMessage = volunteerCount === 0 ?
-                                "Deze speeltuin heeft nog geen team, start er één!" :
-                                (
-                                    volunteerCount === 1 ?
-                                    "Eén vrijwilliger maakt deze speeltuin rookvrij." :
-                                    volunteerCount + " vrijwilligers maken deze speeltuin rookvrij."
-                                ) + (userIsVolunteer ? "" : " Doe mee!")
-
-
+        "Deze speeltuin heeft nog geen team, start er één!" :
+        (
+            volunteerCount === 1 ?
+            "Eén vrijwilliger maakt deze speeltuin rookvrij." :
+            volunteerCount + " vrijwilligers maken deze speeltuin rookvrij."
+        ) + (userIsVolunteer ? "" : " Doe mee!")
 
         return (
             <div className={"workspace-wrapper"}>
@@ -112,19 +122,19 @@ class WorkspaceWelcome extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2>{ "Overzichtpagina"} </h2>
+                                <h2>{ "Team"} </h2>
                                 {playground &&
                                     <div className={"explainer-actions"}>
                                         <h3>
-                                            Op deze pagina vind je alle informatie die je nodig hebt
-                                            om {playground.name} rookvrij te maken.
+                                            Bespreek met je teamgenoten hoe je&nbsp;
+                                            {playground.name} rookvrij gaat maken.
                                         </h3>
                                         <Button
                                             className={"btn btn-highlight"}
-                                            onClick={() => this.gotoActivePhase()}
+                                            onClick={() => history.goBack()}
                                             style={{textAlign: 'center'}}
                                         >
-                                            <span>Naar de actiepagina</span>
+                                            <span>Terug naar de actiepagina</span>
                                         </Button>
                                     </div>
 
@@ -137,47 +147,31 @@ class WorkspaceWelcome extends React.Component {
 
                 <div className={classes.container + " information-wrapper"}>
                     <GridContainer className={"information-container"}>
-                        <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
-                            <CollapseCard title={"Team"}
-                                        image={require("assets/img/backgrounds/team.jpg")}
-                                        content={contentMessage}
-                                        primaryCta={"Word lid"}
-                                        MoreInformation={"Meer informatie"}
-                                        ExpandContent={<PlaygroundManagers playground={playground} user={user}/>}
-                            />
-                            <CollapseCard title={"Petities"}
-                                        image={require("assets/img/backgrounds/petities.jpg")}
-                                        content={"Help mee met deze speeltuin rookvrij te maken door de petitie te tekenen"}
-                                        primaryCta={"Teken Petitie"}
-                                        MoreInformation={"Meer informatie"}
-                                        ExpandContent={<PlaygroundVotes playground={playground} />}
-                            />
-                            <SimpleCard title={"Donaties"}
-                                        image={require("assets/img/backgrounds/donaties.jpg")}
-                                        content={"Door te doneren help je mee deze speeltuin rookvrij te maken."}
-                                        primaryCta={{
-                                            action: "#",
-                                            text: "Doneer nu"
-                                        }}
-                            />
-                            {
-                                !isManager &&
-                                        <div>
-                                            <SimpleCard
-                                                title={"Speeltuin beheerder?"}
-                                                image={require("assets/img/backgrounds/smokefree.jpg")}
-                                                content={"Ben jij de officiele beheerder van deze speeltuin? Laat het ons weten..."}
-                                                primaryCta={{
-                                                    click: (() => { this.onClickClaim() }),
-                                                    text: "Ik ben de beheerder van deze speeltuin"
-                                                }}
-                                            />
-                                        </div>
-                            }
+                        <GridItem xs={4} sm={4} md={4} className={"phase-information-container flex-divide"}>
+
+
+                            <Paper className={classes.paper} elevation={1}>
+                                <List>
+                                    {playground.volunteers.map(function (volunteer, index) {
+                                        const volunteerIsManager = playground.managers.filter(manager => manager.id === volunteer.userId).length > 0
+                                        return <ListItem key={index}>
+                                            <ListItemAvatar>
+                                                <Avatar className={user && volunteer.userId === user.id ? classes.purpleAvatar : classes.avatar }>
+                                                    {volunteer.userName.charAt(0)}
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={volunteer.userName} secondary={volunteerIsManager ? '(Beheerder)' : ''}/>
+                                        </ListItem>
+                                    })}
+                                </List>
+                            </Paper>
+
+                        </GridItem>
+                        <GridItem xs={8} sm={8} md={8} className={classes.paper}>
+                            <PlaygroundChatBox chatboxId={playground.id} />
                         </GridItem>
                     </GridContainer>
                 </div>
-
                 <Footer/>
             </div>
         )
@@ -185,4 +179,4 @@ class WorkspaceWelcome extends React.Component {
 }
 
 
-export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceWelcome));
+export default withStyles(componentsStyle)(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Team)))

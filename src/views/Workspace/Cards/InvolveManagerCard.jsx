@@ -13,7 +13,7 @@ const mapDispatchToProps = dispatch => ({
     claimManagerRole:    (initiativeId, onSuccessCallback) =>     dispatch(claimManagerRole(initiativeId, onSuccessCallback)),
 })
 
-class GetSupportCard extends React.Component {
+class InvolveManagerCard extends React.Component {
 
     state = {
         tipsDialogOpen: false,
@@ -91,5 +91,5 @@ class GetSupportCard extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GetSupportCard)
+export default connect(mapStateToProps, mapDispatchToProps)(InvolveManagerCard)
 

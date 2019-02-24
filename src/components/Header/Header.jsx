@@ -88,9 +88,13 @@ class Header extends React.Component {
     }
 
     componentWillUnmount() {
-        if (this.props.changeColorOnScroll) {
+        if (this.props.changeColorOnScroll)
             window.removeEventListener("scroll", this.headerColorChange);
-        }
+    }
+
+     gotoTeamPage = () => {
+        if (this.props.playground)
+            this.props.history.push("/workspace/" + this.props.playground.id + "/team")
     }
 
     signInClick = () => {
@@ -100,6 +104,7 @@ class Header extends React.Component {
     render() {
         const {
             classes,
+            playground,
             color,
             rightLinks,
             leftLinks,
@@ -149,7 +154,7 @@ class Header extends React.Component {
                         )}
                     </div>
 
-                    <ToolbarButton color="default" className={classes.button}>
+                    <ToolbarButton color="default" className={classes.button} onClick={() => this.gotoTeamPage()}>
                         <GroupIcon className={classes.rightIcon} />
                         &nbsp;19
                     </ToolbarButton>
