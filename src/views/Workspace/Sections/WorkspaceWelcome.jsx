@@ -17,6 +17,7 @@ import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import { connect } from 'react-redux'
 import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative } from "../../../components/Playground/PlaygroundActions";
+import {Redirect} from 'react-router-dom'
 
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
@@ -60,6 +61,12 @@ class WorkspaceWelcome extends React.Component {
         const index = result ? playgroundStatuses.indexOf(result) : 0
         history.push('/workspace/' + this.props.match.params.initiativeId + '/phase/' + (index + 1) )
     }
+
+    getActivePhaseUrl() {
+        const result = playgroundStatuses.find(element => element === this.props.playground.status)
+        const index = result ? playgroundStatuses.indexOf(result) : 0
+        return '/workspace/' + this.props.match.params.initiativeId + '/phase/' + (index + 1)
+    }
     
     onJoinClicked = () => {
         this.props.joinInitiative(this.props.playground.id)
@@ -68,9 +75,12 @@ class WorkspaceWelcome extends React.Component {
     render() {
         const {playground, user, classes, ...rest} = this.props;
 
-
         if (!playground || this.props.playgroundLoading) 
             return "loading.."
+
+        const userIsVolunteer = user && playground.volunteers.filter(volunteer => volunteer.userId === user.id).length > 0
+        if (userIsVolunteer)
+            return ( <Redirect to={this.getActivePhaseUrl()}></Redirect>)
 
         const isManager = user && playground.managers && !!playground.managers.filter(manager => {
             return manager.id === user.id
@@ -80,7 +90,6 @@ class WorkspaceWelcome extends React.Component {
 
         // Prepare content message for the team card
         const volunteerCount = playground.volunteers.length
-        const userIsVolunteer = user && playground.volunteers.filter(volunteer => volunteer.userId === user.id).length > 0
         const contentMessage = volunteerCount === 0 ?
                                 "Deze speeltuin heeft nog geen team, start er één!" :
                                 (
@@ -125,7 +134,8 @@ class WorkspaceWelcome extends React.Component {
                                         </h3>
                                         <Button
                                             className={"btn btn-highlight"}
-                                            onClick={() => this.gotoActivePhase()}
+                                            // onClick={() => this.gotoActivePhase()}
+                                            onClick={() => history.push(this.getActivePhaseUrl())}
                                             style={{textAlign: 'center'}}
                                         >
                                             <span>Naar de actiepagina</span>
