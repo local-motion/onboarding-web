@@ -4,12 +4,29 @@ import ChatMessageEntryBox from './ChatMessageEntryBox';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
 import { getUser } from '../../UserProfile/UserProfileReducer';
+import { Paper } from '@material-ui/core';
 
 const styles = theme => ({
-  pane: {
-    backgroundColor: '#F0F0F0',
-    height: '250px',
+  chatBox: {
+    display: "flex",
+    flexFlow: "column",
+    height: '100%',
+    width: '100%',
     overflow: 'auto',
+  },
+  list: {
+    // backgroundColor: '#F0F0F0',
+    // height: '250px',
+    // height: '100%',
+    flexGrow: "1",
+    // height: 'fill',
+    width: '100%',
+    overflow: 'auto',
+  },
+  entryField: {
+    // backgroundColor: '#F0F0F0',
+    height: '100px',
+    width: '100%',
   },
 });
 
@@ -19,8 +36,6 @@ const mapStateToProps = state => ({
 
 class ChatBox extends React.Component {
 
-  chatboxId = null;
-
   onSubmitHandler = () => {
     if (this.props.messageText !== '') {
       this.props.onSubmitHandler()
@@ -28,8 +43,7 @@ class ChatBox extends React.Component {
   }
 
   componentDidMount() {
-    this.chatboxId = window.location.pathname.split("/").pop();
-    this.props.setActiveChatbox(this.chatboxId)
+    this.props.setActiveChatbox(this.props.chatboxId)
     this.setScrollState()
   }
 
@@ -38,7 +52,7 @@ class ChatBox extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.deactivateChatbox(this.chatboxId)
+    this.props.deactivateChatbox(this.props.chatboxId)
   }
 
   setScrollState() {
@@ -47,18 +61,21 @@ class ChatBox extends React.Component {
   }
 
   render() {
-    const {chatMessages=[], messageText='', onChangeHandler, onTextKeyPress, user} = this.props
+    const {classes, chatMessages=[], messageText='', onChangeHandler, onTextKeyPress, user} = this.props
 
     return (
-    <div>
-      <div id="chatPane" className={this.props.classes.pane}>
-        <ChatMessageList items={chatMessages}/>
-      </div>
-      {user &&
-        <ChatMessageEntryBox onSubmitClick={this.onSubmitHandler} onTextChange={onChangeHandler} text={messageText} onTextKeyPress={onTextKeyPress}/>
-      }
-    </div>
-  );
+      // <Card>
+      // <Paper className={classes.paper} elevation={1}>
+      <Paper elevation={1}  className={classes.chatBox}>
+        <div id="chatPane" className={classes.list}>
+          <ChatMessageList items={chatMessages}/>
+        </div>
+        {user &&
+          <ChatMessageEntryBox onSubmitClick={this.onSubmitHandler} onTextChange={onChangeHandler} text={messageText} onTextKeyPress={onTextKeyPress}  className={classes.entryField}/>
+        }
+      {/* </Card> */}
+      </Paper>
+  )
   }
 }
 

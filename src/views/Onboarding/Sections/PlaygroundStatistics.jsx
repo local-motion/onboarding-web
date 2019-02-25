@@ -10,7 +10,7 @@ import DefaultStatistic from "components/PlaygroundStatistic/DefaultStatistic.js
 import PlaygroundStatistic from "components/PlaygroundStatistic/PlaygroundStatistic.jsx";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Button from "@material-ui/core/Button/Button";
-import JoinInitiative from "./JoinInitiative.jsx"
+import { history } from "../../../setup.js";
 
 import {withTranslation} from "react-i18next";
 import { getStatistics } from "../../../components/Playground/PlaygroundReducer.js";
@@ -74,7 +74,14 @@ class PlaygroundStatistics extends React.Component {
                                 </div>
 
                                 <div style={{display: generalStatistics ? 'none' : 'block'}}>
-                                    <JoinInitiative playground={playground}/>
+                                    {/* <JoinInitiative playground={playground}/> */}
+                                    <Button
+                                        className={"btn btn-highlight pr-25 pull-left"}
+                                        onClick={() => history.push(`/workspace/${playground.id}`) }
+                                    >
+                                        <span>Bezoek deze speeltuin</span>
+                                    </Button>
+
                                     <Button
                                         style={{display: generalStatistics ? 'none' : 'inline-flex'}}
                                         onClick={

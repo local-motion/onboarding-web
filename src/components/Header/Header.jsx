@@ -88,9 +88,13 @@ class Header extends React.Component {
     }
 
     componentWillUnmount() {
-        if (this.props.changeColorOnScroll) {
+        if (this.props.changeColorOnScroll)
             window.removeEventListener("scroll", this.headerColorChange);
-        }
+    }
+
+     gotoTeamPage = () => {
+        if (this.props.playground)
+            this.props.history.push("/workspace/" + this.props.playground.id + "/team")
     }
 
     signInClick = () => {
@@ -101,6 +105,7 @@ class Header extends React.Component {
         const {
             classes,
             color,
+            playground,
             rightLinks,
             leftLinks,
             brandLink,
@@ -122,6 +127,7 @@ class Header extends React.Component {
         })
         const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />
         const brandComponent = <div align='center'>{brandLink ? <Link to={brandLink}>{brandContent}</Link> : brandContent }</div>
+        const nrOfVolunteers = playground ? playground.volunteerCount : 250 // for now mock the total number of volunteers for smokefree playgrounds
 
         return (
             <AppBar className={appBarClasses + " lm-header"}>
@@ -149,9 +155,9 @@ class Header extends React.Component {
                         )}
                     </div>
 
-                    <ToolbarButton color="default" className={classes.button}>
+                    <ToolbarButton color="default" className={classes.button} onClick={() => this.gotoTeamPage()}>
                         <GroupIcon className={classes.rightIcon} />
-                        &nbsp;19
+                        &nbsp;{nrOfVolunteers}
                     </ToolbarButton>
 
                     <ToolbarButton color="default" className={classes.button} onClick={openPetitionDialog}>

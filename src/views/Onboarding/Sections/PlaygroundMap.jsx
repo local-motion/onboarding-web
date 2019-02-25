@@ -101,9 +101,7 @@ const PlaygroundMapImpl = compose(
             >
 
             { props.playgrounds &&
-            props.playgrounds.map(playground => {
-                console.log("plaground:", playground)
-                return (
+            props.playgrounds.map(playground => (
                 <Marker
                     onClick={
                         props.onPlaygroundChange.bind(this, playground)
@@ -112,8 +110,8 @@ const PlaygroundMapImpl = compose(
                     position={{lat: playground.lat, lng: playground.lng}}
                     icon={playground.status === "not_started" ? markerWhite : (playground.status === "in_progress" ? markerBlue : markerGreen)}
                 />
-            ) })
-            }
+            ))}
+            
 
             {props.isMarkerShown &&
                 <Marker
