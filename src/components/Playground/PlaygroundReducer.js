@@ -22,6 +22,7 @@ const initialState = {
         status:  ["not_started|"in_progress"|"finished"]
         smokeFreeDate: [timestamp]
         managers: [array of {id: [string], username: [string]} ]
+        volunteers: [array of {userId: [string], userName: [string]} ]
         jointChecklistItems: [list of strings, each indicating a checklist items that is checked, view is playground as a whole, last checklist action determines the state]
         ownChecklistItems: [list of strings, each indicating a checklist items that is checked, view is the checks placed by the logged on user]
     }

@@ -24,9 +24,8 @@ const styles = {
 
 class PlaygroundManagers extends React.Component {
     render() {
-        const {playground, user, classes} = this.props;
-        console.log("displaying volunteers for: ", playground)
-        if (!playground) return "Loading...";
+        const {playground, user, classes} = this.props
+        if (!playground) return "Loading..."
         return (
             <div>
                 <div className={playground.volunteers.length > 0 ? 'manager-container' : 'hide'}>
@@ -45,7 +44,7 @@ class PlaygroundManagers extends React.Component {
                     </List>
                 </div>
             </div>
-        );
+        )
     }
 }
 

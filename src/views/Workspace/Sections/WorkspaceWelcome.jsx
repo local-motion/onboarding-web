@@ -16,7 +16,7 @@ import PlaygroundManagers from "./PlaygroundManagers";
 import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import { connect } from 'react-redux'
-import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails } from "../../../components/Playground/PlaygroundActions";
+import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative } from "../../../components/Playground/PlaygroundActions";
 
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
@@ -38,6 +38,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = dispatch => ({
     claimManagerRole:    (initiativeId, onSuccessCallback) =>     dispatch(claimManagerRole(initiativeId, onSuccessCallback)),
+    joinInitiative:    (initiativeId, onSuccessCallback) =>     dispatch(joinInitiative(initiativeId, onSuccessCallback)),
     ensurePlaygroundDetails:    (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
 })
 
@@ -59,6 +60,10 @@ class WorkspaceWelcome extends React.Component {
         const index = result ? playgroundStatuses.indexOf(result) : 0
         history.push('/workspace/' + this.props.match.params.initiativeId + '/phase/' + (index + 1) )
     }
+    
+    onJoinClicked = () => {
+        this.props.joinInitiative(this.props.playground.id)
+    }
 
     render() {
         const {playground, user, classes, ...rest} = this.props;
@@ -67,10 +72,9 @@ class WorkspaceWelcome extends React.Component {
         if (!playground || this.props.playgroundLoading) 
             return "loading.."
 
-
         const isManager = user && playground.managers && !!playground.managers.filter(manager => {
             return manager.id === user.id
-        }).length;
+        }).length
 
         console.log(`Displaying workspace welcome for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${user ? user.id : 'anonymous'}`);
 
@@ -138,13 +142,23 @@ class WorkspaceWelcome extends React.Component {
                 <div className={classes.container + " information-wrapper"}>
                     <GridContainer className={"information-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
-                            <CollapseCard title={"Team"}
-                                        image={require("assets/img/backgrounds/team.jpg")}
-                                        content={contentMessage}
-                                        primaryCta={"Word lid"}
-                                        MoreInformation={"Meer informatie"}
-                                        ExpandContent={<PlaygroundManagers playground={playground} user={user}/>}
-                            />
+                            { userIsVolunteer ? 
+                                <CollapseCard title={"Team"}
+                                            image={require("assets/img/backgrounds/team.jpg")}
+                                            content={contentMessage}
+                                            MoreInformation={"Meer informatie"}
+                                            ExpandContent={<PlaygroundManagers playground={playground} user={user}/>}
+                                />
+                            :
+                                <CollapseCard title={"Team"}
+                                            image={require("assets/img/backgrounds/team.jpg")}
+                                            content={contentMessage}
+                                            primaryCta={"Word lid"}
+                                            primaryCtaOnClick={() => this.onJoinClicked()}
+                                            MoreInformation={"Meer informatie"}
+                                            ExpandContent={<PlaygroundManagers playground={playground} user={user}/>}
+                                />
+                            }
                             <CollapseCard title={"Petities"}
                                         image={require("assets/img/backgrounds/petities.jpg")}
                                         content={"Help mee met deze speeltuin rookvrij te maken door de petitie te tekenen"}

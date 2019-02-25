@@ -8,11 +8,7 @@ import classNames from "classnames";
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import CollapseCard from "components/CustomCard/CollapseCard.jsx"
-
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import PlaygroundManagers from "./PlaygroundManagers";
-
 import { connect } from 'react-redux'
 import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails } from "../../../components/Playground/PlaygroundActions";
 import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
@@ -44,7 +40,6 @@ const mapDispatchToProps = dispatch => ({
 
 const styles = theme => ({
     pane: {
-    //   height: '100%',
       width: '100%',
       overflow: 'auto',
     },
@@ -75,33 +70,15 @@ class Team extends React.Component {
     render() {
         const {playground, user, classes, ...rest} = this.props;
 
-
         if (!playground || this.props.playgroundLoading) 
             return "loading.."
-
-
-        const isManager = user && playground.managers && !!playground.managers.filter(manager => {
-            return manager.id === user.id
-        }).length;
-
-        console.log(`Displaying workspace welcome for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${user ? user.id : 'anonymous'}`);
-
-        // Prepare content message for the team card
-        const volunteerCount = playground.volunteers.length
-        const userIsVolunteer = user && playground.volunteers.filter(volunteer => volunteer.userId === user.id).length > 0
-        const contentMessage = volunteerCount === 0 ?
-        "Deze speeltuin heeft nog geen team, start er één!" :
-        (
-            volunteerCount === 1 ?
-            "Eén vrijwilliger maakt deze speeltuin rookvrij." :
-            volunteerCount + " vrijwilligers maken deze speeltuin rookvrij."
-        ) + (userIsVolunteer ? "" : " Doe mee!")
 
         return (
             <div className={"workspace-wrapper"}>
                 <Header
                     brand={playground.name}
                     rightLinks={<HeaderLinks/>}
+                    playground={playground}
                     fixed
                     textBrand
                     color="white"
