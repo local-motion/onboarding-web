@@ -145,7 +145,7 @@ class Team extends React.Component {
 
                         </GridItem>
                         <GridItem xs={8} sm={8} md={8} className={classes.paper}>
-                            <PlaygroundChatBox chatboxId={playground.id} />
+                            <PlaygroundChatBox playground={playground}/>
                         </GridItem>
                     </GridContainer>
                 </div>
