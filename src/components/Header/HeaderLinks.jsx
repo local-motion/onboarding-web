@@ -9,7 +9,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 
 // @material-ui/icons
-import {AccountCircle, Menu} from "@material-ui/icons";
+import {AccountCircle, Menu, ArrowLeftRounded, ArrowDownwardRounded, ArrowDropDownRounded} from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
@@ -18,7 +18,7 @@ import Hidden from "@material-ui/core/Hidden";
 import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 import JSignOut from "../../auth/JSignOut";
 import { connect } from 'react-redux'
-import { Button } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { signOutUser, deleteUser } from "../UserProfile/UserProfileActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
 
@@ -32,6 +32,9 @@ const mapDispatchToProps = dispatch => ({
 
 function HeaderLinks(props) {
     const {classes, user} = props;
+
+    const profileButtonIcon = () => <span><AccountCircle /><ArrowDropDownRounded/></span>
+
     return (
         <List className={classes.list}>
 
@@ -72,8 +75,10 @@ function HeaderLinks(props) {
                                 className: classes.navLink,
                                 color: "transparent"
                             }}
-                            buttonIcon={AccountCircle}
+                            buttonIcon={profileButtonIcon}
                             dropdownList={[
+                                <Typography>Ingelogd als {user.name}</Typography>,
+                                {divider: true},
                                 <Button >Mijn profiel</Button>, 
                                 <Button onClick={props.deleteUser}>Uitschrijven</Button>, 
                                 <Button onClick={props.signOutUser}>Uitloggen</Button>, 
