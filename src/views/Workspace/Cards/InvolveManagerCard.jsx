@@ -4,7 +4,7 @@ import { Button, Typography } from "@material-ui/core";
 import ContentDialog from "../../../components/Dialogs/ContentDialog";
 import { connect } from 'react-redux'
 import { claimManagerRole } from "../../../components/Playground/PlaygroundActions";
-import { isUserManagerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+import { isUserManagerOfPlayground, isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 const mapStateToProps = state => ({
 })
@@ -49,7 +49,7 @@ class InvolveManagerCard extends React.Component {
                 content={"We kunnen de speeltuin alleen rookvrij maken samen met de beheerder. Nodig de beheerder uit om samen aan de slag te gaan."}
                 expandContent={
                     <div>
-                        <Button disabled={!user}  variant="contained" size="small" color="primary" 
+                        <Button disabled={!isUserVolunteerOfPlayground(user, playground)}  variant="contained" size="small" color="primary" 
                             href={
                                 "mailto:?" + 
                                 "subject=" + playground.name /* TODO escapen */ + "%20rookvrij%20maken&" +
@@ -72,7 +72,7 @@ class InvolveManagerCard extends React.Component {
                             title="Hoe vind ik de beheerder?"
                             content={tipsContent}
                             />
-                        { !(user && isUserManagerOfPlayground(user, playground)) &&
+                        { !(isUserManagerOfPlayground(user, playground)) &&
                         <div>
                             <br /><br />
                             <Button 

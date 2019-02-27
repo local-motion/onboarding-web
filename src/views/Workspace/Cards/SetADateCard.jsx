@@ -38,7 +38,8 @@ class SetADateCard extends React.Component {
         if (!playground) return "Loading..."
 
         const date = playground.smokeFreeDate || new Date()
-        const userIsManager = user && isUserManagerOfPlayground(user, playground)
+        const userIsManager = isUserManagerOfPlayground(user, playground)
+
         const tipsContent = (
             <div>
                 <Typography gutterBottom>

@@ -2,6 +2,7 @@ import React from "react";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import { Button, Typography } from "@material-ui/core";
 import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCheckbox";
+import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 
 class GetSupportCard extends React.Component {
@@ -17,7 +18,7 @@ class GetSupportCard extends React.Component {
                 content={"Deel flyers uit in de buurt om de mensen mee te nemen in dit initiatief."}
                 expandContent={
                     <div>
-                        <Button disabled={!user}  variant="contained" size="small" color="primary" 
+                        <Button disabled={!isUserVolunteerOfPlayground(user, playground)}  variant="contained" size="small" color="primary" 
                             href={
                                 "mailto:service@longfonds.nl?" + 
                                 "subject=Flyers%20bestellen&" + 

@@ -38,7 +38,8 @@ export const getPlaygroundDetails = (state, playgroundId) => state.playgrounds.p
 export const isCurrentUserManagerOfPlayground = (state, playgroundId) => isUserManagerOfPlayground(getUser(state), getPlaygroundDetails(state, playgroundId))
 
 // Public utilities
-export const isUserManagerOfPlayground = (user, playground) => playground.managers.filter(manager => manager.id === user.id).length > 0
+export const isUserVolunteerOfPlayground = (user, playground) => playground && user && playground.volunteers.filter(volunteer => volunteer.userId === user.id).length > 0
+export const isUserManagerOfPlayground   = (user, playground) => playground && user && playground.managers.filter(manager => manager.id === user.id).length > 0
 
 
 /// The statistics selector returns a structure like this:

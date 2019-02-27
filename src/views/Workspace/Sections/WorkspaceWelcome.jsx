@@ -98,12 +98,11 @@ class WorkspaceWelcome extends React.Component {
                                     volunteerCount + " vrijwilligers maken deze speeltuin rookvrij."
                                 ) + (userIsVolunteer ? "" : " Doe mee!")
 
-
-
         return (
             <div className={"workspace-wrapper"}>
                 <Header
                     brand={playground.name}
+                    playground={playground}
                     rightLinks={<HeaderLinks/>}
                     fixed
                     textBrand
