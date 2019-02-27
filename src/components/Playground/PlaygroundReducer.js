@@ -121,10 +121,7 @@ const playgroundReducer = (state = initialState, action, baseState) => {
         console.log("userprofile: ", userProfile)
         const playground = action.payload.data.joinInitiative
 
-        var userListedAsVolunteer = false
-        for (let i = 0; i < playground.volunteers.length; i++)
-          userListedAsVolunteer |= playground.volunteers[i].userId === userProfile.id
-  
+        let userListedAsVolunteer = playground.volunteers.filter(volunteer => volunteer.userId === userProfile.id).length
         if (!userListedAsVolunteer) {
           playground.volunteers.push({userId: userProfile.id, userName: userProfile.name})
           playground.volunteerCount++
@@ -135,27 +132,35 @@ const playgroundReducer = (state = initialState, action, baseState) => {
         return {
           ...state,
           playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
+          playgrounds: updatePlaygrounds(state.playgrounds, playground)                     // (to update the volunteerCount) Note that this is not a summary, but fully detailed playground, but that should not matter
         }
       }
 
     case CLAIM_MANAGER_ROLE + SUCCESS_POSTFIX:
+    {
       // Because of the async nature of Axon, the result will often not yet contain the user as a manager. So (for now) we need to fix this here.
+      // Note that all managers are considered to be volunteers, so also add the user to that list
       const userProfile = action.miscAttributes.userProfile
       console.log("userprofile:")
       console.log(userProfile)
       const playground = action.payload.data.claimManagerRole
-      var userListedAsManager = false
-      for (let i = 0; i < playground.managers.length; i++)
-        userListedAsManager |= playground.managers[i].id === userProfile.id
 
+      let userListedAsManager = playground.managers.filter(manager => manager.id === userProfile.id).length
       if (!userListedAsManager)
         playground.managers.push(userProfile)
+
+      let userListedAsVolunteer = playground.volunteers.filter(volunteer => volunteer.userId === userProfile.id).length
+      if (!userListedAsVolunteer) {
+        playground.volunteers.push({userId: userProfile.id, userName: userProfile.name})
+        playground.volunteerCount++
+      }
 
       return {
         ...state,
         playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
+        playgrounds: updatePlaygrounds(state.playgrounds, playground)                     // (to update the volunteerCount) Note that this is not a summary, but fully detailed playground, but that should not matter
       }
-
+    }
       case SET_SMOKEFREE_DATE + SUCCESS_POSTFIX:
         {
         const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
