@@ -39,10 +39,10 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const styles = theme => ({
-    pane: {
-      width: '100%',
-      overflow: 'auto',
-    },
+    // pane: {
+    //   width: '100%',
+    //   overflow: 'auto',
+    // },
     paper: {
       height: '300px',
       width: '100%',
@@ -134,7 +134,7 @@ class Team extends React.Component {
                                         return <ListItem key={index}>
                                             <ListItemAvatar>
                                                 <Avatar className={user && volunteer.userId === user.id ? classes.purpleAvatar : classes.avatar }>
-                                                    {volunteer.userName.charAt(0)}
+                                                    {volunteer.userName.substring(0, volunteer.userName.length > 1 ? 2 : 1)}
                                                 </Avatar>
                                             </ListItemAvatar>
                                             <ListItemText primary={volunteer.userName} secondary={volunteerIsManager ? '(Beheerder)' : ''}/>

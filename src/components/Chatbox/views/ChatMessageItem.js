@@ -5,10 +5,10 @@ import { deepPurple } from "@material-ui/core/colors";
 
 const styles = theme => ({
     avatar: {
-        margin: 10,
+        marginRight: 10,
       },
     purpleAvatar: {
-        margin: 10,
+        marginRight: 10,
         color: '#fff',
         backgroundColor: deepPurple[500],
       },  
@@ -19,6 +19,7 @@ const styles = theme => ({
         gutterBottom: 'true',
         marginRight: '10px',
         noWrap: 'true',
+        // fontSize: '90%'
     },
     dateText: {
         align: 'left',
@@ -27,17 +28,42 @@ const styles = theme => ({
         marginRight: '10px',
         noWrap: 'true',
     },
+    contentText: {
+        align: 'left',
+        color: 'black',
+        fontSize: '100%'
+    },
 })
 
-const ChatMessageItem = ({children, userName, author, creationTime, text, classes}) => {
+const isSameDate = (date1, date2) => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()
+const getTimeString = date => date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
+const getPrettyMessageDatetime = messageDateString => {
+    const displayOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const displayOptionsThisWeek = { weekday: 'long'}
+
+    const now = new Date()
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const yesterday = new Date(today-1)
+    const sixDaysAgo = new Date(today-6)
+
+    const messageDate = new Date(messageDateString)
+
+    if (isSameDate(messageDate, today))
+        return getTimeString(messageDate)
+    else if (isSameDate(messageDate, yesterday))
+        return 'gisteren ' + getTimeString(messageDate)
+    else if (messageDate > sixDaysAgo)
+        return messageDate.toLocaleDateString('nl-NL', displayOptionsThisWeek) + ' ' + getTimeString(messageDate)
+    else
+        return messageDate.toLocaleDateString('nl-NL', displayOptions) + ' ' + getTimeString(messageDate)
+}
+
+const ChatMessageItem = ({userName, author, creationTime, text, classes}) => {
     const iconText = (author || '??').substring(0, 2)
 
-    var displayDateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const displayDate = new Date(creationTime).toLocaleDateString('nl-NL', displayDateOptions)
 
     return (
         <ListItem>
-            {/* <Chip color={author === 'Bot' ? 'secondary' : 'primary'} avatar={<Avatar>{author === 'Bot' ? <FaceIcon/> :  iconText}</Avatar>} label={text} /> */}
             <ListItemAvatar>
                 <Avatar className={author === userName ? classes.purpleAvatar : classes.avatar }>
                     {iconText}
@@ -47,11 +73,11 @@ const ChatMessageItem = ({children, userName, author, creationTime, text, classe
                 <Grid item>
                     <Grid container direction="row">
                     <Grid item><Typography className={classes.authorText}>{author}</Typography></Grid>
-                    <Grid item><Typography className={classes.dateText}>{displayDate}</Typography></Grid>
+                    <Grid item><Typography className={classes.dateText}>{getPrettyMessageDatetime(creationTime)}</Typography></Grid>
                 </Grid>
                 </Grid>
                 <Grid item>
-                    <Typography>{text}</Typography>
+                    <Typography className={classes.contentText}>{text}</Typography>
                 </Grid>
             </Grid>
         </ListItem>

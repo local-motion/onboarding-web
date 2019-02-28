@@ -6,11 +6,11 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 const styles = theme => ({
     entryBox: {
-        margin: '10px',
+        margin: '2px 10px 10px 10px',
         border: '2px solid #CCC',
         borderRadius: '8px',
-        padding: '3px',
-        flexGrow: '1'
+        padding: '5px',
+        // flexGrow: '1'
         // flexFlow: "row",
     },
     textField: {
