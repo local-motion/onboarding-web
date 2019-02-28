@@ -6,6 +6,7 @@ import {withStyles} from '@material-ui/core/styles';
 import ContentDialog from "../../../components/Dialogs/ContentDialog";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 const styles = theme => ({
     smokefreeButton: {
@@ -80,7 +81,7 @@ class ValidateCard extends React.Component {
                         <Typography component="p">Geef aan of je iemand hebt zien roken vandaag.</Typography>
                         <Button 
                             variant="contained" size="small" color="primary" 
-                            disabled={!user}
+                            disabled={!isUserVolunteerOfPlayground(user, playground)}
                             className={classes.smokefreeButton}
                             onClick={this.smokefreeObservation}
                         >
@@ -89,7 +90,7 @@ class ValidateCard extends React.Component {
                         &nbsp;&nbsp;&nbsp;
                         <Button 
                             variant="contained" size="small" color="primary" 
-                            disabled={!user}
+                            disabled={!isUserVolunteerOfPlayground(user, playground)}
                             className={classes.notSmokefreeButton}
                             onClick={this.notSmokefreeObservation}
                         >

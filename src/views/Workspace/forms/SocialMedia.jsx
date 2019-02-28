@@ -19,9 +19,20 @@ import {
 // core components
 import { withTranslation } from "react-i18next";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import { connect } from 'react-redux'
+import { getUser } from "../../../components/UserProfile/UserProfileReducer";
+import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+
+
+const mapStateToProps = state => ({
+    user: getUser(state)
+})
+
 
 class SocialMedia extends React.Component {
     render() {
+        const {user, playground} = this.props
+        const userIsVolunteer = isUserVolunteerOfPlayground(user, playground)
         const shareUrl = window.location.href;
         var details = {
             title: `Help make ${this.props.playground.name} smoke free.`,
@@ -32,27 +43,27 @@ class SocialMedia extends React.Component {
 
         return (
             <div>
-                <FacebookShareButton className="socialIcon" url={shareUrl} quote={details.description} hashtag={details.hashtags[0]}>
+                <FacebookShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} quote={details.description} hashtag={details.hashtags[0]}>
                     <FacebookIcon size={32} round />
                 </FacebookShareButton>
 
-                <GooglePlusShareButton className="socialIcon" url={shareUrl}>
+                <GooglePlusShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl}>
                     <GooglePlusIcon size={32} round />
                 </GooglePlusShareButton>
 
-                <LinkedinShareButton className="socialIcon" url={shareUrl} title={details.title} description={details.description}>
+                <LinkedinShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} title={details.title} description={details.description}>
                     <LinkedinIcon size={32} round />
                 </LinkedinShareButton>
 
-                <TwitterShareButton className="socialIcon" url={shareUrl} title={details.title} via={details.via} hastags={details.hashtags}>
+                <TwitterShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} title={details.title} via={details.via} hastags={details.hashtags}>
                     <TwitterIcon size={32} round />
                 </TwitterShareButton>
 
-                <WhatsappShareButton className="socialIcon" url={shareUrl} title={details.title} seperator=" ">
+                <WhatsappShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} title={details.title} seperator=" ">
                     <WhatsappIcon size={32} round />
                 </WhatsappShareButton>
 
-                <WorkplaceShareButton className="socialIcon" url={shareUrl} quote={details.title} hashtag={details.hashtags[0]} >
+                <WorkplaceShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} quote={details.title} hashtag={details.hashtags[0]} >
                     <WorkplaceIcon size={32} round />
                 </WorkplaceShareButton>
             </div>
@@ -60,6 +71,4 @@ class SocialMedia extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(
-    withTranslation("translations")(SocialMedia)
-);
+export default withStyles(componentsStyle)( withTranslation("translations")(connect(mapStateToProps)(SocialMedia)) )

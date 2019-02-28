@@ -2,6 +2,7 @@ import React from "react";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import SocialMedia from "../forms/SocialMedia";
 import { Button, Typography } from "@material-ui/core";
+import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 
 class GetSupportCard extends React.Component {
@@ -25,7 +26,7 @@ class GetSupportCard extends React.Component {
                 expandContent={
                     <div>
                         <Typography component="p">Stuur je kennissen een mailtje</Typography>
-                        <Button disabled={!user} size="small" color="primary" href={inviteButtonHref}>{inviteButtonLabel}</Button>
+                        <Button disabled={!isUserVolunteerOfPlayground(user, playground)} size="small" color="primary" href={inviteButtonHref}>{inviteButtonLabel}</Button>
                         <br />
                         <br />
                         <Typography component="p">Doe een oproep op social media</Typography>
