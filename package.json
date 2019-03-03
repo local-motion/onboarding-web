@@ -27,7 +27,7 @@
     "apollo-link-context": "1.0.14",
     "apollo-link-error": "1.1.7",
     "apollo-link-http": "1.5.11",
-    "ajv": "6.9.2",
+    "ajv": "6.10.0",
     "autosuggest-highlight": "3.1.1",
     "aws-amplify": "1.1.19",
     "aws-amplify-react": "2.3.0",
