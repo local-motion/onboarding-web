@@ -1,4 +1,4 @@
-import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE, SET_CHECKBOX } from "./PlaygroundActions";
+import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE, SET_CHECKBOX, RECORD_PLAYGROUND_OBSERVATION } from "./PlaygroundActions";
 import { SUCCESS_POSTFIX } from "../../GlobalActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
 
@@ -192,6 +192,24 @@ const playgroundReducer = (state = initialState, action, baseState) => {
         }
         else
           return state
+        }
+
+      case RECORD_PLAYGROUND_OBSERVATION + SUCCESS_POSTFIX:
+        {
+        const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
+
+        const updatedObservations = [...playground.playgroundObservations, {
+          userId: action.variables.input.observer,
+          userName: 'don\'t bother to fetch',
+          smokefree: action.variables.input.smokefree,
+          observationDate: new Date(),
+          comment: action.variables.input.comment,
+        }]
+        const updatedPlayground = {...playground, playgroundObservations: updatedObservations}
+          return {
+            ...state,
+            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
+          }
         }
 
       case SET_CHECKBOX + SUCCESS_POSTFIX:

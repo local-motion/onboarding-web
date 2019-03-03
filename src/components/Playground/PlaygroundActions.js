@@ -14,6 +14,7 @@ export const JOIN_INITIATIVE = 'JOIN_INITIATIVE'
 export const CLAIM_MANAGER_ROLE = 'CLAIM_MANAGER_ROLE'
 export const SET_SMOKEFREE_DATE = 'SET_SMOKEFREE_DATE'
 export const SET_DECIDE_SMOKEFREE = 'SET_DECIDE_SMOKEFREE'
+export const RECORD_PLAYGROUND_OBSERVATION = 'RECORD_PLAYGROUND_OBSERVATION'
 export const SET_CHECKBOX = 'SET_CHECKBOX'
 
 
@@ -44,6 +45,13 @@ const getPlaygroundDetailsQuery = gql`
             votes
             jointChecklistItems
             ownChecklistItems
+            playgroundObservations {
+              observerId
+              observerName
+              smokefree
+              observationDate
+              comment
+            }
             managers {
                 id
                 username
@@ -147,6 +155,14 @@ const setDecideSmokefreeQuery = gql`
   }
 `;
 
+const recordPlaygroundObservationQuery = gql`
+  mutation RecordPlaygroundObservation($input: RecordPlaygroundObservationCommand!) {
+    recordPlaygroundObservation(input: $input) {
+      id
+    }
+  }
+`;
+
 const updateCheckboxQuery = gql`
   mutation UpdateChecklist($input: UpdateChecklistCommand!) {
     updateChecklist(input: $input) {
@@ -229,6 +245,17 @@ export const setDecideSmokefree = (initiativeId) => {
   return mutationGraphQL(SET_DECIDE_SMOKEFREE, setDecideSmokefreeQuery, {
     input: {
       initiativeId
+    }
+  })
+}
+
+export const recordPlaygroundObservation = (initiativeId, smokefree, comment, user) => {
+  return mutationGraphQL(RECORD_PLAYGROUND_OBSERVATION, recordPlaygroundObservationQuery, {
+    input: {
+      initiativeId,
+      observer: user.id,
+      smokefree,
+      comment
     }
   })
 }
