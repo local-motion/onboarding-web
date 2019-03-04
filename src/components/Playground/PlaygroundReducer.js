@@ -199,8 +199,8 @@ const playgroundReducer = (state = initialState, action, baseState) => {
         const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
 
         const updatedObservations = [...playground.playgroundObservations, {
-          userId: action.variables.input.observer,
-          userName: 'don\'t bother to fetch',
+          observerId: action.variables.input.observer,
+          observerName: 'don\'t bother to fetch',
           smokefree: action.variables.input.smokefree,
           observationDate: new Date(),
           comment: action.variables.input.comment,
