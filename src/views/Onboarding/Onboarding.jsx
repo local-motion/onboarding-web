@@ -7,7 +7,6 @@ import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { withTranslation } from "react-i18next";
-import {Redirect} from 'react-router-dom'
 
 import Header from "components/Header/Header.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -25,7 +24,6 @@ import { connect } from 'react-redux'
 import { ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
-import { isShowWelcomePage } from "../Information/Welcome";
 
 
 const mapStateToProps = state => ({
@@ -51,7 +49,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 // Define this variable here to set it once when the module is loaded
-let displayWelcome = isShowWelcomePage()
 
 class Onboarding extends React.Component {
     constructor(props) {
@@ -90,11 +87,6 @@ class Onboarding extends React.Component {
         const {playgrounds, classes, user, ...rest } = this.props;
         const {playground, map} = this.state;
 
-        if (displayWelcome) {
-            displayWelcome = false
-            return <Redirect to='/welcome'/>
-        }
-        else
         return (
             <div className={"onboarding-wrapper"}>
 
