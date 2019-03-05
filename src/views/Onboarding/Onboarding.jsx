@@ -11,6 +11,7 @@ import { withTranslation } from "react-i18next";
 import Header from "components/Header/Header.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Footer from "components/Footer/Footer.jsx";
+import Explanation from "components/Explanation/Explanation.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -134,6 +135,7 @@ class Onboarding extends React.Component {
                         </GridItem>
                     </GridContainer>
                 </div>
+                <Explanation />
                 <Footer />
             </div>
         );
