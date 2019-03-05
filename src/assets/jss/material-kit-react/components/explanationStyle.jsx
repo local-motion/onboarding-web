@@ -36,6 +36,7 @@ const explanationStyle = theme => ({
   },
   image: {
     width: 'auto',
+    maxWidth: 250,
     margin: '0 10px 10px',
   },
   text: {

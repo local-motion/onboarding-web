@@ -10,12 +10,58 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import StepConnector from '@material-ui/core/StepConnector';
 
+import { playgroundIcons } from 'components/PlaygroundIcons/playgroundIconsConstants';
+
+import classNames from 'classnames';
+
 const styles = theme => ({
     button: {
         marginRight: theme.spacing.unit,
         bgColor: 'red',
         color: 'black',
 
+    },
+    icon: {
+        textDecoration: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        color: 'inherit',
+        cursor: 'pointer',
+        padding: '0 10px',
+        '&:hover $iconBgImage': {
+            boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
+        }
+    },
+    iconBgImage: {
+        width: 120,
+        height: 120,
+        borderRadius: '50%',
+        backgroundSize: 'cover',
+        backgroundPosition: '50% 50%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transition: 'all .2s ease',
+        transformOrigin: '50% 50%',
+        [theme.breakpoints.down("sm")]: {
+            width: 70,
+            height: 70,
+        }
+    },
+    iconImage: {
+        width: 42,
+        height: 42,
+        backgroundSize: 'contain',
+        backgroundPosition: '50% 50%',
+        backgroundRepeat: 'no-repeat',
+        [theme.breakpoints.down("sm")]: {
+            width: 20,
+            height: 20,
+        }
+    },
+    active: {
+        transform: 'scale(1.2)',
     },
     completed: {
         display: 'inline-block',
@@ -41,20 +87,15 @@ const styles = theme => ({
     connectorLine: {
         transition: theme.transitions.create('border-color'),
         borderColor: "#555",
-        borderTopWidth: "10px",
+        borderTopWidth: "5px",
         borderRadius: "10px"
     },
 });
 
-function getSteps() {
-    return ['Voorbereiding', 'Uitvoering', 'Onderhouden'];
-}
-
 class PhaseIndicator extends React.Component {
 
     render() {
-        const {classes, selectedPhase, activePhase} = this.props;
-        const steps = getSteps();
+        const { classes, selectedPhase, activePhase } = this.props;
         const connector = (
             <StepConnector
                 className={"lm-step-connector"}
@@ -68,21 +109,35 @@ class PhaseIndicator extends React.Component {
         );
 
         return (
-            <Stepper nonLinear activeStep={selectedPhase} className={classes.stepper + " stepper-container"} connector={connector}>
-                {steps.map((label, index) => {
-                    return (
-                        <Step key={index} className={"lm-step"} onClick={() => this.props.onSwitch(index)}>
-                            <StepButton
-                                className=  {   (activePhase    === index ? "active " : "inactive " ) +
-                                                (selectedPhase  === index ? "selected " : ""        ) +
-                                                "lm-step-button"
-                                            }
-                                disableTouchRipple
-                            >
-                            </StepButton>
-                        </Step>
-                    );
-                })}
+            <Stepper
+                nonLinear
+                activeStep={selectedPhase}
+                className={classes.stepper + " stepper-container"}
+                connector={connector}>
+                {playgroundIcons.map((icon, index) =>
+                    <Step
+                        key={index}
+                        className={"lm-step"}
+                        onClick={() => this.props.onSwitch(index)}>
+                        <div
+                            className={classes.icon}>
+                            <div
+                                style={{
+                                    backgroundImage: `url(${icon.bg})`
+                                }}
+                                className={classNames(classes.iconBgImage, {
+                                    [classes.active]: selectedPhase == index
+                                })}>
+                                <div
+                                    style={{
+                                        backgroundImage: `url(${icon.icon})`
+                                    }}
+                                    className={classes.iconImage}
+                                />
+                            </div>
+                        </div>
+                    </Step>
+                )}
             </Stepper>
         );
     }
