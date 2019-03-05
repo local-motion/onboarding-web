@@ -16,6 +16,15 @@ const footerStyle = {
     float: "left!important",
     display: "block"
   },
+  hide: {
+    position: 'absolute',
+    visibility: 'hidden',
+    pointerEvents: 'none'
+  },
+  fullWidth: {
+    width: '100%',
+    justifyContent: 'center',
+  },
   right: {
     padding: "15px 0",
     margin: "0",
