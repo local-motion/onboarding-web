@@ -2,7 +2,7 @@ import {
   container
 } from "assets/jss/material-kit-react.jsx";
 
-const footerStyle = theme => ({
+const explanationStyle = theme => ({
   container,
   root: {
     width: '100%',
@@ -44,4 +44,4 @@ const footerStyle = theme => ({
     color: '#fff'
   }
 });
-export default footerStyle;
+export default explanationStyle;
