@@ -3,6 +3,7 @@ import { fetchGraphQL, mutationGraphQL } from '../../GlobalActions';
 import { getAllPlaygrounds, getPlaygroundDetails } from './PlaygroundReducer';
 import { createLoadingSelector } from '../../api/Selectors';
 import { getUser } from '../UserProfile/UserProfileReducer';
+import { startGraphQLPolling } from '../../api/ApiActions';
 
 
 export const GET_PLAYGROUNDS = 'GET_PLAYGROUNDS'
@@ -29,6 +30,7 @@ const getPlaygroundsQuery = gql`
       volunteerCount
       votes
     }
+    totalVolunteers
   }
 `;
 
@@ -60,6 +62,7 @@ const getPlaygroundDetailsQuery = gql`
                 userId
                 userName
             }
+            lastUpdateTimestamp
         }
     }
 `;
@@ -184,8 +187,11 @@ export const fetchPlaygrounds = () => {
   return fetchGraphQL(GET_PLAYGROUNDS, getPlaygroundsQuery)
 }
 
-export const ensurePlaygroundDetails = (playgroundId) => (dispatch, getState) => !getPlaygroundDetails(getState(), playgroundId) ? 
-                                                                            dispatch(fetchPlaygroundDetails(playgroundId)) : null
+// export const ensurePlaygroundDetails = (playgroundId) => (dispatch, getState) => !getPlaygroundDetails(getState(), playgroundId) ? 
+//                                                                             dispatch(fetchPlaygroundDetails(playgroundId)) : null
+export const ensurePlaygroundDetails = (playgroundId) => {
+  return startGraphQLPolling(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId})
+}
 
 export const fetchPlaygroundDetails = (playgroundId) => fetchGraphQL(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId}, playgroundId)
 
@@ -268,6 +274,8 @@ export const setCheckbox = (initiativeId, checklistItem, checked, user) => {
       checklistItem,
       checked
       }
-  })
+    },
+    (data, dispatch, getState) => dispatch(ensurePlaygroundDetails(initiativeId))
+    )
 }
 

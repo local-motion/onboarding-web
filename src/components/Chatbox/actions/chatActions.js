@@ -41,24 +41,24 @@ export const fetchChatMessages = (reload=false) => {
         url = (getState().environmentProperties.api.chatbox  + "/") + chatboxId + "?since=" + lastMessageId
       }
 
-
       dispatch({type: FETCHING_MESSAGES})
+
       return fetch(url, {
-      }).then(
-        response => {
-          if (lastMessageId === null) {
-            response.json().then(json => dispatch(receiveChatMessage(chatboxId, json), error => alert('oh no error!' + error)))
-          }
-          else {
-            response.json().then(json => dispatch(receiveChatMessage(chatboxId, json, true), error => alert('oh no error!' + error)))
-          }
-          // Keep polling if this is still the active chatbox
-          if (chatboxId === getState().chat.chatboxId) {
-              setTimeout(() => dispatch(fetchChatMessages()), 3000)
-          }
-        },
-        error => dispatch(signalError(error))
-      )
+        }).then(
+          response => {
+            if (lastMessageId === null) {
+              response.json().then(json => dispatch(receiveChatMessage(chatboxId, json), error => alert('oh no error!' + error)))
+            }
+            else {
+              response.json().then(json => dispatch(receiveChatMessage(chatboxId, json, true), error => alert('oh no error!' + error)))
+            }
+            // Keep polling if this is still the active chatbox
+            if (chatboxId === getState().chat.chatboxId) {
+                setTimeout(() => dispatch(fetchChatMessages()), 3000)
+            }
+          },
+          error => dispatch(signalError(error))
+        )
     }
   }
 }

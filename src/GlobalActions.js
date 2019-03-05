@@ -21,7 +21,7 @@ export const publishGraphQLClient = client => (
   )
 
 
-export const fetchGraphQL = (baseActionIdentifier, graphQLQuery, variables={}, fetchId, invokeErrorHandlers=true) => {
+export const fetchGraphQL = (baseActionIdentifier, graphQLQuery, variables={}, fetchId, invokeErrorHandlers=true, onCompletionCallback) => {
 
 console.log("fetching " + baseActionIdentifier + " for " + fetchId)
 
@@ -29,7 +29,8 @@ console.log("fetching " + baseActionIdentifier + " for " + fetchId)
       const graphQLClient = getState().graphQLClient;
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX, fetchId, timestamp: Date.now()})
 
-      return graphQLClient.query({
+      // return graphQLClient.query({
+      graphQLClient.query({
         query: graphQLQuery,
         variables
       })
@@ -65,8 +66,11 @@ console.log("fetching " + baseActionIdentifier + " for " + fetchId)
               console.log("Unknown error: ", data)
               dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, fetchId,  timestamp: Date.now() })
               dispatch(openGraphQLErrorMessageDialog("Unknown error"))
+            }
           }
-          }
+
+          if (onCompletionCallback)
+            onCompletionCallback(data)
         })
     }
   }
@@ -103,7 +107,8 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
       const graphQLClient = getState().graphQLClient;
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
 
-      return graphQLClient.mutate({
+      // return graphQLClient.mutate({
+      graphQLClient.mutate({
         mutation: graphQLMutation,
         variables
       })

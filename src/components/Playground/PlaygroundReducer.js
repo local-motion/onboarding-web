@@ -103,6 +103,9 @@ const playgroundReducer = (state = initialState, action, baseState) => {
       }
 
     case GET_PLAYGROUND_DETAILS + SUCCESS_POSTFIX:
+        if (action.payload.data.status === 'not_modified')
+          return state
+
         return {
         ...state,
         playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, action.payload.data.playground),
@@ -212,27 +215,27 @@ const playgroundReducer = (state = initialState, action, baseState) => {
           }
         }
 
-      case SET_CHECKBOX + SUCCESS_POSTFIX:
-        {
-        const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
-        if (playground) {
-          const checklistItem = action.variables.input.checklistItem
-          const checked = action.variables.input.checked
-          const jointChecklistItems = playground.jointChecklistItems.filter(item => item !== checklistItem)
-          const ownChecklistItems = playground.ownChecklistItems.filter(item => item !== checklistItem)
-          if (checked) {
-            jointChecklistItems.push(checklistItem)
-            ownChecklistItems.push(checklistItem)
-          }
-          const updatedPlayground = {...playground, jointChecklistItems, ownChecklistItems}
-          return {
-            ...state,
-            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
-          }
-        }
-        else
-          return state
-        }
+      // case SET_CHECKBOX + SUCCESS_POSTFIX:
+      //   {
+      //   const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
+      //   if (playground) {
+      //     const checklistItem = action.variables.input.checklistItem
+      //     const checked = action.variables.input.checked
+      //     const jointChecklistItems = playground.jointChecklistItems.filter(item => item !== checklistItem)
+      //     const ownChecklistItems = playground.ownChecklistItems.filter(item => item !== checklistItem)
+      //     if (checked) {
+      //       jointChecklistItems.push(checklistItem)
+      //       ownChecklistItems.push(checklistItem)
+      //     }
+      //     const updatedPlayground = {...playground, jointChecklistItems, ownChecklistItems}
+      //     return {
+      //       ...state,
+      //       playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
+      //     }
+      //   }
+      //   else
+      //     return state
+      //   }
 
       default:
         return state
