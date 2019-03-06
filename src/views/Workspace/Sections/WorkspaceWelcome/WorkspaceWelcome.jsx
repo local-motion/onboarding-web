@@ -101,8 +101,8 @@ class WorkspaceWelcome extends React.Component {
 
                 <div className={classes.page}>
                     <div className={classes.container}>
-                        <div className={classes.title}>Lineushof Rookvrij</div>
-                        <div className={classes.descr}>Deze actiepagina gaat over het rookvrij maken van de Lineushof. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed congue fringilla mi vel commodo. Integer a bibendum erat.</div>
+                        <div className={classes.title}>{playground.name} Rookvrij</div>
+                        <div className={classes.descr}>Via deze website kan je een speeltuin in 3 fases rookvrij maken.</div>
                         <div className={classes.icons}>
                             <PlaygroundIcons />
                         </div>
@@ -111,13 +111,13 @@ class WorkspaceWelcome extends React.Component {
                                 <a
                                     className={classes.button}
                                     onClick={() => this.onJoinClicked()}>
-                                    Sluit je aan
+                                    Ga direct aan de slag
                                 </a>
                             :
                                 <a
                                     className={classNames(classes.button, classes.passive)}
                                     onClick={() => this.goToLogin()}>
-                                    Sluit je aan
+                                    Ga direct aan de slag
                                 </a>
                             }
                             <a className={classes.skip} onClick={() => this.gotoActivePhase()}>
