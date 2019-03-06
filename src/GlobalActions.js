@@ -37,7 +37,7 @@ console.log("fetching " + baseActionIdentifier + " for " + fetchId)
         .then(data => {
           if (data.data)
               // result -> call went ok
-            dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, fetchId, timestamp: Date.now() })
+            dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: data, payload: data.data, fetchId, timestamp: Date.now() })
           else {
               // no result -> an error must have occurred
             console.log('No data received: ', data)
@@ -57,20 +57,26 @@ console.log("fetching " + baseActionIdentifier + " for " + fetchId)
 
               if (!errorHandled) {
                 console.log("Unhandled error: ", error)
-                dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, fetchId,  timestamp: Date.now() })
-                dispatch(openGraphQLErrorMessageDialog(error))
+                dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, message: data, payload: error, fetchId,  timestamp: Date.now() })
+                dispatch(openSimpleErrorMessageDialog(error.niceMessage))
               }
             }
             else {
               // Unknown error
               console.log("Unknown error: ", data)
               dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, fetchId,  timestamp: Date.now() })
-              dispatch(openGraphQLErrorMessageDialog("Unknown error"))
+              dispatch(openSimpleErrorMessageDialog("Er is een technische fout opgetreden."))
             }
           }
 
           if (onCompletionCallback)
             onCompletionCallback(data)
+        })
+        .catch(error => {
+          // Network errors end up here
+          console.log('graphQL query (network) error: ', error)
+          dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error})
+          dispatch(openGraphQLErrorMessageDialog( error))
         })
     }
   }
@@ -107,7 +113,6 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
       const graphQLClient = getState().graphQLClient;
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
 
-      // return graphQLClient.mutate({
       graphQLClient.mutate({
         mutation: graphQLMutation,
         variables
@@ -116,21 +121,22 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
           if (data.errors && data.errors[0]) {
             console.log('graphQL mutation success with error: ', data)
             const error = {code: data.errors[0].code, message: data.errors[0].niceMessage, miscAttributes}
-              dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error})
+              dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, message: data, payload: error})
               dispatch(openSimpleErrorMessageDialog(error.message))
           }
           else {
             console.log('graphQL mutation success: ', data)
-              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, payload: data, variables, miscAttributes })
+              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: data, payload: data.data, variables, miscAttributes })
               if (onSuccessCallback)
                 onSuccessCallback(data.data, dispatch, getState)
           }
         })
         .catch(error => {
-          console.log('graphQL mutation error: ', error)
+          // Network errors end up here
+          console.log('graphQL mutation (network) error: ', error)
           dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, miscAttributes})
           dispatch(openGraphQLErrorMessageDialog( error))
-        });
+        })
       
     }
   }
@@ -140,12 +146,12 @@ export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables
 
   // Helper functions
 
-  const openSimpleErrorMessageDialog = (graphQLError) => (dispatch, getState) => {
-    dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', extractMessageFromApolloError(graphQLError), 'Sluiten'))
+  const openSimpleErrorMessageDialog = (errorMessage) => (dispatch, getState) => {
+    dispatch(openConfirmationDialog('Er is helaas iets fout gegaan (simple)', errorMessage, 'Sluiten', () => {window.location.reload()}))
   }
 
   const openGraphQLErrorMessageDialog = (graphQLError) => (dispatch, getState) => {
-    dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', extractMessageFromApolloError(graphQLError), 'Sluiten'))
+    dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', extractMessageFromApolloError(graphQLError), 'Sluiten', () => {window.location.reload()}))
   }
 
 
@@ -175,8 +181,8 @@ const extractMessageFromApolloError = (apolloError) => {
   const graphQLErrors = apolloError.graphQLErrors;
   const networkError = apolloError.networkError;
 
-  if (networkError)
-      return "Er is een netwerkfout opgetreden.";
+  if (networkError)   // Note that this includes various errors such as no response and 500 internal server error
+      return "Er is een technische fout opgetreden.";
   else if (graphQLErrors)
       return graphQLErrors.map(({ code, niceMessage }) => niceMessage + " (" + code + ")").join('/n')
   else

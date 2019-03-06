@@ -90,7 +90,7 @@ export const getStatistics = (state) => {
     }
   }
 }
-
+ 
 
 // Reducer
 
@@ -99,23 +99,23 @@ const playgroundReducer = (state = initialState, action, baseState) => {
     case GET_PLAYGROUNDS + SUCCESS_POSTFIX:
       return {
         ...state,
-        playgrounds: action.payload.data.playgrounds,
+        playgrounds: action.payload.playgrounds,
       }
 
     case GET_PLAYGROUND_DETAILS + SUCCESS_POSTFIX:
-        if (action.payload.data.status === 'not_modified')
+        if (action.payload.status === 'not_modified')
           return state
 
         return {
         ...state,
-        playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, action.payload.data.playground),
+        playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, action.payload.playground),
       }
 
 
     case CREATE_INITIATIVE + SUCCESS_POSTFIX:
       return {
         ...state,
-        playgrounds: [action.payload.data.createInitiative, ...state.playgrounds],
+        playgrounds: [action.payload.createInitiative, ...state.playgrounds],
       }
 
     case JOIN_INITIATIVE + SUCCESS_POSTFIX:
@@ -123,7 +123,7 @@ const playgroundReducer = (state = initialState, action, baseState) => {
       {
         const userProfile = getUser(baseState)
         console.log("userprofile: ", userProfile)
-        const playground = action.payload.data.joinInitiative
+        const playground = action.payload.joinInitiative
 
         let userListedAsVolunteer = playground.volunteers.filter(volunteer => volunteer.userId === userProfile.id).length
         if (!userListedAsVolunteer) {
@@ -147,7 +147,7 @@ const playgroundReducer = (state = initialState, action, baseState) => {
       const userProfile = action.miscAttributes.userProfile
       console.log("userprofile:")
       console.log(userProfile)
-      const playground = action.payload.data.claimManagerRole
+      const playground = action.payload.claimManagerRole
 
       let userListedAsManager = playground.managers.filter(manager => manager.id === userProfile.id).length
       if (!userListedAsManager)

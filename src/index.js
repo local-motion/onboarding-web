@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Redirect} from 'react-router-dom'
-// import {createBrowserHistory} from "history";
 import {Route, Router, Switch} from "react-router-dom";
 import {I18nextProvider} from "react-i18next";
 import i18n from "./i18n";
