@@ -136,7 +136,7 @@ class Onboarding extends React.Component {
                     </GridContainer>
                 </div>
                 <Explanation />
-                <Footer />
+                <Footer onlyLinks />
             </div>
         );
     }

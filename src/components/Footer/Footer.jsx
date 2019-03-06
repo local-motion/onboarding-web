@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import footerStyle from "assets/jss/material-kit-react/components/footerStyle.jsx";
 import {withTranslation} from 'react-i18next';
 
-function Footer({ t, classes, whiteFont, onlyLogo }) {
+function Footer({ t, classes, whiteFont, onlyLogo, onlyLinks }) {
     const footerClasses = classNames({
         [classes.footer]: true,
         [classes.footerWhiteFont]: whiteFont
@@ -22,7 +22,8 @@ function Footer({ t, classes, whiteFont, onlyLogo }) {
         <footer className={footerClasses + " footer"}>
             <div className={classes.container + " footer-container"}>
                 <div className={classNames(classes.left, 'links-container', {
-                    [classes.hide]: onlyLogo
+                    [classes.hide]: onlyLogo,
+                    [classes.fullWidth]: onlyLinks,
                 })}>
                     <List className={classes.list}>
                         <ListItem className={classes.inlineBlock}>
@@ -43,7 +44,8 @@ function Footer({ t, classes, whiteFont, onlyLogo }) {
                     </List>
                 </div>
                 <div className={classNames(classes.right, "logos-container", {
-                    [classes.fullWidth]: onlyLogo
+                    [classes.fullWidth]: onlyLogo,
+                    [classes.hide]: onlyLinks,
                 })}>
                     <List className={classes.list}>
                         <ListItem className={classes.inlineBlock + " footer-logo"}>
@@ -83,7 +85,8 @@ function Footer({ t, classes, whiteFont, onlyLogo }) {
 Footer.propTypes = {
     classes: PropTypes.object.isRequired,
     whiteFont: PropTypes.bool,
-    onlyLogo: PropTypes.bool
+    onlyLogo: PropTypes.bool,
+    onlyLinks: PropTypes.bool,
 };
 
 const translatedFooter = withTranslation("translations")(Footer)

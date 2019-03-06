@@ -7,7 +7,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
 import StepConnector from '@material-ui/core/StepConnector';
 
 import { playgroundIcons } from 'components/PlaygroundIcons/playgroundIconsConstants';
@@ -95,7 +94,7 @@ const styles = theme => ({
 class PhaseIndicator extends React.Component {
 
     render() {
-        const { classes, selectedPhase, activePhase } = this.props;
+        const { classes, selectedPhase } = this.props;
         const connector = (
             <StepConnector
                 className={"lm-step-connector"}
@@ -126,7 +125,7 @@ class PhaseIndicator extends React.Component {
                                     backgroundImage: `url(${icon.bg})`
                                 }}
                                 className={classNames(classes.iconBgImage, {
-                                    [classes.active]: selectedPhase == index
+                                    [classes.active]: selectedPhase === index
                                 })}>
                                 <div
                                     style={{

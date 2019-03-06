@@ -6,7 +6,7 @@ const explanationStyle = theme => ({
   container,
   root: {
     width: '100%',
-    backgroundColor: '#2D519A',
+    backgroundColor: '#cacaca',
     padding: '80px 0 20px',
     [theme.breakpoints.down("sm")]: {
       paddingTop: 30
@@ -14,7 +14,9 @@ const explanationStyle = theme => ({
   },
   flex: {
     display: 'flex',
+    alignItems: 'center',
     [theme.breakpoints.down("sm")]: {
+      alignItems: 'flex-start',
       flexWrap: 'wrap',
     },
   },
@@ -34,15 +36,20 @@ const explanationStyle = theme => ({
       order: 1
     }
   },
+  link: {
+    margin: '0 10px 10px',
+    cursor: 'pointer',
+    textDecoration: 'none'
+  },
   image: {
     width: 'auto',
-    maxWidth: 250,
-    margin: '0 10px 10px',
+    height: 60
   },
   text: {
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 1.17,
-    color: '#fff'
+    fontWeight: 400,
+    color: '#3f4956'
   }
 });
 export default explanationStyle;
