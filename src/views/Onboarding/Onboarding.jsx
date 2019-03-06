@@ -72,7 +72,7 @@ class Onboarding extends React.Component {
     }
 
     componentDidMount() {
-        this.props.ensurePlaygrounds()
+        // this.props.ensurePlaygrounds()
     }
 
     handlePlaygroundChange(playground) {

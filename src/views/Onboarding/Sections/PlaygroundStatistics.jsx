@@ -74,7 +74,6 @@ class PlaygroundStatistics extends React.Component {
                                 </div>
 
                                 <div style={{display: generalStatistics ? 'none' : 'block'}}>
-                                    {/* <JoinInitiative playground={playground}/> */}
                                     <Button
                                         className={"btn btn-highlight pr-25 pull-left"}
                                         onClick={() => history.push(`/workspace/${playground.id}`) }

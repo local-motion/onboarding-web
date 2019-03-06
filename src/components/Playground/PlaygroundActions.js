@@ -3,7 +3,7 @@ import { fetchGraphQL, mutationGraphQL } from '../../GlobalActions';
 import { getAllPlaygrounds, getPlaygroundDetails } from './PlaygroundReducer';
 import { createLoadingSelector } from '../../api/Selectors';
 import { getUser } from '../UserProfile/UserProfileReducer';
-import { startGraphQLPolling } from '../../api/ApiActions';
+import { startGraphQLStream, stopStream, triggerStream } from '../../api/ApiActions';
 
 
 export const GET_PLAYGROUNDS = 'GET_PLAYGROUNDS'
@@ -17,6 +17,10 @@ export const SET_SMOKEFREE_DATE = 'SET_SMOKEFREE_DATE'
 export const SET_DECIDE_SMOKEFREE = 'SET_DECIDE_SMOKEFREE'
 export const RECORD_PLAYGROUND_OBSERVATION = 'RECORD_PLAYGROUND_OBSERVATION'
 export const SET_CHECKBOX = 'SET_CHECKBOX'
+
+// Stream identifiers (and/or prefixes)
+export const PLAYGROUNDS_STREAM = 'PLAYGROUNDS'
+export const PLAYGROUND_DETAILS_STREAM = 'PLAYGROUND_DETAILS_'
 
 
 const getPlaygroundsQuery = gql`
@@ -175,12 +179,16 @@ const updateCheckboxQuery = gql`
 `;
 
 
-export const ensurePlaygrounds = () => (dispatch, getState) => {
+// export const ensurePlaygrounds = () => (dispatch, getState) => {
 
-  // console.log("ensurePlaygrounds, loading: " + createLoadingSelector([GET_PLAYGROUNDS])(getState()))
+//   // console.log("ensurePlaygrounds, loading: " + createLoadingSelector([GET_PLAYGROUNDS])(getState()))
 
-  return getAllPlaygrounds(getState()).length === 0 && !createLoadingSelector([GET_PLAYGROUNDS])(getState()) ? 
-                                                                dispatch(fetchPlaygrounds()) : null
+//   return getAllPlaygrounds(getState()).length === 0 && !createLoadingSelector([GET_PLAYGROUNDS])(getState()) ? 
+//                                                                 dispatch(fetchPlaygrounds()) : null
+// }
+
+export const ensurePlaygrounds = () => {
+  return startGraphQLStream(PLAYGROUNDS_STREAM, GET_PLAYGROUNDS, getPlaygroundsQuery)
 }
 
 export const fetchPlaygrounds = () => {
@@ -190,19 +198,26 @@ export const fetchPlaygrounds = () => {
 // export const ensurePlaygroundDetails = (playgroundId) => (dispatch, getState) => !getPlaygroundDetails(getState(), playgroundId) ? 
 //                                                                             dispatch(fetchPlaygroundDetails(playgroundId)) : null
 export const ensurePlaygroundDetails = (playgroundId) => {
-  return startGraphQLPolling(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId})
+  return startGraphQLStream(PLAYGROUND_DETAILS_STREAM + playgroundId, GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId})
 }
+
+export const stopPlaygroundDetailsStream = (playgroundId) => {
+  return stopStream(PLAYGROUND_DETAILS_STREAM + playgroundId)
+}
+
 
 export const fetchPlaygroundDetails = (playgroundId) => fetchGraphQL(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId}, playgroundId)
 
 export const createInitiative = (name, lat, lng, onSuccessCallback) => {
+  const initiativeId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    // generate a uuid
+    var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
+    return v.toString(16);
+    })
+
   return mutationGraphQL(CREATE_INITIATIVE, createInitiativeQuery, {
     input: {
-      initiativeId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        // generate a uuid
-        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
-        return v.toString(16);
-        }),
+      initiativeId,
       name,
       lat,
       lng,
@@ -210,26 +225,31 @@ export const createInitiative = (name, lat, lng, onSuccessCallback) => {
       status: "not_started",
     }
   },
-  onSuccessCallback)
+  (data, dispatch, getState) => {
+      dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+      onSuccessCallback(data)
+    }
+  )
 }
     
-export const joinInitiative = (initiativeId, onSuccessCallback) => {
+export const joinInitiative = initiativeId => {
   return mutationGraphQL(JOIN_INITIATIVE, joinInitiativeQuery, {
     input: {
       initiativeId: initiativeId
     }
   },
-  onSuccessCallback)
+  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  )
 }
     
-export const claimManagerRole = (initiativeId, onSuccessCallback) => {
+export const claimManagerRole = initiativeId => {
   return (dispatch, getState) => {
   dispatch(mutationGraphQL(CLAIM_MANAGER_ROLE, claimManagerRoleQuery, {
     input: {
       initiativeId: initiativeId
     }
   },
-  onSuccessCallback,
+  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId)),
   {
     userProfile: getUser(getState())
   }
@@ -243,7 +263,9 @@ export const setSmokefreeDate = (initiativeId, smokeFreeDate) => {
       initiativeId,
       smokeFreeDate
     }
-  })
+  },
+  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  )
 }
 
     
@@ -252,7 +274,9 @@ export const setDecideSmokefree = (initiativeId) => {
     input: {
       initiativeId
     }
-  })
+  },
+  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  )
 }
 
 export const recordPlaygroundObservation = (initiativeId, smokefree, comment, user) => {
@@ -263,7 +287,9 @@ export const recordPlaygroundObservation = (initiativeId, smokefree, comment, us
       smokefree,
       comment
     }
-  })
+  },
+  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  )
 }
 
 export const setCheckbox = (initiativeId, checklistItem, checked, user) => {
@@ -275,7 +301,9 @@ export const setCheckbox = (initiativeId, checklistItem, checked, user) => {
       checked
       }
     },
-    (data, dispatch, getState) => dispatch(ensurePlaygroundDetails(initiativeId))
+    (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+    // (data, dispatch, getState) => dispatch(ensurePlaygroundDetails(initiativeId))
+    // (data, dispatch, getState) => dispatch(fetchGraphQL(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId: initiativeId}, initiativeId))
     )
 }
 

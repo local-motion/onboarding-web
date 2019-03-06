@@ -97,6 +97,9 @@ export const getStatistics = (state) => {
 const playgroundReducer = (state = initialState, action, baseState) => {
   switch (action.type) {
     case GET_PLAYGROUNDS + SUCCESS_POSTFIX:
+      if (action.payload.status === 'not_modified')
+      return state
+
       return {
         ...state,
         playgrounds: action.payload.playgrounds,
@@ -112,108 +115,108 @@ const playgroundReducer = (state = initialState, action, baseState) => {
       }
 
 
-    case CREATE_INITIATIVE + SUCCESS_POSTFIX:
-      return {
-        ...state,
-        playgrounds: [action.payload.createInitiative, ...state.playgrounds],
-      }
+    // case CREATE_INITIATIVE + SUCCESS_POSTFIX:
+    //   return {
+    //     ...state,
+    //     playgrounds: [action.payload.createInitiative, ...state.playgrounds],
+    //   }
 
-    case JOIN_INITIATIVE + SUCCESS_POSTFIX:
-      // TODO: Because of the async nature of Axon, the result will often not yet contain the user as a volunteer. So (for now) we need to fix this here.
-      {
-        const userProfile = getUser(baseState)
-        console.log("userprofile: ", userProfile)
-        const playground = action.payload.joinInitiative
+    // case JOIN_INITIATIVE + SUCCESS_POSTFIX:
+    //   // TODO: Because of the async nature of Axon, the result will often not yet contain the user as a volunteer. So (for now) we need to fix this here.
+    //   {
+    //     const userProfile = getUser(baseState)
+    //     console.log("userprofile: ", userProfile)
+    //     const playground = action.payload.joinInitiative
 
-        let userListedAsVolunteer = playground.volunteers.filter(volunteer => volunteer.userId === userProfile.id).length
-        if (!userListedAsVolunteer) {
-          playground.volunteers.push({userId: userProfile.id, userName: userProfile.name})
-          playground.volunteerCount++
-        }
+    //     let userListedAsVolunteer = playground.volunteers.filter(volunteer => volunteer.userId === userProfile.id).length
+    //     if (!userListedAsVolunteer) {
+    //       playground.volunteers.push({userId: userProfile.id, userName: userProfile.name})
+    //       playground.volunteerCount++
+    //     }
 
-        console.log("volunteer joined, integrating: ", playground)
+    //     console.log("volunteer joined, integrating: ", playground)
 
-        return {
-          ...state,
-          playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
-          playgrounds: updatePlaygrounds(state.playgrounds, playground)                     // (to update the volunteerCount) Note that this is not a summary, but fully detailed playground, but that should not matter
-        }
-      }
+    //     return {
+    //       ...state,
+    //       playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
+    //       playgrounds: updatePlaygrounds(state.playgrounds, playground)                     // (to update the volunteerCount) Note that this is not a summary, but fully detailed playground, but that should not matter
+    //     }
+    //   }
 
-    case CLAIM_MANAGER_ROLE + SUCCESS_POSTFIX:
-    {
-      // Because of the async nature of Axon, the result will often not yet contain the user as a manager. So (for now) we need to fix this here.
-      // Note that all managers are considered to be volunteers, so also add the user to that list
-      const userProfile = action.miscAttributes.userProfile
-      console.log("userprofile:")
-      console.log(userProfile)
-      const playground = action.payload.claimManagerRole
+    // case CLAIM_MANAGER_ROLE + SUCCESS_POSTFIX:
+    // {
+    //   // Because of the async nature of Axon, the result will often not yet contain the user as a manager. So (for now) we need to fix this here.
+    //   // Note that all managers are considered to be volunteers, so also add the user to that list
+    //   const userProfile = action.miscAttributes.userProfile
+    //   console.log("userprofile:")
+    //   console.log(userProfile)
+    //   const playground = action.payload.claimManagerRole
 
-      let userListedAsManager = playground.managers.filter(manager => manager.id === userProfile.id).length
-      if (!userListedAsManager)
-        playground.managers.push(userProfile)
+    //   let userListedAsManager = playground.managers.filter(manager => manager.id === userProfile.id).length
+    //   if (!userListedAsManager)
+    //     playground.managers.push(userProfile)
 
-      let userListedAsVolunteer = playground.volunteers.filter(volunteer => volunteer.userId === userProfile.id).length
-      if (!userListedAsVolunteer) {
-        playground.volunteers.push({userId: userProfile.id, userName: userProfile.name})
-        playground.volunteerCount++
-      }
+    //   let userListedAsVolunteer = playground.volunteers.filter(volunteer => volunteer.userId === userProfile.id).length
+    //   if (!userListedAsVolunteer) {
+    //     playground.volunteers.push({userId: userProfile.id, userName: userProfile.name})
+    //     playground.volunteerCount++
+    //   }
 
-      return {
-        ...state,
-        playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
-        playgrounds: updatePlaygrounds(state.playgrounds, playground)                     // (to update the volunteerCount) Note that this is not a summary, but fully detailed playground, but that should not matter
-      }
-    }
-      case SET_SMOKEFREE_DATE + SUCCESS_POSTFIX:
-        {
-        const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
-        if (playground) {
-          const updatedPlayground = {...playground, smokeFreeDate: action.variables.input.smokeFreeDate, status: 'finished'}
-          const updatedPlaygroundSummary = {...getPlaygroundSummary(state.playgrounds, playground.id), status: 'finished'}
-          return {
-            ...state,
-            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
-            playgrounds: updatePlaygrounds(state.playgrounds, updatedPlaygroundSummary)
-          }
-        }
-        else
-          return state
-        }
+    //   return {
+    //     ...state,
+    //     playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, playground),
+    //     playgrounds: updatePlaygrounds(state.playgrounds, playground)                     // (to update the volunteerCount) Note that this is not a summary, but fully detailed playground, but that should not matter
+    //   }
+    // }
+      // case SET_SMOKEFREE_DATE + SUCCESS_POSTFIX:
+      //   {
+      //   const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
+      //   if (playground) {
+      //     const updatedPlayground = {...playground, smokeFreeDate: action.variables.input.smokeFreeDate, status: 'finished'}
+      //     const updatedPlaygroundSummary = {...getPlaygroundSummary(state.playgrounds, playground.id), status: 'finished'}
+      //     return {
+      //       ...state,
+      //       playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
+      //       playgrounds: updatePlaygrounds(state.playgrounds, updatedPlaygroundSummary)
+      //     }
+      //   }
+      //   else
+      //     return state
+      //   }
         
-      case SET_DECIDE_SMOKEFREE + SUCCESS_POSTFIX:
-        {
-        const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
-        if (playground && playground.status === 'not_started') {
-          const updatedPlayground = {...playground, status: 'in_progress'}
-          const updatedPlaygroundSummary = {...getPlaygroundSummary(state.playgrounds, playground.id), status: 'in_progress'}
-          return {
-            ...state,
-            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
-            playgrounds: updatePlaygrounds(state.playgrounds, updatedPlaygroundSummary)
-          }
-        }
-        else
-          return state
-        }
+      // case SET_DECIDE_SMOKEFREE + SUCCESS_POSTFIX:
+      //   {
+      //   const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
+      //   if (playground && playground.status === 'not_started') {
+      //     const updatedPlayground = {...playground, status: 'in_progress'}
+      //     const updatedPlaygroundSummary = {...getPlaygroundSummary(state.playgrounds, playground.id), status: 'in_progress'}
+      //     return {
+      //       ...state,
+      //       playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
+      //       playgrounds: updatePlaygrounds(state.playgrounds, updatedPlaygroundSummary)
+      //     }
+      //   }
+      //   else
+      //     return state
+      //   }
 
-      case RECORD_PLAYGROUND_OBSERVATION + SUCCESS_POSTFIX:
-        {
-        const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
+      // case RECORD_PLAYGROUND_OBSERVATION + SUCCESS_POSTFIX:
+      //   {
+      //   const playground = state.playgroundDetails[playgroundIdToKey(action.variables.input.initiativeId)]
 
-        const updatedObservations = [...playground.playgroundObservations, {
-          observerId: action.variables.input.observer,
-          observerName: 'don\'t bother to fetch',
-          smokefree: action.variables.input.smokefree,
-          observationDate: new Date(),
-          comment: action.variables.input.comment,
-        }]
-        const updatedPlayground = {...playground, playgroundObservations: updatedObservations}
-          return {
-            ...state,
-            playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
-          }
-        }
+      //   const updatedObservations = [...playground.playgroundObservations, {
+      //     observerId: action.variables.input.observer,
+      //     observerName: 'don\'t bother to fetch',
+      //     smokefree: action.variables.input.smokefree,
+      //     observationDate: new Date(),
+      //     comment: action.variables.input.comment,
+      //   }]
+      //   const updatedPlayground = {...playground, playgroundObservations: updatedObservations}
+      //     return {
+      //       ...state,
+      //       playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, updatedPlayground),
+      //     }
+      //   }
 
       // case SET_CHECKBOX + SUCCESS_POSTFIX:
       //   {

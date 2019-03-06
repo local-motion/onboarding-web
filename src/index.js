@@ -41,6 +41,7 @@ import Privacy from "views/Legal/Privacy.jsx";
 import Welcome from "views/Information/Welcome";
 import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome";
 import Team from "./views/Workspace/Sections/Team";
+import { ensurePlaygrounds } from "./components/Playground/PlaygroundActions";
 
 
 const environments = {
@@ -148,7 +149,6 @@ window.onpopstate = () => {
 // Set up the graphQL client
 const authLink = setContext( (req, {headers}) => {
     const jwtToken = getJwtToken(store.getState())
-    console.log("authlink fetching jwt token: ", jwtToken)
 
     return {
         headers: {
@@ -184,7 +184,8 @@ const client = new ApolloClient({
 
 store.dispatch(publishGraphQLClient(client))            // Register the graphQL client in the global state
 
-
+// initialise global streams
+store.dispatch(ensurePlaygrounds())
 
 
 const App = class App extends React.Component {

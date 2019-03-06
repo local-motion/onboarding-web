@@ -16,7 +16,7 @@ import PlaygroundManagers from "./PlaygroundManagers";
 import PlaygroundVotes from "../Cards/PlaygroundVotes";
 
 import { connect } from 'react-redux'
-import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative } from "../../../components/Playground/PlaygroundActions";
+import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative, stopPlaygroundDetailsStream } from "../../../components/Playground/PlaygroundActions";
 import {Redirect} from 'react-router-dom'
 
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -38,9 +38,10 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    claimManagerRole:    (initiativeId, onSuccessCallback) =>     dispatch(claimManagerRole(initiativeId, onSuccessCallback)),
-    joinInitiative:    (initiativeId, onSuccessCallback) =>     dispatch(joinInitiative(initiativeId, onSuccessCallback)),
+    claimManagerRole:    (initiativeId) =>     dispatch(claimManagerRole(initiativeId)),
+    joinInitiative:    (initiativeId) =>     dispatch(joinInitiative(initiativeId)),
     ensurePlaygroundDetails:    (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
+    stopPlaygroundDetailsStream:    (initiativeId) =>     dispatch(stopPlaygroundDetailsStream(initiativeId)),
 })
 
 const playgroundStatuses = ['not_started', 'in_progress', 'finished']
@@ -54,6 +55,11 @@ class WorkspaceWelcome extends React.Component {
     componentDidMount() {
         console.log("ensuring playground details of " + this.props.match.params.initiativeId)
         this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId)
+    }
+
+    componentWillUnmount() {
+        console.log('stopping stream: ', this.props.match.params.initiativeId)
+        this.props.stopPlaygroundDetailsStream(this.props.match.params.initiativeId)
     }
 
     gotoActivePhase() {
