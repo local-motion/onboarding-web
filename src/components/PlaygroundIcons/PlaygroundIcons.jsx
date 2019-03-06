@@ -1,7 +1,7 @@
 import React from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
-import playgroundIconsStyle from "assets/jss/material-kit-react/components/playgroundIconsStyle.jsx";
+import playgroundIconsStyle from "./PlaygroundIconsStyle.jsx";
 
 import { playgroundIcons } from './playgroundIconsConstants';
 

@@ -5,20 +5,20 @@ import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import classNames from "classnames";
 
-import workspaceWelcomeStyle from "assets/jss/material-kit-react/views/workspaceWelcomeStyle.jsx";
+import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle.jsx";
 
 import { connect } from 'react-redux'
-import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative } from "../../../components/Playground/PlaygroundActions";
+import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative } from "../../../../components/Playground/PlaygroundActions";
 import { Redirect } from 'react-router-dom'
 
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import PlaygroundIcons from "components/PlaygroundIcons/PlaygroundIcons";
-import { getPlaygroundDetails } from "../../../components/Playground/PlaygroundReducer";
-import { isLoading, getFetchError } from "../../../api/FetchDetailsReducer";
-import { getUser } from "../../../components/UserProfile/UserProfileReducer";
-import { history } from "../../../setup";
+import { getPlaygroundDetails } from "../../../../components/Playground/PlaygroundReducer";
+import { isLoading, getFetchError } from "../../../../api/FetchDetailsReducer";
+import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
+import { history } from "../../../../setup";
 
 const mapStateToProps = (state, ownProps) => ({
     playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),

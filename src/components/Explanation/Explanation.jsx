@@ -3,7 +3,7 @@ import React from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 // nodejs library that concatenates classes
-import explanationStyle from "assets/jss/material-kit-react/components/explanationStyle.jsx";
+import explanationStyle from "./ExplanationStyle.jsx";
 import { withTranslation } from 'react-i18next';
 import { withStyles } from "@material-ui/core";
 

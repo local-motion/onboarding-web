@@ -1,6 +1,6 @@
 import { container } from "assets/jss/material-kit-react.jsx";
 
-const workspaceWelcomeStyle = theme => ({
+const WorkspaceWelcomeStyle = theme => ({
   container,
   page: {
     padding: '100px 0 0px',
@@ -87,4 +87,4 @@ const workspaceWelcomeStyle = theme => ({
     }
   }
 });
-export default workspaceWelcomeStyle;
+export default WorkspaceWelcomeStyle;

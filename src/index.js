@@ -39,7 +39,7 @@ import Contact from "views/About/Contact.jsx";
 import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
-import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome";
+import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome/WorkspaceWelcome";
 import Team from "./views/Workspace/Sections/Team";
 
 
