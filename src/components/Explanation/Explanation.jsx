@@ -46,7 +46,7 @@ const Explanation = ({ t, classes = {} }) => {
                     </div>
                     <div className={classes.right}>
                         <p className={classes.text}>
-                            {t('Rookvrijspelen is een initiatief van Longfonds en ABN Ambro. Wij streven ernaar dat elk kind dat in 2019 wordt geboren Rookvrij kan opgroeien. Dat kan in een omgeving, zonder verleidingen en met goede voorbeelden om je heen. Hoe minder mensen je ziet roken, hoe minder vanzelfsprekend het wordt om zelf te gaan roken. Iedereen kan helpen met het Rookvrij maken van onze omgeving.')}
+                            {t('Rookvrijspelen is een initiatief van Longfonds en ABN AMRO. Wij streven ernaar dat elk kind dat vanaf 2017 wordt geboren Rookvrij kan opgroeien. Dat kan in een omgeving, zonder verleidingen en met goede voorbeelden om je heen. Hoe minder mensen je ziet roken, hoe minder vanzelfsprekend het wordt om zelf te gaan roken. Iedereen kan helpen met het Rookvrij maken van onze omgeving.')}
                         </p>
                         <p className={classes.text}>
                             {t('Rookvrijspelen biedt een persoonlijke plek om een actiepagina op te zetten rondom een speeltuin. Op de actiepagina kan een ieder stappen doorlopen om de speeltuin versneld rookvrij te maken en te helpen houden. De personen rondom een actiepagina kunnen samen een team vormen en met elkaar chatten.')}
