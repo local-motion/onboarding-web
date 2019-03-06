@@ -3,7 +3,6 @@ import React from "react";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import classNames from "classnames";
 
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle.jsx";
 
@@ -108,21 +107,21 @@ class WorkspaceWelcome extends React.Component {
                         </div>
                         <div className={classes.buttonContainer}>
                             {user ?
-                                <a
+                                <button
                                     className={classes.button}
                                     onClick={() => this.onJoinClicked()}>
                                     Ga direct aan de slag
-                                </a>
+                                </button>
                             :
-                                <a
-                                    className={classNames(classes.button, classes.passive)}
+                                <button
+                                    className={classes.button}
                                     onClick={() => this.goToLogin()}>
                                     Ga direct aan de slag
-                                </a>
+                                </button>
                             }
-                            <a className={classes.skip} onClick={() => this.gotoActivePhase()}>
+                            <button className={classes.skip} onClick={() => this.gotoActivePhase()}>
                                 Ga direct naar de pagina
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <Footer onlyLogo />

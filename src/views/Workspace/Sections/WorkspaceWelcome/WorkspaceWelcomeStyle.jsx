@@ -60,6 +60,10 @@ const WorkspaceWelcomeStyle = theme => ({
     textAlign: 'center',
     color: '#ffffff',
     transition: 'all .2s ease',
+    outline: 'none',
+    border: 0,
+    boxShadow: 'none',
+    appearance: 'none',
     '&:hover': {
       color: '#f1f1f1'
     },
@@ -82,6 +86,11 @@ const WorkspaceWelcomeStyle = theme => ({
     letterSpacing: 'normal',
     textDecoration: 'underline',
     cursor: 'pointer',
+    outline: 'none',
+    border: 0,
+    boxShadow: 'none',
+    appearance: 'none',
+    backgroundColor: 'transparent',
     '&:hover': {
       color: '#626262'
     }

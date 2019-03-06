@@ -11,7 +11,7 @@ class PlaygroundIcons extends React.PureComponent {
         const { classes } = this.props;
 
         return (
-            <a className={classes.icon} key={icon.title}>
+            <div className={classes.icon} key={icon.title}>
                 <div
                     style={{
                         backgroundImage: `url(${icon.bg})`
@@ -26,7 +26,7 @@ class PlaygroundIcons extends React.PureComponent {
                 </div>
                 <div className={classes.iconTitle}>{icon.title}</div>
                 <div className={classes.iconText}>{icon.text}</div>
-            </a>
+            </div>
         );
     }
 
