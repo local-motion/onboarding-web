@@ -1,4 +1,5 @@
-import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE, SET_CHECKBOX, RECORD_PLAYGROUND_OBSERVATION } from "./PlaygroundActions";
+// import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE, SET_CHECKBOX, RECORD_PLAYGROUND_OBSERVATION } from "./PlaygroundActions";
+import { GET_PLAYGROUNDS, GET_PLAYGROUND_DETAILS } from "./PlaygroundActions";
 import { SUCCESS_POSTFIX } from "../../GlobalActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
 
@@ -251,8 +252,8 @@ export default playgroundReducer
 
 const playgroundIdToKey = (playgroundId) => 'P' + playgroundId.replace('-', '_')
 
-const updatePlaygrounds = (playgrounds, updatedPlayground) => 
-                            playgrounds.map(playground => playground.id === updatedPlayground.id ? updatedPlayground : playground)
+// const updatePlaygrounds = (playgrounds, updatedPlayground) => 
+//                             playgrounds.map(playground => playground.id === updatedPlayground.id ? updatedPlayground : playground)
 
 const updatePlaygroundDetails = (playgroundDetails, updatedPlayground) => {
   const newPlaygroundDetails = {...playgroundDetails}
@@ -264,9 +265,9 @@ const updatePlaygroundDetails = (playgroundDetails, updatedPlayground) => {
   return newPlaygroundDetails
 }
 
-const getPlaygroundSummary = (playgrounds, id) => {
-  for (var i = 0; i < playgrounds.length; i++)
-    if (playgrounds[i].id === id)
-      return playgrounds[i]
-  return null
-}
+// const getPlaygroundSummary = (playgrounds, id) => {
+//   for (var i = 0; i < playgrounds.length; i++)
+//     if (playgrounds[i].id === id)
+//       return playgrounds[i]
+//   return null
+// }

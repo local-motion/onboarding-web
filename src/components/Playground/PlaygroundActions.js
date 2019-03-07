@@ -1,7 +1,5 @@
 import gql from 'graphql-tag';
 import { fetchGraphQL, mutationGraphQL } from '../../GlobalActions';
-import { getAllPlaygrounds, getPlaygroundDetails } from './PlaygroundReducer';
-import { createLoadingSelector } from '../../api/Selectors';
 import { getUser } from '../UserProfile/UserProfileReducer';
 import { startGraphQLStream, stopStream, triggerStream } from '../../api/ApiActions';
 

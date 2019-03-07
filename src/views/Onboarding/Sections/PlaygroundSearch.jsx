@@ -10,8 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
 import {withStyles} from "@material-ui/core/styles";
 import { connect } from 'react-redux'
-import { createLoadingSelector } from "../../../api/Selectors";
-import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
+import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
 
@@ -181,7 +180,7 @@ class IntegrationAutosuggest extends React.Component {
     }
 
     render() {
-        const {playgroundsLoading, playgrounds, classes} = this.props;
+        const {playgrounds, classes} = this.props;
 
         if (!playgrounds)
             return "loading.."
