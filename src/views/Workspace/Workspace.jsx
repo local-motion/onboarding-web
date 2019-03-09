@@ -65,7 +65,7 @@ class WorkspaceTemplate extends React.Component {
     }
 
     componentDidMount() {
-        console.log("ensuring playground details of " + this.props.match.params.initiativeId)
+        console.log("starting stream playground details of " + this.props.match.params.initiativeId)
         this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId)
     }
 
