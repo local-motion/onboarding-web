@@ -183,7 +183,7 @@ class IntegrationAutosuggest extends React.Component {
         const {playgrounds, classes} = this.props;
 
         if (!playgrounds)
-            return "loading.."
+            return "loading..."
 
         const autosuggestProps = {
             renderInputComponent,
