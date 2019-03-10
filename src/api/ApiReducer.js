@@ -30,8 +30,6 @@ export const apiReducer = (state = initialState, action, baseState) => {
   case START_STREAM:
     // Note that this action is also used to restart/trigger streams
     {
-
-      // alert('start stream')
       const newActiveStreams = {
         ...state.activeStreams, 
         [action.stream.streamIdentifier]: {...action.stream}

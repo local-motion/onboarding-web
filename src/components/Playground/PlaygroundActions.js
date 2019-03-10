@@ -189,9 +189,9 @@ export const ensurePlaygrounds = () => {
   return startGraphQLStream(PLAYGROUNDS_STREAM, GET_PLAYGROUNDS, getPlaygroundsQuery)
 }
 
-export const fetchPlaygrounds = () => {
-  return fetchGraphQL(GET_PLAYGROUNDS, getPlaygroundsQuery)
-}
+// export const fetchPlaygrounds = () => {
+//   return fetchGraphQL(GET_PLAYGROUNDS, getPlaygroundsQuery)
+// }
 
 // export const ensurePlaygroundDetails = (playgroundId) => (dispatch, getState) => !getPlaygroundDetails(getState(), playgroundId) ? 
 //                                                                             dispatch(fetchPlaygroundDetails(playgroundId)) : null
@@ -204,7 +204,7 @@ export const stopPlaygroundDetailsStream = (playgroundId) => {
 }
 
 
-export const fetchPlaygroundDetails = (playgroundId) => fetchGraphQL(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId}, playgroundId)
+// export const fetchPlaygroundDetails = (playgroundId) => fetchGraphQL(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId}, playgroundId)
 
 export const createInitiative = (name, lat, lng, onSuccessCallback) => {
   const initiativeId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

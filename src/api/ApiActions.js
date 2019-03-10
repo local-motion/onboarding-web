@@ -1,4 +1,4 @@
-import { fetchGraphQL } from "../GlobalActions";
+import { fetchGraphQL, fetch } from "../GlobalActions";
 import { getActiveStream } from "./ApiReducer";
 
 export const CLEAR_ERROR = 'CLEAR_ERROR'
@@ -38,22 +38,16 @@ export const startGraphQLStream = (streamIdentifier, baseActionIdentifier, graph
 
   stream.instanceId = streamCount++
 
-  stream.interval = setInterval( () => pollGraphQL(stream, dispatch, getState), stream.pollingInterval)
   dispatch( {type: START_STREAM, stream} )
+  stream.interval = setInterval( () => pollGraphQL(stream, dispatch, getState), stream.pollingInterval)
 
   // As setInterval first waits for the interval and then triggers the function, we trigger the function here for the first time for a swift response
   pollGraphQL(stream, dispatch, getState)
-  
-  // pollGraphQL(stream, dispatch, getState)
-
-  // repeat()
-
 }
 
 export const stopStream = (streamIdentifier) => (dispatch, getState) => {
   const stream = getActiveStream(getState(), streamIdentifier)
   if (stream) {
-    // stream.interval.clearInterval()
     dispatch( {type: STOP_STREAM, streamIdentifier} )
   }
 }
@@ -66,38 +60,17 @@ export const triggerStream = (streamIdentifier) => (dispatch, getState) => {
     console.warn('Cannot trigger stream ' + streamIdentifier + ' as it is not active')
 }
 
-
-// const pollGraphQL = (stream, dispatch, getState) => {
-//   const activeStream = getActiveStream(getState(), stream.streamIdentifier)
-//   const variables = activeStream ?  {...stream.variables, _lastDigest: activeStream.lastDigest} : stream.variables
-
-//   dispatch(fetchGraphQL(stream.baseActionIdentifier, stream.graphQLQuery, variables, stream.instanceId, true, data => {
-
-//     if (data && data.data && data.data.digest)  
-//       dispatch( {type: POLL_RESULT, streamIdentifier: stream.streamIdentifier, digest: data.data.digest} )
-
-//     const activeStream = getActiveStream(getState(), stream.streamIdentifier)
-//     if (activeStream && (activeStream.instanceId === stream.instanceId)) {
-//       // this is still an active stream, schedule the next poll
-//       setTimeout(() => pollGraphQL(stream, dispatch, getState), stream.pollingInterval)
-//     }
-//   }))
-// }
-
 const pollGraphQL = (stream, dispatch, getState) => {
-
-  // alert('poll')
-
-  console.log('polling stream ', stream.streamIdentifier, stream.instanceId)
+  // console.log('polling stream ', stream.streamIdentifier, stream.instanceId)
   const activeStream = getActiveStream(getState(), stream.streamIdentifier)
 
   if (activeStream) {
-    const variables = activeStream ?  {...stream.variables, _lastDigest: activeStream.lastDigest} : stream.variables
+    const variables = activeStream ? {...stream.variables, _lastDigest: activeStream.lastDigest} : stream.variables
 
-    dispatch(fetchGraphQL(stream.baseActionIdentifier, stream.graphQLQuery, variables, stream.instanceId, true, data => {
+    const onCompletionCallback = data => {
 
-      if (data && data.data && data.data.digest)  
-        dispatch( {type: POLL_RESULT, streamIdentifier: stream.streamIdentifier, digest: data.data.digest} )
+      if (data && data.digest)  
+        dispatch( {type: POLL_RESULT, streamIdentifier: stream.streamIdentifier, digest: data.digest} )
 
       const activeStream = getActiveStream(getState(), stream.streamIdentifier)
       if (activeStream && (activeStream.instanceId === stream.instanceId)) {
@@ -105,13 +78,33 @@ const pollGraphQL = (stream, dispatch, getState) => {
       }
       else
        clearInterval(stream.interval)
+    }
+
+    dispatch(fetch( {
+      type: 'GRAPHQL',
+      baseActionIdentifier: stream.baseActionIdentifier, 
+      fetchId: stream.streamIdentifier,
+      query: stream.graphQLQuery, 
+      variables,
+      onCompletion: onCompletionCallback
     }))
+
+
+    // dispatch(fetchGraphQL(stream.baseActionIdentifier, stream.graphQLQuery, variables, stream.instanceId, true, data => {
+
+    //   if (data && data.data && data.data.digest)  
+    //     dispatch( {type: POLL_RESULT, streamIdentifier: stream.streamIdentifier, digest: data.data.digest} )
+
+    //   const activeStream = getActiveStream(getState(), stream.streamIdentifier)
+    //   if (activeStream && (activeStream.instanceId === stream.instanceId)) {
+    //     // just continue
+    //   }
+    //   else
+    //    clearInterval(stream.interval)
+    // }))
+
+
+
+
   }
 }
-
-
-
-// const repeat = () => {
-//   console.log('hi')
-//   setTimeout(repeat, 500)
-// }

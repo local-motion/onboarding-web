@@ -69,7 +69,7 @@ class PlaygroundStatistics extends React.Component {
                                 </div>
                                 <div className="statistics-wrapper specific"
                                      style={{display: generalStatistics ? 'none' : 'block'}}>
-                                    <PlaygroundStatistic playground={playground} name={playground.name} stat={"vol"}/>
+                                    <PlaygroundStatistic playground={playground} name={playground.name} stat={"volunteerCount"}/>
                                     <PlaygroundStatistic playground={playground} name={playground.name} stat={"votes"}/>
                                 </div>
 

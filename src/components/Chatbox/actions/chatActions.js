@@ -43,7 +43,7 @@ export const fetchChatMessages = (reload=false) => {
 
       dispatch({type: FETCHING_MESSAGES})
 
-      return fetch(url, {
+      fetch(url, {
         }).then(
           response => {
             if (lastMessageId === null) {

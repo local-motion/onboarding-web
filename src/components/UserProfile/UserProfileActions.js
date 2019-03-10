@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { fetchGraphQL, mutationGraphQL } from '../../GlobalActions';
+import { fetchGraphQL, mutationGraphQL, fetch } from '../../GlobalActions';
 import { Auth } from 'aws-amplify';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
@@ -38,7 +38,12 @@ const deleteUserProfileQuery = gql`
 `
 
 export const fetchUserProfile = () => {
-  return fetchGraphQL(GET_USER_PROFILE, getUserProfileQuery)
+  // return fetchGraphQL(GET_USER_PROFILE, getUserProfileQuery)
+  return fetch( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: GET_USER_PROFILE, 
+    query: getUserProfileQuery, 
+  })
 }
 
    

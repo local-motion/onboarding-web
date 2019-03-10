@@ -107,7 +107,7 @@ i18n.use('nl').init({
                 "  plug-and-play networks. Dynamically procrastinate\n" +
                 "  B2C users after installed base benefits.\n" +
                 "</p>\n",
-            "onboarding.playground.vol.title":
+            "onboarding.playground.volunteerCount.title":
                 " Teamleden",
             "onboarding.playground.votes.title":
                 " Getekende petities"
