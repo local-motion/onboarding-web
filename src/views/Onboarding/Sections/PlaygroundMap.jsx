@@ -21,7 +21,7 @@ const MAP_API_KEY = "AIzaSyCsy6bZ_CvGdeFBOTSDkN0gPqVK9iKDfQ8";
 class PlaygroundMap extends React.Component {
 
     componentDidMount() {
-        this.props.ensurePlaygrounds()
+        // this.props.ensurePlaygrounds()
       }
 
     render() {
@@ -29,19 +29,22 @@ class PlaygroundMap extends React.Component {
     }
 }
 
+// const mapStateToProps = state => ({
+//     playgrounds: getAllPlaygrounds(state).map(playground => ({
+//             id: playground.id,
+//             name: playground.name,
+//             lat: playground.lat,
+//             lng: playground.lng,
+//             vol: playground.volunteerCount,
+//             votes: playground.votes,
+//             slug: playground.name + " Rookvrij",
+//             status: playground.status,
+//             zoom: 18,
+//             default: false,
+//     }) )
+// })
 const mapStateToProps = state => ({
-    playgrounds: getAllPlaygrounds(state).map(playground => ({
-            id: playground.id,
-            name: playground.name,
-            lat: playground.lat,
-            lng: playground.lng,
-            vol: playground.volunteerCount,
-            votes: playground.votes,
-            slug: playground.name + " Rookvrij",
-            status: playground.status,
-            zoom: 18,
-            default: false,
-    }) )
+    playgrounds: getAllPlaygrounds(state)
 })
 
 const mapDispatchToProps = dispatch => {
@@ -79,7 +82,9 @@ const PlaygroundMapImpl = compose(
     ),
     withScriptjs,
     withGoogleMap
-)(props => (
+)(props => {
+    console.log('drawing map')
+    return (
     <div>
         <GoogleMap
             zoom={props.zoom}
@@ -123,7 +128,8 @@ const PlaygroundMapImpl = compose(
         </GoogleMap>
 
     </div>
-));
+)
+})
 
 
 

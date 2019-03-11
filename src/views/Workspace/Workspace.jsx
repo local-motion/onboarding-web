@@ -23,7 +23,7 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
 import { history } from "../../setup.js";
 import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
-import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails } from "../../components/Playground/PlaygroundActions.js";
+import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, stopPlaygroundDetailsStream } from "../../components/Playground/PlaygroundActions.js";
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import {Route, Switch} from "react-router-dom";
@@ -39,7 +39,8 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    ensurePlaygroundDetails:    (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
+    ensurePlaygroundDetails:        (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
+    stopPlaygroundDetailsStream:    (initiativeId) =>     dispatch(stopPlaygroundDetailsStream(initiativeId)),
 })
 
 
@@ -64,9 +65,14 @@ class WorkspaceTemplate extends React.Component {
     }
 
     componentDidMount() {
-        console.log("ensuring playground details of " + this.props.match.params.initiativeId)
+        console.log("starting stream playground details of " + this.props.match.params.initiativeId)
         this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId)
-      }
+    }
+
+    componentWillUnmount() {
+        console.log('stopping stream: ', this.props.match.params.initiativeId)
+        this.props.stopPlaygroundDetailsStream(this.props.match.params.initiativeId)
+    }
 
      render() {
         const {playground, user, classes, ...rest} = this.props;
@@ -76,7 +82,9 @@ class WorkspaceTemplate extends React.Component {
         const phase = playgroundLabels[phaseIdx]                                // the label of phase that is displayed in the phases view
 
 
-        if (!playground || this.props.playgroundLoading) 
+        // if (!playground || this.props.playgroundLoading) 
+        //     return "loading..";
+        if (!playground) 
             return "loading..";
 
         return (

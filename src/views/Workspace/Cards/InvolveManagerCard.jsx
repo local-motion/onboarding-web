@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    claimManagerRole:    (initiativeId, onSuccessCallback) =>     dispatch(claimManagerRole(initiativeId, onSuccessCallback)),
+    claimManagerRole:    (initiativeId) =>     dispatch(claimManagerRole(initiativeId)),
 })
 
 class InvolveManagerCard extends React.Component {

@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Redirect} from 'react-router-dom'
-// import {createBrowserHistory} from "history";
 import {Route, Router, Switch} from "react-router-dom";
 import {I18nextProvider} from "react-i18next";
 import i18n from "./i18n";
@@ -42,6 +41,7 @@ import Privacy from "views/Legal/Privacy.jsx";
 import Welcome from "views/Information/Welcome";
 import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome";
 import Team from "./views/Workspace/Sections/Team";
+import { ensurePlaygrounds } from "./components/Playground/PlaygroundActions";
 
 
 const environments = {
@@ -149,7 +149,6 @@ window.onpopstate = () => {
 // Set up the graphQL client
 const authLink = setContext( (req, {headers}) => {
     const jwtToken = getJwtToken(store.getState())
-    console.log("authlink fetching jwt token: ", jwtToken)
 
     return {
         headers: {
@@ -185,7 +184,8 @@ const client = new ApolloClient({
 
 store.dispatch(publishGraphQLClient(client))            // Register the graphQL client in the global state
 
-
+// initialise global streams
+store.dispatch(ensurePlaygrounds())
 
 
 const App = class App extends React.Component {

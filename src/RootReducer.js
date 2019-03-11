@@ -6,6 +6,7 @@ import playgroundReducer from "./components/Playground/PlaygroundReducer";
 import { fetchDetailsReducer } from "./api/FetchDetailsReducer";
 import userProfileReducer from "./components/UserProfile/UserProfileReducer";
 import confirmationDialogReducer from "./components/ConfirmationDialog/ConfirmationDialogReducer";
+import { apiReducer } from "./api/ApiReducer";
 
 const rootReducer = (state = {}, action) => {
   switch (action.type) {
@@ -25,6 +26,7 @@ const rootReducer = (state = {}, action) => {
         userprofile:        userProfileReducer(state.userprofile, action),
         chat:               chatReducer(state.chat, action),
         playgrounds:        playgroundReducer(state.playgrounds, action, state),
+        api:                apiReducer(state.api, action, state),
         loading:            loadingReducer(state.loading, action),
         error:              errorReducer(state.error, action),
         confirmationdialog: confirmationDialogReducer(state.confirmationdialog, action),

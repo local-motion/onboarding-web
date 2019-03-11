@@ -10,29 +10,26 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
 import {withStyles} from "@material-ui/core/styles";
 import { connect } from 'react-redux'
-import { createLoadingSelector } from "../../../api/Selectors";
-import { GET_PLAYGROUNDS, ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
+import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
 
-const mapStateToProps = state => {
-    const loadingSelector = createLoadingSelector([GET_PLAYGROUNDS]);
-
-    return {
-        playgroundsLoading: loadingSelector(state),
-        playgrounds: getAllPlaygrounds(state).map(playground => ({
-            id: playground.id,
-            name: playground.name,
-            lat: playground.lat,
-            lng: playground.lng,
-            vol: playground.volunteerCount,
-            votes: playground.votes,
-            slug: playground.name + " Rookvrij",
-            zoom: 18,
-            default: false,
-        })  )
-    }
-}
+// const mapStateToProps = state => ({
+//     playgrounds: getAllPlaygrounds(state).map(playground => ({
+//         id: playground.id,
+//         name: playground.name,
+//         lat: playground.lat,
+//         lng: playground.lng,
+//         vol: playground.volunteerCount,
+//         votes: playground.votes,
+//         slug: playground.name + " Rookvrij",
+//         zoom: 18,
+//         default: false,
+//     })  )
+// })
+const mapStateToProps = state => ({
+    playgrounds: getAllPlaygrounds(state)
+})
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -148,7 +145,7 @@ class IntegrationAutosuggest extends React.Component {
     }
 
     componentDidMount() {
-        this.props.ensurePlaygrounds()
+        // this.props.ensurePlaygrounds()
     }
 
     handleSuggestionsFetchRequested = ({value}) => {
@@ -183,7 +180,10 @@ class IntegrationAutosuggest extends React.Component {
     }
 
     render() {
-        const {playgroundsLoading, classes} = this.props;
+        const {playgrounds, classes} = this.props;
+
+        if (!playgrounds)
+            return "loading..."
 
         const autosuggestProps = {
             renderInputComponent,
@@ -192,10 +192,6 @@ class IntegrationAutosuggest extends React.Component {
             onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
             getSuggestionValue,
             renderSuggestion
-        };
-
-        if (playgroundsLoading) {
-            return "loading..";
         }
 
         return (
