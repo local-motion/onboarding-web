@@ -34,6 +34,41 @@ const getPlaygroundsQuery = gql`
     totalVolunteers
   }
 `
+// TODO: this query fails on the server on the lastUpdateTimestamp field. Requires investigation.
+//
+// const getPlaygroundDetailsQuery = gql`
+//     query Query($playgroundId: String!) {
+//         playground(id: $playgroundId) {
+//             id
+//             name
+//             lng
+//             lat
+//             status
+//             smokeFreeDate
+//             volunteerCount
+//             votes
+//             jointChecklistItems
+//             ownChecklistItems
+//             playgroundObservations {
+//               observerId
+//               observerName
+//               smokefree
+//               observationDate
+//               comment
+//             }
+//             managers {
+//                 id
+//                 username
+//             }
+//             volunteers {
+//                 userId
+//                 userName
+//             }
+//             lastUpdateTimestamp
+//         }
+//     }
+// `
+
 
 const getPlaygroundDetailsQuery = gql`
     query Query($playgroundId: String!) {
@@ -63,7 +98,6 @@ const getPlaygroundDetailsQuery = gql`
                 userId
                 userName
             }
-            lastUpdateTimestamp
         }
     }
 `
