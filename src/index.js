@@ -38,8 +38,7 @@ import Contact from "views/About/Contact.jsx";
 import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
-import Welcome from "views/Information/Welcome";
-import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome";
+import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome/WorkspaceWelcome";
 import Team from "./views/Workspace/Sections/Team";
 import { ensurePlaygrounds } from "./components/Playground/PlaygroundActions";
 
@@ -233,7 +232,6 @@ const App = class App extends React.Component {
                                 <Route exact path="/privacy" key="Privacy Statement" component={Privacy}/>
                                 <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
                                 <Route exact path="/terms" key="Terms of Use" component={Terms}/>
-                                <Route exact path="/welcome" key="Welcome" component={Welcome}/>
                                 
                                 <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
                                 <Route exact path="/workspace/:initiativeId/team" key="Team" component={Team}/>
