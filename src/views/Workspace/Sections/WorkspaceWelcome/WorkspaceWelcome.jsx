@@ -7,7 +7,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle.jsx";
 
 import { connect } from 'react-redux'
-import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative } from "../../../../components/Playground/PlaygroundActions";
+import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative, stopPlaygroundDetailsStream } from "../../../../components/Playground/PlaygroundActions";
 import { Redirect } from 'react-router-dom'
 
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -130,7 +130,7 @@ class WorkspaceWelcome extends React.Component {
                             </button>
                         </div>
                     </div>
-                    <Footer onlyLogo />
+                    <Footer />
                 </div>
             </div>
         )
