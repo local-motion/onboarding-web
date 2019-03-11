@@ -8,7 +8,7 @@
 
 /*
     {
-        type: GRAPHQL|REST
+        type: GRAPHQL_QUERY | GRAPHQL_MUTATION | REST_GET | REST_POST
         baseActionIdentifer: start of the action types that will be spawned along with the execution of the query
         fetchId: identifier of the entity that is being fetched (may be left undefined)
         query: graphQL query of REST url

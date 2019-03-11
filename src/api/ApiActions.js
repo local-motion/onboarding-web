@@ -1,4 +1,4 @@
-import { fetchGraphQL, fetch } from "../GlobalActions";
+import { executeQuery } from "../GlobalActions";
 import { getActiveStream } from "./ApiReducer";
 
 export const CLEAR_ERROR = 'CLEAR_ERROR'
@@ -61,7 +61,6 @@ export const triggerStream = (streamIdentifier) => (dispatch, getState) => {
 }
 
 const pollGraphQL = (stream, dispatch, getState) => {
-  // console.log('polling stream ', stream.streamIdentifier, stream.instanceId)
   const activeStream = getActiveStream(getState(), stream.streamIdentifier)
 
   if (activeStream) {
@@ -80,31 +79,13 @@ const pollGraphQL = (stream, dispatch, getState) => {
        clearInterval(stream.interval)
     }
 
-    dispatch(fetch( {
-      type: 'GRAPHQL',
+    dispatch(executeQuery( {
+      type: 'GRAPHQL_QUERY',
       baseActionIdentifier: stream.baseActionIdentifier, 
       fetchId: stream.streamIdentifier,
       query: stream.graphQLQuery, 
       variables,
       onCompletion: onCompletionCallback
     }))
-
-
-    // dispatch(fetchGraphQL(stream.baseActionIdentifier, stream.graphQLQuery, variables, stream.instanceId, true, data => {
-
-    //   if (data && data.data && data.data.digest)  
-    //     dispatch( {type: POLL_RESULT, streamIdentifier: stream.streamIdentifier, digest: data.data.digest} )
-
-    //   const activeStream = getActiveStream(getState(), stream.streamIdentifier)
-    //   if (activeStream && (activeStream.instanceId === stream.instanceId)) {
-    //     // just continue
-    //   }
-    //   else
-    //    clearInterval(stream.interval)
-    // }))
-
-
-
-
   }
 }

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { fetchGraphQL, mutationGraphQL, fetch } from '../../GlobalActions';
+import { executeQuery } from '../../GlobalActions';
 import { Auth } from 'aws-amplify';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
@@ -38,9 +38,8 @@ const deleteUserProfileQuery = gql`
 `
 
 export const fetchUserProfile = () => {
-  // return fetchGraphQL(GET_USER_PROFILE, getUserProfileQuery)
-  return fetch( {
-    type: 'GRAPHQL',
+  return executeQuery( {
+    type: 'GRAPHQL_QUERY',
     baseActionIdentifier: GET_USER_PROFILE, 
     query: getUserProfileQuery, 
   })
@@ -48,33 +47,22 @@ export const fetchUserProfile = () => {
 
    
 export const createUser = (onSuccessCallback) => {
-  return mutationGraphQL ( {
-    type: 'GRAPHQL',
+  return executeQuery( {
+    type: 'GRAPHQL_MUTATION',
     baseActionIdentifier: CREATE_USER_PROFILE, 
     query: createUserProfileQuery, 
     onSuccess: (data, dispatch, getState) => onSuccessCallback(data, dispatch, getState)
   })
 }
-// export const createUser = (onSuccessCallback) => {
-//     return mutationGraphQL(CREATE_USER_PROFILE, createUserProfileQuery, {}, onSuccessCallback)
-//   }
 
 export const deleteUser = () => {
-  return mutationGraphQL ( {
-    type: 'GRAPHQL',
+  return executeQuery( {
+    type: 'GRAPHQL_MUTATION',
     baseActionIdentifier: DELETE_USER_PROFILE, 
     query: deleteUserProfileQuery, 
     onSuccess: (data, dispatch, getState) => dispatch(signOutUser())
   })
 }
-
-// export const deleteUser = () => {
-//     return mutationGraphQL(DELETE_USER_PROFILE, deleteUserProfileQuery, {}, (data, dispatch) => {
-//         dispatch(signOutUser())
-//     })
-//   }
-
-
 
 export const userSignedIn = cognitoUser => (dispatch, getState) =>{
     dispatch({ type: USER_SIGNED_IN, cognitoUser })
