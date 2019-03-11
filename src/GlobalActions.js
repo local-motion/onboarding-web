@@ -113,18 +113,18 @@ export const fetch = (queryOptions) => {
 
           // onCompletion && onCompletion(data)
         })
-        .catch(error => {
+        .catch(errorResponse => {
           // Network errors end up here
-          console.log('graphQL query (network) error: ', error)
+          console.log('graphQL query (network) error: ', errorResponse)
 
-          const standardError = {
-            code: error.message && error.message.startsWith('Network error') ? 'NETWORK' : 'GENERIC',
-            serverMessage: error.message,
-            response: error,
+          const error = {
+            code: errorResponse.message && errorResponse.message.startsWith('Network error') ? 'NETWORK' : 'GENERIC',
+            serverMessage: errorResponse.message,
+            response: errorResponse,
             queryOptions,
           }
           
-          handleError(standardError, dispatch, getState, queryOptions, error)
+          handleError(error, dispatch, getState, queryOptions, errorResponse)
 
           // onFailPrepublish && onFailPrepublish(standardError, dispatch, getState, options, error)
           // onCompletionPrepublish && onCompletionPrepublish(standardError, dispatch, getState, options, error)
@@ -153,34 +153,6 @@ export const fetch = (queryOptions) => {
     dispatch(openErrorMessageDialog(error))
 }
 
-
-
-
-  const noUserProfileErrorHandler = (error, dispatch, getState, queryOptions) => {
-    if (error.code === 'NO_PROFILE') {
-      // try to create a user profile and then retry the original query
-  
-        console.log("Error: No user profile -> Trying to create one...")
-  
-        // const { dispatch } = context
-        dispatch(createUser(
-          () => {
-  
-            console.log("User profile created-> Retrying original query")
-  
-  
-            // on success retry the original query, without invoking the errorHandlers this time to avoid infinite loops
-            const options = {...queryOptions, invokeErrorHandlers: false}
-            dispatch(fetch(options, false))
-          }
-        ))
-      return true 
-    }
-    else
-      return false
-  }
-  
-  const errorHandlers = [noUserProfileErrorHandler]
 
 
 
@@ -276,38 +248,130 @@ export const fetch = (queryOptions) => {
 
 // const errorHandlers = [noUserProfileErrorHandler]
 
-export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables={}, onSuccessCallback, miscAttributes) => {
-  return (dispatch, getState) => {
-      const graphQLClient = getState().graphQLClient;
-      dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
+export const mutationGraphQL = (queryOptions) => {
 
-      graphQLClient.mutate({
-        mutation: graphQLMutation,
-        variables
-      })
-        .then(data => {
-          if (data.errors && data.errors[0]) {
-            console.log('graphQL mutation success with error: ', data)
-            const error = {code: data.errors[0].code, message: data.errors[0].niceMessage, miscAttributes}
-              dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, message: data, payload: error})
-              dispatch(openSimpleErrorMessageDialog(error.message))
-          }
-          else {
-            console.log('graphQL mutation success: ', data)
-              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: data, payload: data.data, variables, miscAttributes })
-              if (onSuccessCallback)
-                onSuccessCallback(data.data, dispatch, getState)
-          }
+  const { type, baseActionIdentifier, fetchId, query, variables, 
+    auxParameters, invokeErrorHandlers=true,
+    onCompletionPrepublish, onSuccessPrepublish, onFailPrepublish, 
+    onCompletion, onSuccess, onFail } = queryOptions 
+
+    console.log("mutation " + baseActionIdentifier)
+
+    return (dispatch, getState) => {
+        const graphQLClient = getState().graphQLClient;
+        dispatch({type: baseActionIdentifier + REQUEST_POSTFIX, fetchId, timestamp: Date.now()})
+
+        graphQLClient.mutate({
+          mutation: query,
+          variables
         })
-        .catch(error => {
-          // Network errors end up here
-          console.log('graphQL mutation (network) error: ', error)
-          dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, miscAttributes})
-          dispatch(openGraphQLErrorMessageDialog( error))
-        })
-      
+          .then(response => {
+            const error = extractErrorsFromGraphQLResponse(response, queryOptions)
+  
+            if (error) {
+              let errorHandled = false
+              if (invokeErrorHandlers) {
+                  for (var i = 0; i < errorHandlers.length && !errorHandled; i++) {
+                    console.log("invoking error handler: ", errorHandlers[i])
+                    errorHandled = errorHandlers[i](error, dispatch, getState, queryOptions)
+                  }
+              }
+  
+              if (!errorHandled) {
+                console.log("Unhandled error: ", error)
+                handleError(error, dispatch, getState, queryOptions, error)
+              }
+            }
+            else {
+              // result -> call went ok
+              onSuccessPrepublish && onSuccessPrepublish(response.data, dispatch, getState, queryOptions, response)
+              onCompletionPrepublish && onCompletionPrepublish(response.data, dispatch, getState, queryOptions, response)
+
+              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: response.data, fetchId, timestamp: Date.now() })
+  
+              onSuccess && onSuccess(response.data, dispatch, getState, queryOptions, response)
+              onCompletion && onCompletion(response.data, dispatch, getState, queryOptions, response)
+            }
+          })
+          .catch(errorResponse => {
+            // Network errors end up here
+            console.log('graphQL query (network) error: ', errorResponse)
+  
+            const error = {
+              code: errorResponse.message && errorResponse.message.startsWith('Network error') ? 'NETWORK' : 'GENERIC',
+              serverMessage: errorResponse.message,
+              response: errorResponse,
+              queryOptions,
+            }
+            
+            handleError(error, dispatch, getState, queryOptions, errorResponse)
+          })
+      }
     }
+
+    
+// export const mutationGraphQL = (baseActionIdentifier, graphQLMutation, variables={}, onSuccessCallback, miscAttributes) => {
+//   return (dispatch, getState) => {
+//       const graphQLClient = getState().graphQLClient;
+//       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX})
+
+//       graphQLClient.mutate({
+//         mutation: graphQLMutation,
+//         variables
+//       })
+//         .then(data => {
+//           if (data.errors && data.errors[0]) {
+//             console.log('graphQL mutation success with error: ', data)
+//             const error = {code: data.errors[0].code, message: data.errors[0].niceMessage, miscAttributes}
+//               dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, message: data, payload: error})
+//               dispatch(openSimpleErrorMessageDialog(error.message))
+//           }
+//           else {
+//             console.log('graphQL mutation success: ', data)
+//               dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: data, payload: data.data, variables, miscAttributes })
+//               if (onSuccessCallback)
+//                 onSuccessCallback(data.data, dispatch, getState)
+//           }
+//         })
+//         .catch(error => {
+//           // Network errors end up here
+//           console.log('graphQL mutation (network) error: ', error)
+//           dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: error, miscAttributes})
+//           dispatch(openGraphQLErrorMessageDialog( error))
+//         })
+      
+//     }
+//   }
+
+
+// Error handlers
+
+  const noUserProfileErrorHandler = (error, dispatch, getState, queryOptions) => {
+    if (error.code === 'NO_PROFILE') {
+      // try to create a user profile and then retry the original query
+  
+        console.log("Error: No user profile -> Trying to create one...")
+  
+        // const { dispatch } = context
+        dispatch(createUser(
+          () => {
+  
+            console.log("User profile created-> Retrying original query")
+  
+  
+            // on success retry the original query, without invoking the errorHandlers this time to avoid infinite loops
+            const options = {...queryOptions, invokeErrorHandlers: false}
+            dispatch(fetch(options, false))
+          }
+        ))
+      return true 
+    }
+    else
+      return false
   }
+  
+  const errorHandlers = [noUserProfileErrorHandler]
+
 
 
   // Helper functions

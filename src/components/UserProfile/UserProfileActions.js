@@ -48,14 +48,32 @@ export const fetchUserProfile = () => {
 
    
 export const createUser = (onSuccessCallback) => {
-    return mutationGraphQL(CREATE_USER_PROFILE, createUserProfileQuery, {}, onSuccessCallback)
-  }
+  return mutationGraphQL ( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: CREATE_USER_PROFILE, 
+    query: createUserProfileQuery, 
+    onSuccess: (data, dispatch, getState) => onSuccessCallback(data, dispatch, getState)
+  })
+}
+// export const createUser = (onSuccessCallback) => {
+//     return mutationGraphQL(CREATE_USER_PROFILE, createUserProfileQuery, {}, onSuccessCallback)
+//   }
 
 export const deleteUser = () => {
-    return mutationGraphQL(DELETE_USER_PROFILE, deleteUserProfileQuery, {}, (data, dispatch) => {
-        dispatch(signOutUser())
-    })
-  }
+  return mutationGraphQL ( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: DELETE_USER_PROFILE, 
+    query: deleteUserProfileQuery, 
+    onSuccess: (data, dispatch, getState) => dispatch(signOutUser())
+  })
+}
+
+// export const deleteUser = () => {
+//     return mutationGraphQL(DELETE_USER_PROFILE, deleteUserProfileQuery, {}, (data, dispatch) => {
+//         dispatch(signOutUser())
+//     })
+//   }
+
 
 
 export const userSignedIn = cognitoUser => (dispatch, getState) =>{

@@ -206,6 +206,8 @@ export const stopPlaygroundDetailsStream = (playgroundId) => {
 
 // export const fetchPlaygroundDetails = (playgroundId) => fetchGraphQL(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId}, playgroundId)
 
+
+
 export const createInitiative = (name, lat, lng, onSuccessCallback) => {
   const initiativeId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     // generate a uuid
@@ -213,95 +215,221 @@ export const createInitiative = (name, lat, lng, onSuccessCallback) => {
     return v.toString(16);
     })
 
-  return mutationGraphQL(CREATE_INITIATIVE, createInitiativeQuery, {
-    input: {
-      initiativeId,
-      name,
-      lat,
-      lng,
-      type: "smokefree",
-      status: "not_started",
-    }
-  },
-  (data, dispatch, getState) => {
-      dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
-      onSuccessCallback(data)
-    }
-  )
-}
+    return mutationGraphQL ( {
+      type: 'GRAPHQL',
+      baseActionIdentifier: CREATE_INITIATIVE, 
+      fetchId: initiativeId,
+      query: createInitiativeQuery, 
+      variables: {
+        input: {
+          initiativeId,
+          name,
+          lat,
+          lng,
+          type: "smokefree",
+          status: "not_started",
+        }
+      },
+      onSuccess: (data, dispatch, getState) => {
+        dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+        onSuccessCallback(data)
+      }
+    })
+  }
+    
+// export const createInitiative = (name, lat, lng, onSuccessCallback) => {
+//   const initiativeId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+//     // generate a uuid
+//     var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
+//     return v.toString(16);
+//     })
+
+//   return mutationGraphQL(CREATE_INITIATIVE, createInitiativeQuery, {
+//     input: {
+//       initiativeId,
+//       name,
+//       lat,
+//       lng,
+//       type: "smokefree",
+//       status: "not_started",
+//     }
+//   },
+//   (data, dispatch, getState) => {
+//       dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+//       onSuccessCallback(data)
+//     }
+//   )
+// }
     
 export const joinInitiative = initiativeId => {
-  return mutationGraphQL(JOIN_INITIATIVE, joinInitiativeQuery, {
-    input: {
-      initiativeId: initiativeId
-    }
-  },
-  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
-  )
-}
-    
-export const claimManagerRole = initiativeId => {
-  return (dispatch, getState) => {
-  dispatch(mutationGraphQL(CLAIM_MANAGER_ROLE, claimManagerRoleQuery, {
-    input: {
-      initiativeId: initiativeId
-    }
-  },
-  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId)),
-  {
-    userProfile: getUser(getState())
-  }
-  ))
-}
-}
-    
-export const setSmokefreeDate = (initiativeId, smokeFreeDate) => {
-  return mutationGraphQL(SET_SMOKEFREE_DATE, setSmokefreeDateQuery, {
-    input: {
-      initiativeId,
-      smokeFreeDate
-    }
-  },
-  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
-  )
-}
-
-    
-export const setDecideSmokefree = (initiativeId) => {
-  return mutationGraphQL(SET_DECIDE_SMOKEFREE, setDecideSmokefreeQuery, {
-    input: {
-      initiativeId
-    }
-  },
-  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
-  )
-}
-
-export const recordPlaygroundObservation = (initiativeId, smokefree, comment, user) => {
-  return mutationGraphQL(RECORD_PLAYGROUND_OBSERVATION, recordPlaygroundObservationQuery, {
-    input: {
-      initiativeId,
-      observer: user.id,
-      smokefree,
-      comment
-    }
-  },
-  (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
-  )
-}
-
-export const setCheckbox = (initiativeId, checklistItem, checked, user) => {
-  return mutationGraphQL(SET_CHECKBOX, updateCheckboxQuery, {
-    input: {
-      initiativeId,
-      actor: user.id,
-      checklistItem,
-      checked
+  return mutationGraphQL ( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: JOIN_INITIATIVE, 
+    fetchId: initiativeId,
+    query: joinInitiativeQuery, 
+    variables: {
+      input: {
+        initiativeId,
       }
     },
-    (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
-    // (data, dispatch, getState) => dispatch(ensurePlaygroundDetails(initiativeId))
-    // (data, dispatch, getState) => dispatch(fetchGraphQL(GET_PLAYGROUND_DETAILS, getPlaygroundDetailsQuery, {playgroundId: initiativeId}, initiativeId))
-    )
+    onSuccess: (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  })
 }
+
+// export const joinInitiative = initiativeId => {
+//   return mutationGraphQL(JOIN_INITIATIVE, joinInitiativeQuery, {
+//     input: {
+//       initiativeId: initiativeId
+//     }
+//   },
+//   (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+//   )
+// }
+    
+export const claimManagerRole = initiativeId => {
+  return mutationGraphQL ( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: CLAIM_MANAGER_ROLE, 
+    fetchId: initiativeId,
+    query: claimManagerRoleQuery, 
+    variables: {
+      input: {
+        initiativeId,
+      }
+    },
+    onSuccess: (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  })
+}
+
+// export const claimManagerRole = initiativeId => {
+//   return (dispatch, getState) => {
+//   dispatch(mutationGraphQL(CLAIM_MANAGER_ROLE, claimManagerRoleQuery, {
+//     input: {
+//       initiativeId: initiativeId
+//     }
+//   },
+//   (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId)),
+//   {
+//     userProfile: getUser(getState())
+//   }
+//   ))
+// }
+// }
+    
+export const setSmokefreeDate = (initiativeId, smokeFreeDate) => {
+  return mutationGraphQL ( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: SET_SMOKEFREE_DATE, 
+    fetchId: initiativeId,
+    query: setSmokefreeDateQuery, 
+    variables: {
+      input: {
+        initiativeId,
+        smokeFreeDate
+      }
+    },
+    onSuccess: (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  })
+}
+  
+// export const setSmokefreeDate2 = (initiativeId, smokeFreeDate) => {
+//   return mutationGraphQL(SET_SMOKEFREE_DATE, setSmokefreeDateQuery, {
+//     input: {
+//       initiativeId,
+//       smokeFreeDate
+//     }
+//   },
+//   (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+//   )
+// }
+
+    
+export const setDecideSmokefree = initiativeId => {
+  return mutationGraphQL ( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: SET_DECIDE_SMOKEFREE, 
+    fetchId: initiativeId,
+    query: setDecideSmokefreeQuery, 
+    variables: {
+      input: {
+        initiativeId,
+      }
+    },
+    onSuccess: (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  })
+}
+
+// export const setDecideSmokefree = (initiativeId) => {
+//   return mutationGraphQL(SET_DECIDE_SMOKEFREE, setDecideSmokefreeQuery, {
+//     input: {
+//       initiativeId
+//     }
+//   },
+//   (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+//   )
+// }
+
+
+   
+export const recordPlaygroundObservation = (initiativeId, smokefree, comment, user) => {
+  return mutationGraphQL ( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: RECORD_PLAYGROUND_OBSERVATION, 
+    fetchId: initiativeId,
+    query: recordPlaygroundObservationQuery, 
+    variables: {
+      input: {
+        initiativeId,
+        observer: user.id,
+        smokefree,
+        comment
+        }
+    },
+    onSuccess: (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  })
+}
+
+// export const recordPlaygroundObservation = (initiativeId, smokefree, comment, user) => {
+//   return mutationGraphQL(RECORD_PLAYGROUND_OBSERVATION, recordPlaygroundObservationQuery, {
+//     input: {
+//       initiativeId,
+//       observer: user.id,
+//       smokefree,
+//       comment
+//     }
+//   },
+//   (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+//   )
+// }
+
+export const setCheckbox = (initiativeId, checklistItem, checked, user) => {
+  return mutationGraphQL ( {
+    type: 'GRAPHQL',
+    baseActionIdentifier: SET_CHECKBOX, 
+    fetchId: initiativeId,
+    query: updateCheckboxQuery, 
+    variables: {
+      input: {
+        initiativeId,
+        actor: user.id,
+        checklistItem,
+        checked
+        }
+    },
+    onSuccess: (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+  })
+}
+
+// export const setCheckbox = (initiativeId, checklistItem, checked, user) => {
+//   return mutationGraphQL(SET_CHECKBOX, updateCheckboxQuery, {
+//     input: {
+//       initiativeId,
+//       actor: user.id,
+//       checklistItem,
+//       checked
+//       }
+//     },
+//     (data, dispatch, getState) => dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+//     )
+// }
 
