@@ -60,6 +60,7 @@ const getPrettyMessageDatetime = messageDateString => {
 
 const ChatMessageItem = ({userName, author, creationTime, text, classes}) => {
     const iconText = (author || '??').substring(0, 2)
+    console.log('rendering chatitem')
 
 
     return (

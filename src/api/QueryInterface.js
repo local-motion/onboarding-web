@@ -16,8 +16,10 @@
         auxParameters: parameters that will be supplied to the dispatched actions and the callbacks (as part of the entire query object), but are not used in the query itself
         invokeErrorHandlers: whether to invoke the default error handlers (default: true)
 
-        onCompletionPrepublish: function that will be invoked on any result before the result action is dispatched
-        onSuccessPrepublish: function that will be invoked when the result is successful before the result action is dispatched
+        onCompletionPrepublish: function that will be invoked on any result before the result action is dispatched,
+                                when this function returns true the query is cancelled and therefore the result is not dispatched and the onCompletion/onSuccess/OnFail handlers are not invoked
+        onSuccessPrepublish: function that will be invoked when the result is successful before the result action is dispatched, 
+                                when this function returns true the query is cancelled and therefore the result is not dispatched and the onCompletion/onSuccess/OnFail handlers are not invoked
         onFailPrepublish: function that will be invoked when the result is not successful before the result action is dispatched
 
         onCompletion: function that will be invoked on any result after the result action is dispatched

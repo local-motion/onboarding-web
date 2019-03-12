@@ -2,6 +2,7 @@ import { openConfirmationDialog } from "./components/ConfirmationDialog/Confirma
 import { createUser } from "./components/UserProfile/UserProfileActions";
 import ErrorMessages, { ErrorCode } from "./api/ErrorMessages";
 import { generateKeyPairSync } from "crypto";
+import { getJwtToken } from "./components/UserProfile/UserProfileReducer";
 
 export const PUBLISH_ENVIRONMENT = 'PUBLISH_ENVIRONMENT'
 export const PUBLISH_GRAPHQLCLIENT = 'PUBLISH_GRAPHQLCLIENT'
@@ -13,7 +14,13 @@ export const REQUEST_POSTFIX = '_REQUEST'
 export const SUCCESS_POSTFIX = '_SUCCESS'
 export const FAILURE_POSTFIX = '_FAILURE'
 
-const allowedQueryTypes = ['GRAPHQL_QUERY' , 'GRAPHQL_MUTATION', 'REST_GET', 'REST_POST']
+// Query types
+export const GRAPHQL_QUERY = 'GRAPHQL_QUERY'
+export const GRAPHQL_MUTATION = 'GRAPHQL_MUTATION'
+export const REST_GET = 'REST_GET'
+export const REST_POST = 'REST_POST'
+
+const allowedQueryTypes = [GRAPHQL_QUERY , GRAPHQL_MUTATION, REST_GET, REST_POST]
 
 export const publishEnvironment = environmentProperties => (
     {type: PUBLISH_ENVIRONMENT, environmentProperties}
@@ -27,6 +34,23 @@ export const publishGraphQLClient = client => (
 
 
 export const executeQuery = (queryOptions) => {
+  const { type, baseActionIdentifier, fetchId, query, variables, 
+          invokeErrorHandlers=true,
+          onCompletionPrepublish, onSuccessPrepublish, 
+          onCompletion, onSuccess } = queryOptions 
+
+
+  if (!allowedQueryTypes.includes(type))
+    throw new Error('Query type ' + type + ' is not supported, choose from: ' + allowedQueryTypes)
+
+  if (type === GRAPHQL_QUERY || type === GRAPHQL_MUTATION)
+    return executeGraphQLQuery(queryOptions)
+  else
+    return executeRestQuery(queryOptions)
+}
+
+
+export const executeGraphQLQuery = (queryOptions) => {
   const { type, baseActionIdentifier, fetchId, query, variables, 
           invokeErrorHandlers=true,
           onCompletionPrepublish, onSuccessPrepublish, 
@@ -72,13 +96,18 @@ export const executeQuery = (queryOptions) => {
           }
           else {
             // result -> call went ok
-            onSuccessPrepublish && onSuccessPrepublish(response.data, dispatch, getState, queryOptions, response)
-            onCompletionPrepublish && onCompletionPrepublish(response.data, dispatch, getState, queryOptions, response)
+            let cancel = false
+            if (onSuccessPrepublish) 
+              cancel |= onSuccessPrepublish(response.data, dispatch, getState, queryOptions, response)
+            if (onCompletionPrepublish)
+              cancel |= onCompletionPrepublish(response.data, dispatch, getState, queryOptions, response)
         
-            dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: response.data, fetchId, timestamp: Date.now() })
+            if (!cancel) {
+              dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: response.data, fetchId, queryOptions, timestamp: Date.now() })
 
-            onSuccess && onSuccess(response.data, dispatch, getState, queryOptions, response)
-            onCompletion && onCompletion(response.data, dispatch, getState, queryOptions, response)
+              onSuccess && onSuccess(response.data, dispatch, getState, queryOptions, response)
+              onCompletion && onCompletion(response.data, dispatch, getState, queryOptions, response)
+              }
           }
         })
         .catch(errorResponse => {
@@ -114,17 +143,16 @@ export const executeRestQuery = (queryOptions) => {
       // const graphQLClient = getState().graphQLClient;
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX, fetchId, timestamp: Date.now()})
 
-
-      const promise = type === 'REST_QUERY' ?
+      const promise = type === REST_GET ?
         fetch(query, {
         })
         :
         fetch(query, {
           method: 'POST',
-          body: JSON.stringify('chatMessage'),            // TODO TODO TODO TODO TODO TODO TODO
+          body: JSON.stringify(variables),
           headers: {
             'Content-Type': 'application/json',
-            // Authorization: "Bearer " + getJwtToken(getState()) // TODO TODO TODO TODO TODO TODO
+            Authorization: "Bearer " + getJwtToken(getState())
           }
         })
 
@@ -134,14 +162,18 @@ export const executeRestQuery = (queryOptions) => {
           if (response.ok) {
             response.json().then(
               json => {
-                onSuccessPrepublish && onSuccessPrepublish(response.data, dispatch, getState, queryOptions, response)
-                onCompletionPrepublish && onCompletionPrepublish(response.data, dispatch, getState, queryOptions, response)
+                let cancel = false
+                if (onSuccessPrepublish) 
+                  cancel |= onSuccessPrepublish(response.data, dispatch, getState, queryOptions, response)
+                if (onCompletionPrepublish)
+                  cancel |= onCompletionPrepublish(response.data, dispatch, getState, queryOptions, response)
             
-                dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: json, fetchId, timestamp: Date.now() })
+                if (!cancel) {
+                  dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: json, fetchId, queryOptions, timestamp: Date.now() })
     
-                onSuccess && onSuccess(response.data, dispatch, getState, queryOptions, response)
-                onCompletion && onCompletion(response.data, dispatch, getState, queryOptions, response)
-    
+                  onSuccess && onSuccess(response.data, dispatch, getState, queryOptions, response)
+                  onCompletion && onCompletion(response.data, dispatch, getState, queryOptions, response)
+                  }
               },
               jsonError => {
                 console.warn('Error parsing json response: ', jsonError)
@@ -202,7 +234,7 @@ const noUserProfileErrorHandler = (error, dispatch, getState, queryOptions) => {
 
           // on success retry the original query, without invoking the errorHandlers this time to avoid infinite loops
           const options = {...queryOptions, invokeErrorHandlers: false}
-          dispatch(fetch(options, false))
+          dispatch(executeQuery(options))
         }
       ))
     return true   // error handled

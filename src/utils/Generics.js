@@ -8,3 +8,11 @@ export function uuid() {
         return v.toString(16);
     })
 }
+
+/**
+ * Test whether an object is a function
+ * @param {*} functionToCheck 
+ */
+export function isFunction(functionToCheck) {
+    return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
+}
