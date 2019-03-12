@@ -1,5 +1,6 @@
 import { uuid } from "../scripts/Generics";
 import { getJwtToken } from "../../UserProfile/UserProfileReducer";
+import { startGraphQLStream, stopStream } from "../../../api/ApiActions";
 
 
 // Action type definitions
@@ -15,6 +16,9 @@ export const SET_UNACTIVE_CHATBOX = 'SET_UNACTIVE_CHATBOX'
 export const FETCHING_MESSAGES = 'FETCHING_MESSAGES'
 export const POSTED_MESSAGE = 'POSTED_MESSAGE'
 
+export const GET_CHAT_MESSAGES = 'GET_CHAT_MESSAGES'
+export const CHAT_STREAM = 'CHAT'
+
 
 // Actions
 export const activateChatbox = chatboxId => dispatch => {
@@ -25,6 +29,16 @@ export const activateChatbox = chatboxId => dispatch => {
 export const deactivateChatbox = chatboxId => (
   {type: SET_UNACTIVE_CHATBOX, chatboxId}
 )
+
+export const startChatStream = chatboxId => (dispatch, getState) => {
+  const query = (getState().environmentProperties.api.chatbox + "/") + chatboxId
+  dispatch(startGraphQLStream(CHAT_STREAM + chatboxId, GET_CHAT_MESSAGES, query, {}))
+}
+
+export const stopChatStream = chatboxId => {
+  return stopStream(CHAT_STREAM + chatboxId)
+}
+
 
 export const fetchChatMessages = (reload=false) => {
   return (dispatch, getState) => {

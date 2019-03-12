@@ -42,6 +42,8 @@
         code: represents the type of error. Often provided by the server, but may be set client-side as well. This is the only mandatory field.
         serverMessage: error message provided by the server (always in English)
         httpResultCode: the usual response code obtained from the server
+        exception: if the error was detected by catching an exception, this is where to store the exception object
+        aux: object containing any error specific auxilary attributes
         response: protocol (and possibly error type) specific raw content
         queryOptions: the options describing the query that errored
         otherErrors: array of other errors that occurred (in case this error was the first in a list). Note that these other errors will not refer to each other as otherErrors.
