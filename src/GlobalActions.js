@@ -185,7 +185,7 @@ export const executeRestQuery = (queryOptions) => {
                 handleError(error, dispatch, getState, queryOptions, response)
               }
             ).catch(exception => {
-              console.warn('Exception while handling REST call: ', response)
+              console.warn('Exception while handling REST call: ', exception)
               const error = {
                 code: ErrorCode.GENERIC,
                 exception,
@@ -250,16 +250,21 @@ const errorHandlers = [noUserProfileErrorHandler]
 
 const handleError = (error, dispatch, getState, queryOptions, message) => {
   const {baseActionIdentifier, onFailPrepublish, onCompletionPrepublish, onFail, onCompletion} = queryOptions
+  let cancel = false
 
-  onFailPrepublish && onFailPrepublish(error, dispatch, getState, queryOptions, message)
-  onCompletionPrepublish && onCompletionPrepublish(error, dispatch, getState, queryOptions, message)
+  if (onFailPrepublish)
+    cancel |= onFailPrepublish(error, dispatch, getState, queryOptions, message)
+  if (onCompletionPrepublish)
+    cancel |= onCompletionPrepublish(error, dispatch, getState, queryOptions, message)
 
-  dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: message, error: error})
+  if (!cancel) {
+    dispatch({ type: baseActionIdentifier + FAILURE_POSTFIX, payload: message, error: error})
 
-  onFail && onFail(error, dispatch, getState, queryOptions, message)
-  onCompletion && onCompletion(error, dispatch, getState, queryOptions, message)
+    onFail && onFail(error, dispatch, getState, queryOptions, message)
+    onCompletion && onCompletion(error, dispatch, getState, queryOptions, message)
 
-  dispatch(openErrorMessageDialog(error))
+    dispatch(openErrorMessageDialog(error))
+  }
 }
 
 

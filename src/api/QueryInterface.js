@@ -20,7 +20,8 @@
                                 when this function returns true the query is cancelled and therefore the result is not dispatched and the onCompletion/onSuccess/OnFail handlers are not invoked
         onSuccessPrepublish: function that will be invoked when the result is successful before the result action is dispatched, 
                                 when this function returns true the query is cancelled and therefore the result is not dispatched and the onCompletion/onSuccess/OnFail handlers are not invoked
-        onFailPrepublish: function that will be invoked when the result is not successful before the result action is dispatched
+        onFailPrepublish: function that will be invoked when the result is not successful before the result action is dispatched,
+                                when this function returns true the error is cancelled and therefore the error is not dispatched and the onCompletion/onSuccess/OnFail handlers are not invoked
 
         onCompletion: function that will be invoked on any result after the result action is dispatched
         onSuccess: function that will be invoked when the result is successful after the result action is dispatched

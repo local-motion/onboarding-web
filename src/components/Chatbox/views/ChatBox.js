@@ -66,13 +66,13 @@ class ChatBox extends React.Component {
   }
 
   render() {
-    const {classes, chatMessages=[], messageText='', onChangeHandler, chatDisabled, userName} = this.props
+    const {classes, chatMessages=[], messageText='', onChangeHandler, chatDisabled, userName, chatboxId} = this.props
     console.log('rendering chatbox')
     return (
       <Paper elevation={1} className={classes.chatBox}>
         <Grid container direction="column" wrap="nowrap">
           <Grid item xs  id="chatPane" className={classes.list} onScroll={() => this.onMessageListScroll()}>
-            <ChatMessageList items={chatMessages} userName={userName} />
+            <ChatMessageList items={chatMessages} userName={userName} chatboxId={chatboxId}/>
           </Grid>
           <Grid item xs="auto">
             {!chatDisabled &&

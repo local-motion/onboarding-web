@@ -1,6 +1,6 @@
 import { uuid } from "../scripts/Generics";
 import { getJwtToken } from "../../UserProfile/UserProfileReducer";
-import { startGraphQLStream, stopStream, startStream, triggerStream } from "../../../api/ApiActions";
+import { startGraphQLStream, stopStream, startStream, triggerStream, startStream2, triggerStream2 } from "../../../api/ApiActions";
 import { REST_GET, executeQuery, REST_POST } from "../../../GlobalActions";
 
 
@@ -27,12 +27,42 @@ export const CHAT_STREAM = 'CHAT'
 //       dispatch(fetchChatMessages(true))
 // }
 export const activateChatbox = chatboxId => {
-      return startChatStream(chatboxId)
+      return startChatStream2(chatboxId)
 }
 
 export const deactivateChatbox = chatboxId => {
   // return {type: SET_UNACTIVE_CHATBOX, chatboxId}
   return stopChatStream(chatboxId)
+}
+
+export const startChatStream2 = chatboxId => (dispatch, getState) => {
+  console.log('activating chatbox ' + chatboxId)
+  dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
+
+  const chatEndpoint = getState().environmentProperties.api.chatbox
+
+  const queryFunction = (stream, dispatch, getState, firstPoll) => {
+    let url
+    if (firstPoll)
+      url = (chatEndpoint + "/") + chatboxId
+    else {
+      const chatState = getState().chat
+      const lastMessageId = (chatState.messages.length > 0) ? chatState.messages[chatState.messages.length-1].messageId : null;
+      url = chatEndpoint  + "/" + chatboxId + (lastMessageId ? "?since=" + lastMessageId : '')
+    }
+    
+    const query = {
+      type: REST_GET,      
+      baseActionIdentifier: GET_CHAT_MESSAGES,
+      fetchId: chatboxId,
+      query: url,
+    }
+
+    console.log ('returning query: ' + query)
+    return query
+  }
+
+  dispatch(startStream2(CHAT_STREAM, queryFunction))
 }
 
 export const startChatStream = chatboxId => (dispatch, getState) => {
@@ -42,7 +72,10 @@ export const startChatStream = chatboxId => (dispatch, getState) => {
   const chatEndpoint = getState().environmentProperties.api.chatbox
 
   const initialQuery = (chatEndpoint + "/") + chatboxId
-  const query = (stream, dispatch, getState) => {
+  const query = (stream, dispatch, getState, firstPoll) => {
+    if (firstPoll)
+      return initialQuery
+
     const chatState = getState().chat
     const lastMessageId = (chatState.messages.length > 0) ? chatState.messages[chatState.messages.length-1].messageId : null;
     // return chatEndpoint  + "/" + chatboxId + (lastMessageId ? "?since=" + lastMessageId : '')
@@ -130,7 +163,7 @@ export const postChatMessage = text => (dispatch, getState) => {
 
   const onSuccess = (data, dispatch, getState, queryOptions, response) => {
     dispatch({type: POSTED_MESSAGE})
-    dispatch(triggerStream(CHAT_STREAM))
+    dispatch(triggerStream2(CHAT_STREAM))
   }
 
   dispatch(executeQuery( {

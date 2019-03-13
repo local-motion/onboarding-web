@@ -6,6 +6,7 @@ import { getUser } from '../UserProfile/UserProfileReducer';
 
 
 const mapStateToProps = (state, ownProps) => ({
+  chatboxId: state.chat.chatboxId,
   chatMessages: state.chat.messages,
   messageText: state.chat.editText,
   chatDisabled: !isUserVolunteerOfPlayground(getUser(state), ownProps.playground),
