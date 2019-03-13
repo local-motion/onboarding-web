@@ -1,5 +1,5 @@
-import { SUCCESS_POSTFIX } from "../../GlobalActions";
 import { GET_USER_PROFILE, USER_SIGNED_IN, USER_SIGNED_OUT, CREATE_USER_PROFILE, DELETE_USER_PROFILE } from "./UserProfileActions";
+import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 
 
 // State definition

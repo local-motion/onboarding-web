@@ -1,6 +1,6 @@
 import { GET_PLAYGROUNDS, GET_PLAYGROUND_DETAILS } from "./PlaygroundActions";
-import { SUCCESS_POSTFIX } from "../../GlobalActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
+import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 
 
 // State definition

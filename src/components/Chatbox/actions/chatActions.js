@@ -1,7 +1,6 @@
 import { uuid } from "../scripts/Generics";
-import { getJwtToken } from "../../UserProfile/UserProfileReducer";
-import { startGraphQLStream, stopStream, startStream, triggerStream, startStream2, triggerStream2 } from "../../../api/ApiActions";
-import { REST_GET, executeQuery, REST_POST } from "../../../GlobalActions";
+import { stopStream, triggerStream, startStream } from "../../../api/StreamActions";
+import { REST_GET, executeQuery, REST_POST } from "../../../api/QueryActions";
 
 
 // Action type definitions
@@ -40,8 +39,8 @@ export const startChatStream2 = chatboxId => (dispatch, getState) => {
   dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
 
   const chatEndpoint = getState().environmentProperties.api.chatbox
-
-  const queryFunction = (stream, dispatch, getState, firstPoll) => {
+  let firstPoll = true
+  const queryFunction = (stream, dispatch, getState) => {
     let url
     if (firstPoll)
       url = (chatEndpoint + "/") + chatboxId
@@ -50,7 +49,8 @@ export const startChatStream2 = chatboxId => (dispatch, getState) => {
       const lastMessageId = (chatState.messages.length > 0) ? chatState.messages[chatState.messages.length-1].messageId : null;
       url = chatEndpoint  + "/" + chatboxId + (lastMessageId ? "?since=" + lastMessageId : '')
     }
-    
+    firstPoll = false
+
     const query = {
       type: REST_GET,      
       baseActionIdentifier: GET_CHAT_MESSAGES,
@@ -62,38 +62,7 @@ export const startChatStream2 = chatboxId => (dispatch, getState) => {
     return query
   }
 
-  dispatch(startStream2(CHAT_STREAM, queryFunction))
-}
-
-export const startChatStream = chatboxId => (dispatch, getState) => {
-  console.log('activating chatbox ' + chatboxId)
-  dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
-
-  const chatEndpoint = getState().environmentProperties.api.chatbox
-
-  const initialQuery = (chatEndpoint + "/") + chatboxId
-  const query = (stream, dispatch, getState, firstPoll) => {
-    if (firstPoll)
-      return initialQuery
-
-    const chatState = getState().chat
-    const lastMessageId = (chatState.messages.length > 0) ? chatState.messages[chatState.messages.length-1].messageId : null;
-    // return chatEndpoint  + "/" + chatboxId + (lastMessageId ? "?since=" + lastMessageId : '')
-    const url = chatEndpoint  + "/" + chatboxId + (lastMessageId ? "?since=" + lastMessageId : '')
-    console.log ('returning url: ' + url)
-    return url
-  }
-
-  const stream = {
-    streamIdentifier: CHAT_STREAM,
-    baseActionIdentifier: GET_CHAT_MESSAGES,
-    type: REST_GET,
-    initialQuery,
-    query,
-  }
-
-  dispatch(startStream(stream))
-  // dispatch(startGraphQLStream(CHAT_STREAM + chatboxId, GET_CHAT_MESSAGES, query, {}))
+  dispatch(startStream(CHAT_STREAM, queryFunction))
 }
 
 export const stopChatStream = chatboxId => dispatch => {
@@ -102,55 +71,6 @@ export const stopChatStream = chatboxId => dispatch => {
   dispatch({type: SET_UNACTIVE_CHATBOX, chatboxId})
   dispatch(stopStream(CHAT_STREAM))
 }
-
-
-// export const fetchChatMessages = (reload=false) => {
-//   return (dispatch, getState) => {
-//     const chatState = getState().chat
-//     const chatboxId = chatState.chatboxId
-
-//     if (chatboxId !== null) {
-//       const lastMessageId = (!reload && chatState.messages.length > 0) ? chatState.messages[chatState.messages.length-1].messageId : null;
-//       var url;
-//       if (lastMessageId === null) {
-//         url = (getState().environmentProperties.api.chatbox + "/") + chatboxId
-//       }
-//       else {
-//         url = (getState().environmentProperties.api.chatbox  + "/") + chatboxId + "?since=" + lastMessageId
-//       }
-
-//       dispatch({type: FETCHING_MESSAGES})
-
-//       fetch(url, {
-//         }).then(
-//           response => {
-//             if (lastMessageId === null) {
-//               response.json().then(json => dispatch(receiveChatMessage(chatboxId, json), error => alert('oh no error!' + error)))
-//             }
-//             else {
-//               response.json().then(json => dispatch(receiveChatMessage(chatboxId, json, true), error => alert('oh no error!' + error)))
-//             }
-//             // Keep polling if this is still the active chatbox
-//             if (chatboxId === getState().chat.chatboxId) {
-//                 setTimeout(() => dispatch(fetchChatMessages()), 3000)
-//             }
-//           },
-//           error => dispatch(signalError(error))
-//         )
-//     }
-//   }
-// }
-
-
-// export const receiveChatMessage = (chatboxId, messages, append=false) => {
-
-//   return ({
-//   type: RECEIVE_CHAT_MESSAGES,
-//   chatboxId,
-//   messages,
-//   append
-//   })
-// }
 
 export const postChatMessage = text => (dispatch, getState) => {
   const chatboxId = getState().chat.chatboxId
@@ -163,7 +83,7 @@ export const postChatMessage = text => (dispatch, getState) => {
 
   const onSuccess = (data, dispatch, getState, queryOptions, response) => {
     dispatch({type: POSTED_MESSAGE})
-    dispatch(triggerStream2(CHAT_STREAM))
+    dispatch(triggerStream(CHAT_STREAM))
   }
 
   dispatch(executeQuery( {

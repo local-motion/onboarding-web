@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import { executeQuery } from '../../GlobalActions';
 import { Auth } from 'aws-amplify';
+import { executeQuery } from '../../api/QueryActions';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CREATE_USER_PROFILE = 'CREATE_USER_PROFILE'

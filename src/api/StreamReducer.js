@@ -1,4 +1,4 @@
-import { START_STREAM, STOP_STREAM, POLL_RESULT } from "./ApiActions";
+import { START_STREAM, STOP_STREAM, POLL_RESULT } from "./StreamActions";
 
 
 // State definition
@@ -17,14 +17,14 @@ const initialState = {
 // Selectors
 export const getActiveStream = (state, streamIdentifier) => {
   console.log(state)
-  return state.api.activeStreams[streamIdentifier]
+  return state.stream.activeStreams[streamIdentifier]
 }
 
 
 
 // Reducer
 
-export const apiReducer = (state = initialState, action, baseState) => {
+export const streamReducer = (state = initialState, action, baseState) => {
 
   switch (action.type) {
   case START_STREAM:

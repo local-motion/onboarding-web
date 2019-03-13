@@ -6,11 +6,11 @@
 // Technical errors
 
 export const ErrorCode = {
-    GENERIC: {developerMessage: 'Generic error', message: 'Er is een technische fout opgetreden'},
-    NOT_AUTHORISED: {developerMessage: 'Not authorised', message: 'Er is een technische fout opgetreden'},
-    INTERNAL_SERVER_ERROR: {developerMessage: 'Internal server error', message: 'Er is een technische fout opgetreden'},
-    JSON_PARSE: {developerMessage: 'Json did not parse', message: 'Er is een technische fout opgetreden'},
-    NETWORK: {developerMessage: 'Network error', message: 'Er is een netwerk fout opgetreden'},
+    GENERIC:                    {developerMessage: 'Generic error', message: 'Er is een technische fout opgetreden'},
+    NOT_AUTHORISED:             {developerMessage: 'Not authorised', message: 'Er is een technische fout opgetreden'},
+    INTERNAL_SERVER_ERROR:      {developerMessage: 'Internal server error', message: 'Er is een technische fout opgetreden'},
+    JSON_PARSE:                 {developerMessage: 'Json did not parse', message: 'Er is een technische fout opgetreden'},
+    NETWORK:                    {developerMessage: 'Network error', message: 'Er is een netwerk fout opgetreden'},
 }
 
 export default ErrorCode

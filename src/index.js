@@ -22,7 +22,6 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
 import rootReducer from './RootReducer';
-import { publishEnvironment, publishGraphQLClient } from "./GlobalActions";
 import { history } from "./setup";
 import { getJwtToken } from "./components/UserProfile/UserProfileReducer";
 import CustomAuthenticator from "./auth/CustomAuthenticator";
@@ -41,6 +40,7 @@ import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome/WorkspaceWelcome";
 import Team from "./views/Workspace/Sections/Team";
 import { ensurePlaygrounds } from "./components/Playground/PlaygroundActions";
+import { publishEnvironment, publishGraphQLClient } from "./misc/ConfigActions";
 
 
 const environments = {

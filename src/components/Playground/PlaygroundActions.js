@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import { executeQuery } from '../../GlobalActions';
-import { startGraphQLStream, stopStream, triggerStream } from '../../api/ApiActions';
+import { startGraphQLStream, stopStream, triggerStream } from '../../api/StreamActions';
+import { executeQuery } from '../../api/QueryActions';
 
 
 export const GET_PLAYGROUNDS = 'GET_PLAYGROUNDS'

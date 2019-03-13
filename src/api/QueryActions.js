@@ -1,14 +1,7 @@
-import { openConfirmationDialog } from "./components/ConfirmationDialog/ConfirmationDialogActions";
-import { createUser } from "./components/UserProfile/UserProfileActions";
-import ErrorMessages, { ErrorCode } from "./api/ErrorMessages";
-import { generateKeyPairSync } from "crypto";
-import { getJwtToken } from "./components/UserProfile/UserProfileReducer";
-
-export const PUBLISH_ENVIRONMENT = 'PUBLISH_ENVIRONMENT'
-export const PUBLISH_GRAPHQLCLIENT = 'PUBLISH_GRAPHQLCLIENT'
-export const NULL_ACTION = 'NULL_ACTION'
-
-export const nullAction = {type: NULL_ACTION}
+import { openConfirmationDialog } from "../components/ConfirmationDialog/ConfirmationDialogActions";
+import { createUser } from "../components/UserProfile/UserProfileActions";
+import ErrorMessages, { ErrorCode } from "./ErrorMessages";
+import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 
 export const REQUEST_POSTFIX = '_REQUEST'
 export const SUCCESS_POSTFIX = '_SUCCESS'
@@ -20,46 +13,71 @@ export const GRAPHQL_MUTATION = 'GRAPHQL_MUTATION'
 export const REST_GET = 'REST_GET'
 export const REST_POST = 'REST_POST'
 
-const allowedQueryTypes = [GRAPHQL_QUERY , GRAPHQL_MUTATION, REST_GET, REST_POST]
+const supportedQueryTypes = [GRAPHQL_QUERY, GRAPHQL_MUTATION, REST_GET, REST_POST]
 
-export const publishEnvironment = environmentProperties => (
-    {type: PUBLISH_ENVIRONMENT, environmentProperties}
-  )
+/**
+ *     Both grahpQL and REST queries are executed through this generic interface. Doing so results in a consistent handling of all kinds of queries.
+ *     For now only queries that retrieve data are supported.
+ * 
+ * @param {*} queryOptions the queryOptions object is layed out as such:
+ * 
+    {
+        type: GRAPHQL_QUERY | GRAPHQL_MUTATION | REST_GET | REST_POST
+        baseActionIdentifer: start of the action types that will be spawned along with the execution of the query
+        fetchId: identifier of the entity that is being fetched (may be left undefined)
+        query: graphQL query or REST url
+        variables: will be sent along with the graphQL query, for rest query the variables will be available for callback
+        auxParameters: parameters that will be supplied to the dispatched actions and the callbacks (as part of the entire query object), but are not used in the query itself
+        invokeErrorHandlers: whether to invoke the default error handlers (default: true)
 
-export const publishGraphQLClient = client => (
-    {type: PUBLISH_GRAPHQLCLIENT, client}
-  )
+        onCompletionPrepublish: function that will be invoked on any result before the result action is dispatched,
+                                when this function returns true the query is cancelled and therefore the result is not dispatched and the onCompletion/onSuccess/OnFail handlers are not invoked
+        onSuccessPrepublish: function that will be invoked when the result is successful before the result action is dispatched, 
+                                when this function returns true the query is cancelled and therefore the result is not dispatched and the onCompletion/onSuccess/OnFail handlers are not invoked
+        onFailPrepublish: function that will be invoked when the result is not successful before the result action is dispatched,
+                                when this function returns true the error is cancelled and therefore the error is not dispatched and the onCompletion/onSuccess/OnFail handlers are not invoked
 
-
-
-
+        onCompletion: function that will be invoked on any result after the result action is dispatched
+        onSuccess: function that will be invoked when the result is successful after the result action is dispatched
+        onFail: function that will be invoked when the result is not successful after the result action is dispatched
+    }
+ * 
+    The callback functions are invoked with these parameters:
+    - result: payload for onSuccess error handlers | error (see below) for onError handlers | complete result object for onCompletion handlers
+    - dispatch function
+    - getState function
+    - query object as passed to fetch function
+    - complete result object
+ * 
+ *  Errors are formatted as such:
+ *
+    {
+        code: represents the type of error. Often provided by the server, but may be set client-side as well. This is the only mandatory field.
+        serverMessage: error message provided by the server (always in English)
+        httpResultCode: the usual response code obtained from the server
+        exception: if the error was detected by catching an exception, this is where to store the exception object
+        aux: object containing any error specific auxilary attributes
+        response: protocol (and possibly error type) specific raw content
+        queryOptions: the options describing the query that errored
+        otherErrors: array of other errors that occurred (in case this error was the first in a list). Note that these other errors will not refer to each other as otherErrors.
+    }
+ * 
+ */
 export const executeQuery = (queryOptions) => {
-  const { type, baseActionIdentifier, fetchId, query, variables, 
-          invokeErrorHandlers=true,
-          onCompletionPrepublish, onSuccessPrepublish, 
-          onCompletion, onSuccess } = queryOptions 
+  const { type } = queryOptions 
 
+  if (!supportedQueryTypes.includes(type))
+    throw new Error('Query type ' + type + ' is not supported, choose from: ' + supportedQueryTypes)
 
-  if (!allowedQueryTypes.includes(type))
-    throw new Error('Query type ' + type + ' is not supported, choose from: ' + allowedQueryTypes)
-
-  if (type === GRAPHQL_QUERY || type === GRAPHQL_MUTATION)
-    return executeGraphQLQuery(queryOptions)
-  else
-    return executeRestQuery(queryOptions)
+  return (type === GRAPHQL_QUERY || type === GRAPHQL_MUTATION) ? executeGraphQLQuery(queryOptions) : executeRestQuery(queryOptions)
 }
 
 
-export const executeGraphQLQuery = (queryOptions) => {
+const executeGraphQLQuery = (queryOptions) => {
   const { type, baseActionIdentifier, fetchId, query, variables, 
           invokeErrorHandlers=true,
           onCompletionPrepublish, onSuccessPrepublish, 
           onCompletion, onSuccess } = queryOptions 
-
-        console.log("fetching " + baseActionIdentifier + " for " + fetchId)
-
-  if (!allowedQueryTypes.includes(type))
-    throw new Error('Query type ' + type + ' is not supported, choose from: ' + allowedQueryTypes)
 
   return (dispatch, getState) => {
       const graphQLClient = getState().graphQLClient;
@@ -125,19 +143,10 @@ export const executeGraphQLQuery = (queryOptions) => {
     }
   }
 
-
-
-
-export const executeRestQuery = (queryOptions) => {
+const executeRestQuery = (queryOptions) => {
   const { type, baseActionIdentifier, fetchId, query, variables, 
-          invokeErrorHandlers=true,
           onCompletionPrepublish, onSuccessPrepublish, 
           onCompletion, onSuccess } = queryOptions 
-
-        console.log("fetching " + baseActionIdentifier + " for " + fetchId)
-
-  if (!allowedQueryTypes.includes(type))
-    throw new Error('Query type ' + type + ' is not supported, choose from: ' + allowedQueryTypes)
 
   return (dispatch, getState) => {
       // const graphQLClient = getState().graphQLClient;
@@ -157,8 +166,8 @@ export const executeRestQuery = (queryOptions) => {
         })
 
       promise.then(
-        response => {
 
+        response => {
           if (response.ok) {
             response.json().then(
               json => {
@@ -271,7 +280,7 @@ const handleError = (error, dispatch, getState, queryOptions, message) => {
 // Helper functions
 
 const openErrorMessageDialog = (error) => (dispatch, getState) => {
-  const developerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].developerMessage : 'Error message not defined'
+  const developerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].developerMessage : ErrorMessages[error.code].serverMessage
   // const consumerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].message : 'Onbekende fout'
 
   // TODO switch between developer mode and consumer mode
