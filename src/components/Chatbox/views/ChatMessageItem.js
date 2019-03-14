@@ -19,7 +19,6 @@ const styles = theme => ({
         gutterBottom: 'true',
         marginRight: '10px',
         noWrap: 'true',
-        // fontSize: '90%'
     },
     dateText: {
         align: 'left',
@@ -60,7 +59,6 @@ const getPrettyMessageDatetime = messageDateString => {
 
 const ChatMessageItem = ({userName, author, creationTime, text, classes}) => {
     const iconText = (author || '??').substring(0, 2)
-
 
     return (
         <ListItem>

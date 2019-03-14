@@ -1,4 +1,5 @@
-import { CLEAR_ERROR } from "./ApiActions";
+import { CLEAR_ERROR } from "./StreamActions";
+
 // credits to: https://medium.com/stashaway-engineering/react-redux-tips-better-way-to-handle-loading-flags-in-your-reducers-afda42a804c6
 
 // This reducer will keep the detailed state for all fetch actions carrying the fetchId attribute

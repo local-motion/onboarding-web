@@ -29,7 +29,7 @@ class ChatBox extends React.Component {
   onSubmitHandler = () => {
     if (this.props.messageText !== '') {
       this.props.onSubmitHandler()
-      this.scrollToBottom()
+      this.setState({scrolledToBottom: true})
     }
   }
 
@@ -54,12 +54,13 @@ class ChatBox extends React.Component {
 
   onMessageListScroll() {
     var element = document.getElementById("chatPane")
-    this.setState({scrolledToBottom: element.scrollHeight - element.scrollTop === element.offsetHeight})
+    const scrollDifferenceFromBottom = element.scrollHeight - element.scrollTop - element.offsetHeight    // Note that this value is a float and can be inexact
+    const scrolledToBottom = Math.abs(scrollDifferenceFromBottom) < 2
+    this.setState({scrolledToBottom})
   }
 
   render() {
-    const {classes, chatMessages=[], messageText='', onChangeHandler, onTextKeyPress, chatDisabled, userName} = this.props
-
+    const {classes, chatMessages=[], messageText='', onChangeHandler, chatDisabled, userName} = this.props
     return (
       <Paper elevation={1} className={classes.chatBox}>
         <Grid container direction="column" wrap="nowrap">
@@ -70,7 +71,6 @@ class ChatBox extends React.Component {
             {!chatDisabled &&
               <ChatMessageEntryBox 
                 disabled={chatDisabled}
-                onTextKeyPress={onTextKeyPress}  
                 onTextChange={onChangeHandler} 
                 onSubmitClick={this.onSubmitHandler} 
                 text={messageText} 

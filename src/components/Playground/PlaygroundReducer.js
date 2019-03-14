@@ -1,7 +1,6 @@
-// import { GET_PLAYGROUNDS, CREATE_INITIATIVE, GET_PLAYGROUND_DETAILS, JOIN_INITIATIVE, CLAIM_MANAGER_ROLE, SET_SMOKEFREE_DATE, SET_DECIDE_SMOKEFREE, SET_CHECKBOX, RECORD_PLAYGROUND_OBSERVATION } from "./PlaygroundActions";
 import { GET_PLAYGROUNDS, GET_PLAYGROUND_DETAILS } from "./PlaygroundActions";
-import { SUCCESS_POSTFIX } from "../../GlobalActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
+import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 
 
 // State definition

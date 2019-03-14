@@ -39,10 +39,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const styles = theme => ({
-    // pane: {
-    //   width: '100%',
-    //   overflow: 'auto',
-    // },
     paper: {
       height: '300px',
       width: '100%',
