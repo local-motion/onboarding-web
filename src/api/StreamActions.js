@@ -16,7 +16,6 @@ export const clearError = baseActionIdentifier => (
 
 
 const defaultStreamProperties = {
-  variables: {},
   pollingInterval: 10000,
 }
 

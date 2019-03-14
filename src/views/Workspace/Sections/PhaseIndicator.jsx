@@ -11,7 +11,6 @@ import StepConnector from '@material-ui/core/StepConnector';
 
 import { playgroundIcons } from 'components/PlaygroundIcons/playgroundIconsConstants';
 
-import classNames from 'classnames';
 
 const styles = theme => ({
     button: {
@@ -124,9 +123,8 @@ class PhaseIndicator extends React.Component {
                                 style={{
                                     backgroundImage: `url(${icon.bg})`
                                 }}
-                                className={classNames(classes.iconBgImage, {
-                                    [classes.active]: selectedPhase === index
-                                })}>
+                                className={classes.iconBgImage + (selectedPhase === index ? ' ' + classes.active : '')}
+                            >
                                 <div
                                     style={{
                                         backgroundImage: `url(${icon.icon})`

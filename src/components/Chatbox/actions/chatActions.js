@@ -1,6 +1,7 @@
 import { uuid } from "../scripts/Generics";
 import { stopStream, triggerStream, startStream } from "../../../api/StreamActions";
 import { REST_GET, executeQuery, REST_POST } from "../../../api/QueryActions";
+import { getEnvironmentProperties } from "../../../misc/ConfigReducer";
 
 
 // Action type definitions
@@ -20,25 +21,11 @@ export const GET_CHAT_MESSAGES = 'GET_CHAT_MESSAGES'
 export const CHAT_STREAM = 'CHAT'
 
 
-// Actions
-// export const activateChatbox = chatboxId => dispatch => {
-//       dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
-//       dispatch(fetchChatMessages(true))
-// }
-export const activateChatbox = chatboxId => {
-      return startChatStream2(chatboxId)
-}
-
-export const deactivateChatbox = chatboxId => {
-  // return {type: SET_UNACTIVE_CHATBOX, chatboxId}
-  return stopChatStream(chatboxId)
-}
-
-export const startChatStream2 = chatboxId => (dispatch, getState) => {
+export const activateChatbox = chatboxId => (dispatch, getState) => {
   console.log('activating chatbox ' + chatboxId)
   dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
 
-  const chatEndpoint = getState().environmentProperties.api.chatbox
+  const chatEndpoint = getEnvironmentProperties(getState()).api.chatbox
   let firstPoll = true
   const queryFunction = (stream, dispatch, getState) => {
     let url
@@ -57,20 +44,23 @@ export const startChatStream2 = chatboxId => (dispatch, getState) => {
       fetchId: chatboxId,
       query: url,
     }
-
-    console.log ('returning query: ' + query)
     return query
   }
 
-  dispatch(startStream(CHAT_STREAM, queryFunction))
+  dispatch(startStream(CHAT_STREAM, queryFunction, {pollingInterval: 3000}))
 }
 
-export const stopChatStream = chatboxId => dispatch => {
+export const deactivateChatbox = chatboxId => dispatch => {
   console.log('deactivating chatbox ' + chatboxId)
 
   dispatch({type: SET_UNACTIVE_CHATBOX, chatboxId})
   dispatch(stopStream(CHAT_STREAM))
 }
+
+export const editChatMessage = text => ({
+  type: EDIT_CHAT_MESSAGE,
+  text
+})
 
 export const postChatMessage = text => (dispatch, getState) => {
   const chatboxId = getState().chat.chatboxId
@@ -79,7 +69,7 @@ export const postChatMessage = text => (dispatch, getState) => {
     messageId: uuid(),
     text: getState().chat.editText
   }
-  const query = getState().environmentProperties.api.chatbox + '/' + chatboxId
+  const query = getEnvironmentProperties(getState()).api.chatbox + '/' + chatboxId
 
   const onSuccess = (data, dispatch, getState, queryOptions, response) => {
     dispatch({type: POSTED_MESSAGE})
@@ -97,52 +87,3 @@ export const postChatMessage = text => (dispatch, getState) => {
 
   dispatch({type: POSTED_MESSAGE})
 }
-
-// export function postChatMessage(text) {
-//   return function (dispatch, getState) {
-    
-//     const chatboxId = getState().chat.chatboxId
-
-//     const chatMessage = {
-//       messageId: uuid(),
-//       text: getState().chat.editText
-//     }
-//     console.log("POSTING: ", chatMessage)
-
-//     dispatch({type: POSTED_MESSAGE})
-
-//     const url = getState().environmentProperties.api.chatbox + '/' + chatboxId
-//     return fetch(url, {
-//         method: 'POST',
-//         body: JSON.stringify(chatMessage),
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: "Bearer " + getJwtToken(getState())
-//         }
-//       })
-//       .then(response => response.json())
-//       .catch(error => dispatch(signalError(error)))
-//       .then(json => dispatch(fetchChatMessages()));
-//   };
-// }
-
-// export const signalError = error => ({
-//   type: SIGNAL_ERROR,
-//   error
-// })
-
-
-export const editChatMessage = text => ({
-  type: EDIT_CHAT_MESSAGE,
-  text
-})
-
-// export const submitChatMessage = () => ({
-//   type: SUBMIT_CHAT_MESSAGE,
-// })
-
-// export const submitBotMessage = message => ({
-//   type: SUBMIT_BOT_MESSAGE,
-//   message
-// })
-

@@ -2,6 +2,7 @@ import { openConfirmationDialog } from "../components/ConfirmationDialog/Confirm
 import { createUser } from "../components/UserProfile/UserProfileActions";
 import ErrorMessages, { ErrorCode } from "./ErrorMessages";
 import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
+import { getGraphQLClient } from "../misc/ConfigReducer";
 
 export const REQUEST_POSTFIX = '_REQUEST'
 export const SUCCESS_POSTFIX = '_SUCCESS'
@@ -80,7 +81,7 @@ const executeGraphQLQuery = (queryOptions) => {
           onCompletion, onSuccess } = queryOptions 
 
   return (dispatch, getState) => {
-      const graphQLClient = getState().graphQLClient;
+      const graphQLClient = getGraphQLClient(getState())
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX, fetchId, timestamp: Date.now()})
 
       const promise = type === 'GRAPHQL_QUERY' ?

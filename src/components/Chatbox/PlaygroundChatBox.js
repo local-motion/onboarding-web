@@ -6,7 +6,6 @@ import { getUser } from '../UserProfile/UserProfileReducer';
 
 
 const mapStateToProps = (state, ownProps) => ({
-  chatboxId: state.chat.chatboxId,
   chatMessages: state.chat.messages,
   messageText: state.chat.editText,
   chatDisabled: !isUserVolunteerOfPlayground(getUser(state), ownProps.playground),
@@ -15,9 +14,9 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSubmitHandler:    () =>     dispatch(postChatMessage()),
-  onChangeHandler:    event => dispatch(editChatMessage(event.target.value)),
-  setActiveChatbox:   () => dispatch(activateChatbox(ownProps.playground.id)),
-  deactivateChatbox:  () => dispatch(deactivateChatbox(ownProps.playground.id))
+  onChangeHandler:    event =>  dispatch(editChatMessage(event.target.value)),
+  setActiveChatbox:   () =>     dispatch(activateChatbox(ownProps.playground.id)),
+deactivateChatbox:    () =>     dispatch(deactivateChatbox(ownProps.playground.id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatBox)

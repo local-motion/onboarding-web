@@ -30,7 +30,6 @@ class ChatBox extends React.Component {
     if (this.props.messageText !== '') {
       this.props.onSubmitHandler()
       this.setState({scrolledToBottom: true})
-      // this.scrollToBottom()
     }
   }
 
@@ -42,8 +41,6 @@ class ChatBox extends React.Component {
   componentDidUpdate() {
     if (this.state.scrolledToBottom)
       this.scrollToBottom()
-    else  
-      console.log('not down!')
   }
 
   componentWillUnmount() {
@@ -53,26 +50,22 @@ class ChatBox extends React.Component {
   scrollToBottom() {
     var element = document.getElementById("chatPane")
     element.scrollTop = element.scrollHeight
-    console.log('scrolling to bottom')
   }
 
   onMessageListScroll() {
     var element = document.getElementById("chatPane")
-    console.log('scrolling: height-top=' + (element.scrollHeight - element.scrollTop) + '  offset=' + element.offsetHeight)
     const scrollDifferenceFromBottom = element.scrollHeight - element.scrollTop - element.offsetHeight    // Note that this value is a float and can be inexact
     const scrolledToBottom = Math.abs(scrollDifferenceFromBottom) < 2
     this.setState({scrolledToBottom})
-    console.log(scrolledToBottom ? 'scrolled to bottom' : 'scrolled from bottom')
   }
 
   render() {
-    const {classes, chatMessages=[], messageText='', onChangeHandler, chatDisabled, userName, chatboxId} = this.props
-    console.log('rendering chatbox')
+    const {classes, chatMessages=[], messageText='', onChangeHandler, chatDisabled, userName} = this.props
     return (
       <Paper elevation={1} className={classes.chatBox}>
         <Grid container direction="column" wrap="nowrap">
           <Grid item xs  id="chatPane" className={classes.list} onScroll={() => this.onMessageListScroll()}>
-            <ChatMessageList items={chatMessages} userName={userName} chatboxId={chatboxId}/>
+            <ChatMessageList items={chatMessages} userName={userName} />
           </Grid>
           <Grid item xs="auto">
             {!chatDisabled &&

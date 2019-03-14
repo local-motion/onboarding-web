@@ -15,11 +15,7 @@ const initialState = {
 }
 
 // Selectors
-export const getActiveStream = (state, streamIdentifier) => {
-  console.log(state)
-  return state.stream.activeStreams[streamIdentifier]
-}
-
+export const getActiveStream = (state, streamIdentifier) => state.stream.activeStreams[streamIdentifier]
 
 
 // Reducer
