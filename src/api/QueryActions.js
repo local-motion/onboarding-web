@@ -125,7 +125,7 @@ const executeGraphQLQuery = (queryOptions) => {
               dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: response.data, fetchId, queryOptions, timestamp: Date.now() })
 
               onSuccess && onSuccess(response.data, dispatch, getState, queryOptions, response)
-              onCompletion && onCompletion(response.data, dispatch, getState, queryOptions, response)
+              onCompletion && onCompletion(response, dispatch, getState, queryOptions, response)
               }
           }
         })
@@ -181,8 +181,8 @@ const executeRestQuery = (queryOptions) => {
                 if (!cancel) {
                   dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: json, fetchId, queryOptions, timestamp: Date.now() })
     
-                  onSuccess && onSuccess(response.data, dispatch, getState, queryOptions, response)
-                  onCompletion && onCompletion(response.data, dispatch, getState, queryOptions, response)
+                  onSuccess && onSuccess(json, dispatch, getState, queryOptions, response)
+                  onCompletion && onCompletion(response, dispatch, getState, queryOptions, response)
                   }
               },
               jsonError => {

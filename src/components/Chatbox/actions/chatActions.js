@@ -1,7 +1,8 @@
 import { uuid } from "../scripts/Generics";
 import { stopStream, triggerStream, startStream } from "../../../api/StreamActions";
 import { REST_GET, executeQuery, REST_POST } from "../../../api/QueryActions";
-import { getEnvironmentProperties } from "../../../misc/ConfigReducer";
+import { getEnvironmentProperties, getApiBaseUrl } from "../../../misc/ConfigReducer";
+import { CHAT_ENDPOINT, CHAT_PATH } from "../../../misc/Paths";
 
 
 // Action type definitions
@@ -25,7 +26,7 @@ export const activateChatbox = chatboxId => (dispatch, getState) => {
   console.log('activating chatbox ' + chatboxId)
   dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
 
-  const chatEndpoint = getEnvironmentProperties(getState()).api.chatbox
+  const chatEndpoint = getApiBaseUrl(getState()) + CHAT_PATH
   let firstPoll = true
   const queryFunction = (stream, dispatch, getState) => {
     let url
@@ -69,7 +70,7 @@ export const postChatMessage = text => (dispatch, getState) => {
     messageId: uuid(),
     text: getState().chat.editText
   }
-  const query = getEnvironmentProperties(getState()).api.chatbox + '/' + chatboxId
+  const query = getApiBaseUrl(getState()) + CHAT_PATH + '/' + chatboxId
 
   const onSuccess = (data, dispatch, getState, queryOptions, response) => {
     dispatch({type: POSTED_MESSAGE})

@@ -40,7 +40,10 @@ import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome/WorkspaceWelcome";
 import Team from "./views/Workspace/Sections/Team";
 import { ensurePlaygrounds } from "./components/Playground/PlaygroundActions";
-import { publishEnvironment, publishGraphQLClient } from "./misc/ConfigActions";
+import { publishEnvironment, publishGraphQLClient, publishApiBaseURL, PUBLISH_ENVIRONMENT } from "./misc/ConfigActions";
+import { executeQuery, REST_GET } from "./api/QueryActions";
+import { CONFIGURATION_PATH } from "./misc/Paths";
+import App from "./App";
 
 
 const environments = {
@@ -113,6 +116,10 @@ const settings = environments[window.location.hostname] || environments["localho
 console.log("Host name is: " + window.location.hostname);
 console.log("Using settings:", settings);
 
+const hostName = window.location.hostname
+const apiBaseUrl = hostName === 'localhost' ? 'http://localhost:8086/api/' : 'https://' + hostName + '/api/'
+console.log("apiBaseUrl is: " + apiBaseUrl);
+
 const uri = process.env.ONBOARDING_API || settings.api.onboarding;
 console.log('Using Onboarding API at ' + uri);
 
@@ -139,6 +146,7 @@ Amplify.configure({
 // Set up the Redux store
 const store = createStore(rootReducer, applyMiddleware(thunk))
 store.dispatch(publishEnvironment(settings))
+store.dispatch(publishApiBaseURL(apiBaseUrl))
 
 // Trigger a close of the confirmation dialog each time the history changes
 window.onpopstate = () => {
@@ -187,91 +195,110 @@ store.dispatch(publishGraphQLClient(client))            // Register the graphQL 
 store.dispatch(ensurePlaygrounds())
 
 
-const App = class App extends React.Component {
+// const App = class App extends React.Component {
 
-    signInHandler = (username, password) => {
-        console.log("App1 button is clicked ");
-        Auth.signIn(username, password)
-            .then(user => {
-                console.log("Auth.signIn is success ", user);
-                store.dispatch(userSignedIn(user))
-                console.log("App1 signInHandler()");
-                this.hist.push("/");
+//     signInHandler = (username, password) => {
+//         Auth.signIn(username, password)
+//             .then(user => {
+//                 console.log("Auth.signIn is success ", user);
+//                 store.dispatch(userSignedIn(user))
+//                 console.log("App1 signInHandler()");
+//                 this.hist.push("/");
                 
-            })
-            .catch(err => {/* this.signInError(err) */}); 
-    }
+//             })
+//             .catch(err => {/* this.signInError(err) */}); 
+//     }
 
-    signOutHandler = () => {
-        console.log("Clicked on Logout");
-        this.setState({ status: "guest" });
-    }
+//     signOutHandler = () => {
+//         console.log("Clicked on Logout");
+//         this.setState({ status: "guest" });
+//     }
 
-    render() {
-        return (
-            <div>
-                <ApolloProvider client={client}>
-                    <I18nextProvider i18n={i18n}>
-                        <Router history={history}>
-                            <Switch>
-                                <Route
-                                    path="/login"
-                                    exact
-                                    key="Login"
-                                    render={props => <CustomAuthenticator
-                                        {...props}
-                                        {...this.state}
-                                        goForward={this.signInHandler}
-                                        goBack={this.signOutHandler}>
-                                    </CustomAuthenticator>
-                                    }
-                                />
+//     render() {
+//         return (
+//             <div>
+//                 <ApolloProvider client={client}>
+//                     <I18nextProvider i18n={i18n}>
+//                         <Router history={history}>
+//                             <Switch>
+//                                 <Route
+//                                     path="/login"
+//                                     exact
+//                                     key="Login"
+//                                     render={props => <CustomAuthenticator
+//                                         {...props}
+//                                         {...this.state}
+//                                         goForward={this.signInHandler}
+//                                         goBack={this.signOutHandler}>
+//                                     </CustomAuthenticator>
+//                                     }
+//                                 />
 
-                                <Route exact path="/about" key="Who are we" component={About}/>
-                                <Route exact path="/contact" key="Contact us" component={Contact}/>
-                                <Route exact path="/privacy" key="Privacy Statement" component={Privacy}/>
-                                <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
-                                <Route exact path="/terms" key="Terms of Use" component={Terms}/>
+//                                 <Route exact path="/about" key="Who are we" component={About}/>
+//                                 <Route exact path="/contact" key="Contact us" component={Contact}/>
+//                                 <Route exact path="/privacy" key="Privacy Statement" component={Privacy}/>
+//                                 <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
+//                                 <Route exact path="/terms" key="Terms of Use" component={Terms}/>
                                 
-                                <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
-                                <Route exact path="/workspace/:initiativeId/team" key="Team" component={Team}/>
-                                <Route exact path="/workspace/:initiativeId/phase/:phaseId" key="Workspace" component={Workspace}/>
+//                                 <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
+//                                 <Route exact path="/workspace/:initiativeId/team" key="Team" component={Team}/>
+//                                 <Route exact path="/workspace/:initiativeId/phase/:phaseId" key="Workspace" component={Workspace}/>
 
-                                <Route exact path="/" key="Onboarding" component={Onboarding}/>
+//                                 <Route exact path="/" key="Onboarding" component={Onboarding}/>
 
-                                { /* If none of the paths match, redirect to /*/ }
-                                <Route path="/" render={ () => (<Redirect to='/'/>) } />
+//                                 { /* If none of the paths match, redirect to /*/ }
+//                                 <Route path="/" render={ () => (<Redirect to='/'/>) } />
 
-                            </Switch>
-                        </Router>
-                    </I18nextProvider>
-                </ApolloProvider>
-                <CookieConsent
-                    location="bottom"
-                    buttonText="Accepteren"
-                    cookieName="CookiesAccepted"
-                    style={{background: "#2B373B"}}
-                    buttonStyle={{color: "#4e503b", fontSize: "13px"}}
-                    expires={150}
-                >
-                    Deze website gebruikt cookies om te kunnen functioneren.{" "}
-                        <span style={{fontSize: "10px"}}>
-                            Door gebruik te maken van de site stemt u in met het plaatsen van dergelijke cookies
-                        </span>
-                </CookieConsent>
+//                             </Switch>
+//                         </Router>
+//                     </I18nextProvider>
+//                 </ApolloProvider>
+//                 <CookieConsent
+//                     location="bottom"
+//                     buttonText="Accepteren"
+//                     cookieName="CookiesAccepted"
+//                     style={{background: "#2B373B"}}
+//                     buttonStyle={{color: "#4e503b", fontSize: "13px"}}
+//                     expires={150}
+//                 >
+//                     Deze website gebruikt cookies om te kunnen functioneren.{" "}
+//                         <span style={{fontSize: "10px"}}>
+//                             Door gebruik te maken van de site stemt u in met het plaatsen van dergelijke cookies
+//                         </span>
+//                 </CookieConsent>
 
-                <WrappedConfirmationDialog/>
+//                 <WrappedConfirmationDialog/>
                 
-            </div>
-        )
-    }
-};
+//             </div>
+//         )
+//     }
+// };
+
+// const Wrapped = [
+//     // <Provider store={store}><SecuredApp className={"secure-app"}/></Provider>
+//     <Provider store={store}><App className={"secure-app"}/></Provider>
+// ];
 
 const Wrapped = [
-    // <Provider store={store}><SecuredApp className={"secure-app"}/></Provider>
-    <Provider store={store}><App className={"secure-app"}/></Provider>
+    <Provider store={store}>
+        <ApolloProvider client={client}>
+            <I18nextProvider i18n={i18n}>
+                <App className={"secure-app"}/>
+            </I18nextProvider>
+        </ApolloProvider>
+    </Provider>
 ];
 
+
+store.dispatch(executeQuery({
+    type: REST_GET,
+    // baseActionIdentifer: PUBLISH_ENVIRONMENT,
+    baseActionIdentifer: 'vla',
+    query: apiBaseUrl + CONFIGURATION_PATH,
+    onSuccess: (result) => {
+        console.log("fetched config: ", result)
+    }
+}))
 
 // Before (re)loading this page/application, check whether there is a authenticated user (which includes the session)
 // We wait for the result of the authenticatedUser call before starting the react application, so all elements are
