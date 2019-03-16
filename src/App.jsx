@@ -1,9 +1,6 @@
 import React from "react";
 import {Redirect} from 'react-router-dom'
 import {Route, Router, Switch} from "react-router-dom";
-import {I18nextProvider} from "react-i18next";
-import i18n from "./i18n";
-import {ApolloProvider} from 'react-apollo';
 
 import "assets/scss/material-kit-react.css?v=1.2.0";
 
@@ -29,23 +26,20 @@ import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome/Worksp
 import Team from "./views/Workspace/Sections/Team";
 
 
-
 const mapStateToProps = (state) => ({
   })
   
-  const mapDispatchToProps = (dispatch) => ({
-    onUserSignedIn: user => dispatch(userSignedIn(user))
-  })
+const mapDispatchToProps = (dispatch) => ({
+onUserSignedIn: user => dispatch(userSignedIn(user))
+})
   
   
-
 class App extends React.Component {
 
     signInHandler = (username, password) => {
         Auth.signIn(username, password)
             .then(user => {
                 console.log("Auth.signIn is success ", user);
-                // store.dispatch(userSignedIn(user))
                 this.props.onUserSignedIn(user)
                 console.log("App1 signInHandler()");
                 this.hist.push("/");
@@ -62,38 +56,38 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                        <Router history={history}>
-                            <Switch>
-                                <Route
-                                    path="/login"
-                                    exact
-                                    key="Login"
-                                    render={props => <CustomAuthenticator
-                                        {...props}
-                                        {...this.state}
-                                        goForward={this.signInHandler}
-                                        goBack={this.signOutHandler}>
-                                    </CustomAuthenticator>
-                                    }
-                                />
+                <Router history={history}>
+                    <Switch>
+                        <Route
+                            path="/login"
+                            exact
+                            key="Login"
+                            render={props => <CustomAuthenticator
+                                {...props}
+                                {...this.state}
+                                goForward={this.signInHandler}
+                                goBack={this.signOutHandler}>
+                            </CustomAuthenticator>
+                            }
+                        />
 
-                                <Route exact path="/about" key="Who are we" component={About}/>
-                                <Route exact path="/contact" key="Contact us" component={Contact}/>
-                                <Route exact path="/privacy" key="Privacy Statement" component={Privacy}/>
-                                <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
-                                <Route exact path="/terms" key="Terms of Use" component={Terms}/>
-                                
-                                <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
-                                <Route exact path="/workspace/:initiativeId/team" key="Team" component={Team}/>
-                                <Route exact path="/workspace/:initiativeId/phase/:phaseId" key="Workspace" component={Workspace}/>
+                        <Route exact path="/about" key="Who are we" component={About}/>
+                        <Route exact path="/contact" key="Contact us" component={Contact}/>
+                        <Route exact path="/privacy" key="Privacy Statement" component={Privacy}/>
+                        <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
+                        <Route exact path="/terms" key="Terms of Use" component={Terms}/>
+                        
+                        <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
+                        <Route exact path="/workspace/:initiativeId/team" key="Team" component={Team}/>
+                        <Route exact path="/workspace/:initiativeId/phase/:phaseId" key="Workspace" component={Workspace}/>
 
-                                <Route exact path="/" key="Onboarding" component={Onboarding}/>
+                        <Route exact path="/" key="Onboarding" component={Onboarding}/>
 
-                                { /* If none of the paths match, redirect to /*/ }
-                                <Route path="/" render={ () => (<Redirect to='/'/>) } />
+                        { /* If none of the paths match, redirect to /*/ }
+                        <Route path="/" render={ () => (<Redirect to='/'/>) } />
 
-                            </Switch>
-                        </Router>
+                    </Switch>
+                </Router>
                 <CookieConsent
                     location="bottom"
                     buttonText="Accepteren"

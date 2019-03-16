@@ -44,7 +44,7 @@ const supportedQueryTypes = [GRAPHQL_QUERY, GRAPHQL_MUTATION, REST_GET, REST_POS
     }
  * 
     The callback functions are invoked with these parameters:
-    - result: payload for onSuccess error handlers | error (see below) for onError handlers | complete result object for onCompletion handlers
+    - result: payload for onSuccess and onCompletion handlers | error (see below) for onError and onCompletion handlers
     - dispatch function
     - getState function
     - query object as passed to fetch function
@@ -125,7 +125,7 @@ const executeGraphQLQuery = (queryOptions) => {
               dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: response.data, fetchId, queryOptions, timestamp: Date.now() })
 
               onSuccess && onSuccess(response.data, dispatch, getState, queryOptions, response)
-              onCompletion && onCompletion(response, dispatch, getState, queryOptions, response)
+              onCompletion && onCompletion(response.data, dispatch, getState, queryOptions, response)
               }
           }
         })
@@ -182,7 +182,7 @@ const executeRestQuery = (queryOptions) => {
                   dispatch({ type: baseActionIdentifier + SUCCESS_POSTFIX, message: response, payload: json, fetchId, queryOptions, timestamp: Date.now() })
     
                   onSuccess && onSuccess(json, dispatch, getState, queryOptions, response)
-                  onCompletion && onCompletion(response, dispatch, getState, queryOptions, response)
+                  onCompletion && onCompletion(json, dispatch, getState, queryOptions, response)
                   }
               },
               jsonError => {

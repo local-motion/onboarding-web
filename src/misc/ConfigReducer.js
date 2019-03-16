@@ -1,4 +1,5 @@
 import { PUBLISH_ENVIRONMENT, PUBLISH_GRAPHQLCLIENT, PUBLISH_API_BASE_URL } from "./ConfigActions";
+import { SUCCESS_POSTFIX } from "../api/QueryActions";
 
 // State definition
 
@@ -14,6 +15,7 @@ const initialState = {
 export const getGraphQLClient = (state) => state.config.graphQLClient
 export const getEnvironmentProperties = (state) => state.config.environmentProperties
 export const getApiBaseUrl = (state) => state.config.apiBaseUrl
+export const getGoogleMapsKey = (state) => state.config.environmentProperties.googleMapsKey
 
 
 // Reducer
@@ -21,10 +23,10 @@ export const getApiBaseUrl = (state) => state.config.apiBaseUrl
 const configReducer = (state = initialState, action) => {
   switch (action.type) {
 
-    case PUBLISH_ENVIRONMENT:
+    case PUBLISH_ENVIRONMENT + SUCCESS_POSTFIX:
       return {
         ...state,
-        environmentProperties: action.environmentProperties
+        environmentProperties: action.payload
       }
 
     case PUBLISH_API_BASE_URL:

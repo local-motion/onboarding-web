@@ -1,8 +1,8 @@
 import { uuid } from "../scripts/Generics";
 import { stopStream, triggerStream, startStream } from "../../../api/StreamActions";
 import { REST_GET, executeQuery, REST_POST } from "../../../api/QueryActions";
-import { getEnvironmentProperties, getApiBaseUrl } from "../../../misc/ConfigReducer";
-import { CHAT_ENDPOINT, CHAT_PATH } from "../../../misc/Paths";
+import { getApiBaseUrl } from "../../../misc/ConfigReducer";
+import { CHAT_PATH } from "../../../misc/Paths";
 
 
 // Action type definitions

@@ -13,38 +13,19 @@ import markerBlue from "assets/img/markers/playground_blue.png";
 import { connect } from 'react-redux'
 import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
-
-const MAP_API_KEY = "AIzaSyCsy6bZ_CvGdeFBOTSDkN0gPqVK9iKDfQ8";
-
+import { getGoogleMapsKey } from "../../../misc/ConfigReducer";
 
 
 class PlaygroundMap extends React.Component {
 
-    componentDidMount() {
-        // this.props.ensurePlaygrounds()
-      }
-
     render() {
-        return (<PlaygroundMapImpl {...this.props} />)
+        return (<PlaygroundMapImpl {...this.props} googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${this.props.googleMapsKey}&v=3.exp&libraries=geometry,drawing,places`}/>)
     }
 }
 
-// const mapStateToProps = state => ({
-//     playgrounds: getAllPlaygrounds(state).map(playground => ({
-//             id: playground.id,
-//             name: playground.name,
-//             lat: playground.lat,
-//             lng: playground.lng,
-//             vol: playground.volunteerCount,
-//             votes: playground.votes,
-//             slug: playground.name + " Rookvrij",
-//             status: playground.status,
-//             zoom: 18,
-//             default: false,
-//     }) )
-// })
 const mapStateToProps = state => ({
-    playgrounds: getAllPlaygrounds(state)
+    playgrounds: getAllPlaygrounds(state),
+    googleMapsKey: getGoogleMapsKey(state),
 })
 
 const mapDispatchToProps = dispatch => {
@@ -60,8 +41,6 @@ export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchT
 
 const PlaygroundMapImpl = compose(
     withProps({
-        googleMapURL:
-            `https://maps.googleapis.com/maps/api/js?key=${MAP_API_KEY}&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{height: `100%`}}/>,
         containerElement: <div style={{height: `100%`}} className="playground-map"/>,
         mapElement: <div style={{height: `100%`}}/>
@@ -130,6 +109,3 @@ const PlaygroundMapImpl = compose(
     </div>
 )
 })
-
-
-
