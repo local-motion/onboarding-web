@@ -136,8 +136,8 @@ store.dispatch(executeQuery({
                 // domain: settings.aws.cognito.domain,
                 domain: cognitoConfig.domain,
                 scope: ['email', 'openid'],
-                redirectSignIn: baseUrl + 'onboarding/signin',
-                redirectSignOut: baseUrl + 'onboarding/logout',
+                redirectSignIn: baseUrl + (hostName === 'localhost' ? 'onboarding/signin' : ''),    // TODO patch until userpool for local testing is updated
+                redirectSignOut: baseUrl + (hostName === 'localhost' ? 'onboarding/logout' : ''),   // TODO patch until userpool for local testing is updated
                 responseType: 'token', // 'token' for Implicit grant, 'code' for Authorization code grant
             }
         }
