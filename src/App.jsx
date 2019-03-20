@@ -37,21 +37,26 @@ onUserSignedIn: user => dispatch(userSignedIn(user))
 class App extends React.Component {
 
     signInHandler = (username, password) => {
-        Auth.signIn(username, password)
-            .then(user => {
-                console.log("Auth.signIn is success ", user);
-                this.props.onUserSignedIn(user)
-                console.log("App1 signInHandler()");
-                this.hist.push("/");
+        // Auth.signIn(username, password)
+        //     .then(user => {
+        //         console.log("Auth.signIn is success ", user);
+        //         this.props.onUserSignedIn(user)
+        //         console.log("App1 signInHandler()");
+        //         this.hist.push("/");
                 
-            })
-            .catch(err => {/* this.signInError(err) */}); 
+        //     })
+        //     .catch(err => {
+        //         console.log('we have got an error: ', err)
+        //         /* this.signInError(err) */}); 
+        console.log('signed in with ' + username);
+        this.props.onUserSignedIn(username)
+        history.goBack()
     }
 
-    signOutHandler = () => {
-        console.log("Clicked on Logout");
-        this.setState({ status: "guest" });
-    }
+    // signOutHandler = () => {
+    //     console.log("Clicked on Logout");
+    //     this.setState({ status: "guest" });
+    // }
 
     render() {
         return (
@@ -65,8 +70,7 @@ class App extends React.Component {
                             render={props => <CustomAuthenticator
                                 {...props}
                                 {...this.state}
-                                goForward={this.signInHandler}
-                                goBack={this.signOutHandler}>
+                                onSignIn={this.signInHandler}>
                             </CustomAuthenticator>
                             }
                         />

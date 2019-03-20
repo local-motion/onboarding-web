@@ -281,7 +281,7 @@ const handleError = (error, dispatch, getState, queryOptions, message) => {
 // Helper functions
 
 const openErrorMessageDialog = (error) => (dispatch, getState) => {
-  const developerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].developerMessage : ErrorMessages[error.code].serverMessage
+  const developerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].developerMessage : error.serverMessage
   // const consumerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].message : 'Onbekende fout'
 
   // TODO switch between developer mode and consumer mode

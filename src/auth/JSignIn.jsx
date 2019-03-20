@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core'
 import {Auth, JS, Logger} from 'aws-amplify';
+import { history } from '../setup';
 
 const logger = new Logger('JSignIn');
 
@@ -28,16 +29,13 @@ export default class JSignIn extends Component {
 
     signIn() {
         const {username, password} = this.inputs;
-        logger.info('sign in with ' + username);
-        // Auth.signIn(username, password)
-        //     .then(user => this.signInSuccess(user))
-        //     .catch(err => this.signInError(err));
+        logger.info('attempting sign in with ' + username);
+        Auth.signIn(username, password)
+            .then(user => this.signInSuccess(user))
+            .catch(err => this.signInError(err));
 
-        console.log('sign in with ' + username);
-        this.props.goForward(username,password);
-        // setTimeout(() => this.props.history.push("/"), 1);
-        setTimeout(() => this.props.history.goBack());
-        console.log("JSignIn signIn()");
+        // this.props.goForward(username,password);
+        // setTimeout(() => this.props.history.goBack());
     }
 
     signInSuccess(user) {
@@ -68,6 +66,7 @@ export default class JSignIn extends Component {
             .then(data => {
                 if (!JS.isEmpty(data.verified)) {
                     this.changeState('signedIn', user);
+                    this.props.onSignIn(user)
                 } else {
                     user = Object.assign(user, data);
                     this.changeState('verifyContact', user);
