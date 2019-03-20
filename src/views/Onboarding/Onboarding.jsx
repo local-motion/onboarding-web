@@ -121,7 +121,7 @@ class Onboarding extends React.Component {
                                 center={map.latlng}
                                 zoom={map.zoom}
                             />
-                            <AddPlayground playgrounds={playgrounds} user={user}/>
+                            {this.state.playground.default && <AddPlayground playgrounds={playgrounds} user={user}/>}
                         </GridItem>
                         <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
                             <div>
