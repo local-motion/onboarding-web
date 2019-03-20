@@ -98,7 +98,6 @@ const environments = {
 };
 const settings = environments[window.location.hostname] || environments["localhost"];
 console.log("Host name is: " + window.location.hostname);
-// console.log("Using settings:", settings);
 
 const hostName = window.location.hostname
 const baseUrl = hostName === 'localhost' ? 'http://localhost:3000/' : 'https://' + hostName + '/'
