@@ -57,6 +57,8 @@ export const deleteUser = () => executeQuery( {
 export const userSignedIn = cognitoUser => (dispatch, getState) =>{
     dispatch({ type: USER_SIGNED_IN, cognitoUser })
     dispatch(fetchUserProfile())
+
+    return Promise.resolve();
 }
 
 export const signOutUser = () => (dispatch) => {

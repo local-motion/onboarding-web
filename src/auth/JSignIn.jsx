@@ -34,9 +34,9 @@ export default class JSignIn extends Component {
         //     .catch(err => this.signInError(err));
 
         console.log('sign in with ' + username);
-        this.props.goForward(username,password);
+        this.props.goForward(username, password, this.props.history);
         // setTimeout(() => this.props.history.push("/"), 1);
-        setTimeout(() => this.props.history.goBack());
+        // setTimeout(() => this.props.history.goBack());
         console.log("JSignIn signIn()");
     }
 

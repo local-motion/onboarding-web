@@ -30,6 +30,10 @@ const getPlaygroundsQuery = gql`
       lat
       status
       volunteerCount
+      volunteers {
+        userId
+        userName
+      }
       votes
     }
     totalVolunteers

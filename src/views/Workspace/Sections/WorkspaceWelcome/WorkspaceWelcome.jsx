@@ -53,7 +53,7 @@ class WorkspaceWelcome extends React.Component {
     }
     
     goToLogin() {
-        history.push('/login');
+        history.push(`/login?from=${this.props.location.pathname}&id=${this.props.playground.id}`);
     }
 
     gotoActivePhase() {

@@ -7,12 +7,14 @@ import "assets/scss/material-kit-react.css?v=1.2.0";
 import { Auth } from "aws-amplify";
 
 import CookieConsent from "react-cookie-consent";
+import { connect } from 'react-redux';
+import querySearch from "stringquery";
 
 import { history } from "./setup";
 import CustomAuthenticator from "./auth/CustomAuthenticator";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
 import WrappedConfirmationDialog from "./components/ConfirmationDialog/WrappedConfirmationDialog";
-import { connect } from 'react-redux'
+import { joinInitiative } from "./components/Playground/PlaygroundActions";
 
 // Components to route to
 import Workspace from "views/Workspace/Workspace.jsx";
@@ -27,23 +29,54 @@ import Team from "./views/Workspace/Sections/Team";
 
 
 const mapStateToProps = (state) => ({
+  playgrounds: state.playgrounds.playgrounds,
   })
   
 const mapDispatchToProps = (dispatch) => ({
-onUserSignedIn: user => dispatch(userSignedIn(user))
-})
+  onUserSignedIn: user => dispatch(userSignedIn(user)),
+  joinInitiative: initiativeId => dispatch(joinInitiative(initiativeId)),
+});
   
   
 class App extends React.Component {
 
-    signInHandler = (username, password) => {
+    joinAndOpenInitiative(user, history) {
+        const searchQuery = querySearch(history.location.search);
+
+        const url = searchQuery['from'];
+        const id = searchQuery['id'];
+
+        const playground = this.props.playgrounds
+          .find(({ id: playgroundId }) => playgroundId === id);
+
+        if (playground) {
+          const isUserAlreadyJoinedToInitiative = playground.volunteers
+            .find(({ userName }) => userName === user.username);
+
+          if (isUserAlreadyJoinedToInitiative) {
+            console.log('User is already joined to the initiative');
+
+            history.push(url);
+            return;
+          }
+        }
+
+        if (url && id) {
+            this.props.joinInitiative(id);
+            history.push(url);
+            return;
+        }
+
+        history.goBack();
+    }
+
+    signInHandler = (username, password, history) => {
         Auth.signIn(username, password)
             .then(user => {
                 console.log("Auth.signIn is success ", user);
                 this.props.onUserSignedIn(user)
+                  .then(() => this.joinAndOpenInitiative(user, history));
                 console.log("App1 signInHandler()");
-                this.hist.push("/");
-                
             })
             .catch(err => {/* this.signInError(err) */}); 
     }
