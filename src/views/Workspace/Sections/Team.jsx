@@ -72,9 +72,9 @@ class Team extends React.Component {
         return (
             <div className={"workspace-wrapper"}>
                 <Header
-                    brand={playground.name}
                     rightLinks={<HeaderLinks/>}
                     playground={playground}
+                    showStats
                     fixed
                     textBrand
                     color="white"
@@ -84,18 +84,17 @@ class Team extends React.Component {
                     }}
                     {...rest}
                 />
-                <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")}
-                        className={"phase-container empty"}>
+                <Parallax className={"phase-container empty"}>
                     <div className={classes.container + " phase-wrapper"}>
 
                     </div>
                 </Parallax>
 
-                <div className={classNames(classes.mainRaised, classes.container + " phase-explainer-container")}>
+                <div className={classNames(classes.container + " phase-explainer-container")}>
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2>{ "Team"} </h2>
+                                <h2>{ "Team "} {playground.name}</h2>
                                 {playground &&
                                     <div className={"explainer-actions"}>
                                         <h3>

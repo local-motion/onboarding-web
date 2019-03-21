@@ -91,11 +91,10 @@ class WorkspaceWelcome extends React.Component {
         return (
             <div className={"workspace-wrapper"}>
                 <Header
-                    brand={playground.name}
                     playground={playground}
                     rightLinks={<HeaderLinks />}
+                    showStats
                     fixed
-                    textBrand
                     color="white"
                     changeColorOnScroll={{
                         height: 50,
