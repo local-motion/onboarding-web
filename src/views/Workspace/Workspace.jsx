@@ -93,6 +93,7 @@ class WorkspaceTemplate extends React.Component {
                     brand={playground.name}
                     playground={playground}
                     rightLinks={<HeaderLinks/>}
+                    showStats
                     fixed
                     textBrand
                     color="white"

@@ -110,6 +110,7 @@ class Header extends React.Component {
             leftLinks,
             brandLink,
             textBrand,
+            showStats,
             brand,
             fixed,
             absolute,
@@ -155,21 +156,24 @@ class Header extends React.Component {
                         )}
                     </div>
 
-                    <ToolbarButton color="default" className={classes.button} onClick={() => this.gotoTeamPage()}>
-                        <GroupIcon className={classes.rightIcon} />
-                        &nbsp;{nrOfVolunteers}
-                    </ToolbarButton>
+                    {showStats && (
+                        <React.Fragment>
+                            <ToolbarButton color="default" className={classes.button} onClick={() => this.gotoTeamPage()}>
+                                <GroupIcon className={classes.rightIcon} />
+                                &nbsp;{nrOfVolunteers}
+                            </ToolbarButton>
 
-                    <ToolbarButton color="default" className={classes.button} onClick={openPetitionDialog}>
-                        <ThumbUpIcon className={classes.rightIcon} />
-                        &nbsp;235
-                    </ToolbarButton>
+                            <ToolbarButton color="default" className={classes.button} onClick={openPetitionDialog}>
+                                <ThumbUpIcon className={classes.rightIcon} />
+                                &nbsp;235
+                            </ToolbarButton>
 
-                    <LastToolbarButton color="default" className={classes.button} onClick={openDonationDialog}>
-                        <EuroIcon className={classes.rightIcon} />
-                    &nbsp;53.60
-                    </LastToolbarButton>
-
+                            <LastToolbarButton color="default" className={classes.button} onClick={openDonationDialog}>
+                                <EuroIcon className={classes.rightIcon} />
+                                &nbsp;53.60
+                            </LastToolbarButton>
+                        </React.Fragment>
+                    )}
 
                     <Hidden smDown implementation="css">
                         {rightLinks}
@@ -238,6 +242,7 @@ Header.propTypes = {
     brand: PropTypes.string,
     brandLink: PropTypes.string,
     textBrand: PropTypes.bool,
+    showStats: PropTypes.bool,
     fixed: PropTypes.bool,
     absolute: PropTypes.bool,
     // this will cause the sidebar to change the color from

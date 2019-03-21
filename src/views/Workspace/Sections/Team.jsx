@@ -75,6 +75,7 @@ class Team extends React.Component {
                     brand={playground.name}
                     rightLinks={<HeaderLinks/>}
                     playground={playground}
+                    showStats
                     fixed
                     textBrand
                     color="white"
