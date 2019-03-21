@@ -1,6 +1,7 @@
 .workspace-wrapper {
     .phase-container {
         height: 300px !important;
+        margin: 50px 0 30px;
         &.empty{
             height: 200px !important;
         }
@@ -15,6 +16,7 @@
         }
     }
     .lm-step {
+        margin: 0 25px;
         @include breakpoint-max($breakpoints-sm){
             padding: 0;
         }
