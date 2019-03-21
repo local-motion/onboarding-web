@@ -108,8 +108,6 @@ class Header extends React.Component {
             playground,
             rightLinks,
             leftLinks,
-            brandLink,
-            textBrand,
             brand,
             fixed,
             absolute,
@@ -125,9 +123,9 @@ class Header extends React.Component {
             [classes.absolute]: absolute,
             [classes.fixed]: fixed
         })
-        const brandContent = textBrand ? <h1 className={"grunge-title"}>{brand}</h1> : <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />
-        const brandComponent = <div align='center'>{brandLink ? <Link to={brandLink}>{brandContent}</Link> : brandContent }</div>
-        const nrOfVolunteers = playground ? playground.volunteerCount : 250 // for now mock the total number of volunteers for smokefree playgrounds
+        const brandContent = <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />;
+        const brandComponent = brand ? <div align='center'><Link to={'/'}>{brandContent}</Link></div> : null;
+        const nrOfVolunteers = playground ? playground.volunteerCount : 250; // for now mock the total number of volunteers for smokefree playgrounds
 
         return (
             <AppBar className={appBarClasses + " lm-header"}>
@@ -167,9 +165,8 @@ class Header extends React.Component {
 
                     <LastToolbarButton color="default" className={classes.button} onClick={openDonationDialog}>
                         <EuroIcon className={classes.rightIcon} />
-                    &nbsp;53.60
+                        &nbsp;53.60
                     </LastToolbarButton>
-
 
                     <Hidden smDown implementation="css">
                         {rightLinks}
@@ -238,6 +235,7 @@ Header.propTypes = {
     brand: PropTypes.string,
     brandLink: PropTypes.string,
     textBrand: PropTypes.bool,
+    showStats: PropTypes.bool,
     fixed: PropTypes.bool,
     absolute: PropTypes.bool,
     // this will cause the sidebar to change the color from
