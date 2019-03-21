@@ -235,7 +235,6 @@ Header.propTypes = {
     brand: PropTypes.string,
     brandLink: PropTypes.string,
     textBrand: PropTypes.bool,
-    showStats: PropTypes.bool,
     fixed: PropTypes.bool,
     absolute: PropTypes.bool,
     // this will cause the sidebar to change the color from
