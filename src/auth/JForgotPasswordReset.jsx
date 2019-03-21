@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
+import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JForgotPasswordReset');
 
@@ -45,7 +46,8 @@ export default class JForgotPasswordReset extends Component {
 
     handleError(err) {
         logger.info('forgot password reset error', err);
-        this.setState({error: err.message || err});
+        // this.setState({error: err.message || err});
+        this.setState({error: getErrorMessage(err.code, err.message)});
     }
 
     render() {

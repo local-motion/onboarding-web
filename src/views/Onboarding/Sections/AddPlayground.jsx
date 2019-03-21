@@ -36,11 +36,11 @@ class AddPlayground extends React.Component {
     };
 
     isValidState = () => {
-        return !this.state.duplicate && !this.props.loading && this.state.name && this.state.lat && this.state.lng
+        return !this.state.duplicate && !this.state.error && !this.props.loading && this.state.name && this.state.lat && this.state.lng
     }
 
     submit = () => {
-        if (this.isValidState)
+        if (!this.validateName(this.state.name) && this.isValidState)
             this.props.createInitiative(this.state.name, this.state.lat, this.state.lng, (data) => history.push('/workspace/' + data.createInitiative.id))
     }
 
@@ -56,12 +56,44 @@ class AddPlayground extends React.Component {
         if (eEvent.key === 'Enter')
             this.submit()
         else {
-            this.duplicateCheck(eEvent.target.value);
-            this.setState({
-                name: eEvent.target.value
-            });
+            const name = eEvent.target.value.trim()
+            this.setState({ name })
+            this.validateName(name, 'entry')
         }
-    };
+    }
+
+    validateName = (name, stage) => {
+        const validations = [
+            { 
+                validateThat: name => name.length > 2,
+                message: 'De naam van de speeltuin moet tenminste drie karakters lang zijn.',
+                stages: ['submit']
+            },
+            { 
+                validateThat: name => name.length <= 40,
+                message: 'De naam van de speeltuin mag maximaal 40 karakters lang zijn.'
+            },
+            { 
+                validateThat: name => this.props.playgrounds.filter(e => e.name.toLowerCase().trim() === name.toLowerCase()).length === 0,
+                message: 'Er bestaat al een speeltuin met deze naam.'
+            },
+        ]
+
+        let errorMessage = ''
+
+        for (let i = 0; !errorMessage && i < validations.length; i++) {
+            const validation = validations[i]
+            if (!validation.stages || !stage || validation.stages.includes(stage))
+            if (!validation.validateThat(name))
+                errorMessage = validation.message
+        }
+
+        this.setState({
+            error: errorMessage
+        })
+
+        return errorMessage
+    }
 
     duplicateCheck = (playgroundName) =>{
         const playgroundList = this.props.playgrounds;

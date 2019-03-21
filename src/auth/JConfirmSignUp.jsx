@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
+import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JConfirmSignUp');
 
@@ -83,7 +84,8 @@ export default class JConfirmSignUp extends Component {
 
     handleError(err) {
         logger.info('confirm sign up error', err);
-        this.setState({message: '', error: err.message || err});
+        // this.setState({message: '', error: err.message || err});
+        this.setState({message: '', error: getErrorMessage(err.code, err.message)});
     }
 
     isDirty(event) {

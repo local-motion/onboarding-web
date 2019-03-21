@@ -1,6 +1,6 @@
 import { openConfirmationDialog } from "../components/ConfirmationDialog/ConfirmationDialogActions";
 import { createUser } from "../components/UserProfile/UserProfileActions";
-import ErrorMessages, { ErrorCode } from "./ErrorMessages";
+import { ErrorCode, getErrorMessage } from "./ErrorMessages";
 import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 import { getGraphQLClient } from "../misc/ConfigReducer";
 
@@ -281,11 +281,14 @@ const handleError = (error, dispatch, getState, queryOptions, message) => {
 // Helper functions
 
 const openErrorMessageDialog = (error) => (dispatch, getState) => {
-  const developerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].developerMessage : ErrorMessages[error.code].serverMessage
-  // const consumerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].message : 'Onbekende fout'
+  // const developerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].developerMessage : error.serverMessage
+  // // const consumerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].message : 'Onbekende fout'
 
-  // TODO switch between developer mode and consumer mode
-  dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', developerMessage, 'Sluiten', () => {window.location.reload()}))
+  // // TODO switch between developer mode and consumer mode
+  // dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', developerMessage, 'Sluiten', () => {window.location.reload()}))
+
+  dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', 
+                                  getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => {window.location.reload()}))
 }
 
 

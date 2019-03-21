@@ -4,8 +4,6 @@ import {Route, Router, Switch} from "react-router-dom";
 
 import "assets/scss/material-kit-react.css?v=1.2.0";
 
-import { Auth } from "aws-amplify";
-
 import CookieConsent from "react-cookie-consent";
 
 import { history } from "./setup";
@@ -36,21 +34,10 @@ onUserSignedIn: user => dispatch(userSignedIn(user))
   
 class App extends React.Component {
 
-    signInHandler = (username, password) => {
-        Auth.signIn(username, password)
-            .then(user => {
-                console.log("Auth.signIn is success ", user);
-                this.props.onUserSignedIn(user)
-                console.log("App1 signInHandler()");
-                this.hist.push("/");
-                
-            })
-            .catch(err => {/* this.signInError(err) */}); 
-    }
-
-    signOutHandler = () => {
-        console.log("Clicked on Logout");
-        this.setState({ status: "guest" });
+    signInHandler = (username) => {
+        console.log('signed in with ' + username);
+        this.props.onUserSignedIn(username)
+        history.goBack()
     }
 
     render() {
@@ -58,18 +45,7 @@ class App extends React.Component {
             <div>
                 <Router history={history}>
                     <Switch>
-                        <Route
-                            path="/login"
-                            exact
-                            key="Login"
-                            render={props => <CustomAuthenticator
-                                {...props}
-                                {...this.state}
-                                goForward={this.signInHandler}
-                                goBack={this.signOutHandler}>
-                            </CustomAuthenticator>
-                            }
-                        />
+                        <Route exact path="/login" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
 
                         <Route exact path="/about" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>

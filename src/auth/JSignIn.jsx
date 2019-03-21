@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core'
 import {Auth, JS, Logger} from 'aws-amplify';
+import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JSignIn');
 
@@ -28,16 +29,10 @@ export default class JSignIn extends Component {
 
     signIn() {
         const {username, password} = this.inputs;
-        logger.info('sign in with ' + username);
-        // Auth.signIn(username, password)
-        //     .then(user => this.signInSuccess(user))
-        //     .catch(err => this.signInError(err));
-
-        console.log('sign in with ' + username);
-        this.props.goForward(username,password);
-        // setTimeout(() => this.props.history.push("/"), 1);
-        setTimeout(() => this.props.history.goBack());
-        console.log("JSignIn signIn()");
+        logger.info('attempting sign in with ' + username);
+        Auth.signIn(username, password)
+            .then(user => this.signInSuccess(user))
+            .catch(err => this.signInError(err));
     }
 
     signInSuccess(user) {
@@ -60,7 +55,7 @@ export default class JSignIn extends Component {
             1) plain text message;
             2) object { code: ..., message: ..., name: ... }
         */
-        this.setState({error: err.message || err});
+        this.setState({error: getErrorMessage(err.code, err.message)})
     }
 
     checkContact(user) {
@@ -68,6 +63,7 @@ export default class JSignIn extends Component {
             .then(data => {
                 if (!JS.isEmpty(data.verified)) {
                     this.changeState('signedIn', user);
+                    this.props.onSignIn(user)
                 } else {
                     user = Object.assign(user, data);
                     this.changeState('verifyContact', user);
@@ -132,25 +128,24 @@ export default class JSignIn extends Component {
                                 Inloggen
                             </Button>
                         </form>
-                            <div style={style.links} className={"extra-info"}>
-                                <div style={style.left}>
-                                    <button
-                                        style={style.extraButton}
-                                        onClick={() => this.changeState('signUp')}
-                                    >
-                                        Maak een account
-                                    </button>
-                                </div>
-                                <div style={style.left}>
-                                    <button style={style.extraButton}
-                                            onClick={() => this.changeState('forgotPassword')}
-                                    >
-                                        Wachtwoord vergeten?
-                                    </button>
-                                </div>
+                        {error && <p className={"error"}>{error}</p>}
+                        <div style={style.links} className={"extra-info"}>
+                            <div style={style.left}>
+                                <button
+                                    style={style.extraButton}
+                                    onClick={() => this.changeState('signUp')}
+                                >
+                                    Maak een account
+                                </button>
                             </div>
-                            {/*<Federated federated={federated_data} onStateChange={this.changeState} />*/}
-                            {error && <div style={style.alert}>{error}</div>}
+                            <div style={style.left}>
+                                <button style={style.extraButton}
+                                        onClick={() => this.changeState('forgotPassword')}
+                                >
+                                    Wachtwoord vergeten?
+                                </button>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

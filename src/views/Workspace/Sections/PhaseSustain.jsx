@@ -10,8 +10,8 @@ import GridItem from "components/Grid/GridItem.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import ShareSmokefreeCard from "../Cards/ShareSmokefreeCard.jsx";
 import ValidateCard from "../Cards/ValidateCard.jsx";
-import NewsCard from "../Cards/NewsCard.jsx";
-import WhatsNextCard from "../Cards/WhatsNextCard.jsx";
+// import NewsCard from "../Cards/NewsCard.jsx";
+// import WhatsNextCard from "../Cards/WhatsNextCard.jsx";
 
 class PhaseSustain extends React.Component {
 
@@ -24,8 +24,8 @@ class PhaseSustain extends React.Component {
 
                         <ShareSmokefreeCard {...this.props} />
                         <ValidateCard {...otherProps} />
-                        <NewsCard {...this.props} />
-                        <WhatsNextCard {...this.props} />
+                        {/* <NewsCard {...this.props} /> */}
+                        {/* <WhatsNextCard {...this.props} /> */}
 
                     </GridItem>
                 </GridContainer>

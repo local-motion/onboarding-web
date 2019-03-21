@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core';
 import {Auth, JS, Logger} from 'aws-amplify';
+import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JConfirmSignIn');
 
@@ -42,7 +43,8 @@ export default class JConfirmSignIn extends Component {
 
     confirmError(err) {
         logger.info('confirm sign in error', err);
-        this.setState({error: err.message || err});
+        // this.setState({error: err.message || err});
+        this.setState({error: getErrorMessage(err.code, err.message)});
     }
 
     checkContact(user) {

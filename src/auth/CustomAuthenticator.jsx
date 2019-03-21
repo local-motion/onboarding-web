@@ -14,8 +14,7 @@ const CustomAuthenticator = (props) => {
 
         <Authenticator
             hideDefault >
-
-            <JSignIn {...props} goBack={props.goBack} goForward={props.goForward} />
+            <JSignIn onSignIn={props.onSignIn} />
             <JSignUp />
             <JForgotPassword />
             <JForgotPasswordReset />
