@@ -1,6 +1,6 @@
 import { openConfirmationDialog } from "../components/ConfirmationDialog/ConfirmationDialogActions";
 import { createUser } from "../components/UserProfile/UserProfileActions";
-import ErrorMessages, { ErrorCode, getErrorMessage } from "./ErrorMessages";
+import { ErrorCode, getErrorMessage } from "./ErrorMessages";
 import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 import { getGraphQLClient } from "../misc/ConfigReducer";
 

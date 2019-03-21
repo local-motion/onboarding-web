@@ -26,87 +26,14 @@ import { closeConfirmationDialog } from "./components/ConfirmationDialog/Confirm
 import { ensurePlaygrounds } from "./components/Playground/PlaygroundActions";
 import { publishGraphQLClient, publishApiBaseURL, PUBLISH_ENVIRONMENT } from "./misc/ConfigActions";
 import { executeQuery, REST_GET } from "./api/QueryActions";
-import { CONFIGURATION_PATH } from "./misc/Paths";
+import { CONFIGURATION_PATH, GRAPHQL_PATH } from "./misc/Paths";
 import App from "./App";
 
-
-const environments = {
-    "techoverflow-p.aws.abnamro.org": {
-        aws: {
-            cognito: {
-                region: "eu-west-1",
-                userPoolId: "eu-west-1_IvXqOMf7v",
-                userPoolWebClientId: "5c2h1fooc1lvn4ir13k679cj9e",
-                domain: "techoverflow-p.auth.eu-west-1.amazoncognito.com",
-                redirectSignIn: "https://techoverflow-p.aws.abnamro.org/onboarding/signin",
-                redirectSignOut: "https://techoverflow-p.aws.abnamro.org/onboarding/logout",
-            }
-        },
-        api: {
-            onboarding: "https://techoverflow-p.aws.abnamro.org/api/graphql",
-            chatbox: "https://techoverflow-p.aws.abnamro.org/api/chatbox",
-        }
-    },
-    "techoverflow-ta.aws.abnamro.org": {
-        aws: {
-            cognito: {
-                region: "eu-west-1",
-                userPoolId: "eu-west-1_jnPKAXCKm",
-                userPoolWebClientId: "4334v709m540earh0e9h23mpie",
-                domain: "techoverflow-ta.auth.eu-west-1.amazoncognito.com",
-                redirectSignIn: "https://techoverflow-ta.aws.abnamro.org/onboarding/signin",
-                redirectSignOut: "https://techoverflow-ta.aws.abnamro.org/onboarding/logout",
-            }
-        },
-        api: {
-            onboarding: "https://techoverflow-ta.aws.abnamro.org/api/graphql",
-            chatbox: "https://techoverflow-ta.aws.abnamro.org/api/chatbox",
-        }
-    },
-    "techoverflow-d.aws.nl.eu.abnamro.com": {
-        aws: {
-            cognito: {
-                region: "eu-west-1",
-                userPoolId: "eu-west-1_sgRa8Mtz4",
-                userPoolWebClientId: "87d8qhatpdtpm3jnlv4ir7gqu",
-                domain: "techoverflow-d.auth.eu-west-1.amazoncognito.com",
-                redirectSignIn: "https://techoverflow-d.aws.nl.eu.abnamro.com/onboarding/signin",
-                redirectSignOut: "https://techoverflow-d.aws.nl.eu.abnamro.com/onboarding/logout",
-            }
-        },
-        api: {
-            onboarding: "https://techoverflow-d.aws.nl.eu.abnamro.com/api/graphql",
-            chatbox: "https://techoverflow-d.aws.nl.eu.abnamro.com/api/chatbox",
-        }
-    },
-    "localhost": {
-        aws: {
-            cognito: {
-                region: "eu-west-1",
-                userPoolId: "eu-west-1_WsTxYUHyC",
-                userPoolWebClientId: "3nkh1qomocr39s893jf0dp44cd",
-                domain: "smokefree-dev.auth.eu-west-1.amazoncognito.com",
-                redirectSignIn: "http://localhost:3000/onboarding/signin",
-                redirectSignOut: "http://localhost:3000/onboarding/logout",
-            }
-        },
-        api: {
-            onboarding: "http://localhost:8086/api/graphql",
-            chatbox: "http://localhost:8086/api/chatbox",
-        }
-    }
-};
-const settings = environments[window.location.hostname] || environments["localhost"];
-console.log("Host name is: " + window.location.hostname);
-
+// Determine api base endpoints
 const hostName = window.location.hostname
 const baseUrl = hostName === 'localhost' ? 'http://localhost:3000/' : 'https://' + hostName + '/'
 const apiBaseUrl = hostName === 'localhost' ? 'http://localhost:8086/api/' : 'https://' + hostName + '/api/'
 console.log("apiBaseUrl is: " + apiBaseUrl);
-
-const uri = process.env.ONBOARDING_API || settings.api.onboarding;
-console.log('Using Onboarding API at ' + uri);
-
 
 
 // Set up the Redux store
@@ -132,19 +59,15 @@ store.dispatch(executeQuery({
         // Set up the Cognito client
         const oauth = {
             awsCognito: {
-                // domain: settings.aws.cognito.domain,
                 domain: cognitoConfig.domain,
                 scope: ['email', 'openid'],
-                redirectSignIn: baseUrl + (hostName === 'localhost' ? 'onboarding/signin' : ''),    // TODO patch until userpool for local testing is updated
-                redirectSignOut: baseUrl + (hostName === 'localhost' ? 'onboarding/logout' : ''),   // TODO patch until userpool for local testing is updated
+                redirectSignIn: baseUrl,
+                redirectSignOut: baseUrl,
                 responseType: 'token', // 'token' for Implicit grant, 'code' for Authorization code grant
             }
         }
         Amplify.configure({
             Auth: {
-                // region: settings.aws.cognito.region,
-                // userPoolId: settings.aws.cognito.userPoolId,
-                // userPoolWebClientId: settings.aws.cognito.userPoolWebClientId,
                 region: cognitoConfig.region,
                 userPoolId: cognitoConfig.userPoolId,
                 userPoolWebClientId: cognitoConfig.userPoolWebClientId,
@@ -164,7 +87,7 @@ store.dispatch(executeQuery({
                 }
             }
         })
-        const httpLink = new HttpLink({uri: uri});
+        const httpLink = new HttpLink({uri: apiBaseUrl + GRAPHQL_PATH});
         const client = new ApolloClient({
             defaultOptions: {
                 watchQuery: {

@@ -57,12 +57,7 @@ class AddPlayground extends React.Component {
             this.submit()
         else {
             const name = eEvent.target.value.trim()
-            
-            // this.duplicateCheck(eEvent.target.value);
-            this.setState({
-                name,
-                // error: this.validateName(name, 'enter')
-            })
+            this.setState({ name })
             this.validateName(name, 'entry')
         }
     }
