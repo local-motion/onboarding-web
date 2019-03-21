@@ -3,6 +3,7 @@ import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JSignUp');
 
@@ -28,7 +29,6 @@ export default class JSignUp extends Component {
     }
 
     handleChange = name => event => {
-
         this.setState({[name]: event.target.checked}, () => {
             this.isFilled();
         });
@@ -58,10 +58,12 @@ export default class JSignUp extends Component {
 
     signUpError(err) {
         logger.info('sign up error', err);
-        let message = err.message || err;
-        if (message.includes("password")) {
-            message = 'Je wachtwoord heeft minimaal 6 karakters en 1 cijfer nodig.';
-        }
+        let message = getErrorMessage(err.code, err.message)
+        if (err.message && (err.message.includes("password") || err.message.includes("Password")))
+            message = 'Je wachtwoord heeft minimaal 6 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.';
+        else if (err.message && err.message.includes("email"))
+            message = 'Ongeldig email adres';
+        
         this.setState({error: message});
     }
 

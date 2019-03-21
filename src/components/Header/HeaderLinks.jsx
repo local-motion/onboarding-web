@@ -21,6 +21,7 @@ import { connect } from 'react-redux'
 import { Button, Typography } from "@material-ui/core";
 import { signOutUser, deleteUser } from "../UserProfile/UserProfileActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
+import { isDeveloperMode, setDeveloperMode } from "../../utils/DeveloperMode";
 
 const mapStateToProps = state => ({
     user: getUser(state)
@@ -34,6 +35,8 @@ function HeaderLinks(props) {
     const {classes, user} = props;
 
     const profileButtonIcon = () => <span><AccountCircle /><ArrowDropDownRounded/></span>
+
+    const devModeIndicator = isDeveloperMode() ? 'on' : 'off'
 
     return (
         <List className={classes.list}>
@@ -80,6 +83,7 @@ function HeaderLinks(props) {
                                 <Typography>Ingelogd als {user.name}</Typography>,
                                 {divider: true},
                                 <Button >Mijn profiel</Button>, 
+                                <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>, 
                                 <Button onClick={props.deleteUser}>Uitschrijven</Button>, 
                                 <Button onClick={props.signOutUser}>Uitloggen</Button>, 
                             ]}

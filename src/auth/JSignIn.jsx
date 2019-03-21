@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Input} from '@material-ui/core'
 import {Auth, JS, Logger} from 'aws-amplify';
-import { history } from '../setup';
+import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JSignIn');
 
@@ -33,9 +33,6 @@ export default class JSignIn extends Component {
         Auth.signIn(username, password)
             .then(user => this.signInSuccess(user))
             .catch(err => this.signInError(err));
-
-        // this.props.goForward(username,password);
-        // setTimeout(() => this.props.history.goBack());
     }
 
     signInSuccess(user) {
@@ -58,7 +55,7 @@ export default class JSignIn extends Component {
             1) plain text message;
             2) object { code: ..., message: ..., name: ... }
         */
-        this.setState({error: err.message || err});
+        this.setState({error: getErrorMessage(err.code, err.message)})
     }
 
     checkContact(user) {
@@ -131,25 +128,24 @@ export default class JSignIn extends Component {
                                 Inloggen
                             </Button>
                         </form>
-                            <div style={style.links} className={"extra-info"}>
-                                <div style={style.left}>
-                                    <button
-                                        style={style.extraButton}
-                                        onClick={() => this.changeState('signUp')}
-                                    >
-                                        Maak een account
-                                    </button>
-                                </div>
-                                <div style={style.left}>
-                                    <button style={style.extraButton}
-                                            onClick={() => this.changeState('forgotPassword')}
-                                    >
-                                        Wachtwoord vergeten?
-                                    </button>
-                                </div>
+                        {error && <p className={"error"}>{error}</p>}
+                        <div style={style.links} className={"extra-info"}>
+                            <div style={style.left}>
+                                <button
+                                    style={style.extraButton}
+                                    onClick={() => this.changeState('signUp')}
+                                >
+                                    Maak een account
+                                </button>
                             </div>
-                            {/*<Federated federated={federated_data} onStateChange={this.changeState} />*/}
-                            {error && <div style={style.alert}>{error}</div>}
+                            <div style={style.left}>
+                                <button style={style.extraButton}
+                                        onClick={() => this.changeState('forgotPassword')}
+                                >
+                                    Wachtwoord vergeten?
+                                </button>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
