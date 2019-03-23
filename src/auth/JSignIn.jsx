@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, JS, Logger} from 'aws-amplify';
+import querySearch from "stringquery";
 import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JSignIn');
@@ -10,7 +12,7 @@ const logger = new Logger('JSignIn');
  * https://raw.githubusercontent.com/aws-amplify/amplify-js/master/packages/aws-amplify-react/src/Auth/SignIn.jsx
  * https://github.com/richardzcode/Journal-AWS-Amplify-Tutorial/blob/master/step-03/journal/src/components/auth/JSignIn.jsx
  */
-export default class JSignIn extends Component {
+class JSignIn extends Component {
     constructor(props) {
         super(props);
         this.signIn = this.signIn.bind(this);
@@ -58,12 +60,21 @@ export default class JSignIn extends Component {
         this.setState({error: getErrorMessage(err.code, err.message)})
     }
 
+    goToTargetUrl = () => {
+        console.log(this.props);
+        const parsedSearch = querySearch(this.props.location.search);
+        const url = parsedSearch["target"] || "/";
+
+        this.props.history.push(url);
+    };
+
     checkContact(user) {
         Auth.verifiedContact(user)
             .then(data => {
                 if (!JS.isEmpty(data.verified)) {
                     this.changeState('signedIn', user);
-                    this.props.onSignIn(user)
+                    this.props.onSignIn(user);
+                    this.goToTargetUrl();
                 } else {
                     user = Object.assign(user, data);
                     this.changeState('verifyContact', user);
@@ -153,3 +164,5 @@ export default class JSignIn extends Component {
         )
     }
 }
+
+export default withRouter(JSignIn);
