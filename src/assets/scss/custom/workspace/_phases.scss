@@ -1,6 +1,8 @@
 .workspace-wrapper {
+    background: #FFFFFF;
     .phase-container {
         height: 300px !important;
+        margin: 50px 0 30px;
         &.empty{
             height: 200px !important;
         }
@@ -15,6 +17,7 @@
         }
     }
     .lm-step {
+        margin: 0 25px;
         @include breakpoint-max($breakpoints-sm){
             padding: 0;
         }
@@ -64,11 +67,14 @@
                 text-align: center;
             }
             h2{
+                font-weight: 600;
+                margin-bottom: 0;
                 margin-top: 0;
             }
             h3{
                 font-size: 1.5rem;
-                margin-top: 10px;
+                margin-top: 5px;
+                margin-bottom: 15px;
             }
         }
     }

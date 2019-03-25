@@ -109,7 +109,7 @@ export default class JSignIn extends Component {
                         >
                             <Input
                                 type="text"
-                                placeholder="Username"
+                                placeholder="Gebruikersnaam"
                                 style={style.input}
                                 defaultValue={authData || ''}
                                 onChange={event => this.inputs.username = event.target.value}
@@ -117,7 +117,7 @@ export default class JSignIn extends Component {
                             />
                             <Input
                                 type="password"
-                                placeholder="Password"
+                                placeholder="Wachtwoord"
                                 onChange={event => this.inputs.password = event.target.value}
                                 style={style.input}
                             />

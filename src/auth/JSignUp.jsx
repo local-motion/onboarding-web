@@ -153,7 +153,7 @@ export default class JSignUp extends Component {
                             <div>
                                 <Input
                                     type="text"
-                                    placeholder="Username"
+                                    placeholder="Gebruikersnaam"
                                     style={style.input}
                                     className={"code"}
                                     onChange={
@@ -166,7 +166,7 @@ export default class JSignUp extends Component {
                             <div>
                                 <Input
                                     type="password"
-                                    placeholder="Password"
+                                    placeholder="Wachtwoord"
                                     onChange={
                                         event => this.isDirty("password", event.target.value)
                                     }
@@ -177,7 +177,7 @@ export default class JSignUp extends Component {
                             <div>
                                 <Input
                                     type="email"
-                                    placeholder="Email address"
+                                    placeholder="Emailadres"
                                     style={style.input}
                                     onChange={
                                         event => this.isDirty("email", event.target.value)
