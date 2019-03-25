@@ -148,7 +148,8 @@ class AddPlayground extends React.Component {
                     <DialogTitle id="form-dialog-title">Voeg een speeltuin toe</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Je staat op het punt om een speeltuin toe te voegen. We willen alleen nog van je weten wat de naam is van deze speeltuin. Plaats alstublieft pin op de kaart:
+                            Je staat op het punt om een speeltuin toe te voegen. We willen alleen nog van je weten wat de naam is van deze speeltuin.
+                            <span className={"add-playground-pin-title"}>Plaats alstublieft pin op de kaart:</span>
                         </DialogContentText>
                         <PlaygroundMap
                             className={"playground-container"}
