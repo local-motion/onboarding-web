@@ -96,7 +96,7 @@ export default class JForgotPassword extends Component {
                                 <Input
                                     type="text"
                                     style={style.input}
-                                    placeholder="Username"
+                                    placeholder="Gebruikersnaam"
                                     defaultValue={authData || ''}
                                     onChange={
                                         event => this.isDirty(event.target.value)
