@@ -6,10 +6,10 @@ import { compose, withStateHandlers, withProps } from "recompose";
 
 import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import markerGray from "assets/img/markers/playground_gray.png";
-import markerGreen from "assets/img/markers/playground_green.png";
-import markerWhite from "assets/img/markers/playground_white.png";
-import markerBlue from "assets/img/markers/playground_blue.png";
+import markerGray from "assets/img/markers/playground-gray.svg";
+import markerGreen from "assets/img/markers/playground-green.svg";
+import markerWhite from "assets/img/markers/playground-white.svg";
+import markerBlue from "assets/img/markers/playground-blue.svg";
 import { connect } from 'react-redux'
 import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
