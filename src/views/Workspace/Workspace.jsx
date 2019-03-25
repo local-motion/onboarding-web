@@ -90,12 +90,10 @@ class WorkspaceTemplate extends React.Component {
         return (
             <div className={"workspace-wrapper"}>
                 <Header
-                    brand={playground.name}
                     playground={playground}
                     rightLinks={<HeaderLinks/>}
                     showStats
                     fixed
-                    textBrand
                     color="white"
                     changeColorOnScroll={{
                         height: 50,
@@ -103,8 +101,7 @@ class WorkspaceTemplate extends React.Component {
                     }}
                     {...rest}
                 />
-                <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")}
-                          className={"phase-container"}>
+                <Parallax className={"phase-container"}>
                     <div className={classes.container + " phase-wrapper"}>
                         <PhaseIndicator
                             onSwitch={this.selectPhase}
@@ -114,11 +111,11 @@ class WorkspaceTemplate extends React.Component {
                     </div>
                 </Parallax>
 
-                <div className={classNames(classes.mainRaised, classes.container + " phase-explainer-container")}>
+                <div className={classNames(classes.container + " phase-explainer-container")}>
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2> {"Stap " + phase} </h2>
+                                <h2>{playground.name}</h2>
                                     <div className={"explainer-actions"}>
                                         <h3>Welkom bij Stap {phase}</h3>
                                         <Button
