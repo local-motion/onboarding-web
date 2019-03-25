@@ -108,8 +108,6 @@ class Header extends React.Component {
             playground,
             rightLinks,
             leftLinks,
-            brandLink,
-            textBrand,
             showStats,
             brand,
             fixed,

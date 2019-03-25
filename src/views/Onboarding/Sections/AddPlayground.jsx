@@ -147,10 +147,19 @@ class AddPlayground extends React.Component {
                 >
                     <DialogTitle id="form-dialog-title">Voeg een speeltuin toe</DialogTitle>
                     <DialogContent>
+
+                        <TextField
+                            className={classes.textField + " form-control"}
+                            label="Wat is de naam van de speeltuin?"
+                            pattern="/^\w{4,}$/"
+                            onKeyUp={this.updateName}
+                            defaultValue={this.state.name}/>
+                        {error && <span className={"error alert"}>{error}</span>}
+
                         <DialogContentText>
-                            Je staat op het punt om een speeltuin toe te voegen. We willen alleen nog van je weten wat de naam is van deze speeltuin.
-                            <span className={"add-playground-pin-title"}>Plaats alstublieft pin op de kaart:</span>
+                            <span className={"add-playground-pin-title"}>Geef op de kaart de locatie van de speeltuin aan:</span>
                         </DialogContentText>
+
                         <PlaygroundMap
                             className={"playground-container"}
                             isMarkerShown
@@ -160,13 +169,6 @@ class AddPlayground extends React.Component {
                             onPlaygroundCreated={this.handleCreatePlayground}
 
                         />
-                        <TextField
-                            className={classes.textField + " form-control"}
-                            label="Wat is de naam van de speeltuin?"
-                            pattern="/^\w{4,}$/"
-                            onKeyUp={this.updateName}
-                            defaultValue={this.state.name}/>
-                        {error && <span className={"error alert"}>{error}</span>}
                     </DialogContent>
                     <DialogActions className={"dialog-actions"}>
                         <Button onClick={this.handleClose} color="primary">
