@@ -139,6 +139,7 @@ class AddPlayground extends React.Component {
                     </Button>
                 }
                 <Dialog
+                    fullScreen
                     open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
@@ -148,6 +149,7 @@ class AddPlayground extends React.Component {
                     <DialogContent>
                         <DialogContentText>
                             Je staat op het punt om een speeltuin toe te voegen. We willen alleen nog van je weten wat de naam is van deze speeltuin.
+                            <span className={"add-playground-pin-title"}>Plaats alstublieft pin op de kaart:</span>
                         </DialogContentText>
                         <PlaygroundMap
                             className={"playground-container"}

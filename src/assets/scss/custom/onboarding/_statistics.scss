@@ -46,8 +46,14 @@
     }
     .playground-container, .playground-map{
         min-height: 190px !important;
-        height: 190px !important;
+        height: 60vh !important;
         margin: 20px 0;
+    }
+    .add-playground-pin-title{
+      font-weight: bold;
+      display: block;
+      font-size: 20px;
+      margin-top: 10px;
     }
 }
 
