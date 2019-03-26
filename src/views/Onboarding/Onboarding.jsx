@@ -70,12 +70,19 @@ class Onboarding extends React.Component {
     }
 
     handlePlaygroundChange(playground) {
+        const isPlayground = playground.id;
+
         this.setState({
             view: 'default',
-            playground: playground,
+            playground: isPlayground
+                ? playground
+                : {
+                    default: true,
+                    name: this.props.t("playground.default.area")
+                },
             map: {
                 latlng: {lat: playground.lat, lng: playground.lng},
-                zoom: playground.zoom
+                zoom: playground.zoom || 10
             }
         });
     }

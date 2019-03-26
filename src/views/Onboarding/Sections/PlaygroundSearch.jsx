@@ -9,10 +9,11 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
 import {withStyles} from "@material-ui/core/styles";
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+
 import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
-
+import cities from "assets/nl-cities.json";
 
 // const mapStateToProps = state => ({
 //     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -28,7 +29,7 @@ import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundRedu
 //     })  )
 // })
 const mapStateToProps = state => ({
-    playgrounds: getAllPlaygrounds(state)
+    playgrounds: [...cities, ...getAllPlaygrounds(state)]
 })
 
 const mapDispatchToProps = dispatch => {
