@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -92,13 +93,13 @@ class Header extends React.Component {
             window.removeEventListener("scroll", this.headerColorChange);
     }
 
-     gotoTeamPage = () => {
+    gotoTeamPage = () => {
         if (this.props.playground)
             this.props.history.push("/workspace/" + this.props.playground.id + "/team")
     }
 
     signInClick = () => {
-      this.props.history.push("/login")
+        this.props.history.push(`/login?target=${this.props.location.pathname}`)
     }
     
     render() {
@@ -267,4 +268,4 @@ Header.propTypes = {
 
 
 
-export default withStyles(headerStyle)(connect(mapStateToProps, mapDispatchToProps)(Header))
+export default withRouter(withStyles(headerStyle)(connect(mapStateToProps, mapDispatchToProps)(Header)))

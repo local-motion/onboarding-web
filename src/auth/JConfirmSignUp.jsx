@@ -145,7 +145,7 @@ export default class JConfirmSignUp extends Component {
                             <div>
                                 <Input
                                     type="text"
-                                    placeholder="Username"
+                                    placeholder="Gebruikersnaam"
                                     defaultValue={authData || ''}
                                     style={style.input}
                                     className={error === "Username cannot be empty" ? "input-container error" : "input-container"}
