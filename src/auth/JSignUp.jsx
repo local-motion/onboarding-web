@@ -130,7 +130,7 @@ export default class JSignUp extends Component {
             input: {borderRadius: '0', display: 'block'},
             links: {fontSize: '0.9em', minHeight: "35px"},
             button: {width: '100%'},
-            extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
+            extraButton: {border: "0", marginBottom: "15px", marginRight: "15px", cursor: "pointer"},
             left: {float: "left"},
             alert: {fontSize: '0.8em'}
         };
