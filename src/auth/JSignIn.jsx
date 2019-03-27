@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, JS, Logger} from 'aws-amplify';
+import querySearch from "stringquery";
 import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JSignIn');
@@ -10,7 +12,7 @@ const logger = new Logger('JSignIn');
  * https://raw.githubusercontent.com/aws-amplify/amplify-js/master/packages/aws-amplify-react/src/Auth/SignIn.jsx
  * https://github.com/richardzcode/Journal-AWS-Amplify-Tutorial/blob/master/step-03/journal/src/components/auth/JSignIn.jsx
  */
-export default class JSignIn extends Component {
+class JSignIn extends Component {
     constructor(props) {
         super(props);
         this.signIn = this.signIn.bind(this);
@@ -28,7 +30,14 @@ export default class JSignIn extends Component {
     }
 
     signIn() {
-        const {username, password} = this.inputs;
+        const {password} = this.inputs;
+
+        // We are taking the username straight from the DOM here, because the inputs may contains an old value from a previous display of the form which
+        // can happen in the signup process (user gets presented a signin form, elects to signup and afterwards is directed to signin again).
+        // After signup the username field will contain the just enrolled username (from authData), which will not be propagated to the input if the user
+        // does not edit the username field. 
+        const username = document.getElementById('SigninFormUserName').value
+
         logger.info('attempting sign in with ' + username);
         Auth.signIn(username, password)
             .then(user => this.signInSuccess(user))
@@ -58,12 +67,21 @@ export default class JSignIn extends Component {
         this.setState({error: getErrorMessage(err.code, err.message)})
     }
 
+    goToTargetUrl = () => {
+        console.log(this.props);
+        const parsedSearch = querySearch(this.props.location.search);
+        const url = parsedSearch["target"] || "/";
+
+        this.props.history.push(url);
+    };
+
     checkContact(user) {
         Auth.verifiedContact(user)
             .then(data => {
                 if (!JS.isEmpty(data.verified)) {
                     this.changeState('signedIn', user);
-                    this.props.onSignIn(user)
+                    this.props.onSignIn(user);
+                    this.goToTargetUrl();
                 } else {
                     user = Object.assign(user, data);
                     this.changeState('verifyContact', user);
@@ -76,6 +94,7 @@ export default class JSignIn extends Component {
             this.signIn();
         }
     }
+
 
     render() {
         const {authState, authData} = this.props;
@@ -108,6 +127,7 @@ export default class JSignIn extends Component {
                             }
                         >
                             <Input
+                                id="SigninFormUserName"
                                 type="text"
                                 placeholder="Gebruikersnaam"
                                 style={style.input}
@@ -153,3 +173,5 @@ export default class JSignIn extends Component {
         )
     }
 }
+
+export default withRouter(JSignIn);
