@@ -96,7 +96,7 @@ function getSuggestions(value, suggestions) {
         : suggestions.filter(suggestion => {
             const keep =
                 count < 5 &&
-                suggestion.name.toLowerCase().indexOf(inputValue) > -1
+                deburr(suggestion.name).toLowerCase().indexOf(inputValue) > -1
             if (keep)
                 count++
 
