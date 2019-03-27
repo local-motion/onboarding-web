@@ -140,3 +140,5 @@ typings/
 
 #Generated CSS
 src/assets/scss/*.css
+
+.idea

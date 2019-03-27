@@ -15,6 +15,7 @@ const explanationStyle = theme => ({
     alignItems: 'center',
     [theme.breakpoints.down("sm")]: {
       alignItems: 'flex-start',
+      justifyContent: 'center',
       flexWrap: 'wrap',
     },
   },
@@ -25,6 +26,7 @@ const explanationStyle = theme => ({
     [theme.breakpoints.down("sm")]: {
       padding: '10px 0',
       order: 2,
+      justifyContent: 'center'
     }
   },
   right: {
@@ -47,7 +49,10 @@ const explanationStyle = theme => ({
     fontSize: 15,
     lineHeight: 1.17,
     fontWeight: 400,
-    color: '#3f4956'
+    color: '#3f4956',
+    [theme.breakpoints.down("sm")]: {
+      textAlign: 'justify'
+    }
   }
 });
 export default explanationStyle;
