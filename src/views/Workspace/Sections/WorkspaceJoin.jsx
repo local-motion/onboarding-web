@@ -10,27 +10,44 @@ import { getActivePhaseUrl } from "../../../misc/WorkspaceHelpers";
 const mapStateToProps = (state, ownProps) => ({
     playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),
     user: getUser(state),
-});
+})
 
 const mapDispatchToProps = (dispatch) => ({
     joinInitiative: (initiativeId) => dispatch(joinInitiative(initiativeId)),
-});
+})
 
-const WorkspaceJoin = ({ history, user, playground, joinInitiative }) => {
-    if (!user || !playground)
-        return "loading..";
-
-    const activePhaseUrl = getActivePhaseUrl(playground);
-    const isUserAlreadyJoined = playground.volunteers.find(({ userId }) => userId === user.id);
-
-    if (!isUserAlreadyJoined) {
-        joinInitiative(playground.id);
-        console.log('join!');
+class WorkspaceJoin extends React.Component {
+    state = {
+        joined: false,
     }
 
-    history.push(activePhaseUrl);
+    tryJoinInitiative() {
+        const { history, user, playground, joinInitiative } = this.props
 
-    return <div>Join</div>;
-};
+        if (user && playground && !this.state.joined) {
+            const activePhaseUrl = getActivePhaseUrl(playground);
+            const isUserAlreadyJoined = playground.volunteers.find(({ userId }) => userId === user.id)
+
+            if (!isUserAlreadyJoined) {
+                joinInitiative(playground.id)
+                console.log('join!')
+            }
+            this.setState( {joined: true} )
+            history.push(activePhaseUrl)
+        }
+    }
+
+    componentDidMount() {
+        this.tryJoinInitiative()
+    }
+    componentDidUpdate() {
+        this.tryJoinInitiative()
+    }
+
+    render() {
+        return <div>Join</div>;
+    }
+
+}
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WorkspaceJoin));

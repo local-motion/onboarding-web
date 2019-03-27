@@ -30,7 +30,14 @@ class JSignIn extends Component {
     }
 
     signIn() {
-        const {username, password} = this.inputs;
+        const {password} = this.inputs;
+
+        // We are taking the username straight from the DOM here, because the inputs may contains an old value from a previous display of the form which
+        // can happen in the signup process (user gets presented a signin form, elects to signup and afterwards is directed to signin again).
+        // After signup the username field will contain the just enrolled username (from authData), which will not be propagated to the input if the user
+        // does not edit the username field. 
+        const username = document.getElementById('SigninFormUserName').value
+
         logger.info('attempting sign in with ' + username);
         Auth.signIn(username, password)
             .then(user => this.signInSuccess(user))
@@ -88,6 +95,7 @@ class JSignIn extends Component {
         }
     }
 
+
     render() {
         const {authState, authData} = this.props;
         if (!['signIn', 'signedOut', 'signedUp'].includes(authState)) {
@@ -119,6 +127,7 @@ class JSignIn extends Component {
                             }
                         >
                             <Input
+                                id="SigninFormUserName"
                                 type="text"
                                 placeholder="Gebruikersnaam"
                                 style={style.input}
