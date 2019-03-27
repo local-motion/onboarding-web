@@ -74,7 +74,7 @@ const PlaygroundMapImpl = compose(
                     props.onMapClick(e);
                 }
             }}
-            defaultOptions={{disableDefaultUI: true}}
+            defaultOptions={{disableDefaultUI: true, scrollwheel: true}}
         >
 
             <MarkerClusterer
