@@ -7,7 +7,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle.jsx";
 
 import { connect } from 'react-redux'
-import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, joinInitiative, stopPlaygroundDetailsStream } from "../../../../components/Playground/PlaygroundActions";
+import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, stopPlaygroundDetailsStream }
+    from "../../../../components/Playground/PlaygroundActions";
 import { Redirect } from 'react-router-dom'
 
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -17,6 +18,7 @@ import PlaygroundIcons from "components/PlaygroundIcons/PlaygroundIcons";
 import { getPlaygroundDetails } from "../../../../components/Playground/PlaygroundReducer";
 import { isLoading, getFetchError } from "../../../../api/FetchDetailsReducer";
 import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
+import { getActivePhaseUrl } from "../../../../misc/WorkspaceHelpers";
 import { history } from "../../../../setup";
 
 const mapStateToProps = (state, ownProps) => ({
@@ -29,12 +31,9 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = dispatch => ({
     claimManagerRole:    (initiativeId) =>     dispatch(claimManagerRole(initiativeId)),
-    joinInitiative:    (initiativeId) =>     dispatch(joinInitiative(initiativeId)),
     ensurePlaygroundDetails:    (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
     stopPlaygroundDetailsStream:    (initiativeId) =>     dispatch(stopPlaygroundDetailsStream(initiativeId)),
 })
-
-const playgroundStatuses = ['not_started', 'in_progress', 'finished']
 
 class WorkspaceWelcome extends React.Component {
 
@@ -52,24 +51,14 @@ class WorkspaceWelcome extends React.Component {
         this.props.stopPlaygroundDetailsStream(this.props.match.params.initiativeId)
     }
     
-    goToLogin() {
-        history.push('/login');
+    goToJoinPage() {
+        history.push(`${this.props.user ? '' : '/login?target='}/workspace/${this.props.match.params.initiativeId}/join`);
     }
 
     gotoActivePhase() {
-        const result = playgroundStatuses.find(element => element === this.props.playground.status)
-        const index = result ? playgroundStatuses.indexOf(result) : 0
-        history.push('/workspace/' + this.props.match.params.initiativeId + '/phase/' + (index + 1))
-    }
+        const activePhaseUrl = getActivePhaseUrl(this.props.playground);
 
-    getActivePhaseUrl() {
-        const result = playgroundStatuses.find(element => element === this.props.playground.status)
-        const index = result ? playgroundStatuses.indexOf(result) : 0
-        return '/workspace/' + this.props.match.params.initiativeId + '/phase/' + (index + 1)
-    }
-
-    onJoinClicked = () => {
-        this.props.joinInitiative(this.props.playground.id)
+        history.push(activePhaseUrl);
     }
 
     render() {
@@ -80,7 +69,7 @@ class WorkspaceWelcome extends React.Component {
 
         const userIsVolunteer = user && playground.volunteers.filter(volunteer => volunteer.userId === user.id).length > 0
         if (userIsVolunteer)
-            return (<Redirect to={this.getActivePhaseUrl()}></Redirect>)
+            return (<Redirect to={getActivePhaseUrl(playground)}></Redirect>)
 
         const isManager = user && playground.managers && !!playground.managers.filter(manager => {
             return manager.id === user.id
@@ -111,19 +100,11 @@ class WorkspaceWelcome extends React.Component {
                             <PlaygroundIcons />
                         </div>
                         <div className={classes.buttonContainer}>
-                            {user ?
-                                <button
-                                    className={classes.button}
-                                    onClick={() => this.onJoinClicked()}>
-                                    Ga direct aan de slag
-                                </button>
-                            :
-                                <button
-                                    className={classes.button}
-                                    onClick={() => this.goToLogin()}>
-                                    Ga direct aan de slag
-                                </button>
-                            }
+                            <button
+                                className={classes.button}
+                                onClick={() => this.goToJoinPage()}>
+                                Ga direct aan de slag
+                            </button>
                             <button className={classes.skip} onClick={() => this.gotoActivePhase()}>
                                 Ga direct naar de pagina
                             </button>

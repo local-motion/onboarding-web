@@ -22,7 +22,7 @@ import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome/WorkspaceWelcome";
 import Team from "./views/Workspace/Sections/Team";
-
+import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
 
 const mapStateToProps = (state) => ({
   })
@@ -36,8 +36,7 @@ class App extends React.Component {
 
     signInHandler = (username) => {
         console.log('signed in with ' + username);
-        this.props.onUserSignedIn(username)
-        history.goBack()
+        this.props.onUserSignedIn(username);
     }
 
     render() {
@@ -54,6 +53,7 @@ class App extends React.Component {
                         <Route exact path="/terms" key="Terms of Use" component={Terms}/>
                         
                         <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
+                        <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
                         <Route exact path="/workspace/:initiativeId/team" key="Team" component={Team}/>
                         <Route exact path="/workspace/:initiativeId/phase/:phaseId" key="Workspace" component={Workspace}/>
 
