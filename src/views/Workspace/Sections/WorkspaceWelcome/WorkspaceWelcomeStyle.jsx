@@ -15,7 +15,7 @@ const WorkspaceWelcomeStyle = theme => ({
     lineHeight: 'normal',
     letterSpacing: 'normal',
     textAlign: 'center',
-    color: '#258ecc',
+    color: '#01579b',
     margin: '0 0 24px'
   },
   descr: {
