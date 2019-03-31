@@ -33,7 +33,7 @@
     "aws-amplify-react": "2.3.2",
     "classnames": "2.2.6",
     "cognito-user-pool": "0.2.4",
-    "graphql": "14.1.1",
+    "graphql": "14.2.1",
     "graphql-tag": "2.10.1",
     "history": "4.9.0",
     "i18next-browser-languagedetector": "3.0.1",
