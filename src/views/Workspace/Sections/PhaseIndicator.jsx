@@ -7,6 +7,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
 
 import { playgroundIcons } from 'components/PlaygroundIcons/playgroundIconsConstants';
@@ -117,22 +118,24 @@ class PhaseIndicator extends React.Component {
                         key={index}
                         className={"lm-step"}
                         onClick={() => this.props.onSwitch(index)}>
-                        <div
-                            className={classes.icon}>
+                        <StepLabel icon={
                             <div
-                                style={{
-                                    backgroundImage: `url(${icon.bg})`
-                                }}
-                                className={classes.iconBgImage + (selectedPhase === index ? ' ' + classes.active : '')}
-                            >
+                              className={classes.icon}>
                                 <div
-                                    style={{
-                                        backgroundImage: `url(${icon.icon})`
-                                    }}
-                                    className={classes.iconImage}
-                                />
+                                  style={{
+                                      backgroundImage: `url(${icon.bg})`
+                                  }}
+                                  className={classes.iconBgImage + (selectedPhase === index ? ' ' + classes.active : '')}
+                                >
+                                    <div
+                                      style={{
+                                          backgroundImage: `url(${icon.icon})`
+                                      }}
+                                      className={classes.iconImage}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        } />
                     </Step>
                 )}
             </Stepper>

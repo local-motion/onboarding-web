@@ -1,4 +1,8 @@
-import { container, primaryColor } from "assets/jss/material-kit-react.jsx";
+import {
+  container,
+  primaryColor,
+  tabletPortraitMedia,
+} from "assets/jss/material-kit-react.jsx";
 
 const footerStyle = {
   block: {
@@ -19,7 +23,8 @@ const footerStyle = {
   hide: {
     position: 'absolute',
     visibility: 'hidden',
-    pointerEvents: 'none'
+    pointerEvents: 'none',
+    display: 'none !important'
   },
   fullWidth: {
     width: '100%',
@@ -51,11 +56,26 @@ const footerStyle = {
   list: {
     marginBottom: "0",
     padding: "0",
-    marginTop: "0"
+    marginTop: "0",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    [tabletPortraitMedia]: {
+    }
   },
   inlineBlock: {
-    display: "inline-block",
+    display: "block",
     padding: "0px",
+    width: "auto",
+    textAlign: "center",
+    flexBasis: "100%",
+    [tabletPortraitMedia]: {
+      flexBasis: "auto",
+    }
+  },
+  logo: {
+    display: "inline-block",
+    padding: "0.9375rem",
     width: "auto"
   },
   icon: {
