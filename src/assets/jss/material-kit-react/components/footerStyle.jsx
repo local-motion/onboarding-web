@@ -1,10 +1,7 @@
 import {
   container,
   primaryColor,
-  mobileMedia,
   tabletPortraitMedia,
-  tabletLandscapeMedia,
-  desktopMedia
 } from "assets/jss/material-kit-react.jsx";
 
 const footerStyle = {
