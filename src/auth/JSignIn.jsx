@@ -107,7 +107,7 @@ class JSignIn extends Component {
             input: {borderRadius: '0', display: 'block'},
             links: {fontSize: '0.9em', minHeight: "25px"},
             button: {width: '100%', marginBottom: "15px"},
-            extraButton: {border: "0", marginBottom: "15px", cursor: "pointer"},
+            extraButton: {border: "0", marginBottom: "15px", marginRight: "15px", cursor: "pointer"},
             left: {float: "left"},
             alert: {fontSize: '0.8em'}
         };
