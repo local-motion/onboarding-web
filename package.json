@@ -63,7 +63,7 @@
     "react-swipeable-views": "0.13.1",
     "recompose": "0.30.0",
     "redux-thunk": "2.3.0",
-    "stringquery": "^1.0.8"
+    "stringquery": "1.0.8"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
