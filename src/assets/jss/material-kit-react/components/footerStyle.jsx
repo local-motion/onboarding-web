@@ -23,7 +23,8 @@ const footerStyle = {
   hide: {
     position: 'absolute',
     visibility: 'hidden',
-    pointerEvents: 'none'
+    pointerEvents: 'none',
+    display: 'none !important'
   },
   fullWidth: {
     width: '100%',
