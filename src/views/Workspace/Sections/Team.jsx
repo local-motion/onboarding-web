@@ -63,7 +63,7 @@ const styles = theme => ({
         boxShadow: `-1px 1px 5px 0px rgba(0,0,0,0.2)`
     },
     usersList: {
-        overflow: 'scroll',
+        overflowY: 'auto',
         maxHeight: '600px',
     },
     chatMessages: {
