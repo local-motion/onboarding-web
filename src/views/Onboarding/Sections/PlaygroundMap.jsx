@@ -92,7 +92,7 @@ const PlaygroundMapImpl = compose(
                     }
                     key={playground.id}
                     position={{lat: playground.lat, lng: playground.lng}}
-                    icon={playground.status === "not_started" ? markerWhite : (playground.status === "in_progress" ? markerBlue : markerGreen)}
+                    icon={playground.status === "NOT_STARTED" ? markerWhite : (playground.status === "IN_PROGRESS" ? markerBlue : markerGreen)}
                 />
             ))}
             

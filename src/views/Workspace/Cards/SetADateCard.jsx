@@ -80,7 +80,7 @@ class SetADateCard extends React.Component {
                             <div className={"card-datepicker"}>
                                 <br />
                                 <DatePicker
-                                    disabled={!userIsManager || playground.status === 'not_started'}
+                                    disabled={!userIsManager || playground.status === 'NOT_STARTED'}
                                     dateFormat="dd-MM-YYYY"
                                     selected={date}
                                     onChange={date => setSmokefreeDate(playground.id, dateToString(date))}

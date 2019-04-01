@@ -135,8 +135,6 @@ export const createInitiative = (name, lat, lng, onSuccessCallback) => {
           name,
           lat,
           lng,
-          type: "smokefree",
-          status: "not_started",
         }
       },
       onSuccess: (data, dispatch, getState) => {
@@ -259,7 +257,6 @@ export const setCheckbox = (initiativeId, checklistItem, checked, user) => execu
     variables: {
       input: {
         initiativeId,
-        actor: user.id,
         checklistItem,
         checked
         }

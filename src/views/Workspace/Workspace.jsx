@@ -44,7 +44,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-const playgroundStatuses = ['not_started', 'in_progress', 'finished']
+const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED']
 const playgroundLabels = ['Voorbereiding', 'Uitvoering', 'Onderhouden']
 
 class WorkspaceTemplate extends React.Component {
