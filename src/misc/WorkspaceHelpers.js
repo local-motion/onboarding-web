@@ -1,4 +1,4 @@
-export const playgroundStatuses = ['not_started', 'in_progress', 'finished'];
+export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 
 export function getActivePhaseUrl(playground) {
     const result = playgroundStatuses.find(element => element === playground.status);

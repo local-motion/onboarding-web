@@ -19,7 +19,7 @@ const initialState = {
         lng: [longitude, float]
         volunteerCount: [volunteer count, integer]
         votes: [nr of signed petitions, integer]
-        status:  ["not_started|"in_progress"|"finished"]
+        status:  ["NOT_STARTED|"IN_PROGRESS"|"FINISHED"]
         smokeFreeDate: [timestamp]
         managers: [array of {id: [string], username: [string]} ]
         volunteers: [array of {userId: [string], userName: [string]} ]
@@ -68,9 +68,9 @@ export const getStatistics = (state) => {
   var smokingCount = 0
 
   for (var i = 0; i < playgrounds.length; i++) {
-    smokeFreeCount    += playgrounds[i].status === "finished"     ?  1 : 0;
-    workingOnItCount  += playgrounds[i].status === "in_progress"  ?  1 : 0;
-    smokingCount      += playgrounds[i].status === "not_started"  ?  1 : 0;
+    smokeFreeCount    += playgrounds[i].status === "FINISHED"     ?  1 : 0;
+    workingOnItCount  += playgrounds[i].status === "IN_PROGRESS"  ?  1 : 0;
+    smokingCount      += playgrounds[i].status === "NOT_STARTED"  ?  1 : 0;
   }
 
   return  {
