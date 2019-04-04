@@ -50,6 +50,7 @@ const componentsStyle = {
     },
     playgroundTitle: {
         fontFamily: "'dk_black_bamboo-webfont'",
+        color: '#085ca6',
     },
 };
 
