@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
@@ -10,7 +11,7 @@ const logger = new Logger('JConfirmSignUp');
  * https://raw.githubusercontent.com/aws-amplify/amplify-js/master/packages/aws-amplify-react/src/Auth/ConfirmSignUp.jsx
  * https://github.com/richardzcode/Journal-AWS-Amplify-Tutorial/blob/master/step-03/journal/src/components/auth/JConfirmSignUp.jsx
  */
-export default class JConfirmSignUp extends Component {
+class JConfirmSignUp extends Component {
     constructor(props) {
         super(props);
         this.confirmSignUp = this.confirmSignUp.bind(this);
@@ -108,6 +109,7 @@ export default class JConfirmSignUp extends Component {
     }
 
     render() {
+        const isInCard = !!this.props.match.params.initiativeId;
         const {authState, authData} = this.props;
         if (authState !== 'confirmSignUp') {
             return null;
@@ -128,8 +130,8 @@ export default class JConfirmSignUp extends Component {
         const {message, error, validateCode, codeLength} = this.state;
 
         return (
-            <div className={"secure-app-wrapper"}>
-                <div className={"secure-app-background"}></div>
+            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+                {isInCard || <div className={"secure-app-background"}></div>}
                 <div className={"secure-app-container"}>
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
@@ -212,3 +214,5 @@ export default class JConfirmSignUp extends Component {
         )
     }
 }
+
+export default withRouter(JConfirmSignUp);

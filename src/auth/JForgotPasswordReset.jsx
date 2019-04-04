@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
@@ -9,7 +10,7 @@ const logger = new Logger('JForgotPasswordReset');
  * Based on:
  * https://github.com/richardzcode/Journal-AWS-Amplify-Tutorial/blob/master/step-03/journal/src/components/auth/JForgotPasswordReset.jsx
  */
-export default class JForgotPasswordReset extends Component {
+class JForgotPasswordReset extends Component {
     constructor(props) {
         super(props);
         this.submit = this.submit.bind(this);
@@ -51,6 +52,7 @@ export default class JForgotPasswordReset extends Component {
     }
 
     render() {
+        const isInCard = !!this.props.match.params.initiativeId;
         const {authState} = this.props;
         if (authState !== 'forgotPasswordReset') {
             return null;
@@ -70,8 +72,8 @@ export default class JForgotPasswordReset extends Component {
         const {error} = this.state;
 
         return (
-            <div className={"secure-app-wrapper"}>
-                <div className={"secure-app-background"}></div>
+            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+                {isInCard || <div className={"secure-app-background"}></div>}
                 <div className={"secure-app-container"}>
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
@@ -122,3 +124,5 @@ export default class JForgotPasswordReset extends Component {
         )
     }
 }
+
+export default withRouter(JForgotPasswordReset);

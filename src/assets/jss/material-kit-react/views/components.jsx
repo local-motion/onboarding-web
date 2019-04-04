@@ -41,7 +41,13 @@ const componentsStyle = {
     },
     textCenter: {
         textAlign: "center"
-    }
+    },
+    workspacePaper: {
+        display: 'flex',
+        borderRadius: '7px',
+        overflow: 'hidden',
+        width: '100%',
+    },
 };
 
 export default componentsStyle;
