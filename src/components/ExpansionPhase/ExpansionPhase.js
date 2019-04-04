@@ -97,6 +97,24 @@ const ExpandingArrow = withStyles({
     }
 })(Span);
 
+const Icon = withStyles({
+    iconWrapper: {
+        display: 'block',
+        marginBottom: '6px',
+        width: '30px',
+        height: '30px',
+        textAlign: 'center',
+    },
+    icon: {
+        height: '100%',
+        margin: '0 auto',
+    },
+})(({ icon, classes }) => (
+  <span className={classes.iconWrapper}>
+      <img className={classes.icon} src={icon} alt="Icon" />
+  </span>
+));
+
 class ExpansionPhase extends Component {
     handleChange = () => {
         this.props.onChange(this.props.title);
@@ -115,8 +133,8 @@ class ExpansionPhase extends Component {
               <ExpansionPanelSummary>
                   {
                       isExpanded
-                        ? <StyledExpandedTypography><img src={expandedIcon} alt="Icon" width="30" height="30" style={{ marginBottom: '6px' }} /> {title} <ExpandingArrow /></StyledExpandedTypography>
-                        : <StyledTypography><img src={icon} alt="Icon" width="30" height="30" style={{ marginBottom: '6px' }} /> {title}</StyledTypography>
+                        ? <StyledExpandedTypography><Icon icon={expandedIcon} /> {title} <ExpandingArrow /></StyledExpandedTypography>
+                        : <StyledTypography><Icon icon={icon} /> {title}</StyledTypography>
                   }
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
