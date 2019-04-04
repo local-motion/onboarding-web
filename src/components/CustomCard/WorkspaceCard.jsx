@@ -27,7 +27,7 @@ const styles = theme => ({
         padding: 10,
     },
     media: {
-        height: '250px',
+        height: '200px',
         margin: '-10px',
     },
     managerPassiveIcon: {
