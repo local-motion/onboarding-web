@@ -48,6 +48,9 @@ const componentsStyle = {
         overflow: 'hidden',
         width: '100%',
     },
+    playgroundTitle: {
+        fontFamily: "'dk_black_bamboo-webfont'",
+    },
 };
 
 export default componentsStyle;

@@ -213,7 +213,7 @@ class WorkspaceTemplate extends React.Component {
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
-                                <h2>{playground.name}</h2>
+                                <h2 className={classes.playgroundTitle}>{playground.name}</h2>
                                     <div className={"explainer-actions"}>
                                         <Button
                                             className={"btn btn-highlight"}

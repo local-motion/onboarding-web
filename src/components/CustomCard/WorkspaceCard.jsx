@@ -36,6 +36,11 @@ const styles = theme => ({
     managerActiveIcon: {
         color: 'green',
     },
+    cardTitle: {
+        fontFamily: "'dk_black_bamboo-webfont'",
+        color: 'red',
+        marginTop: '18px',
+    }
 });
 
 const mapStateToProps = state => ({
@@ -59,7 +64,7 @@ class WorkspaceCard extends React.Component {
                   title={title}
                 />
                 <CardContent className={"card-content"}>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="h5" component="h2" className={classes.cardTitle}>
                         {title}
                     </Typography>
                     <Typography component="p">
