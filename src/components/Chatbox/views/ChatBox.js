@@ -100,7 +100,7 @@ class ChatBox extends React.Component {
 
   onTextChange(text) {
     this.props.onChangeHandler(text);
-    this.activateTyping();
+    // this.activateTyping();
   }
 
   render() {
