@@ -40,32 +40,13 @@ const styles = themes => ({
         '& $name': {
             color: '#fff',
         },
-        '& $number': {
-            color: '#fff',
-            borderRight: '1px solid rgba(166,207,250,0.2)',
-        },
     },
-    number: {
-        color: '#2783be',
-        borderRight: '1px solid #e7e7e7',
-        fontFamily: '"Montserrat"',
-        fontSize: '18px',
-        fontWeight: 700,
-        marginBottom: 0,
-        width: '44px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
 });
 
-const StepLink = ({ name, description, image, link, classes, index, match, disabled }) => (
+const StepLink = ({ name, description, image, link, classes, match, disabled }) => (
     <Link to={link} className={classes.link} disabled={disabled}>
         <Card className={`${classes.card} ${match.url.includes(link) ? classes.cardActive : null}`}>
             <CardContent className={classes.cardContent}>
-                <Typography gutterBottom className={classes.number}>
-                    {index}
-                </Typography>
                 <Typography gutterBottom className={classes.name}>
                     {name}
                 </Typography>
@@ -74,13 +55,10 @@ const StepLink = ({ name, description, image, link, classes, index, match, disab
     </Link>
 );
 
-const StepButton = ({ name, description, image, onClick, classes, index }) => (
+const StepButton = ({ name, description, image, onClick, classes }) => (
     <div onClick={onClick} className={classes.link}>
         <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
-                <Typography gutterBottom className={classes.number}>
-                    {index}
-                </Typography>
                 <Typography gutterBottom className={classes.name}>
                     {name}
                 </Typography>
