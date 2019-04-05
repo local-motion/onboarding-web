@@ -10,7 +10,7 @@ class DecideSmokefreeCard extends React.Component {
 
         if (!playground) return "Loading..."
 
-        const decisionTaken  = playground.status === 'in_progress' || playground.status === 'finished'
+        const decisionTaken  = playground.status === 'IN_PROGRESS' || playground.status === 'FINISHED'
 
         return (
             <WorkspaceCard 

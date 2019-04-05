@@ -32,7 +32,6 @@ export const createUser = (onSuccessCallback) => executeQuery( {
       mutation CreateUser {
         createUser(doesNotMatter: "irrelevant") {
           id
-          username
         }
       }
     `, 
