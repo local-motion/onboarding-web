@@ -20,7 +20,6 @@ import Contact from "views/About/Contact.jsx";
 import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
-import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome/WorkspaceWelcome";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
 import Team from "./views/Workspace/Sections/Team";
 
@@ -54,7 +53,6 @@ class App extends React.Component {
 
                         <Route exact path="/workspace/" key="Workspace" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/welcome" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
                         <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
                         <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
                         <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Team}/>

@@ -76,7 +76,7 @@ class PlaygroundStatistics extends React.Component {
                                 <div style={{display: generalStatistics ? 'none' : 'block'}}>
                                     <Button
                                         className={"btn btn-highlight pr-25 pull-left"}
-                                        onClick={() => history.push(`/workspace/${playground.id}/welcome`) }
+                                        onClick={() => history.push(`/workspace/${playground.id}`) }
                                     >
                                         <span>Bezoek deze speeltuin</span>
                                     </Button>

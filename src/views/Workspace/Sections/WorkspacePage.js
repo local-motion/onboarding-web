@@ -22,6 +22,7 @@ import HeaderLinks from "../../../components/Header/HeaderLinks";
 import GridContainer from "../../../components/Grid/GridContainer";
 import GridItem from "../../../components/Grid/GridItem";
 import Footer from "../../../components/Footer/Footer";
+import WorkspaceWelcome from "./WorkspaceWelcome/WorkspaceWelcome";
 
 
 class WorkspacePage extends PureComponent {
@@ -47,7 +48,7 @@ class WorkspacePage extends PureComponent {
     }
 
     gotoWorkspaceWelcomePage = () => {
-        this.props.history.push(`/workspace/${this.props.match.params.initiativeId}/welcome`);
+        this.props.history.push(`/workspace/${this.props.match.params.initiativeId}`);
     };
 
     toggleAddPlayground() {
@@ -129,6 +130,9 @@ class WorkspacePage extends PureComponent {
                               <Switch>
                                   <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
+
+                                  <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
+                                         render={(props) => <WorkspaceWelcome {...props} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember"
                                          render={(props) => <GetSupportCard {...props} playground={playground} user={user} />}/>
