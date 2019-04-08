@@ -5,7 +5,7 @@ export function getActivePhaseUrl(playground) {
     return `/workspace/${playground.id}/`;
 }
 
-export function getPhases({ startPathUrl }) {
+export function getPhases(startPathUrl) {
     return {
         firstPhase: {
             title: 'Voorbereiden',
@@ -68,4 +68,17 @@ export function getPhases({ startPathUrl }) {
             ],
         },
     };
+}
+
+/**
+ * phases{Object}
+ * url{String}
+ */
+export function getOpenedStepTitle(phases, url) {
+    const foundPhase = Object.keys(phases)
+      .find((phaseName) => !!phases[phaseName].steps.find(({ link }) => link.includes(url)));
+
+    return foundPhase
+      ? phases[foundPhase].title
+      : null;
 }
