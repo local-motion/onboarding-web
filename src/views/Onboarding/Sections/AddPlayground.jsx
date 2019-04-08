@@ -16,6 +16,8 @@ import { createInitiative, CREATE_INITIATIVE } from '../../../components/Playgro
 import { connect } from 'react-redux'
 import { createLoadingSelector } from '../../../api/Selectors';
 import { history } from '../../../setup';
+import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
+import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 
 class AddPlayground extends React.Component {
     constructor(props) {
@@ -124,13 +126,14 @@ class AddPlayground extends React.Component {
 
 
     render() {
-        const {classes, user} = this.props;
+        const {classes, user, toggleOpen, isOpen} = this.props;
         const {map} = this.state;
-        const error = this.state.error
+        const error = this.state.error;
+        const isFromWorkspace = isOpen !== undefined;
 
         return (
             <div className={"FormDialog-container"}>
-                { user &&
+                { (user && !isFromWorkspace) &&
                     <Button
                         className={"btn btn-highlight map-add"}
                         onClick={this.handleClickOpen}
@@ -140,8 +143,8 @@ class AddPlayground extends React.Component {
                 }
                 <Dialog
                     fullScreen
-                    open={this.state.open}
-                    onClose={this.handleClose}
+                    open={isFromWorkspace ? isOpen : this.state.open}
+                    onClose={toggleOpen || this.handleClose}
                     aria-labelledby="form-dialog-title"
                     className={"FormDialog"}
                 >
@@ -171,7 +174,7 @@ class AddPlayground extends React.Component {
                         />
                     </DialogContent>
                     <DialogActions className={"dialog-actions"}>
-                        <Button onClick={this.handleClose} color="primary">
+                        <Button onClick={toggleOpen || this.handleClose} color="primary">
                             Annuleren
                         </Button>
 
@@ -194,7 +197,20 @@ class AddPlayground extends React.Component {
 const mapStateToProps = state => {
     const loadingSelector = createLoadingSelector([CREATE_INITIATIVE]);
     return {
+        playgrounds: getAllPlaygrounds(state).map(playground => ({
+              id: playground.id,
+              name: playground.name,
+              lat: playground.lat,
+              lng: playground.lng,
+              vol: playground.volunteerCount,
+              votes: playground.votes,
+              slug: playground.name + " Rookvrij",
+              zoom: 18,
+              default: false,
+          })
+        ),
         loading: loadingSelector(state),
+        user: getUser(state),
     }
 }
 

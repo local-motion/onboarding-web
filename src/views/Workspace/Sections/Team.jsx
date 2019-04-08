@@ -17,7 +17,6 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
-import Parallax from "components/Parallax/Parallax.jsx";
 import { getPlaygroundDetails } from "../../../components/Playground/PlaygroundReducer";
 import { isLoading, getFetchError } from "../../../api/FetchDetailsReducer";
 import { getUser } from "../../../components/UserProfile/UserProfileReducer";

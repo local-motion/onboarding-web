@@ -1,4 +1,4 @@
-.secure-app-wrapper {
+.secure-app-wrapper, .secure-app-wrapper-card {
     width: 1024px;
     margin: 0 auto;
     @include breakpoint($breakpoints-xs) {
@@ -94,5 +94,43 @@
                 color: $lm-red-1;
             }
         }
+    }
+}
+
+.secure-app-wrapper-card {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .secure-app-background {
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-image: url("../img/backgrounds/bg-auth.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        z-index: 1;
+    }
+
+    .secure-app-container {
+        background: white;
+        padding: 25px;
+        width: 90%;
+        @include breakpoint($breakpoints-lg) {
+            width: 100%;
+        }
+        @include breakpoint($breakpoints-xl) {
+            width: 100%;
+        }
+        margin: 10px auto;
+        box-shadow: none;
+        position: relative;
+        z-index: 10;
+        border-radius: 10px;
     }
 }

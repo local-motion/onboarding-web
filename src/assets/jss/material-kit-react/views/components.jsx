@@ -41,7 +41,17 @@ const componentsStyle = {
     },
     textCenter: {
         textAlign: "center"
-    }
+    },
+    workspacePaper: {
+        display: 'flex',
+        borderRadius: '7px',
+        overflow: 'hidden',
+        width: '100%',
+    },
+    playgroundTitle: {
+        fontFamily: "'dk_black_bamboo-webfont'",
+        color: '#085ca6',
+    },
 };
 
 export default componentsStyle;

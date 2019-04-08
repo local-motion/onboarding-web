@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -12,7 +13,7 @@ const logger = new Logger('JSignUp');
  * https://raw.githubusercontent.com/aws-amplify/amplify-js/master/packages/aws-amplify-react/src/Auth/SignUp.jsx
  * https://github.com/richardzcode/Journal-AWS-Amplify-Tutorial/blob/master/step-03/journal/src/components/auth/JSignUp.jsx
  */
-export default class JSignUp extends Component {
+class JSignUp extends Component {
     constructor(props) {
         super(props);
         this.signUp = this.signUp.bind(this);
@@ -120,6 +121,7 @@ export default class JSignUp extends Component {
     }
 
     render() {
+        const isInCard = !!this.props.match.params.initiativeId;
         const {authState} = this.props;
         if (authState !== 'signUp') {
             return null;
@@ -139,8 +141,8 @@ export default class JSignUp extends Component {
 
 
         return (
-            <div className={"secure-app-wrapper"}>
-                <div className={"secure-app-background"}></div>
+            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+                {isInCard || <div className={"secure-app-background"}></div>}
                 <div className={"secure-app-container"}>
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
@@ -232,3 +234,5 @@ export default class JSignUp extends Component {
         )
     }
 }
+
+export default withRouter(JSignUp);
