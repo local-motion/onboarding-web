@@ -22,7 +22,7 @@ import HeaderLinks from "../../../components/Header/HeaderLinks";
 import GridContainer from "../../../components/Grid/GridContainer";
 import GridItem from "../../../components/Grid/GridItem";
 import Footer from "../../../components/Footer/Footer";
-import WorkspaceWelcome from "./WorkspaceWelcome/WorkspaceWelcome";
+import WorkspaceWelcomeContent from "./WorkspaceWelcome/WorkspaceWelcomeContent";
 
 
 class WorkspacePage extends PureComponent {
@@ -132,7 +132,7 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
 
                                   <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
-                                         render={(props) => <WorkspaceWelcome {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember"
                                          render={(props) => <GetSupportCard {...props} playground={playground} user={user} />}/>
