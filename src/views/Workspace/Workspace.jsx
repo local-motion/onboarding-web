@@ -172,10 +172,10 @@ class WorkspaceTemplate extends React.Component {
                                   expandedPhase={this.state.expandedPhase}
                                   onChange={this.selectPhase}
                                 >
-                                    {!playground && <StyledStepButton onClick={this.toggleAddPlayground} index="1" name="Speeltuin toevoegen" />}
-                                    {!user && <StyledStepLink link={`/workspace/${playground.id}/login`} index="2" disabled={user} name="Inloggen" />}
+                                    {!playground && <StyledStepButton onClick={this.toggleAddPlayground} name="Speeltuin toevoegen" />}
+                                    {!user && <StyledStepLink link={`/workspace/${playground.id}/login`} disabled={user} name="Inloggen" />}
 
-                                    {phases.firstPhase.steps.map((step, index)=> <StyledStepLink key={step.name} index={index + 3} {...step} />)}
+                                    {phases.firstPhase.steps.map(step=> <StyledStepLink key={step.name} {...step} />)}
                                 </ExpansionPhase>
                                 <ExpansionPhase
                                   title={phases.secondPhase.title}
@@ -184,7 +184,7 @@ class WorkspaceTemplate extends React.Component {
                                   expandedPhase={this.state.expandedPhase}
                                   onChange={this.selectPhase}
                                 >
-                                    {phases.secondPhase.steps.map((step, index) => <StyledStepLink key={step.name} index={index} {...step} />)}
+                                    {phases.secondPhase.steps.map(step => <StyledStepLink key={step.name} {...step} />)}
                                 </ExpansionPhase>
                                 <ExpansionPhase
                                   title={phases.thirdPhase.title}
@@ -193,7 +193,7 @@ class WorkspaceTemplate extends React.Component {
                                   expandedPhase={this.state.expandedPhase}
                                   onChange={this.selectPhase}
                                 >
-                                    {phases.thirdPhase.steps.map((step, index) => <StyledStepLink key={step.name} index={index} {...step} />)}
+                                    {phases.thirdPhase.steps.map(step => <StyledStepLink key={step.name} {...step} />)}
                                 </ExpansionPhase>
                             </GridItem>
 
