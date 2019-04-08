@@ -95,7 +95,7 @@ class WorkspaceTemplate extends React.Component {
     }
 
     gotoWorkspaceWelcomePage = () => {
-        history.push('/workspace/' + this.props.match.params.initiativeId)
+        history.push(`/workspace/${this.props.match.params.initiativeId}/welcome`);
     };
 
     componentDidMount() {
