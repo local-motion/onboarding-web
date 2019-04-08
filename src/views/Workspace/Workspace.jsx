@@ -17,7 +17,6 @@ import GridItem from "components/Grid/GridItem.jsx";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Button from "@material-ui/core/Button/Button";
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { history } from "../../setup.js";
 import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
 import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, stopPlaygroundDetailsStream } from "../../components/Playground/PlaygroundActions.js";
@@ -66,13 +65,8 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-<<<<<<< HEAD
 const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED']
-const playgroundLabels = ['Voorbereiding', 'Uitvoering', 'Onderhouden']
-=======
-const playgroundStatuses = ['not_started', 'in_progress', 'finished'];
 const playgroundLabels = ['Voorbereiden', 'Uitvoeren', 'Onderhouden'];
->>>>>>> origin/reorder-workspaces
 
 class WorkspaceTemplate extends React.Component {
     constructor(props) {

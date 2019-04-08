@@ -54,7 +54,7 @@ class WorkspaceCard extends React.Component {
     };
 
     render() {
-        const {classes, title, image, content, primaryCta, MoreInformation, expandContent, enableActions, done, managerOnly, userIsManager, user} = this.props;
+        const {classes, title, image, content, primaryCta, MoreInformation, expandContent, enableActions, managerOnly, userIsManager, user} = this.props;
 
         return (
             <Card className={classes.card + " card"}>

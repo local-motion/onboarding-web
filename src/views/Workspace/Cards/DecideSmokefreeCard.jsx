@@ -2,7 +2,15 @@ import React from "react";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import { Button } from "@material-ui/core";
 import { isUserManagerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+import { connect } from 'react-redux'
+import { setDecideSmokefree } from "../../../components/Playground/PlaygroundActions";
 
+const mapStateToProps = state => {
+}
+
+const mapDispatchToProps = dispatch => ({
+    setDecideSmokefree:    (initiativeId) =>     dispatch(setDecideSmokefree(initiativeId)),
+})
 
 class DecideSmokefreeCard extends React.Component {
     render() {
@@ -37,5 +45,5 @@ class DecideSmokefreeCard extends React.Component {
     }
 }
 
-export default DecideSmokefreeCard
+export default connect(mapStateToProps, mapDispatchToProps)(DecideSmokefreeCard);
 
