@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core';
 import {Auth, JS, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
 
 const logger = new Logger('JConfirmSignIn');
 
-export default class JConfirmSignIn extends Component {
+class JConfirmSignIn extends Component {
     constructor(props) {
         super(props);
         this.confirmSignIn = this.confirmSignIn.bind(this);
@@ -64,6 +65,7 @@ export default class JConfirmSignIn extends Component {
     }
 
     render() {
+        const isInCard = !!this.props.match.params.initiativeId;
         const {authState} = this.props;
         if (authState !== 'confirmSignIn') {
             return null;
@@ -78,8 +80,8 @@ export default class JConfirmSignIn extends Component {
         const {error} = this.state;
 
         return (
-            <div className={"secure-app-wrapper"}>
-                <div className={"secure-app-background"}></div>
+            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+                {isInCard || <div className={"secure-app-background"}></div>}
                 <div className={"secure-app-container"}>
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
@@ -118,3 +120,5 @@ export default class JConfirmSignIn extends Component {
         )
     }
 }
+
+export default withRouter(JConfirmSignIn);

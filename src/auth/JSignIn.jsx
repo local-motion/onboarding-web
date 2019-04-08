@@ -97,6 +97,7 @@ class JSignIn extends Component {
 
 
     render() {
+        const isInCard = !!this.props.match.params.initiativeId;
         const {authState, authData} = this.props;
         if (!['signIn', 'signedOut', 'signedUp'].includes(authState)) {
             return null;
@@ -115,8 +116,8 @@ class JSignIn extends Component {
         const {error} = this.state;
 
         return (
-            <div className={"secure-app-wrapper"}>
-                <div className={"secure-app-background"}></div>
+            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+                {isInCard || <div className={"secure-app-background"}></div>}
                 <div className={"secure-app-container"}>
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div className={"signin-wrapper"}>

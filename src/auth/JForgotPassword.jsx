@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
@@ -10,7 +11,7 @@ const logger = new Logger('JForgotPassword');
  * https://raw.githubusercontent.com/aws-amplify/amplify-js/master/packages/aws-amplify-react/src/Auth/ForgotPassword.jsx
  * https://github.com/richardzcode/Journal-AWS-Amplify-Tutorial/blob/master/step-03/journal/src/components/auth/JforgotPassword.jsx
  */
-export default class JForgotPassword extends Component {
+class JForgotPassword extends Component {
     constructor(props) {
         super(props);
         this.sendCode = this.sendCode.bind(this);
@@ -58,6 +59,7 @@ export default class JForgotPassword extends Component {
     }
 
     render() {
+        const isInCard = !!this.props.match.params.initiativeId;
         const {authState, authData} = this.props;
         if (authState !== 'forgotPassword') {
             return null;
@@ -77,8 +79,8 @@ export default class JForgotPassword extends Component {
         const {error} = this.state;
 
         return (
-            <div className={"secure-app-wrapper"}>
-                <div className={"secure-app-background"}></div>
+            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+                {isInCard || <div className={"secure-app-background"}></div>}
                 <div className={"secure-app-container"}>
                     <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
                     <div style={style.container}>
@@ -145,3 +147,5 @@ export default class JForgotPassword extends Component {
         )
     }
 }
+
+export default withRouter(JForgotPassword);
