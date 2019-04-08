@@ -40,17 +40,36 @@ const mapDispatchToProps = dispatch => ({
 
 const styles = theme => ({
     paper: {
-      height: '300px',
-      width: '100%',
+        minHeight: '300px',
+        width: '100%',
     },
     avatar: {
-        margin: 10,
-      },
+        margin: 10
+    },
     purpleAvatar: {
-        margin: 0,
+        margin: 10,
         color: '#fff',
         backgroundColor: deepPurple[500],
-      },  });
+    },
+    teamChatTitleContainer: {
+        margin: '70px auto 20px !important',
+    },
+    chatUsersContainer: {
+        paddingRight: 0,
+    },
+    chatUsers: {
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+        boxShadow: `-1px 1px 5px 0px rgba(0,0,0,0.2)`
+    },
+    usersList: {
+        overflowY: 'auto',
+        maxHeight: '600px',
+    },
+    chatMessages: {
+        paddingLeft: 0,
+    },
+});
 
 class Team extends React.Component {
 
@@ -66,7 +85,7 @@ class Team extends React.Component {
     render() {
         const {playground, user, classes, ...rest} = this.props;
 
-        if (!playground || this.props.playgroundLoading) 
+        if (!playground || this.props.playgroundLoading)
             return "loading.."
 
         return (
@@ -84,13 +103,13 @@ class Team extends React.Component {
                     }}
                     {...rest}
                 />
-                <Parallax className={"phase-container empty"}>
-                    <div className={classes.container + " phase-wrapper"}>
+                {/*<Parallax className={"phase-container empty"}>*/}
+                    {/*<div className={classes.container + " phase-wrapper"}>*/}
 
-                    </div>
-                </Parallax>
+                    {/*</div>*/}
+                {/*</Parallax>*/}
 
-                <div className={classNames(classes.container + " phase-explainer-container")}>
+                <div className={classNames(`${classes.container} ${classes.teamChatTitleContainer} phase-explainer-container`)}>
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                             <div className={"title-wrapper"}>
@@ -119,11 +138,10 @@ class Team extends React.Component {
 
                 <div className={classes.container + " information-wrapper"}>
                     <GridContainer className={"information-container"}>
-                        <GridItem xs={4} sm={4} md={4} className={"phase-information-container flex-divide"}>
+                        <GridItem xs={4} sm={4} md={4} className={classNames(classes.chatUsersContainer + " phase-information-container flex-divide")}>
 
-
-                            <Paper className={classes.paper} elevation={1}>
-                                <List>
+                            <Paper className={classNames(`${classes.paper} ${classes.chatUsers}`)} elevation={2}>
+                                <List className={classes.usersList}>
                                     {playground.volunteers.map(function (volunteer, index) {
                                         const volunteerIsManager = playground.managers.filter(manager => manager.id === volunteer.userId).length > 0
                                         return <ListItem key={index}>
@@ -139,7 +157,7 @@ class Team extends React.Component {
                             </Paper>
 
                         </GridItem>
-                        <GridItem xs={8} sm={8} md={8} className={classes.paper}>
+                        <GridItem xs={8} sm={8} md={8} className={classNames(`${classes.paper} ${classes.chatMessages}`)}>
                             <PlaygroundChatBox playground={playground}/>
                         </GridItem>
                     </GridContainer>

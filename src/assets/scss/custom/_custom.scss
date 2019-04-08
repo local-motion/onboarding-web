@@ -116,3 +116,14 @@ This CSS resource incorporates links to font software which is the valuable copy
 .hide{
     display: none;
 }
+
+@keyframes wave {
+    0%, 60%, 100% {
+        -webkit-transform: initial;
+        transform: initial
+    }
+    30% {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px)
+    }
+}
