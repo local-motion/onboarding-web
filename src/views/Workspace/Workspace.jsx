@@ -235,7 +235,7 @@ class WorkspaceTemplate extends React.Component {
                                   expandedPhase={this.state.expandedPhase}
                                   onChange={this.selectPhase}
                                 >
-                                    <StyledStepButton onClick={this.toggleAddPlayground} index="1" name="Speeltuin toevoegen" />
+                                    {!playground && <StyledStepButton onClick={this.toggleAddPlayground} index="1" name="Speeltuin toevoegen" />}
                                     {!user && <StyledStepLink link={`/workspace/${playground.id}/login`} index="2" disabled={user} name="Inloggen" />}
 
                                     {phases.firstPhase.steps.map((step, index)=> <StyledStepLink key={step.name} index={index + 3} {...step} />)}
