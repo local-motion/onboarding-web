@@ -42,7 +42,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-class WorkspaceTemplate extends React.PureComponent {
+class WorkspaceTemplate extends React.Component {
     componentDidMount() {
         console.log("starting stream playground details of " + this.props.match.params.initiativeId);
         this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId);
