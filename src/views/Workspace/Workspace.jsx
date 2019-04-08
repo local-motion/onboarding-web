@@ -7,7 +7,13 @@ import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, stopPlaygroundDetailsS
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
-import { playgroundLabels, playgroundStatuses, getPhases, getOpenedStepTitle } from "../../misc/WorkspaceHelpers";
+import {
+    playgroundLabels,
+    playgroundStatuses,
+    getPhases,
+    getOpenedStepTitle,
+    shouldWorkspaceUpdate,
+} from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
 
 const mapStateToProps = (state, ownProps) => ({
@@ -40,6 +46,10 @@ class WorkspaceTemplate extends React.PureComponent {
     componentDidMount() {
         console.log("starting stream playground details of " + this.props.match.params.initiativeId);
         this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId);
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return shouldWorkspaceUpdate(this.props.playground, nextProps.playground);
     }
 
     componentWillUnmount() {

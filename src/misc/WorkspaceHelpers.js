@@ -82,3 +82,41 @@ export function getOpenedStepTitle(phases, url) {
       ? phases[foundPhase].title
       : null;
 }
+
+export function shouldWorkspaceUpdate(currentPlayground, nextPlayground) {
+    if (!currentPlayground && !nextPlayground) return false;
+
+    if (!currentPlayground && nextPlayground) return true;
+
+    const {
+        id,
+        name,
+        lat,
+        lng,
+        volunteerCount,
+        votes,
+        status,
+        smokeFreeDate,
+        managers,
+        volunteers,
+        jointChecklistItems,
+        ownChecklistItems,
+        playgroundObservations,
+    } = currentPlayground;
+
+    return (
+      id !== nextPlayground.id
+          || volunteerCount !== nextPlayground.volunteerCount
+          || name !== nextPlayground.name
+          || lat !== nextPlayground.lat
+          || lng !== nextPlayground.lng
+          || votes !== nextPlayground.votes
+          || status !== nextPlayground.status
+          || smokeFreeDate !== nextPlayground.smokeFreeDate
+          || jointChecklistItems.length !== nextPlayground.jointChecklistItems.length
+          || ownChecklistItems.length !== nextPlayground.ownChecklistItems.length
+          || managers.length !== nextPlayground.managers.length
+          || volunteers.length !== nextPlayground.volunteers.length
+          || playgroundObservations.length !== nextPlayground.playgroundObservations.length
+    );
+}
