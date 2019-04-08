@@ -23,7 +23,7 @@ const styles = themes => ({
         textAlign: "center",
         margin: "10px",
         fontSize: "13px",
-        fontFamily: '"Montserrat"',
+        fontFamily: '"montserrat-light-webfont"',
         fontWeight: 600,
     },
     cardContent: {
