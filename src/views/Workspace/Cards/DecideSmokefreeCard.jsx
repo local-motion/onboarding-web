@@ -5,18 +5,16 @@ import { isUserManagerOfPlayground } from "../../../components/Playground/Playgr
 import { connect } from 'react-redux'
 import { setDecideSmokefree } from "../../../components/Playground/PlaygroundActions";
 
-const mapStateToProps = state => {
-}
-
 const mapDispatchToProps = dispatch => ({
     setDecideSmokefree:    (initiativeId) =>     dispatch(setDecideSmokefree(initiativeId)),
-})
+});
 
 class DecideSmokefreeCard extends React.Component {
     render() {
         const {playground, user} = this.props;
 
-        if (!playground) return "Loading..."
+        if (!playground)
+            return "Loading...";
 
         const decisionTaken  = playground.status === 'IN_PROGRESS' || playground.status === 'FINISHED'
 
@@ -45,5 +43,5 @@ class DecideSmokefreeCard extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DecideSmokefreeCard);
+export default connect(null, mapDispatchToProps)(DecideSmokefreeCard);
 
