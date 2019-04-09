@@ -84,13 +84,14 @@ class ChatMessageList extends React.PureComponent /* using PureComponent to over
 
     return (
       <List>
-        {
-          items.length > 2
-            ? this.renderUnreadMessages(howManyUnread, items)
-            : items.map(this.renderItem)
-        }
+        {/*{*/}
+          {/*items.length > 2*/}
+            {/*? this.renderUnreadMessages(howManyUnread, items)*/}
+            {/*: items.map(this.renderItem)*/}
+        {/*}*/}
+        {items.map(this.renderItem)}
 
-        {isTyping && this.renderItem(typingItem)}
+        {/*{isTyping && this.renderItem(typingItem)}*/}
       </List>
     )
   }
