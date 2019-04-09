@@ -21,7 +21,6 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
-import Team from "./views/Workspace/Sections/Team";
 
 const mapStateToProps = (state) => ({
   })
@@ -55,7 +54,7 @@ class App extends React.Component {
                         <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
                         <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
-                        <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Team}/>
+                        <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/flyer" key="Flyer" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator" component={Workspace}/>

@@ -13,11 +13,6 @@ export function getPhases(startPathUrl) {
             expandedIcon: require('assets/img/icon-cooperate@2x-active.png'),
             steps: [
                 {
-                    name: 'Vorm een team',
-                    link: startPathUrl + '/add-team-member',
-
-                },
-                {
                     name: 'Flyers verspreiden',
                     link: startPathUrl + '/flyer',
                 },
@@ -64,6 +59,22 @@ export function getPhases(startPathUrl) {
                 {
                     name: 'Volhouden',
                     link: startPathUrl + '/magnify',
+                },
+            ],
+        },
+
+        community: {
+            title: 'Gemeenschap',
+            icon: '',
+            expandedIcon: '',
+            steps: [
+                {
+                    name: 'Vorm een team!',
+                    link: startPathUrl + '/add-team-member',
+                },
+                {
+                    name: 'Babbelen',
+                    link: startPathUrl + '/team',
                 },
             ],
         },

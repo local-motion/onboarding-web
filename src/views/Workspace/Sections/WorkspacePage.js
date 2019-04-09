@@ -23,6 +23,7 @@ import GridContainer from "../../../components/Grid/GridContainer";
 import GridItem from "../../../components/Grid/GridItem";
 import Footer from "../../../components/Footer/Footer";
 import WorkspaceWelcomeContent from "./WorkspaceWelcome/WorkspaceWelcomeContent";
+import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 
 
 class WorkspacePage extends PureComponent {
@@ -124,6 +125,15 @@ class WorkspacePage extends PureComponent {
                               >
                                   {phases.thirdPhase.steps.map(step => <StyledStepLink key={step.name} {...step} />)}
                               </ExpansionPhase>
+                              <ExpansionPhase
+                                title={phases.community.title}
+                                icon={phases.community.icon}
+                                expandedIcon={phases.community.expandedIcon}
+                                expandedPhase={expandedPhase}
+                                onChange={this.selectPhase}
+                              >
+                                  {phases.community.steps.map(step => <StyledStepLink key={step.name} {...step} />)}
+                              </ExpansionPhase>
                           </GridItem>
 
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
@@ -134,6 +144,8 @@ class WorkspacePage extends PureComponent {
                                   <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
                                          render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
+                                  <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
+                                         render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember"
                                          render={(props) => <GetSupportCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/flyer" key="Flyer"
