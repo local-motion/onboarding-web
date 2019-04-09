@@ -6,10 +6,15 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 const styles = theme => ({
     entryBox: {
-        margin: '2px 10px 10px 10px',
-        border: '2px solid #CCC',
-        borderRadius: '8px',
-        padding: '5px',
+        alignItems: 'center',
+        border: '1px solid #a1a1a1',
+        borderRadius: '3px',
+        display: 'flex',
+        height: '60px',
+        fontSize: '14px',
+        lineHeight: '20px',
+        margin: '20px 25px',
+        padding: '20px',
     },
     textField: {
         marginRight: '5px',
