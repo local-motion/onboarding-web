@@ -30,6 +30,7 @@ const styles = theme => ({
     margin: '4px 0 0',
     overflow: 'auto',
     scrollbarWidth: 'none',       // hide the scrollbar in firefox
+    flexBasis: '350px',
     // WebkitScrollbar: {
     //   display: 'none'
     // }
