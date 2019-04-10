@@ -157,10 +157,10 @@ class Header extends React.Component {
 
                     {showStats && (
                         <React.Fragment>
-                            <ToolbarButton color="default" className={classes.button} onClick={() => this.gotoTeamPage()}>
-                                <GroupIcon className={classes.rightIcon} />
-                                &nbsp;{nrOfVolunteers}
-                            </ToolbarButton>
+                            {/*<ToolbarButton color="default" className={classes.button} onClick={() => this.gotoTeamPage()}>*/}
+                                {/*<GroupIcon className={classes.rightIcon} />*/}
+                                {/*&nbsp;{nrOfVolunteers}*/}
+                            {/*</ToolbarButton>*/}
 
                             <ToolbarButton color="default" className={classes.button} onClick={openPetitionDialog}>
                                 <ThumbUpIcon className={classes.rightIcon} />

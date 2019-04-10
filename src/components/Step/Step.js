@@ -35,7 +35,7 @@ const styles = themes => ({
         textAlign: "center",
         margin: "15px",
         fontSize: "13px",
-        fontFamily: '"Montserrat"',
+        fontFamily: '"montserrat-light-webfont"',
         fontWeight: 600,
         transition: 'all .2s',
     },

@@ -1,7 +1,4 @@
 import React from "react";
-//import PropTypes from 'prop-types';
-
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle.jsx";
@@ -14,12 +11,12 @@ import { Redirect } from 'react-router-dom'
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
-import PlaygroundIcons from "components/PlaygroundIcons/PlaygroundIcons";
 import { getPlaygroundDetails } from "../../../../components/Playground/PlaygroundReducer";
 import { isLoading, getFetchError } from "../../../../api/FetchDetailsReducer";
 import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
 import { getActivePhaseUrl } from "../../../../misc/WorkspaceHelpers";
 import { history } from "../../../../setup";
+import WorkspaceWelcomeContent from "./WorkspaceWelcomeContent";
 
 const mapStateToProps = (state, ownProps) => ({
     playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),
@@ -49,16 +46,6 @@ class WorkspaceWelcome extends React.Component {
     componentWillUnmount() {
         console.log('stopping stream: ', this.props.match.params.initiativeId)
         this.props.stopPlaygroundDetailsStream(this.props.match.params.initiativeId)
-    }
-    
-    goToJoinPage() {
-        history.push(`${this.props.user ? '' : '/login?target='}/workspace/${this.props.match.params.initiativeId}/join`);
-    }
-
-    gotoActivePhase() {
-        const activePhaseUrl = getActivePhaseUrl(this.props.playground);
-
-        history.push(activePhaseUrl);
     }
 
     render() {
@@ -96,19 +83,10 @@ class WorkspaceWelcome extends React.Component {
                     <div className={classes.container}>
                         <div className={classes.title}>{playground.name} Rookvrij</div>
                         <div className={classes.descr}>Via deze website kan je een speeltuin in 3 fases rookvrij maken.</div>
-                        <div className={classes.icons}>
-                            <PlaygroundIcons />
-                        </div>
-                        <div className={classes.buttonContainer}>
-                            <button
-                                className={classes.button}
-                                onClick={() => this.goToJoinPage()}>
-                                Ga direct aan de slag
-                            </button>
-                            <button className={classes.skip} onClick={() => this.gotoActivePhase()}>
-                                Ga direct naar de pagina
-                            </button>
-                        </div>
+
+                        <WorkspaceWelcomeContent
+                            playground={playground}
+                        />
                     </div>
                     <Footer />
                 </div>
