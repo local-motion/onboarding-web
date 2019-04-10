@@ -16,7 +16,6 @@ const styles = theme => ({
     card: {
         maxWidth: '100%',
         marginTop: 0,
-        marginBottom: 10,
         alignSelf: 'baseline',
         // borderRadius: '0px 7px 7px 0px',
         height: '100%',

@@ -1,5 +1,6 @@
 import React from "react";
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
@@ -13,6 +14,8 @@ import {
     getPhases,
     getOpenedStepTitle,
     shouldWorkspaceUpdate,
+    getPrevStep,
+    getNextStep,
 } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
 
@@ -81,19 +84,27 @@ class WorkspaceTemplate extends React.Component {
 
         const startPathUrl = `/workspace/${this.props.playground.id}`;
 
-        const phases = getPhases(startPathUrl);
+        const phases = getPhases();
 
-        const openedStepTitle = getOpenedStepTitle(phases, this.props.match.url);
+        const { url } = this.props.match;
+
+        const openedStepTitle = getOpenedStepTitle(phases, url);
 
         const activePhase = openedStepTitle !== null
           ? openedStepTitle
           : this.getStatus();
+
+        const prevStep = getPrevStep(phases, url);
+        const nextStep = getNextStep(phases, url);
 
         return (
             <div className={"workspace-wrapper"}>
                 <WorkspacePage
                     playground={playground}
                     phases={phases}
+                    startPathUrl={startPathUrl}
+                    prevStep={prevStep}
+                    nextStep={nextStep}
                     activePhase={activePhase}
                     user={user}
                     classes={classes}
@@ -105,4 +116,4 @@ class WorkspaceTemplate extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate));
+export default withRouter(withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate)));
