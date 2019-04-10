@@ -27,6 +27,7 @@ class GetSupportCard extends React.Component {
             <WorkspaceCard title={"Mensen verzamelen"}
                 done={playground.volunteerCount >= targetNrOfVolunteers}
                 image={require("assets/img/backgrounds/team.jpg")}
+                customStyle={{ backgroundPositionY: '-70px' }}
                 content={"Samen sta je sterk. Nodig anderen uit om mee te doen. Probeer om minimaal " + targetNrOfVolunteers + " mensen te verzamelen."}
                 primaryCta={{
                     action: inviteButtonHref,
