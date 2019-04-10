@@ -21,7 +21,6 @@ import { Button } from "@material-ui/core";
 import { ArrowLeftRounded } from "@material-ui/icons";
 import { Link } from 'react-router-dom'
 import EuroIcon from '@material-ui/icons/EuroSymbol';
-import GroupIcon from '@material-ui/icons/Group';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { openConfirmationDialog } from "../ConfirmationDialog/ConfirmationDialogActions";
 
@@ -106,7 +105,6 @@ class Header extends React.Component {
         const {
             classes,
             color,
-            playground,
             rightLinks,
             leftLinks,
             showStats,
@@ -127,7 +125,7 @@ class Header extends React.Component {
         })
         const brandContent = <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />;
         const brandComponent = brand ? <div align='center'><Link to={'/'}>{brandContent}</Link></div> : null;
-        const nrOfVolunteers = playground ? playground.volunteerCount : 250; // for now mock the total number of volunteers for smokefree playgrounds
+        // const nrOfVolunteers = playground ? playground.volunteerCount : 250; // for now mock the total number of volunteers for smokefree playgrounds
 
         return (
             <AppBar className={appBarClasses + " lm-header"}>

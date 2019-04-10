@@ -54,7 +54,10 @@ class App extends React.Component {
                         <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
                         <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
-                        <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Workspace}/>
+
+                        <Route path="/workspace/:initiativeId/" component={Workspace}/>
+
+                        {/* <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/flyer" key="Flyer" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator" component={Workspace}/>
@@ -63,7 +66,7 @@ class App extends React.Component {
                         <Route exact path="/workspace/:initiativeId/shout" key="Shout" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/signonfence" key="Signonfence" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/celebrate" key="Celebrate" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/magnify" key="Magnify" component={Workspace}/>
+                        <Route exact path="/workspace/:initiativeId/magnify" key="Magnify" component={Workspace}/> */}
 
                         <Route exact path="/" key="Onboarding" component={Onboarding}/>
 
