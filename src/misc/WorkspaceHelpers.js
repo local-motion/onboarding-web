@@ -64,7 +64,7 @@ export function getPhases(startPathUrl) {
         },
 
         community: {
-            title: 'Gemeenschap',
+            title: 'Community',
             icon: '',
             expandedIcon: '',
             steps: [
@@ -73,7 +73,7 @@ export function getPhases(startPathUrl) {
                     link: startPathUrl + '/add-team-member',
                 },
                 {
-                    name: 'Babbelen',
+                    name: 'Chat',
                     link: startPathUrl + '/team',
                 },
             ],
