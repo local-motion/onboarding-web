@@ -24,7 +24,7 @@ class GetSupportCard extends React.Component {
         const inviteButtonLabel = "Verstuur een email"
         const targetNrOfVolunteers = 2
         return (
-            <WorkspaceCard title={"Vorm een team"}
+            <WorkspaceCard title={"Mensen verzamelen"}
                 done={playground.volunteerCount >= targetNrOfVolunteers}
                 image={require("assets/img/backgrounds/team.jpg")}
                 content={"Samen sta je sterk. Nodig anderen uit om mee te doen. Probeer om minimaal " + targetNrOfVolunteers + " mensen te verzamelen."}

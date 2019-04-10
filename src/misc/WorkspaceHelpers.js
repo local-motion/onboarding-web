@@ -1,5 +1,5 @@
 export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
-export const playgroundLabels = ['Voorbereiden', 'Uitvoeren', 'Onderhouden'];
+export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Naleven en Evalueren'];
 
 export function getActivePhaseUrl(playground) {
     return `/workspace/${playground.id}/flyer`;
@@ -8,7 +8,7 @@ export function getActivePhaseUrl(playground) {
 export function getPhases(startPathUrl) {
     return {
         firstPhase: {
-            title: 'Voorbereiden',
+            title: playgroundLabels[0],
             icon: require('assets/img/icon-cooperate@2x.png'),
             expandedIcon: require('assets/img/icon-cooperate@2x-active.png'),
             steps: [
@@ -28,7 +28,7 @@ export function getPhases(startPathUrl) {
         },
 
         secondPhase: {
-            title: 'Uitvoeren',
+            title: playgroundLabels[1],
             icon: require('assets/img/icon-checklist@2x.png'),
             expandedIcon: require('assets/img/icon-checklist@2x-active.png'),
             steps: [
@@ -48,7 +48,7 @@ export function getPhases(startPathUrl) {
         },
 
         thirdPhase: {
-            title: 'Onderhouden',
+            title: playgroundLabels[2],
             icon: require('assets/img/icon-positivity@2x.png'),
             expandedIcon: require('assets/img/icon-positivity@2x-active.png'),
             steps: [
@@ -69,7 +69,7 @@ export function getPhases(startPathUrl) {
             expandedIcon: '',
             steps: [
                 {
-                    name: 'Vorm een team!',
+                    name: 'Mensen verzamelen',
                     link: startPathUrl + '/add-team-member',
                 },
                 {
