@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import Paper from "@material-ui/core/Paper/Paper";
-import Button from "@material-ui/core/Button/Button";
 import classNames from "classnames";
 
 import { StyledStepButton, StyledStepLink } from "../../../components/Step/Step";
@@ -27,8 +26,8 @@ import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 
 
 class WorkspacePage extends PureComponent {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.toggleAddPlayground = this.toggleAddPlayground.bind(this);
         this.selectPhase = this.selectPhase.bind(this);
@@ -47,10 +46,6 @@ class WorkspacePage extends PureComponent {
         this.setState(({ expandedPhase }) =>
           ({ expandedPhase: expandedPhase !== phase ? phase : 'none' }));
     }
-
-    gotoWorkspaceWelcomePage = () => {
-        this.props.history.push(`/workspace/${this.props.match.params.initiativeId}`);
-    };
 
     toggleAddPlayground() {
         this.setState(({ isAddPlaygroundOpen }) => ({ isAddPlaygroundOpen: !isAddPlaygroundOpen }));
@@ -81,15 +76,6 @@ class WorkspacePage extends PureComponent {
                       <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                           <div className={"title-wrapper"}>
                               <h2 className={classes.playgroundTitle}>{playground.name}</h2>
-                              <div className={"explainer-actions"}>
-                                  <Button
-                                    className={"btn btn-highlight"}
-                                    onClick={this.gotoWorkspaceWelcomePage}
-                                    style={{textAlign: 'center'}}
-                                  >
-                                      <span>Ga terug naar de startpagina</span>
-                                  </Button>
-                              </div>
                           </div>
                       </GridItem>
 
