@@ -32,7 +32,7 @@ const WorkspaceWelcomeStyle = theme => ({
   icons: {
     display: 'flex',
     justifyContent: 'center',
-    margin: '0 0 48px',
+    margin: '40px 0 48px',
     [theme.breakpoints.down("sm")]: {
       flexWrap: 'wrap',
     },

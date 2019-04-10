@@ -7,24 +7,37 @@ import { withStyles } from "@material-ui/core";
 
 const styles = themes => ({
     link: {
-        display: "block",
-        marginBottom: "10px",
         cursor: "pointer",
+        display: "block",
+        marginBottom: "15px",
         "&:first-child": {
-            marginTop: "10px"
+            marginTop: "15px"
         },
         "&:last-child": {
             marginBottom: 0,
             paddingBottom: 0
-        }
+        },
+    },
+    card: {
+        background: '#f5f5f5',
+        border: 'none',
+        boxShadow: 'none',
+        transition: 'all .2s',
+        '&:hover $name': {
+            color: '#f5f5f5',
+        },
+        '&:hover': {
+           background: '#085ca6',
+        },
     },
     name: {
         color: '#626262',
         textAlign: "center",
-        margin: "10px",
+        margin: "15px",
         fontSize: "13px",
-        fontFamily: '"Montserrat"',
+        fontFamily: '"montserrat-light-webfont"',
         fontWeight: 600,
+        transition: 'all .2s',
     },
     cardContent: {
         border: '1px solid transparent',

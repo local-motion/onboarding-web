@@ -20,9 +20,7 @@ import Contact from "views/About/Contact.jsx";
 import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
-import WorkspaceWelcome from "./views/Workspace/Sections/WorkspaceWelcome/WorkspaceWelcome";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
-import Team from "./views/Workspace/Sections/Team";
 
 const mapStateToProps = (state) => ({
   })
@@ -52,11 +50,14 @@ class App extends React.Component {
                         <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
                         <Route exact path="/terms" key="Terms of Use" component={Terms}/>
 
-                        <Route exact path="/workspace/:initiativeId" key="Workspace" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/welcome" key="WorkspaceWelcome" component={WorkspaceWelcome}/>
+                        <Route exact path="/workspace/" key="Workspace" component={Workspace}/>
+                        <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
                         <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
-                        <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Team}/>
+
+                        <Route path="/workspace/:initiativeId/" component={Workspace}/>
+
+                        {/* <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/flyer" key="Flyer" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator" component={Workspace}/>
@@ -65,7 +66,7 @@ class App extends React.Component {
                         <Route exact path="/workspace/:initiativeId/shout" key="Shout" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/signonfence" key="Signonfence" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/celebrate" key="Celebrate" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/magnify" key="Magnify" component={Workspace}/>
+                        <Route exact path="/workspace/:initiativeId/magnify" key="Magnify" component={Workspace}/> */}
 
                         <Route exact path="/" key="Onboarding" component={Onboarding}/>
 

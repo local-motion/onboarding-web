@@ -26,11 +26,11 @@ const ExpansionPanelSummary = withStyles({
         borderBottom: '1px solid rgba(0,0,0,.125)',
         marginBottom: -1,
         boxShadow: '0px 5px 10px 0px rgba(98,98,98,0.1)',
-        minHeight: '114px',
+        maxHeight: '114px',
+        minHeight: 'fit-content',
         transition: 'none',
         '&$expanded': {
             margin: 0,
-            minHeight: '114px',
             backgroundColor: '#085ca6',
         },
     },
@@ -60,7 +60,7 @@ const StyledTypography = withStyles({
         padding: '15px 0 15px 0 !important',
         flexDirection: 'column',
         fontSize: '16px',
-        fontFamily: '"Montserrat"',
+        fontFamily: '"montserrat-light-webfont"',
         alignItems: 'center',
         color: '#626262',
     },
@@ -74,7 +74,7 @@ const StyledExpandedTypography = withStyles({
         padding: '15px 0 15px 0 !important',
         flexDirection: 'column',
         fontSize: '16px',
-        fontFamily: '"Montserrat"',
+        fontFamily: '"montserrat-light-webfont"',
         alignItems: 'center',
         color: '#fff',
     },
@@ -109,11 +109,14 @@ const Icon = withStyles({
         height: '100%',
         margin: '0 auto',
     },
-})(({ icon, classes }) => (
-  <span className={classes.iconWrapper}>
-      <img className={classes.icon} src={icon} alt="Icon" />
-  </span>
-));
+})(({ icon, classes }) => icon
+  ? (
+      <span className={classes.iconWrapper}>
+          <img className={classes.icon} src={icon} alt="Icon" />
+      </span>
+    )
+  : null
+);
 
 class ExpansionPhase extends Component {
     handleChange = () => {
