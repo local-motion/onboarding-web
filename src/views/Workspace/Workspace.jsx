@@ -52,7 +52,7 @@ class WorkspaceTemplate extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return shouldWorkspaceUpdate(this.props.playground, nextProps.playground);
+        return shouldWorkspaceUpdate(this.props, nextProps);
     }
 
     componentWillUnmount() {
@@ -86,16 +86,9 @@ class WorkspaceTemplate extends React.Component {
 
         const phases = getPhases();
 
-        const { url } = this.props.match;
-
-        const openedStepTitle = getOpenedStepTitle(phases, url);
-
-        const activePhase = openedStepTitle !== null
-          ? openedStepTitle
-          : this.getStatus();
-
-        const prevStep = getPrevStep(phases, url);
-        const nextStep = getNextStep(phases, url);
+        if (!user) {
+            phases.firstPhase.steps.unshift({ name: 'Inloggen', link: '/login' });
+        }
 
         return (
             <div className={"workspace-wrapper"}>
@@ -103,9 +96,6 @@ class WorkspaceTemplate extends React.Component {
                     playground={playground}
                     phases={phases}
                     startPathUrl={startPathUrl}
-                    prevStep={prevStep}
-                    nextStep={nextStep}
-                    activePhase={activePhase}
                     user={user}
                     classes={classes}
                     rest={rest}

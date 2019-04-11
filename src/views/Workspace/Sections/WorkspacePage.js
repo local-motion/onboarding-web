@@ -25,6 +25,7 @@ import GridItem from "../../../components/Grid/GridItem";
 import Footer from "../../../components/Footer/Footer";
 import WorkspaceWelcomeContent from "./WorkspaceWelcome/WorkspaceWelcomeContent";
 import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
+import { getNextStep, getOpenedStepTitle, getPrevStep } from "../../../misc/WorkspaceHelpers";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -42,7 +43,7 @@ class WorkspacePage extends PureComponent {
         super();
 
         this.toggleAddPlayground = this.toggleAddPlayground.bind(this);
-        this.selectPhase = this.selectPhase.bind(this);
+        this.clickPhase = this.clickPhase.bind(this);
         this.gotoPrevStep = this.gotoPrevStep.bind(this);
         this.gotoNextStep = this.gotoNextStep.bind(this);
     }
@@ -53,35 +54,59 @@ class WorkspacePage extends PureComponent {
     };
 
     componentDidMount() {
-        this.selectPhase(this.props.activePhase);
+        this.selectActivePhase();
+    }
+
+    getActivePhase() {
+        const { location: { pathname }, phases } = this.props;
+
+        const openedStepTitle = getOpenedStepTitle(phases, pathname);
+
+        return openedStepTitle !== null
+          ? openedStepTitle
+          : this.getStatus();
+    }
+
+    selectActivePhase() {
+        const activePhase = this.getActivePhase();
+
+        this.selectPhase(activePhase);
     }
 
     selectPhase(phase) {
-        this.setState(({ expandedPhase }) =>
-          ({ expandedPhase: expandedPhase !== phase ? phase : 'none' }));
+        this.setState(({ expandedPhase: phase }));
+    }
+
+    clickPhase(phase) {
+        this.selectPhase(this.state.expandedPhase !== phase ? phase : 'none');
     }
 
     toggleAddPlayground() {
         this.setState(({ isAddPlaygroundOpen }) => ({ isAddPlaygroundOpen: !isAddPlaygroundOpen }));
     }
 
-    gotoPrevStep() {
-        const { history, prevStep, startPathUrl } = this.props;
-        const url = startPathUrl + prevStep;
+    gotoPrevStep(prev) {
+        const { history, startPathUrl } = this.props;
+        const url = startPathUrl + prev.stepLink;
 
         history.push(url);
+        this.selectPhase(prev.title);
     }
 
-    gotoNextStep() {
-        const { history, nextStep, startPathUrl } = this.props;
-        const url = startPathUrl + nextStep;
+    gotoNextStep(next) {
+        const { history, startPathUrl } = this.props;
+        const url = startPathUrl + next.stepLink;
 
         history.push(url);
+        this.selectPhase(next.title);
     }
 
     render() {
-        const { phases, playground, user, prevStep, nextStep, startPathUrl, classes, ...rest } = this.props;
+        const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
         const { expandedPhase, isAddPlaygroundOpen } = this.state;
+
+        const prev = getPrevStep(phases, pathname);
+        const next = getNextStep(phases, pathname);
 
         return (
           <React.Fragment>
@@ -114,10 +139,9 @@ class WorkspacePage extends PureComponent {
                                 icon={phases.firstPhase.icon}
                                 expandedIcon={phases.firstPhase.expandedIcon}
                                 expandedPhase={expandedPhase}
-                                onChange={this.selectPhase}
+                                onChange={this.clickPhase}
                               >
                                   {!playground && <StyledStepButton onClick={this.toggleAddPlayground} name="Speeltuin toevoegen" />}
-                                  {!user && <StyledStepLink link={"/login"} disabled={user} name="Inloggen" />}
 
                                   {phases.firstPhase.steps.map(step=> <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
@@ -126,7 +150,7 @@ class WorkspacePage extends PureComponent {
                                 icon={phases.secondPhase.icon}
                                 expandedIcon={phases.secondPhase.expandedIcon}
                                 expandedPhase={expandedPhase}
-                                onChange={this.selectPhase}
+                                onChange={this.clickPhase}
                               >
                                   {phases.secondPhase.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
@@ -135,7 +159,7 @@ class WorkspacePage extends PureComponent {
                                 icon={phases.thirdPhase.icon}
                                 expandedIcon={phases.thirdPhase.expandedIcon}
                                 expandedPhase={expandedPhase}
-                                onChange={this.selectPhase}
+                                onChange={this.clickPhase}
                               >
                                   {phases.thirdPhase.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
@@ -144,7 +168,7 @@ class WorkspacePage extends PureComponent {
                                 icon={phases.community.icon}
                                 expandedIcon={phases.community.expandedIcon}
                                 expandedPhase={expandedPhase}
-                                onChange={this.selectPhase}
+                                onChange={this.clickPhase}
                               >
                                   {phases.community.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
@@ -181,16 +205,16 @@ class WorkspacePage extends PureComponent {
                               </Switch>
 
                               <div className={"workspace-content-pagination"}>
-                                  {prevStep ? (
-                                    <Button onClick={this.gotoPrevStep} variant="outlined" className={"pagination-button"}>
+                                  {prev.stepLink ? (
+                                    <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined" className={"pagination-button"}>
                                         <PaginationIcon />
                                     </Button>
                                   ) : <div style={{ width: '45px' }} />}
 
                                   <Button variant="contained" className={"pagination-button-step"}>ik heb deze stap volbracht!</Button>
 
-                                  {nextStep ? (
-                                    <Button onClick={this.gotoNextStep} variant="outlined" className={"pagination-button"}>
+                                  {next.stepLink ? (
+                                    <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
                                         <PaginationIcon className={"pagination-button-icon-right"} />
                                     </Button>
                                   ) : <div style={{ width: '45px' }} />}
