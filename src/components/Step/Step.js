@@ -56,16 +56,16 @@ const styles = themes => ({
     },
 });
 
-const StepLink = ({ name, description, image, link, classes, match, disabled }) => (
-    <Link to={link} className={classes.link} disabled={disabled}>
-        <Card className={`${classes.card} ${match.url.includes(link) ? classes.cardActive : null}`}>
-            <CardContent className={classes.cardContent}>
-                <Typography gutterBottom className={classes.name}>
-                    {name}
-                </Typography>
-            </CardContent>
-        </Card>
-    </Link>
+const StepLink = ({ name, description, image, link, classes, location: { pathname }, startPathUrl }) => (
+  <Link to={startPathUrl + link} className={classes.link}>
+      <Card className={`${classes.card} ${pathname.includes(link) ? classes.cardActive : null}`}>
+          <CardContent className={classes.cardContent}>
+              <Typography gutterBottom className={classes.name}>
+                  {name}
+              </Typography>
+          </CardContent>
+      </Card>
+  </Link>
 );
 
 const StepButton = ({ name, description, image, onClick, classes }) => (

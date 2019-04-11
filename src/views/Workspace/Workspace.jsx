@@ -1,5 +1,6 @@
 import React from "react";
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
@@ -7,13 +8,7 @@ import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, stopPlaygroundDetailsS
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
-import {
-    playgroundLabels,
-    playgroundStatuses,
-    getPhases,
-    getOpenedStepTitle,
-    shouldWorkspaceUpdate,
-} from "../../misc/WorkspaceHelpers";
+import { getPhases, shouldWorkspaceUpdate } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
 
 const mapStateToProps = (state, ownProps) => ({
@@ -57,18 +52,6 @@ class WorkspaceTemplate extends React.Component {
         this.props.stopPlaygroundDetailsStream(this.props.match.params.initiativeId);
     }
 
-    getStatus() {
-        const playgroundStatus = this.props.playground
-          ? this.props.playground.status
-          : '';
-
-        const result = playgroundStatuses.find(element => element === playgroundStatus);
-
-        return result
-          ? playgroundLabels[playgroundStatuses.indexOf(result)]
-          : null;
-    }
-
     render() {
         const { playground, user, classes, signInHandler, ...rest } = this.props;
 
@@ -81,20 +64,18 @@ class WorkspaceTemplate extends React.Component {
 
         const startPathUrl = `/workspace/${this.props.playground.id}`;
 
-        const phases = getPhases(startPathUrl);
+        const phases = getPhases();
 
-        const openedStepTitle = getOpenedStepTitle(phases, this.props.match.url);
-
-        const activePhase = openedStepTitle !== null
-          ? openedStepTitle
-          : this.getStatus();
+        if (!user) {
+            phases.firstPhase.steps.unshift({ name: 'Inloggen', link: '/login' });
+        }
 
         return (
             <div className={"workspace-wrapper"}>
                 <WorkspacePage
                     playground={playground}
                     phases={phases}
-                    activePhase={activePhase}
+                    startPathUrl={startPathUrl}
                     signInHandler={signInHandler}
                     user={user}
                     classes={classes}
@@ -105,4 +86,4 @@ class WorkspaceTemplate extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate));
+export default withRouter(withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate)));

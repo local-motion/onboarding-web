@@ -68,9 +68,8 @@ class JSignIn extends Component {
     }
 
     goToTargetUrl = () => {
-        console.log(this.props);
         const parsedSearch = querySearch(this.props.location.search);
-        const url = parsedSearch["target"] || "/";
+        const url = parsedSearch["target"] || this.props.location.pathname.replace('/login', '');
 
         this.props.history.push(url);
     };
