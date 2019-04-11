@@ -70,7 +70,7 @@ class WorkspaceTemplate extends React.Component {
     }
 
     render() {
-        const { playground, user, classes, ...rest } = this.props;
+        const { playground, user, classes, signInHandler, ...rest } = this.props;
 
         // const activePhaseIdx = this.getStatusIndex();                        // the active phase represents the current state of this playground
         // const phaseIdx = this.props.match.params.phaseId - 1;                // The phase that the user has selected, if any
@@ -95,6 +95,7 @@ class WorkspaceTemplate extends React.Component {
                     playground={playground}
                     phases={phases}
                     activePhase={activePhase}
+                    signInHandler={signInHandler}
                     user={user}
                     classes={classes}
                     rest={rest}
