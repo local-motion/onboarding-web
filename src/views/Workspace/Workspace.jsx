@@ -60,18 +60,6 @@ class WorkspaceTemplate extends React.Component {
         this.props.stopPlaygroundDetailsStream(this.props.match.params.initiativeId);
     }
 
-    getStatus() {
-        const playgroundStatus = this.props.playground
-          ? this.props.playground.status
-          : '';
-
-        const result = playgroundStatuses.find(element => element === playgroundStatus);
-
-        return result
-          ? playgroundLabels[playgroundStatuses.indexOf(result)]
-          : null;
-    }
-
     render() {
         const { playground, user, classes, signInHandler, ...rest } = this.props;
 

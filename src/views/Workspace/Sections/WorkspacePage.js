@@ -25,7 +25,12 @@ import GridItem from "../../../components/Grid/GridItem";
 import Footer from "../../../components/Footer/Footer";
 import WorkspaceWelcomeContent from "./WorkspaceWelcome/WorkspaceWelcomeContent";
 import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
-import { getNextStep, getOpenedStepTitle, getPrevStep } from "../../../misc/WorkspaceHelpers";
+import {
+    getNextStep,
+    getOpenedStepTitle,
+    getPrevStep,
+    playgroundLabels,
+} from "../../../misc/WorkspaceHelpers";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -64,7 +69,7 @@ class WorkspacePage extends PureComponent {
 
         return openedStepTitle !== null
           ? openedStepTitle
-          : this.getStatus();
+          : playgroundLabels[0];
     }
 
     selectActivePhase() {
@@ -107,6 +112,8 @@ class WorkspacePage extends PureComponent {
 
         const prev = getPrevStep(phases, pathname);
         const next = getNextStep(phases, pathname);
+
+        const openedStepTitle = getOpenedStepTitle(phases, pathname);
 
         return (
           <React.Fragment>
@@ -204,21 +211,23 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <ValidateCard {...props} playground={playground} user={user} />}/>
                               </Switch>
 
-                              <div className={"workspace-content-pagination"}>
-                                  {prev.stepLink ? (
-                                    <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined" className={"pagination-button"}>
-                                        <PaginationIcon />
-                                    </Button>
-                                  ) : <div style={{ width: '45px' }} />}
+                              {openedStepTitle && (
+                                <div className={"workspace-content-pagination"}>
+                                    {prev.stepLink ? (
+                                      <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined" className={"pagination-button"}>
+                                          <PaginationIcon />
+                                      </Button>
+                                    ) : <div style={{ width: '45px' }} />}
 
-                                  <Button variant="contained" className={"pagination-button-step"}>ik heb deze stap volbracht!</Button>
+                                    {user && <Button variant="contained" className={"pagination-button-step"}>ik heb deze stap volbracht!</Button>}
 
-                                  {next.stepLink ? (
-                                    <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
-                                        <PaginationIcon className={"pagination-button-icon-right"} />
-                                    </Button>
-                                  ) : <div style={{ width: '45px' }} />}
-                              </div>
+                                    {next.stepLink ? (
+                                      <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
+                                          <PaginationIcon className={"pagination-button-icon-right"} />
+                                      </Button>
+                                    ) : <div style={{ width: '45px' }} />}
+                                </div>
+                              )}
                           </GridItem>
                       </Paper>
                   </GridContainer>
