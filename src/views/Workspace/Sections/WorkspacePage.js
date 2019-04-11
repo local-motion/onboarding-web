@@ -76,8 +76,6 @@ class WorkspacePage extends PureComponent {
     selectActivePhase() {
         const activePhase = this.getActivePhase();
 
-        console.log('activePhase', activePhase);
-
         this.selectPhase(activePhase);
     }
 
