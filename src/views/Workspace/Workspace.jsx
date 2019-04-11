@@ -83,7 +83,7 @@ class WorkspaceTemplate extends React.Component {
 
         const phases = getPhases(startPathUrl);
 
-        const openedStepTitle = getOpenedStepTitle(phases, this.props.match.url);
+        const openedStepTitle = getOpenedStepTitle(phases, this.props.location.pathname);
 
         const activePhase = openedStepTitle !== null
           ? openedStepTitle
