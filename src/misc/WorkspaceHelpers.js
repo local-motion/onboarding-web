@@ -91,32 +91,40 @@ export function getCurrentStep(phases, pathname) {
 }
 
 export function getPrevStep(phases, pathname) {
-    let prevStepLink = '';
+    const prev = {
+        title: '',
+        stepLink: '',
+    };
 
     Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
         phases[phaseName].steps.forEach((step, stepIndex) => {
             if (pathname.includes(step.link)) {
                 if (stepIndex > 0) {
-                    prevStepLink = phases[phaseName].steps[stepIndex - 1].link;
+                    prev.stepLink = phases[phaseName].steps[stepIndex - 1].link;
+                    prev.title = phases[phaseName].title;
                 } else {
                     if (phaseIndex > 0) {
                         const phase = phases[phasesKeys[phaseIndex - 1]];
 
-                        prevStepLink = phase.steps[phase.steps.length - 1].link;
+                        prev.stepLink = phase.steps[phase.steps.length - 1].link;
+                        prev.title = phase.title;
                     } else {
-                        prevStepLink = null;
+                        prev.stepLink = null;
+                        prev.title = null;
                     }
                 }
             }
         });
     });
 
-    return prevStepLink;
+    return prev;
 }
 
 export function getNextStep(phases, pathname) {
-    console.log('phases', phases);
-    let nextStepLink = '';
+    const next = {
+        title: '',
+        stepLink: '',
+    };
 
     Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
         const phasesLength = phasesKeys.length;
@@ -126,21 +134,24 @@ export function getNextStep(phases, pathname) {
 
             if (pathname.includes(step.link)) {
                 if (stepIndex < (stepsLength - 1)) {
-                    nextStepLink = phases[phaseName].steps[stepIndex + 1].link;
+                    next.stepLink = phases[phaseName].steps[stepIndex + 1].link;
+                    next.title = phases[phaseName].title;
                 } else {
                     if (phaseIndex < (phasesLength - 1)) {
                         const phase = phases[phasesKeys[phaseIndex + 1]];
 
-                        nextStepLink = phase.steps[0].link;
+                        next.stepLink = phase.steps[0].link;
+                        next.title = phase.title;
                     } else {
-                        nextStepLink = null;
+                        next.stepLink = null;
+                        next.title = null;
                     }
                 }
             }
         });
     });
 
-    return nextStepLink;
+    return next;
 }
 
 export function getOpenedStepTitle(phases, pathname) {
@@ -151,10 +162,15 @@ export function getOpenedStepTitle(phases, pathname) {
       : null;
 }
 
-export function shouldWorkspaceUpdate(currentPlayground, nextPlayground) {
+export function shouldWorkspaceUpdate(props, nextProps) {
+    const { playground: currentPlayground, user: currentUser }= props;
+    const { playground: nextPlayground, user: nextUser } = nextProps;
+
     if (!currentPlayground && !nextPlayground) return false;
 
     if (!currentPlayground && nextPlayground) return true;
+
+    if (!currentUser && nextUser) return true;
 
     const {
         id,

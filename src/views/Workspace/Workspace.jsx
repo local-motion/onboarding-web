@@ -44,7 +44,7 @@ class WorkspaceTemplate extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return shouldWorkspaceUpdate(this.props.playground, nextProps.playground);
+        return shouldWorkspaceUpdate(this.props, nextProps);
     }
 
     componentWillUnmount() {
