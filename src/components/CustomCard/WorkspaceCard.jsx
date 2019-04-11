@@ -16,7 +16,6 @@ const styles = theme => ({
     card: {
         maxWidth: '100%',
         marginTop: 0,
-        marginBottom: 10,
         alignSelf: 'baseline',
         // borderRadius: '0px 7px 7px 0px',
         height: '100%',
@@ -30,6 +29,13 @@ const styles = theme => ({
         height: '200px',
         margin: '-10px',
     },
+    customMedia: {
+        height: '200px',
+        margin: '-10px',
+        [theme.breakpoints.down("sm")]: {
+            backgroundPositionY: 'center !important'
+        },
+    },
     managerPassiveIcon: {
         color: 'red',
     },
@@ -40,7 +46,7 @@ const styles = theme => ({
         fontFamily: "'dk_black_bamboo-webfont'",
         color: 'red',
         marginTop: '18px',
-    }
+    },
 });
 
 const mapStateToProps = state => ({
@@ -54,14 +60,15 @@ class WorkspaceCard extends React.Component {
     };
 
     render() {
-        const {classes, title, image, content, primaryCta, MoreInformation, expandContent, enableActions, managerOnly, userIsManager, user} = this.props;
+        const {classes, title, image, customStyle, content, primaryCta, MoreInformation, expandContent, enableActions, managerOnly, userIsManager, user} = this.props;
 
         return (
             <Card className={classes.card + " card"}>
                 <CardMedia
-                  className={classes.media}
+                  className={customStyle ? classes.customMedia : classes.media}
                   image={image}
                   title={title}
+                  style={customStyle || {}}
                 />
                 <CardContent className={"card-content"}>
                     <Typography gutterBottom variant="h5" component="h2" className={classes.cardTitle}>

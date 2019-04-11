@@ -17,6 +17,7 @@ class ShareDecisionCard extends React.Component {
                         playground.jointChecklistItems.includes('newsletter_announcement') && 
                         playground.jointChecklistItems.includes('website_announcement')    }
                 image={require("assets/img/backgrounds/shout.jpg")}
+                customStyle={{ backgroundPositionY: '-90px' }}
                 content={"Laat iedereen weten dat de speeltuin rookvrij gaat worden zodat mensen zich kunnen voorbereiden."}
                 expandContent={
                     <div>

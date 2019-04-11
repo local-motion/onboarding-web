@@ -1,64 +1,64 @@
 export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
-export const playgroundLabels = ['Voorbereiden', 'Uitvoeren', 'Onderhouden'];
+export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Naleven en Evalueren'];
 
 export function getActivePhaseUrl(playground) {
     return `/workspace/${playground.id}/flyer`;
 }
 
-export function getPhases(startPathUrl) {
+export function getPhases() {
     return {
         firstPhase: {
-            title: 'Voorbereiden',
+            title: playgroundLabels[0],
             icon: require('assets/img/icon-cooperate@2x.png'),
             expandedIcon: require('assets/img/icon-cooperate@2x-active.png'),
             steps: [
                 {
                     name: 'Flyers verspreiden',
-                    link: startPathUrl + '/flyer',
+                    link: '/flyer',
                 },
                 {
                     name: 'Betrek de beheerder',
-                    link: startPathUrl + '/involve-administrator',
+                    link: '/involve-administrator',
                 },
                 {
                     name: 'Wij worden rookvrij!',
-                    link: startPathUrl + '/commitment',
+                    link: '/commitment',
                 },
             ],
         },
 
         secondPhase: {
-            title: 'Uitvoeren',
+            title: playgroundLabels[1],
             icon: require('assets/img/icon-checklist@2x.png'),
             expandedIcon: require('assets/img/icon-checklist@2x-active.png'),
             steps: [
                 {
                     name: 'Zet in de agenda',
-                    link: startPathUrl + '/pick-date',
+                    link: '/pick-date',
                 },
                 {
                     name: 'Deel het besluit',
-                    link: startPathUrl + '/shout',
+                    link: '/shout',
                 },
                 {
                     name: 'Laat het zien',
-                    link: startPathUrl + '/signonfence',
+                    link: '/signonfence',
                 },
             ],
         },
 
         thirdPhase: {
-            title: 'Onderhouden',
+            title: playgroundLabels[2],
             icon: require('assets/img/icon-positivity@2x.png'),
             expandedIcon: require('assets/img/icon-positivity@2x-active.png'),
             steps: [
                 {
                     name: 'We zijn rookvrij!',
-                    link: startPathUrl + '/celebrate',
+                    link: '/celebrate',
                 },
                 {
                     name: 'Volhouden',
-                    link: startPathUrl + '/magnify',
+                    link: '/magnify',
                 },
             ],
         },
@@ -69,12 +69,12 @@ export function getPhases(startPathUrl) {
             expandedIcon: '',
             steps: [
                 {
-                    name: 'Vorm een team!',
-                    link: startPathUrl + '/add-team-member',
+                    name: 'Mensen verzamelen',
+                    link: '/add-team-member',
                 },
                 {
                     name: 'Chat',
-                    link: startPathUrl + '/team',
+                    link: '/team',
                 },
             ],
         },
@@ -85,9 +85,65 @@ export function getPhases(startPathUrl) {
  * phases{Object}
  * url{String}
  */
+export function getCurrentStep(phases, url) {
+    return Object.keys(phases)
+      .find((phaseName) => !!phases[phaseName].steps.find(({ link }) => url.includes(link)));
+}
+
+export function getPrevStep(phases, url) {
+    let prevStepLink = '';
+
+    Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
+        phases[phaseName].steps.forEach((step, stepIndex) => {
+            if (url.includes(step.link)) {
+                if (stepIndex > 0) {
+                    prevStepLink = phases[phaseName].steps[stepIndex - 1].link;
+                } else {
+                    if (phaseIndex > 0) {
+                        const phase = phases[phasesKeys[phaseIndex - 1]];
+
+                        prevStepLink = phase.steps[phase.steps.length - 1].link;
+                    } else {
+                        prevStepLink = null;
+                    }
+                }
+            }
+        });
+    });
+
+    return prevStepLink;
+}
+
+export function getNextStep(phases, url) {
+    let nextStepLink = '';
+
+    Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
+        const phasesLength = phasesKeys.length;
+
+        phases[phaseName].steps.forEach((step, stepIndex, steps) => {
+            const stepsLength = steps.length;
+
+            if (url.includes(step.link)) {
+                if (stepIndex < (stepsLength - 1)) {
+                    nextStepLink = phases[phaseName].steps[stepIndex + 1].link;
+                } else {
+                    if (phaseIndex < (phasesLength - 1)) {
+                        const phase = phases[phasesKeys[phaseIndex + 1]];
+
+                        nextStepLink = phase.steps[0].link;
+                    } else {
+                        nextStepLink = null;
+                    }
+                }
+            }
+        });
+    });
+
+    return nextStepLink;
+}
+
 export function getOpenedStepTitle(phases, url) {
-    const foundPhase = Object.keys(phases)
-      .find((phaseName) => !!phases[phaseName].steps.find(({ link }) => link.includes(url)));
+    const foundPhase = getCurrentStep(phases, url);
 
     return foundPhase
       ? phases[foundPhase].title

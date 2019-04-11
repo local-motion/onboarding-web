@@ -1,5 +1,6 @@
 import React from "react";
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
@@ -13,6 +14,8 @@ import {
     getPhases,
     getOpenedStepTitle,
     shouldWorkspaceUpdate,
+    getPrevStep,
+    getNextStep,
 } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
 
@@ -70,7 +73,7 @@ class WorkspaceTemplate extends React.Component {
     }
 
     render() {
-        const { playground, user, classes, ...rest } = this.props;
+        const { playground, user, classes, signInHandler, ...rest } = this.props;
 
         // const activePhaseIdx = this.getStatusIndex();                        // the active phase represents the current state of this playground
         // const phaseIdx = this.props.match.params.phaseId - 1;                // The phase that the user has selected, if any
@@ -81,7 +84,7 @@ class WorkspaceTemplate extends React.Component {
 
         const startPathUrl = `/workspace/${this.props.playground.id}`;
 
-        const phases = getPhases(startPathUrl);
+        const phases = getPhases();
 
         const openedStepTitle = getOpenedStepTitle(phases, this.props.location.pathname);
 
@@ -89,19 +92,26 @@ class WorkspaceTemplate extends React.Component {
           ? openedStepTitle
           : this.getStatus();
 
+        const prevStep = getPrevStep(phases, url);
+        const nextStep = getNextStep(phases, url);
+
         return (
             <div className={"workspace-wrapper"}>
                 <WorkspacePage
                     playground={playground}
                     phases={phases}
+                    startPathUrl={startPathUrl}
+                    prevStep={prevStep}
+                    nextStep={nextStep}
                     activePhase={activePhase}
                     user={user}
                     classes={classes}
                     rest={rest}
+                    signInHandler={signInHandler}
                 />
             </div>
         );
     }
 }
 
-export default withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate));
+export default withRouter(withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(WorkspaceTemplate)));
