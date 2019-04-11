@@ -86,14 +86,16 @@ class WorkspaceTemplate extends React.Component {
 
         const phases = getPhases();
 
-        const openedStepTitle = getOpenedStepTitle(phases, this.props.location.pathname);
+        const { pathname } = this.props.location;
+
+        const openedStepTitle = getOpenedStepTitle(phases, pathname);
 
         const activePhase = openedStepTitle !== null
           ? openedStepTitle
           : this.getStatus();
 
-        const prevStep = getPrevStep(phases, url);
-        const nextStep = getNextStep(phases, url);
+        const prevStep = getPrevStep(phases, pathname);
+        const nextStep = getNextStep(phases, pathname);
 
         return (
             <div className={"workspace-wrapper"}>
