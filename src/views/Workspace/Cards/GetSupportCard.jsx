@@ -10,6 +10,7 @@ import GridContainer from "../../../components/Grid/GridContainer";
 const styles = theme => ({
     usersList: {
         overflowY: 'auto',
+        marginBottom: '20px',
         maxHeight: '600px',
     },
 });
@@ -24,19 +25,20 @@ class GetSupportCard extends React.Component {
         const inviteButtonLabel = "Verstuur een email"
         const targetNrOfVolunteers = 2
         return (
-            <WorkspaceCard title={"Vorm een team"}
+            <WorkspaceCard title={"Mensen verzamelen"}
                 done={playground.volunteerCount >= targetNrOfVolunteers}
                 image={require("assets/img/backgrounds/team.jpg")}
+                customStyle={{ backgroundPositionY: '-70px' }}
                 content={"Samen sta je sterk. Nodig anderen uit om mee te doen. Probeer om minimaal " + targetNrOfVolunteers + " mensen te verzamelen."}
                 primaryCta={{
                     action: inviteButtonHref,
                     text: inviteButtonLabel
                 }}
                 expandContent={
-                    <GridContainer className={"information-container" + classes.usersList}>
-                        <GridItem xs={4} sm={4} md={4}>
+                    <GridContainer>
+                        <GridItem xs={12} sm={12} md={4}>
                             <Paper elevation={2}>
-                                <List>
+                                <List className={classes.usersList}>
                                     {playground.volunteers.map(function (volunteer, index) {
                                         const volunteerIsManager = playground.managers.filter(manager => manager.id === volunteer.userId).length > 0
                                         return <ListItem key={index}>
@@ -52,7 +54,7 @@ class GetSupportCard extends React.Component {
                             </Paper>
                         </GridItem>
 
-                        <GridItem xs={8} sm={8} md={8}>
+                        <GridItem xs={12} sm={12} md={8}>
                             <Typography component="p">Stuur je kennissen een mailtje</Typography>
                             <Button disabled={!isUserVolunteerOfPlayground(user, playground)} size="small" color="primary" href={inviteButtonHref}>{inviteButtonLabel}</Button>
                             <br />
