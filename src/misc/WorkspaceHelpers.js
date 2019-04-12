@@ -2,7 +2,7 @@ export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
 
 export function getActivePhaseUrl(playground) {
-    return `/workspace/${playground.id}/flyer`;
+    return `/workspace/${playground.id}${getPhases().firstPhase.steps[0].link}`;
 }
 
 export function getPhases() {
