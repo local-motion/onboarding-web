@@ -190,13 +190,13 @@ class WorkspacePage extends PureComponent {
 
                                   <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
-                                  <Route exact path="/workspace/:initiativeId/mensen-verzamelen" key="MensenVerzamelen"
+                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="MensenVerzamelen"
                                          render={(props) => <MensenVerzamelen {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/flyers-verspreiden" key="FlyersVerspreiden"
+                                  <Route exact path="/workspace/:initiativeId/flyer" key="FlyersVerspreiden"
                                          render={(props) => <FlyersVerspreiden {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="MeningenInventariseren"
                                          render={(props) => <MeningenInventariseren {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/contact-leggen-met-bestuur" key="ContactLeggenMetBestuur"
+                                  <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactLeggenMetBestuur"
                                          render={(props) => <ContactLeggenMetBestuur {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/commitment" key="WijWordenRookvrij"
                                          render={(props) => <WijWordenRookvrij {...props} playground={playground} user={user} />}/>

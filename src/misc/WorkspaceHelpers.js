@@ -14,11 +14,11 @@ export function getPhases() {
             steps: [
                 {
                     name: 'Mensen verzamelen',
-                    link: '/mensen-verzamelen',
+                    link: '/add-team-member',
                 },
                 {
                     name: 'Flyers verspreiden',
-                    link: '/flyers-verspreiden',
+                    link: '/flyer',
                 },
                 {
                     name: 'Meningen inventariseren',
@@ -26,7 +26,7 @@ export function getPhases() {
                 },
                 {
                     name: 'Contact leggen met bestuur',
-                    link: '/contact-leggen-met-bestuur',
+                    link: '/involve-administrator',
                 },
                 {
                     name: 'Wij worden rookvrij',
