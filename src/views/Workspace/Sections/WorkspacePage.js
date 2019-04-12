@@ -190,7 +190,7 @@ class WorkspacePage extends PureComponent {
 
                                   <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
-                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="MensenVerzamelen"
+                                  <Route exact path="/workspace/:initiativeId/mensen-verzamelen" key="MensenVerzamelen"
                                          render={(props) => <MensenVerzamelen {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/flyer" key="Flyer"
                                          render={(props) => <FlyersCard {...props} playground={playground} user={user} />}/>
