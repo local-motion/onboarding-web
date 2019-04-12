@@ -16,7 +16,7 @@ import WijWordenRookvrij from "../Cards/WijWordenRookvrij";
 import KiesEenGoedMomentVanInvoering from "../Cards/KiesEenGoedMomentVanInvoering";
 import CommuniceerOverDeRookvrijeAfspraak from "../Cards/CommuniceerOverDeRookvrijeAfspraak";
 import LaatZienDatDeSpeelplekRookvrijIs from "../Cards/LaatZienDatDeSpeelplekRookvrijIs";
-import ShareSmokefreeCard from "../Cards/ShareSmokefreeCard";
+import WeZijnRookvrij from "../Cards/WeZijnRookvrij";
 import ValidateCard from "../Cards/ValidateCard";
 import AddPlayground from "../../Onboarding/Sections/AddPlayground";
 import Header from "../../../components/Header/Header";
@@ -208,8 +208,8 @@ class WorkspacePage extends PureComponent {
                                   <Route exact path="/workspace/:initiativeId/signonfence" key="LaatZienDatDeSpeelplekRookvrijIs"
                                          render={(props) => <LaatZienDatDeSpeelplekRookvrijIs {...props} playground={playground} user={user} />}/>
 
-                                  <Route exact path="/workspace/:initiativeId/celebrate" key="Celebrate"
-                                         render={(props) => <ShareSmokefreeCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/celebrate" key="WeZijnRookvrij"
+                                         render={(props) => <WeZijnRookvrij {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/magnify" key="Magnify"
                                          render={(props) => <ValidateCard {...props} playground={playground} user={user} />}/>
 

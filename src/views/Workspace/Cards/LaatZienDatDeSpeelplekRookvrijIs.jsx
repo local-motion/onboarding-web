@@ -10,6 +10,9 @@ const styles = ({
     contentItem: {
         marginBottom: '20px',
     },
+    contentItemSmallMargin: {
+        marginBottom: '10px',
+    },
 });
 
 
@@ -33,6 +36,7 @@ class LaatZienDatDeSpeelplekRookvrijIs extends React.Component {
             expandContent={
                 <div>
                     <Button
+                      className={classes.contentItemSmallMargin}
                       disabled={!isUserVolunteerOfPlayground(user, playground)} variant="contained"
                       size="small" color="primary"
                       href={
