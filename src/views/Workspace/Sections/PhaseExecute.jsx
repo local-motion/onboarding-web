@@ -7,7 +7,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import SetADateCard from "../Cards/SetADateCard.jsx";
 import CommuniceerOverDeRookvrijeAfspraak from "../Cards/ShareDecisionCard.jsx";
-import MakeItVisibleCard from "../Cards/MakeItVisibleCard.jsx";
+import LaatZienDatDeSpeelplekRookvrijIs from "../Cards/MakeItVisibleCard.jsx";
 // import PartyCard from "../Cards/PartyCard.jsx";
 
 class PhaseExecute extends React.Component {
@@ -22,7 +22,7 @@ class PhaseExecute extends React.Component {
 
                         <SetADateCard {...this.props} />
                         <CommuniceerOverDeRookvrijeAfspraak {...this.props} />
-                        <MakeItVisibleCard {...this.props} />
+                        <LaatZienDatDeSpeelplekRookvrijIs {...this.props} />
                         {/* <PartyCard {...this.props} /> */}       
 
                     </GridItem>
