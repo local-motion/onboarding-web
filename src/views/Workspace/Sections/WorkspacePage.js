@@ -12,7 +12,7 @@ import MensenVerzamelen from "../Cards/MensenVerzamelen";
 import MeningenInventariseren from "../Cards/MeningenInventariseren";
 import FlyersVerspreiden from "../Cards/FlyersVerspreiden";
 import ContactLeggenMetBestuur from "../Cards/ContactLeggenMetBestuur";
-import DecideSmokefreeCard from "../Cards/DecideSmokefreeCard";
+import WijWordenRookvrij from "../Cards/WijWordenRookvrij";
 import SetADateCard from "../Cards/SetADateCard";
 import ShareDecisionCard from "../Cards/ShareDecisionCard";
 import MakeItVisibleCard from "../Cards/MakeItVisibleCard";
@@ -198,18 +198,21 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <MeningenInventariseren {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/contact-leggen-met-bestuur" key="ContactLeggenMetBestuur"
                                          render={(props) => <ContactLeggenMetBestuur {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/commitment" key="Commitment"
-                                         render={(props) => <DecideSmokefreeCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/commitment" key="WijWordenRookvrij"
+                                         render={(props) => <WijWordenRookvrij {...props} playground={playground} user={user} />}/>
+
                                   <Route exact path="/workspace/:initiativeId/pick-date" key="PickDate"
                                          render={(props) => <SetADateCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/shout" key="Shout"
                                          render={(props) => <ShareDecisionCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/signonfence" key="Signonfence"
                                          render={(props) => <MakeItVisibleCard {...props} playground={playground} user={user} />}/>
+
                                   <Route exact path="/workspace/:initiativeId/celebrate" key="Celebrate"
                                          render={(props) => <ShareSmokefreeCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/magnify" key="Magnify"
                                          render={(props) => <ValidateCard {...props} playground={playground} user={user} />}/>
+
                                   <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
                                          render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
                               </Switch>
