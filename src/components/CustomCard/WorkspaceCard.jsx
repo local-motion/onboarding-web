@@ -70,7 +70,7 @@ class WorkspaceCard extends React.Component {
                   title={title}
                   style={customStyle || {}}
                 />
-                <CardContent className={"card-content"}>
+                <CardContent>
                     <Typography gutterBottom variant="h5" component="h2" className={classes.cardTitle}>
                         {title}
                     </Typography>
