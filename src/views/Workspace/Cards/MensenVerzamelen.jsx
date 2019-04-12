@@ -41,9 +41,17 @@ class MensenVerzamelen extends React.Component {
                 }}
                 expandContent={
                     <React.Fragment>
-                        <Typography component="p" className={classes.contentParagraph}>Probeer om minimaal {targetNrOfVolunteers} mensen te verzamelen.</Typography>
-
                         <GridContainer>
+                            <GridItem xs={12} sm={12} md={8}>
+                                <Typography component="p" className={classes.contentParagraph}>Probeer om minimaal {targetNrOfVolunteers} mensen te verzamelen.</Typography>
+                                <Typography component="p" className={classes.contentParagraph}>Deel de link om mensen uit te nodigen voor deze actiepagina:</Typography>
+                                <Button disabled={!isUserVolunteerOfPlayground(user, playground)} size="small" color="primary" href={inviteButtonHref}>{inviteButtonLabel}</Button>
+                                <br />
+                                <br />
+                                <Typography component="p" className={classes.contentParagraph}>Deel link door middel van social media</Typography>
+                                <SocialMedia playground={playground}/>
+                            </GridItem>
+
                             <GridItem xs={12} sm={12} md={4}>
                                 <Paper elevation={2}>
                                     <List className={classes.usersList}>
@@ -60,15 +68,6 @@ class MensenVerzamelen extends React.Component {
                                         })}
                                     </List>
                                 </Paper>
-                            </GridItem>
-
-                            <GridItem xs={12} sm={12} md={8}>
-                                <Typography component="p" className={classes.contentParagraph}>Deel de link om mensen uit te nodigen voor deze actiepagina:</Typography>
-                                <Button disabled={!isUserVolunteerOfPlayground(user, playground)} size="small" color="primary" href={inviteButtonHref}>{inviteButtonLabel}</Button>
-                                <br />
-                                <br />
-                                <Typography component="p" className={classes.contentParagraph}>Deel link door middel van social media</Typography>
-                                <SocialMedia playground={playground}/>
                             </GridItem>
                         </GridContainer>
                     </React.Fragment>
