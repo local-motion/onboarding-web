@@ -14,7 +14,7 @@ import FlyersVerspreiden from "../Cards/FlyersVerspreiden";
 import ContactLeggenMetBestuur from "../Cards/ContactLeggenMetBestuur";
 import WijWordenRookvrij from "../Cards/WijWordenRookvrij";
 import KiesEenGoedMomentVanInvoering from "../Cards/KiesEenGoedMomentVanInvoering";
-import ShareDecisionCard from "../Cards/ShareDecisionCard";
+import CommuniceerOverDeRookvrijeAfspraak from "../Cards/CommuniceerOverDeRookvrijeAfspraak";
 import MakeItVisibleCard from "../Cards/MakeItVisibleCard";
 import ShareSmokefreeCard from "../Cards/ShareSmokefreeCard";
 import ValidateCard from "../Cards/ValidateCard";
@@ -203,8 +203,8 @@ class WorkspacePage extends PureComponent {
 
                                   <Route exact path="/workspace/:initiativeId/pick-date" key="KiesEenGoedMomentVanInvoering"
                                          render={(props) => <KiesEenGoedMomentVanInvoering {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/shout" key="Shout"
-                                         render={(props) => <ShareDecisionCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/shout" key="CommuniceerOverDeRookvrijeAfspraak"
+                                         render={(props) => <CommuniceerOverDeRookvrijeAfspraak {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/signonfence" key="Signonfence"
                                          render={(props) => <MakeItVisibleCard {...props} playground={playground} user={user} />}/>
 
