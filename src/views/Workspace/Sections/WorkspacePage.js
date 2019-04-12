@@ -10,7 +10,7 @@ import ExpansionPhase from "../../../components/ExpansionPhase/ExpansionPhase";
 import CustomAuthenticator from "../../../auth/CustomAuthenticator";
 import MensenVerzamelen from "../Cards/MensenVerzamelen";
 import MeningenInventariseren from "../Cards/MeningenInventariseren";
-import FlyersCard from "../Cards/FlyersCard";
+import FlyersVerspreiden from "../Cards/FlyersVerspreiden";
 import InvolveManagerCard from "../Cards/InvolveManagerCard";
 import DecideSmokefreeCard from "../Cards/DecideSmokefreeCard";
 import SetADateCard from "../Cards/SetADateCard";
@@ -192,8 +192,8 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/workspace/:initiativeId/mensen-verzamelen" key="MensenVerzamelen"
                                          render={(props) => <MensenVerzamelen {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/flyer" key="Flyer"
-                                         render={(props) => <FlyersCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/flyers-verspreiden" key="FlyersVerspreiden"
+                                         render={(props) => <FlyersVerspreiden {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="MeningenInventariseren"
                                          render={(props) => <MeningenInventariseren {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator"
