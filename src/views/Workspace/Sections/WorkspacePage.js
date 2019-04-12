@@ -11,7 +11,7 @@ import CustomAuthenticator from "../../../auth/CustomAuthenticator";
 import MensenVerzamelen from "../Cards/MensenVerzamelen";
 import MeningenInventariseren from "../Cards/MeningenInventariseren";
 import FlyersVerspreiden from "../Cards/FlyersVerspreiden";
-import InvolveManagerCard from "../Cards/InvolveManagerCard";
+import ContactLeggenMetBestuur from "../Cards/ContactLeggenMetBestuur";
 import DecideSmokefreeCard from "../Cards/DecideSmokefreeCard";
 import SetADateCard from "../Cards/SetADateCard";
 import ShareDecisionCard from "../Cards/ShareDecisionCard";
@@ -196,8 +196,8 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <FlyersVerspreiden {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="MeningenInventariseren"
                                          render={(props) => <MeningenInventariseren {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator"
-                                         render={(props) => <InvolveManagerCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/contact-leggen-met-bestuur" key="ContactLeggenMetBestuur"
+                                         render={(props) => <ContactLeggenMetBestuur {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/commitment" key="Commitment"
                                          render={(props) => <DecideSmokefreeCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/pick-date" key="PickDate"

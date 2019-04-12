@@ -26,7 +26,7 @@ export function getPhases() {
                 },
                 {
                     name: 'Contact leggen met bestuur',
-                    link: '/involve-administrator',
+                    link: '/contact-leggen-met-bestuur',
                 },
                 {
                     name: 'Wij worden rookvrij',
