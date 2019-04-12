@@ -19,7 +19,7 @@ export function getPhases() {
                 {
                     name: 'Flyers verspreiden',
                     link: '/flyer',
-                }
+                },
                 {
                     name: 'Meningen inventariseren',
                     link: '/meningen-inventariseren',

@@ -31,6 +31,7 @@ import {
     getPrevStep,
     playgroundLabels,
 } from "../../../misc/WorkspaceHelpers";
+import MeningenInventariseren from "../Cards/MeningenInventariseren";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -195,6 +196,8 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <GetSupportCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/flyer" key="Flyer"
                                          render={(props) => <FlyersCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="MeningenInventariseren"
+                                         render={(props) => <MeningenInventariseren {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator"
                                          render={(props) => <InvolveManagerCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/commitment" key="Commitment"
