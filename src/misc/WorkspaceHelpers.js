@@ -14,7 +14,7 @@ export function getPhases() {
             steps: [
                 {
                     name: 'Mensen verzamelen',
-                    link: '/add-team-member',
+                    link: '/mensen-verzamelen',
                 },
                 {
                     name: 'Flyers verspreiden',

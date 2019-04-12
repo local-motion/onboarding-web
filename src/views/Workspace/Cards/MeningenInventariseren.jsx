@@ -1,7 +1,5 @@
 import React from "react";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
-import { Typography } from "@material-ui/core";
-
 
 class MeningenInventariseren extends React.Component {
     render() {

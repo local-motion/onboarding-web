@@ -8,7 +8,8 @@ import classNames from "classnames";
 import { StyledStepButton, StyledStepLink } from "../../../components/Step/Step";
 import ExpansionPhase from "../../../components/ExpansionPhase/ExpansionPhase";
 import CustomAuthenticator from "../../../auth/CustomAuthenticator";
-import GetSupportCard from "../Cards/GetSupportCard";
+import MensenVerzamelen from "../Cards/MensenVerzamelen";
+import MeningenInventariseren from "../Cards/MeningenInventariseren";
 import FlyersCard from "../Cards/FlyersCard";
 import InvolveManagerCard from "../Cards/InvolveManagerCard";
 import DecideSmokefreeCard from "../Cards/DecideSmokefreeCard";
@@ -31,7 +32,6 @@ import {
     getPrevStep,
     playgroundLabels,
 } from "../../../misc/WorkspaceHelpers";
-import MeningenInventariseren from "../Cards/MeningenInventariseren";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -184,16 +184,14 @@ class WorkspacePage extends PureComponent {
 
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
                               <Switch>
-                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
 
                                   <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
                                          render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
-                                  <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
-                                         render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember"
-                                         render={(props) => <GetSupportCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
+                                         render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
+                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="MensenVerzamelen"
+                                         render={(props) => <MensenVerzamelen {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/flyer" key="Flyer"
                                          render={(props) => <FlyersCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="MeningenInventariseren"
@@ -212,6 +210,8 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <ShareSmokefreeCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/magnify" key="Magnify"
                                          render={(props) => <ValidateCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
+                                         render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
                               </Switch>
 
                               {openedStepTitle && (
