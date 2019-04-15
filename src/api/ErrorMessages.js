@@ -19,6 +19,7 @@ export const ErrorCode = {
 // Cognito errors
     UserNotFoundException:      {developerMessage: 'User does not exist', message: 'Deze gebruikersnaam is onbekend'},
     NotAuthorizedException:     {developerMessage: 'Invalid user and/or password', message: 'Ongeldige gebruikersnaam en/of wachtwoord'},
+    UserNotConfirmedException:  {developerMessage: 'User\'s email is not confirmed', message: 'Uw emailadres is nog niet bevestigd. Vraag een nieuwe code aan.'},
     UsernameExistsException:    {developerMessage: 'User already exists', message: 'Er bestaat al een gebruiker met deze naam'},
     CodeMismatchException:      {developerMessage: 'Invalid verification code provided', message: 'Ongeldige verificatiecode'},
 
