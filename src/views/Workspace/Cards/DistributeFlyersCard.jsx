@@ -5,7 +5,8 @@ import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCh
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 
-class FlyersVerspreiden extends React.Component {
+// step:  "Flyers Verspreiden"
+class DistributeFlyersCard extends React.Component {
     render() {
         const {playground, user} = this.props;
 
@@ -44,5 +45,5 @@ class FlyersVerspreiden extends React.Component {
     }
 }
 
-export default FlyersVerspreiden
+export default DistributeFlyersCard
 

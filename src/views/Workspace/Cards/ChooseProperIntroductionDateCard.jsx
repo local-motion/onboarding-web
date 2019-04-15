@@ -28,7 +28,8 @@ const styles = ({
 });
 
 
-class KiesEenGoedMomentVanInvoering extends React.Component {
+// step:  "Kies Een Goed Moment Van Invoering"
+class ChooseProperIntroductionDateCard extends React.Component {
     render() {
         const { playground, user, classes, setSmokefreeDate } = this.props;
 
@@ -78,5 +79,5 @@ class KiesEenGoedMomentVanInvoering extends React.Component {
     }
 }
 
-export default withStyles(styles)(connect(null, mapDispatchToProps)(KiesEenGoedMomentVanInvoering));
+export default withStyles(styles)(connect(null, mapDispatchToProps)(ChooseProperIntroductionDateCard));
 

@@ -1,7 +1,8 @@
 import React from "react";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 
-class MeningenInventariseren extends React.Component {
+// step: "Meningen Inventariseren"
+class CollectOpinionsCard extends React.Component {
     render() {
         const {playground} = this.props;
 
@@ -19,5 +20,5 @@ class MeningenInventariseren extends React.Component {
     }
 }
 
-export default MeningenInventariseren;
+export default CollectOpinionsCard;
 

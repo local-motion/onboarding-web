@@ -18,7 +18,8 @@ const styles = theme => ({
     }
 });
 
-class MensenVerzamelen extends React.Component {
+// step: "Mensen Verzamelen"
+class RecruitVolunteersCard extends React.Component {
     render() {
         const {playground, user, classes} = this.props;
         
@@ -77,5 +78,5 @@ class MensenVerzamelen extends React.Component {
     }
 }
 
-export default withStyles(styles)(MensenVerzamelen);
+export default withStyles(styles)(RecruitVolunteersCard);
 

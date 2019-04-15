@@ -16,7 +16,8 @@ const styles = ({
 });
 
 
-class LaatZienDatDeSpeelplekRookvrijIs extends React.Component {
+// step: "Laat Zien Dat De Speelplek Rookvrij Is"
+class ShowPlaygroundIsSmokefreeCard extends React.Component {
     render() {
         const { playground, user, classes } = this.props;
 
@@ -94,4 +95,4 @@ class LaatZienDatDeSpeelplekRookvrijIs extends React.Component {
     }
 }
 
-export default withStyles(styles)(LaatZienDatDeSpeelplekRookvrijIs);
+export default withStyles(styles)(ShowPlaygroundIsSmokefreeCard);

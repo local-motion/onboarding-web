@@ -17,7 +17,8 @@ const styles = theme => ({
    },
 });
 
-class ContactLeggenMetBestuur extends React.Component {
+// step: "Contact Leggen Met Bestuur"
+class ContactManagementCard extends React.Component {
 
     state = {
         tipsDialogOpen: false,
@@ -99,5 +100,5 @@ class ContactLeggenMetBestuur extends React.Component {
     }
 }
 
-export default withStyles(styles)(connect(null, mapDispatchToProps)(ContactLeggenMetBestuur));
+export default withStyles(styles)(connect(null, mapDispatchToProps)(ContactManagementCard));
 

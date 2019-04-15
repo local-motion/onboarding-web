@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
@@ -13,7 +13,8 @@ const styles = ({
 });
 
 
-class WeZijnRookvrij extends React.Component {
+// step: "We Zijn Rookvrij"
+class WeAreSmokefreeCard extends React.Component {
     render() {
         const { playground, classes } = this.props;
 
@@ -48,5 +49,5 @@ class WeZijnRookvrij extends React.Component {
     }
 }
 
-export default withStyles(styles)(WeZijnRookvrij);
+export default withStyles(styles)(WeAreSmokefreeCard);
 

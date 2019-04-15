@@ -9,7 +9,8 @@ const mapDispatchToProps = dispatch => ({
     setDecideSmokefree:    (initiativeId) =>     dispatch(setDecideSmokefree(initiativeId)),
 });
 
-class WijWordenRookvrij extends React.Component {
+// step: "Wij Worden Rookvrij"
+class WeWillBecomeSmokefreeCard extends React.Component {
     render() {
         const {playground, user} = this.props;
 
@@ -43,5 +44,5 @@ class WijWordenRookvrij extends React.Component {
     }
 }
 
-export default connect(null, mapDispatchToProps)(WijWordenRookvrij);
+export default connect(null, mapDispatchToProps)(WeWillBecomeSmokefreeCard);
 
