@@ -12,9 +12,8 @@ const WorkspaceWelcomeStyle = theme => ({
       width: '100%',
     },
   },
-  page: {
-    padding: '100px 0 0px',
-    backgroundColor: '#fff'
+  statistics: {
+
   },
   title: {
     fontFamily: "'dk_black_bamboo-webfont'",
@@ -42,7 +41,7 @@ const WorkspaceWelcomeStyle = theme => ({
   icons: {
     display: 'flex',
     justifyContent: 'center',
-    margin: '-60px 0 48px',
+    margin: '-60px 0 30px',
     [theme.breakpoints.down("sm")]: {
       flexWrap: 'wrap',
     },
@@ -55,7 +54,7 @@ const WorkspaceWelcomeStyle = theme => ({
   },
   button: {
     maxWidth: '100%',
-    width: 350,
+    width: 280,
     height: 50,
     display: 'inline-block',
     cursor: 'pointer',
@@ -84,26 +83,5 @@ const WorkspaceWelcomeStyle = theme => ({
   passive: {
     backgroundColor: '#adabab'
   },
-  skip: {
-    color: '#626262',
-    margin: '10px 0 0',
-    fontSize: 16,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    fontWeight: 'normal',
-    lineHeight: 1.5,
-    fontStretch: 'normal',
-    letterSpacing: 'normal',
-    textDecoration: 'underline',
-    cursor: 'pointer',
-    outline: 'none',
-    border: 0,
-    boxShadow: 'none',
-    appearance: 'none',
-    backgroundColor: 'transparent',
-    '&:hover': {
-      color: '#626262'
-    }
-  }
 });
 export default WorkspaceWelcomeStyle;

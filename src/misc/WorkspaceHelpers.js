@@ -12,7 +12,7 @@ export function getOpenedPhase(phases, pathname) {
 
     return openedStepTitle !== null
       ? openedStepTitle
-      : playgroundLabels[0];
+      : 'none';
 }
 
 export function getActivePhase(playground) {

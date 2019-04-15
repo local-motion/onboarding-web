@@ -30,7 +30,6 @@ import {
     getNextStep,
     getOpenedStepTitle,
     getPrevStep,
-    getOpenedPhase,
 } from "../../../misc/WorkspaceHelpers";
 
 const PaginationIcon = (props) => (
@@ -66,7 +65,7 @@ class WorkspacePage extends PureComponent {
     selectActivePhase() {
         const { location: { pathname }, phases } = this.props;
 
-        const activePhase = getOpenedPhase(phases, pathname);
+        const activePhase = getOpenedStepTitle(phases, pathname);
 
         this.selectPhase(activePhase);
     }
