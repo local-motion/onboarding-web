@@ -9,24 +9,24 @@ const mapDispatchToProps = dispatch => ({
     setDecideSmokefree:    (initiativeId) =>     dispatch(setDecideSmokefree(initiativeId)),
 });
 
-class DecideSmokefreeCard extends React.Component {
+class WijWordenRookvrij extends React.Component {
     render() {
         const {playground, user} = this.props;
 
         if (!playground)
             return "Loading...";
 
-        const decisionTaken  = playground.status === 'IN_PROGRESS' || playground.status === 'FINISHED'
+        const decisionTaken  = playground.status === 'IN_PROGRESS' || playground.status === 'FINISHED';
 
         return (
             <WorkspaceCard 
-                title={"Wij worden rookvrij!"}
+                title={"Wij worden rookvrij"}
                 playground={playground}
                 done={decisionTaken}
                 managerOnly={true}
                 userIsManager={ user && isUserManagerOfPlayground(user, playground) }
                 image={require("assets/img/backgrounds/commitment.jpg")}
-                content={"Neem het officieel het besluit om de speeltuin rookvrij te maken. Alleen de beheerders van de speeltuin kunnen dit doen."}
+                content={"Neem officieel het besluit om de speeltuin rookvrij te maken. (Alleen de beheerders van de speeltuin kunnen dit doen.)"}
                 expandContent={
                     <div>
                         <Button 
@@ -43,5 +43,5 @@ class DecideSmokefreeCard extends React.Component {
     }
 }
 
-export default connect(null, mapDispatchToProps)(DecideSmokefreeCard);
+export default connect(null, mapDispatchToProps)(WijWordenRookvrij);
 

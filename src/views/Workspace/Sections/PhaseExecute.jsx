@@ -6,8 +6,8 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import SetADateCard from "../Cards/SetADateCard.jsx";
-import ShareDecisionCard from "../Cards/ShareDecisionCard.jsx";
-import MakeItVisibleCard from "../Cards/MakeItVisibleCard.jsx";
+import CommuniceerOverDeRookvrijeAfspraak from "../Cards/ShareDecisionCard.jsx";
+import LaatZienDatDeSpeelplekRookvrijIs from "../Cards/MakeItVisibleCard.jsx";
 // import PartyCard from "../Cards/PartyCard.jsx";
 
 class PhaseExecute extends React.Component {
@@ -21,8 +21,8 @@ class PhaseExecute extends React.Component {
                     <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
 
                         <SetADateCard {...this.props} />
-                        <ShareDecisionCard {...this.props} />
-                        <MakeItVisibleCard {...this.props} />
+                        <CommuniceerOverDeRookvrijeAfspraak {...this.props} />
+                        <LaatZienDatDeSpeelplekRookvrijIs {...this.props} />
                         {/* <PartyCard {...this.props} /> */}       
 
                     </GridItem>
