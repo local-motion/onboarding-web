@@ -8,10 +8,7 @@ import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, stopPlaygroundDetailsS
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
-import {
-    getPhases,
-    shouldWorkspaceUpdate,
-} from "../../misc/WorkspaceHelpers";
+import { getPhases, shouldWorkspaceUpdate } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
 
 const mapStateToProps = (state, ownProps) => ({
