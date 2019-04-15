@@ -9,13 +9,8 @@ import { getPlaygroundDetails } from "../../components/Playground/PlaygroundRedu
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import {
-    playgroundLabels,
-    playgroundStatuses,
     getPhases,
-    getOpenedStepTitle,
     shouldWorkspaceUpdate,
-    getPrevStep,
-    getNextStep,
 } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
 

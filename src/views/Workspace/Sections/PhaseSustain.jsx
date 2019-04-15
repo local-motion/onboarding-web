@@ -8,7 +8,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import ShareSmokefreeCard from "../Cards/ShareSmokefreeCard.jsx";
+import WeAreSmokefreeCard from "../Cards/ShareSmokefreeCard.jsx";
 import ValidateCard from "../Cards/ValidateCard.jsx";
 // import NewsCard from "../Cards/NewsCard.jsx";
 // import WhatsNextCard from "../Cards/WhatsNextCard.jsx";
@@ -22,7 +22,7 @@ class PhaseSustain extends React.Component {
                 <GridContainer className={"information-container"}>
                     <GridItem xs={12} sm={12} md={12} className={"phase-information-container flex-divide"}>
 
-                        <ShareSmokefreeCard {...this.props} />
+                        <WeAreSmokefreeCard {...this.props} />
                         <ValidateCard {...otherProps} />
                         {/* <NewsCard {...this.props} /> */}
                         {/* <WhatsNextCard {...this.props} /> */}

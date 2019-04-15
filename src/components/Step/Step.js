@@ -32,7 +32,6 @@ const styles = themes => ({
     },
     name: {
         color: '#626262',
-        textAlign: "center",
         margin: "15px",
         fontSize: "13px",
         fontFamily: '"montserrat-light-webfont"',

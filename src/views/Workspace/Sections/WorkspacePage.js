@@ -8,15 +8,16 @@ import classNames from "classnames";
 import { StyledStepButton, StyledStepLink } from "../../../components/Step/Step";
 import ExpansionPhase from "../../../components/ExpansionPhase/ExpansionPhase";
 import CustomAuthenticator from "../../../auth/CustomAuthenticator";
-import GetSupportCard from "../Cards/GetSupportCard";
-import FlyersCard from "../Cards/FlyersCard";
-import InvolveManagerCard from "../Cards/InvolveManagerCard";
-import DecideSmokefreeCard from "../Cards/DecideSmokefreeCard";
-import SetADateCard from "../Cards/SetADateCard";
-import ShareDecisionCard from "../Cards/ShareDecisionCard";
-import MakeItVisibleCard from "../Cards/MakeItVisibleCard";
-import ShareSmokefreeCard from "../Cards/ShareSmokefreeCard";
-import ValidateCard from "../Cards/ValidateCard";
+import RecruitVolunteersCard from "../Cards/RecruitVolunteersCard";
+import CollectOpinionsCard from "../Cards/CollectOpinionsCard";
+import DistributeFlyersCard from "../Cards/DistributeFlyersCard";
+import ContactManagementCard from "../Cards/ContactManagementCard";
+import WeWillBecomeSmokefreeCard from "../Cards/WeWillBecomeSmokefreeCard";
+import ChooseProperIntroductionDateCard from "../Cards/ChooseProperIntroductionDateCard";
+import CommunicateAboutSmokefreeAgreementCard from "../Cards/CommunicateAboutSmokefreeAgreementCard";
+import ShowPlaygroundIsSmokefreeCard from "../Cards/ShowPlaygroundIsSmokefreeCard";
+import WeAreSmokefreeCard from "../Cards/WeAreSmokefreeCard";
+import EvaluateCard from "../Cards/EvaluateCard";
 import AddPlayground from "../../Onboarding/Sections/AddPlayground";
 import Header from "../../../components/Header/Header";
 import HeaderLinks from "../../../components/Header/HeaderLinks";
@@ -183,32 +184,37 @@ class WorkspacePage extends PureComponent {
 
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
                               <Switch>
-                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
 
                                   <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
                                          render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
+                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
+                                         render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
+                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="RecruitVolunteers"
+                                         render={(props) => <RecruitVolunteersCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
+                                         render={(props) => <DistributeFlyersCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="CollectOpinions"
+                                         render={(props) => <CollectOpinionsCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactManagement"
+                                         render={(props) => <ContactManagementCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/commitment" key="WeWillBecomeSmokefree"
+                                         render={(props) => <WeWillBecomeSmokefreeCard {...props} playground={playground} user={user} />}/>
+
+                                  <Route exact path="/workspace/:initiativeId/pick-date" key="ChooseProperIntroductionDate"
+                                         render={(props) => <ChooseProperIntroductionDateCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/shout" key="CommunicateAboutSmokefreeAgreement"
+                                         render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/signonfence" key="ShowPlaygroundIsSmokefree"
+                                         render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} playground={playground} user={user} />}/>
+
+                                  <Route exact path="/workspace/:initiativeId/celebrate" key="WeAreSmokefree"
+                                         render={(props) => <WeAreSmokefreeCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/magnify" key="Evaluate"
+                                         render={(props) => <EvaluateCard {...props} playground={playground} user={user} />}/>
+
                                   <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
                                          render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember"
-                                         render={(props) => <GetSupportCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/flyer" key="Flyer"
-                                         render={(props) => <FlyersCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator"
-                                         render={(props) => <InvolveManagerCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/commitment" key="Commitment"
-                                         render={(props) => <DecideSmokefreeCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/pick-date" key="PickDate"
-                                         render={(props) => <SetADateCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/shout" key="Shout"
-                                         render={(props) => <ShareDecisionCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/signonfence" key="Signonfence"
-                                         render={(props) => <MakeItVisibleCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/celebrate" key="Celebrate"
-                                         render={(props) => <ShareSmokefreeCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/magnify" key="Magnify"
-                                         render={(props) => <ValidateCard {...props} playground={playground} user={user} />}/>
                               </Switch>
 
                               {openedStepTitle && (

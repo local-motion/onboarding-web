@@ -1,8 +1,8 @@
 export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
-export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Naleven en Evalueren'];
+export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
 
 export function getActivePhaseUrl(playground) {
-    return `/workspace/${playground.id}/flyer`;
+    return `/workspace/${playground.id}${getPhases().firstPhase.steps[0].link}`;
 }
 
 export function getPhases() {
@@ -13,15 +13,23 @@ export function getPhases() {
             expandedIcon: require('assets/img/icon-cooperate@2x-active.png'),
             steps: [
                 {
+                    name: 'Mensen verzamelen',
+                    link: '/add-team-member',
+                },
+                {
                     name: 'Flyers verspreiden',
                     link: '/flyer',
                 },
                 {
-                    name: 'Betrek de beheerder',
+                    name: 'Meningen inventariseren',
+                    link: '/meningen-inventariseren',
+                },
+                {
+                    name: 'Contact leggen met bestuur',
                     link: '/involve-administrator',
                 },
                 {
-                    name: 'Wij worden rookvrij!',
+                    name: 'Wij worden rookvrij',
                     link: '/commitment',
                 },
             ],
@@ -33,15 +41,15 @@ export function getPhases() {
             expandedIcon: require('assets/img/icon-checklist@2x-active.png'),
             steps: [
                 {
-                    name: 'Zet in de agenda',
+                    name: 'Kies moment van invoering',
                     link: '/pick-date',
                 },
                 {
-                    name: 'Deel het besluit',
+                    name: 'Communiceer over de rookvrije afspraak',
                     link: '/shout',
                 },
                 {
-                    name: 'Laat het zien',
+                    name: 'Laat zien dat de speeltuin rookvrij is',
                     link: '/signonfence',
                 },
             ],
@@ -53,11 +61,11 @@ export function getPhases() {
             expandedIcon: require('assets/img/icon-positivity@2x-active.png'),
             steps: [
                 {
-                    name: 'We zijn rookvrij!',
+                    name: 'We zijn rookvrij',
                     link: '/celebrate',
                 },
                 {
-                    name: 'Volhouden',
+                    name: 'Evalueren',
                     link: '/magnify',
                 },
             ],
@@ -68,10 +76,6 @@ export function getPhases() {
             icon: '',
             expandedIcon: '',
             steps: [
-                {
-                    name: 'Mensen verzamelen',
-                    link: '/add-team-member',
-                },
                 {
                     name: 'Chat',
                     link: '/team',

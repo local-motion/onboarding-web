@@ -5,11 +5,12 @@ import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCh
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 
-class GetSupportCard extends React.Component {
+// step:  "Flyers Verspreiden"
+class DistributeFlyersCard extends React.Component {
     render() {
         const {playground, user} = this.props;
 
-        if (!playground) return "Loading..."
+        if (!playground) return "Loading...";
         
         return (
             <WorkspaceCard title={"Flyers verspreiden"}
@@ -44,5 +45,5 @@ class GetSupportCard extends React.Component {
     }
 }
 
-export default GetSupportCard
+export default DistributeFlyersCard
 
