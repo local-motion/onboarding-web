@@ -8,15 +8,16 @@ import classNames from "classnames";
 import { StyledStepButton, StyledStepLink } from "../../../components/Step/Step";
 import ExpansionPhase from "../../../components/ExpansionPhase/ExpansionPhase";
 import CustomAuthenticator from "../../../auth/CustomAuthenticator";
-import GetSupportCard from "../Cards/GetSupportCard";
-import FlyersCard from "../Cards/FlyersCard";
-import InvolveManagerCard from "../Cards/InvolveManagerCard";
-import DecideSmokefreeCard from "../Cards/DecideSmokefreeCard";
-import SetADateCard from "../Cards/SetADateCard";
-import ShareDecisionCard from "../Cards/ShareDecisionCard";
-import MakeItVisibleCard from "../Cards/MakeItVisibleCard";
-import ShareSmokefreeCard from "../Cards/ShareSmokefreeCard";
-import ValidateCard from "../Cards/ValidateCard";
+import RecruitVolunteersCard from "../Cards/RecruitVolunteersCard";
+import CollectOpinionsCard from "../Cards/CollectOpinionsCard";
+import DistributeFlyersCard from "../Cards/DistributeFlyersCard";
+import ContactManagementCard from "../Cards/ContactManagementCard";
+import WeWillBecomeSmokefreeCard from "../Cards/WeWillBecomeSmokefreeCard";
+import ChooseProperIntroductionDateCard from "../Cards/ChooseProperIntroductionDateCard";
+import CommunicateAboutSmokefreeAgreementCard from "../Cards/CommunicateAboutSmokefreeAgreementCard";
+import ShowPlaygroundIsSmokefreeCard from "../Cards/ShowPlaygroundIsSmokefreeCard";
+import WeAreSmokefreeCard from "../Cards/WeAreSmokefreeCard";
+import EvaluateCard from "../Cards/EvaluateCard";
 import AddPlayground from "../../Onboarding/Sections/AddPlayground";
 import Header from "../../../components/Header/Header";
 import HeaderLinks from "../../../components/Header/HeaderLinks";
@@ -25,6 +26,12 @@ import GridItem from "../../../components/Grid/GridItem";
 import Footer from "../../../components/Footer/Footer";
 import WorkspaceWelcomeContent from "./WorkspaceWelcome/WorkspaceWelcomeContent";
 import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
+import {
+    getNextStep,
+    getOpenedStepTitle,
+    getPrevStep,
+    playgroundLabels,
+} from "../../../misc/WorkspaceHelpers";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -42,7 +49,7 @@ class WorkspacePage extends PureComponent {
         super();
 
         this.toggleAddPlayground = this.toggleAddPlayground.bind(this);
-        this.selectPhase = this.selectPhase.bind(this);
+        this.clickPhase = this.clickPhase.bind(this);
         this.gotoPrevStep = this.gotoPrevStep.bind(this);
         this.gotoNextStep = this.gotoNextStep.bind(this);
     }
@@ -53,35 +60,61 @@ class WorkspacePage extends PureComponent {
     };
 
     componentDidMount() {
-        this.selectPhase(this.props.activePhase);
+        this.selectActivePhase();
+    }
+
+    getActivePhase() {
+        const { location: { pathname }, phases } = this.props;
+
+        const openedStepTitle = getOpenedStepTitle(phases, pathname);
+
+        return openedStepTitle !== null
+          ? openedStepTitle
+          : playgroundLabels[0];
+    }
+
+    selectActivePhase() {
+        const activePhase = this.getActivePhase();
+
+        this.selectPhase(activePhase);
     }
 
     selectPhase(phase) {
-        this.setState(({ expandedPhase }) =>
-          ({ expandedPhase: expandedPhase !== phase ? phase : 'none' }));
+        this.setState(({ expandedPhase: phase }));
+    }
+
+    clickPhase(phase) {
+        this.selectPhase(this.state.expandedPhase !== phase ? phase : 'none');
     }
 
     toggleAddPlayground() {
         this.setState(({ isAddPlaygroundOpen }) => ({ isAddPlaygroundOpen: !isAddPlaygroundOpen }));
     }
 
-    gotoPrevStep() {
-        const { history, prevStep, startPathUrl } = this.props;
-        const url = startPathUrl + prevStep;
+    gotoPrevStep(prev) {
+        const { history, startPathUrl } = this.props;
+        const url = startPathUrl + prev.stepLink;
 
         history.push(url);
+        this.selectPhase(prev.title);
     }
 
-    gotoNextStep() {
-        const { history, nextStep, startPathUrl } = this.props;
-        const url = startPathUrl + nextStep;
+    gotoNextStep(next) {
+        const { history, startPathUrl } = this.props;
+        const url = startPathUrl + next.stepLink;
 
         history.push(url);
+        this.selectPhase(next.title);
     }
 
     render() {
-        const { phases, playground, user, prevStep, nextStep, startPathUrl, classes, ...rest } = this.props;
+        const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
         const { expandedPhase, isAddPlaygroundOpen } = this.state;
+
+        const prev = getPrevStep(phases, pathname);
+        const next = getNextStep(phases, pathname);
+
+        const openedStepTitle = getOpenedStepTitle(phases, pathname);
 
         return (
           <React.Fragment>
@@ -114,10 +147,9 @@ class WorkspacePage extends PureComponent {
                                 icon={phases.firstPhase.icon}
                                 expandedIcon={phases.firstPhase.expandedIcon}
                                 expandedPhase={expandedPhase}
-                                onChange={this.selectPhase}
+                                onChange={this.clickPhase}
                               >
                                   {!playground && <StyledStepButton onClick={this.toggleAddPlayground} name="Speeltuin toevoegen" />}
-                                  {!user && <StyledStepLink link={"/login"} disabled={user} name="Inloggen" />}
 
                                   {phases.firstPhase.steps.map(step=> <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
@@ -126,7 +158,7 @@ class WorkspacePage extends PureComponent {
                                 icon={phases.secondPhase.icon}
                                 expandedIcon={phases.secondPhase.expandedIcon}
                                 expandedPhase={expandedPhase}
-                                onChange={this.selectPhase}
+                                onChange={this.clickPhase}
                               >
                                   {phases.secondPhase.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
@@ -135,7 +167,7 @@ class WorkspacePage extends PureComponent {
                                 icon={phases.thirdPhase.icon}
                                 expandedIcon={phases.thirdPhase.expandedIcon}
                                 expandedPhase={expandedPhase}
-                                onChange={this.selectPhase}
+                                onChange={this.clickPhase}
                               >
                                   {phases.thirdPhase.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
@@ -144,7 +176,7 @@ class WorkspacePage extends PureComponent {
                                 icon={phases.community.icon}
                                 expandedIcon={phases.community.expandedIcon}
                                 expandedPhase={expandedPhase}
-                                onChange={this.selectPhase}
+                                onChange={this.clickPhase}
                               >
                                   {phases.community.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
@@ -152,49 +184,56 @@ class WorkspacePage extends PureComponent {
 
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
                               <Switch>
-                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
 
                                   <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
                                          render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
+                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
+                                         render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
+                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="RecruitVolunteers"
+                                         render={(props) => <RecruitVolunteersCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
+                                         render={(props) => <DistributeFlyersCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="CollectOpinions"
+                                         render={(props) => <CollectOpinionsCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactManagement"
+                                         render={(props) => <ContactManagementCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/commitment" key="WeWillBecomeSmokefree"
+                                         render={(props) => <WeWillBecomeSmokefreeCard {...props} playground={playground} user={user} />}/>
+
+                                  <Route exact path="/workspace/:initiativeId/pick-date" key="ChooseProperIntroductionDate"
+                                         render={(props) => <ChooseProperIntroductionDateCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/shout" key="CommunicateAboutSmokefreeAgreement"
+                                         render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/signonfence" key="ShowPlaygroundIsSmokefree"
+                                         render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} playground={playground} user={user} />}/>
+
+                                  <Route exact path="/workspace/:initiativeId/celebrate" key="WeAreSmokefree"
+                                         render={(props) => <WeAreSmokefreeCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/magnify" key="Evaluate"
+                                         render={(props) => <EvaluateCard {...props} playground={playground} user={user} />}/>
+
                                   <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
                                          render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember"
-                                         render={(props) => <GetSupportCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/flyer" key="Flyer"
-                                         render={(props) => <FlyersCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator"
-                                         render={(props) => <InvolveManagerCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/commitment" key="Commitment"
-                                         render={(props) => <DecideSmokefreeCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/pick-date" key="PickDate"
-                                         render={(props) => <SetADateCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/shout" key="Shout"
-                                         render={(props) => <ShareDecisionCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/signonfence" key="Signonfence"
-                                         render={(props) => <MakeItVisibleCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/celebrate" key="Celebrate"
-                                         render={(props) => <ShareSmokefreeCard {...props} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/magnify" key="Magnify"
-                                         render={(props) => <ValidateCard {...props} playground={playground} user={user} />}/>
                               </Switch>
 
-                              <div className={"workspace-content-pagination"}>
-                                  {prevStep ? (
-                                    <Button onClick={this.gotoPrevStep} variant="outlined" className={"pagination-button"}>
-                                        <PaginationIcon />
-                                    </Button>
-                                  ) : <div style={{ width: '45px' }} />}
+                              {openedStepTitle && (
+                                <div className={"workspace-content-pagination"}>
+                                    {prev.stepLink ? (
+                                      <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined" className={"pagination-button"}>
+                                          <PaginationIcon />
+                                      </Button>
+                                    ) : <div style={{ width: '45px' }} />}
 
-                                  <Button variant="contained" className={"pagination-button-step"}>ik heb deze stap volbracht!</Button>
+                                    {user && <Button variant="contained" className={"pagination-button-step"}>ik heb deze stap volbracht!</Button>}
 
-                                  {nextStep ? (
-                                    <Button onClick={this.gotoNextStep} variant="outlined" className={"pagination-button"}>
-                                        <PaginationIcon className={"pagination-button-icon-right"} />
-                                    </Button>
-                                  ) : <div style={{ width: '45px' }} />}
-                              </div>
+                                    {next.stepLink ? (
+                                      <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
+                                          <PaginationIcon className={"pagination-button-icon-right"} />
+                                      </Button>
+                                    ) : <div style={{ width: '45px' }} />}
+                                </div>
+                              )}
                           </GridItem>
                       </Paper>
                   </GridContainer>

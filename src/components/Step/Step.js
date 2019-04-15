@@ -32,7 +32,6 @@ const styles = themes => ({
     },
     name: {
         color: '#626262',
-        textAlign: "center",
         margin: "15px",
         fontSize: "13px",
         fontFamily: '"montserrat-light-webfont"',
@@ -56,9 +55,9 @@ const styles = themes => ({
     },
 });
 
-const StepLink = ({ name, description, image, link, classes, match, disabled, startPathUrl }) => (
+const StepLink = ({ name, description, image, link, classes, location: { pathname }, startPathUrl }) => (
   <Link to={startPathUrl + link} className={classes.link}>
-      <Card className={`${classes.card} ${match.url.includes(link) ? classes.cardActive : null}`}>
+      <Card className={`${classes.card} ${pathname.includes(link) ? classes.cardActive : null}`}>
           <CardContent className={classes.cardContent}>
               <Typography gutterBottom className={classes.name}>
                   {name}
