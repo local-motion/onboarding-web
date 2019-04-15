@@ -2,12 +2,17 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import PlaygroundIcons from "../../../../components/PlaygroundIcons/PlaygroundIcons";
+import PlaygroundIcon from "../../../../components/PlaygroundIcons/PlaygroundIcons";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle";
 import { getActivePhaseUrl, getStatus } from "../../../../misc/WorkspaceHelpers";
 import { playgroundIcons } from "../../../../components/PlaygroundIcons/playgroundIconsConstants";
 
 class WorkspaceWelcomeContent extends Component {
+    constructor(props) {
+        super(props);
+
+        this.getPhaseIcon = this.getPhaseIcon.bind(this);
+    }
     goToJoinPage() {
         this.props.history.push(
           `${this.props.user ? '' : '/login?target='}/workspace/${this.props.match.params.initiativeId}/join`
@@ -22,16 +27,20 @@ class WorkspaceWelcomeContent extends Component {
 
     getPhaseIcon() {
         const status = getStatus(this.props.playground);
-        const currentPhaseIcons = playgroundIcons.find(({ title }) => title === status);
+
+        return playgroundIcons.find(({ title }) => title === status);
     }
 
     render() {
-        const { classes, playground } = this.props;
+        const { classes } = this.props;
 
         return (
-          <React.Fragment>
+          <div className={classes.workspaceWelcomeContent}>
+              <div className={classes.mainImage}>
+                  <img src={require('assets/img/backgrounds/workspace-welcome-bg.jpg')} alt="WorkspaceWelcome" />
+              </div>
               <div className={classes.icons}>
-                  <PlaygroundIcons />
+                  <PlaygroundIcon playgroundIcon={this.getPhaseIcon()} />
               </div>
               <div className={classes.buttonContainer}>
                   <button
@@ -39,11 +48,8 @@ class WorkspaceWelcomeContent extends Component {
                     onClick={() => this.goToJoinPage()}>
                       Ga direct aan de slag
                   </button>
-                  <button className={classes.skip} onClick={() => this.gotoActivePhase()}>
-                      Ga direct naar de pagina
-                  </button>
               </div>
-          </React.Fragment>
+          </div>
         );
     }
 }

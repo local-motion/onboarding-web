@@ -2,6 +2,16 @@ import { container } from "assets/jss/material-kit-react.jsx";
 
 const WorkspaceWelcomeStyle = theme => ({
   container,
+  workspaceWelcomeContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  mainImage: {
+    '& img': {
+      width: '100%',
+    },
+  },
   page: {
     padding: '100px 0 0px',
     backgroundColor: '#fff'
@@ -32,7 +42,7 @@ const WorkspaceWelcomeStyle = theme => ({
   icons: {
     display: 'flex',
     justifyContent: 'center',
-    margin: '40px 0 48px',
+    margin: '-60px 0 48px',
     [theme.breakpoints.down("sm")]: {
       flexWrap: 'wrap',
     },

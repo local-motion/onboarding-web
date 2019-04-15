@@ -6,22 +6,20 @@ const PlaygroundIconsStyle = theme => ({
       alignItems: 'center',
       color: 'inherit',
       padding: '0 10px',
-      maxWidth: 320,
-      margin: '0 0 20px',
-      '&:hover $iconBgImage': {
-        boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
-      }
+      maxWidth: 120,
+      margin: '0 0 10px',
     },
     iconBgImage: {
-      width: 180,
-      height: 180,
+      width: 120,
+      height: 120,
       borderRadius: '50%',
+      border: '10px solid #FFF',
       backgroundSize: 'cover',
       backgroundPosition: '50% 50%',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 28,
+      marginBottom: 10,
       transition: 'all .2s ease',
       transformOrigin: '50% 50%',
     },
@@ -29,15 +27,15 @@ const PlaygroundIconsStyle = theme => ({
       transform: 'scale(1.05)',
     },
     iconImage: {
-      width: 72,
-      height: 72,
+      width: 55,
+      height: 55,
       backgroundSize: 'contain',
       backgroundPosition: '50% 50%',
       backgroundRepeat: 'no-repeat'
     },
     iconTitle: {
       fontFamily: "'dk_black_bamboo-webfont'",
-      fontSize: 30,
+      fontSize: 26,
       fontWeight: 900,
       fontStyle: 'normal',
       fontStretch: 'normal',
@@ -45,17 +43,17 @@ const PlaygroundIconsStyle = theme => ({
       letterSpacing: 'normal',
       textAlign: 'center',
       color: '#626262',
-      margin: '0 0 19px'
+      margin: '0 0 5px'
     },
     iconText: {
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: 'normal',
       fontStyle: 'normal',
       fontStretch: 'normal',
-      lineHeight: 1.5,
+      lineHeight: 1.1,
       letterSpacing: 'normal',
       textAlign: 'center',
-      color: '#626262',
+      color: '#085ca6',
       margin: '0',
     }
   });
