@@ -4,11 +4,14 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import PlaygroundIcons from "../../../../components/PlaygroundIcons/PlaygroundIcons";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle";
-import { getActivePhaseUrl } from "../../../../misc/WorkspaceHelpers";
+import { getActivePhaseUrl, getStatus } from "../../../../misc/WorkspaceHelpers";
+import { playgroundIcons } from "../../../../components/PlaygroundIcons/playgroundIconsConstants";
 
 class WorkspaceWelcomeContent extends Component {
     goToJoinPage() {
-        this.props.history.push(`${this.props.user ? '' : '/login?target='}/workspace/${this.props.match.params.initiativeId}/join`);
+        this.props.history.push(
+          `${this.props.user ? '' : '/login?target='}/workspace/${this.props.match.params.initiativeId}/join`
+        );
     }
 
     gotoActivePhase() {
@@ -17,8 +20,13 @@ class WorkspaceWelcomeContent extends Component {
         this.props.history.push(activePhaseUrl);
     }
 
+    getPhaseIcon() {
+        const status = getStatus(this.props.playground);
+        const currentPhaseIcons = playgroundIcons.find(({ title }) => title === status);
+    }
+
     render() {
-        const { classes } = this.props;
+        const { classes, playground } = this.props;
 
         return (
           <React.Fragment>
