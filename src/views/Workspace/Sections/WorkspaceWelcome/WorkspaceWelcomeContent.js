@@ -40,8 +40,13 @@ class WorkspaceWelcomeContent extends Component {
     }
 
     goToJoinPage() {
-        this.props.history.push(
-          `/workspace/${this.props.match.params.initiativeId}/${this.props.user ? 'join' : 'login'}`
+        const { match: { params: { initiativeId } }, user, history } = this.props;
+
+        const startUrl = `/workspace/${initiativeId}`;
+        const loginUrl = `/login?target=${startUrl}`;
+
+        history.push(
+          `${startUrl}${user ? '' : loginUrl}/join`
         );
     }
 
