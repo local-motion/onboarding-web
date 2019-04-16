@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import PlaygroundIcon from "../../../../components/PlaygroundIcons/PlaygroundIcons";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle";
-import { getStatus } from "../../../../misc/WorkspaceHelpers";
+import { getActivePhaseUrl, getStatus } from "../../../../misc/WorkspaceHelpers";
 import { playgroundIcons } from "../../../../components/PlaygroundIcons/playgroundIconsConstants";
 import Statistics from "../../../../components/Statistics/Statistics";
 
@@ -14,9 +14,34 @@ class WorkspaceWelcomeContent extends Component {
 
         this.getPhaseIcon = this.getPhaseIcon.bind(this);
     }
+
+    componentDidMount() {
+        this.goToActivePhaseIfJoined();
+    }
+
+    goToActivePhaseIfJoined() {
+        const { playground, user, history } = this.props;
+
+        if (!user)
+            return;
+
+        const activePhaseUrl = getActivePhaseUrl(playground);
+        const isUserAlreadyJoined = playground.volunteers.find(({ userId }) => userId === user.id);
+
+        if (isUserAlreadyJoined) {
+            history.push(activePhaseUrl);
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!prevProps.user && this.props.user) {
+            this.goToActivePhaseIfJoined();
+        }
+    }
+
     goToJoinPage() {
         this.props.history.push(
-          `${this.props.user ? '' : '/login?target='}/workspace/${this.props.match.params.initiativeId}/join`
+          `/workspace/${this.props.match.params.initiativeId}/${this.props.user ? 'join' : 'login'}`
         );
     }
 
