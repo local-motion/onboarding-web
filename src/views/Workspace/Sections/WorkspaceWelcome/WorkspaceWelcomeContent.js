@@ -19,18 +19,28 @@ class WorkspaceWelcomeContent extends Component {
         this.goToActivePhaseIfJoined();
     }
 
+    goToActivePhase() {
+        const { playground, history } = this.props;
+        const activePhaseUrl = getActivePhaseUrl(playground);
+
+        history.push(activePhaseUrl);
+    }
+
     goToActivePhaseIfJoined() {
-        const { playground, user, history } = this.props;
+        const { user } = this.props;
 
         if (!user)
             return;
 
-        const activePhaseUrl = getActivePhaseUrl(playground);
-        const isUserAlreadyJoined = playground.volunteers.find(({ userId }) => userId === user.id);
-
-        if (isUserAlreadyJoined) {
-            history.push(activePhaseUrl);
+        if (this.isUserAlreadyJoined()) {
+            this.goToActivePhase();
         }
+    }
+
+    isUserAlreadyJoined() {
+        const { playground, user } = this.props;
+
+        return playground.volunteers.find(({ userId }) => userId === user.id);
     }
 
     componentDidUpdate(prevProps) {
@@ -57,7 +67,11 @@ class WorkspaceWelcomeContent extends Component {
     }
 
     render() {
-        const { classes, playground } = this.props;
+        const { classes, playground, user } = this.props;
+
+        const mainButtonText = user
+          ? 'Doe mee, ga naar de actieve stap!'
+          : 'Doe mee en meld je aan!';
 
         return (
           <div className={classes.workspaceWelcomeContent}>
@@ -75,7 +89,7 @@ class WorkspaceWelcomeContent extends Component {
                   <button
                     className={classes.button}
                     onClick={() => this.goToJoinPage()}>
-                      Ga direct aan de slag!
+                      {mainButtonText}
                   </button>
               </div>
           </div>
