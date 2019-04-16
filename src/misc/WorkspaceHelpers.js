@@ -77,8 +77,12 @@ export function getPhases() {
             expandedIcon: '',
             steps: [
                 {
-                    name: 'Chat',
+                    name: 'Team',
                     link: '/team',
+                },
+                {
+                    name: 'Chat',
+                    link: '/chat',
                 },
             ],
         },
