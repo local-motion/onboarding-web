@@ -30,7 +30,6 @@ import {
     getNextStep,
     getOpenedStepTitle,
     getPrevStep,
-    playgroundLabels,
 } from "../../../misc/WorkspaceHelpers";
 
 const PaginationIcon = (props) => (
@@ -63,18 +62,10 @@ class WorkspacePage extends PureComponent {
         this.selectActivePhase();
     }
 
-    getActivePhase() {
+    selectActivePhase() {
         const { location: { pathname }, phases } = this.props;
 
-        const openedStepTitle = getOpenedStepTitle(phases, pathname);
-
-        return openedStepTitle !== null
-          ? openedStepTitle
-          : playgroundLabels[0];
-    }
-
-    selectActivePhase() {
-        const activePhase = this.getActivePhase();
+        const activePhase = getOpenedStepTitle(phases, pathname);
 
         this.selectPhase(activePhase);
     }

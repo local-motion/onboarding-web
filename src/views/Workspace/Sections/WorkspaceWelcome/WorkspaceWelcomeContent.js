@@ -2,40 +2,53 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import PlaygroundIcons from "../../../../components/PlaygroundIcons/PlaygroundIcons";
+import PlaygroundIcon from "../../../../components/PlaygroundIcons/PlaygroundIcons";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle";
-import { getActivePhaseUrl } from "../../../../misc/WorkspaceHelpers";
+import { getStatus } from "../../../../misc/WorkspaceHelpers";
+import { playgroundIcons } from "../../../../components/PlaygroundIcons/playgroundIconsConstants";
+import Statistics from "../../../../components/Statistics/Statistics";
 
 class WorkspaceWelcomeContent extends Component {
+    constructor(props) {
+        super(props);
+
+        this.getPhaseIcon = this.getPhaseIcon.bind(this);
+    }
     goToJoinPage() {
-        this.props.history.push(`${this.props.user ? '' : '/login?target='}/workspace/${this.props.match.params.initiativeId}/join`);
+        this.props.history.push(
+          `${this.props.user ? '' : '/login?target='}/workspace/${this.props.match.params.initiativeId}/join`
+        );
     }
 
-    gotoActivePhase() {
-        const activePhaseUrl = getActivePhaseUrl(this.props.playground);
+    getPhaseIcon() {
+        const status = getStatus(this.props.playground);
 
-        this.props.history.push(activePhaseUrl);
+        return playgroundIcons.find(({ title }) => title === status);
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, playground } = this.props;
 
         return (
-          <React.Fragment>
-              <div className={classes.icons}>
-                  <PlaygroundIcons />
+          <div className={classes.workspaceWelcomeContent}>
+              <div className={classes.mainImage}>
+                  <img src={require('assets/img/backgrounds/workspace-welcome-bg.jpg')} alt="WorkspaceWelcome" />
               </div>
+
+              <div className={classes.icons}>
+                  <PlaygroundIcon icon={this.getPhaseIcon()} />
+              </div>
+
+              <Statistics playground={playground} />
+
               <div className={classes.buttonContainer}>
                   <button
                     className={classes.button}
                     onClick={() => this.goToJoinPage()}>
-                      Ga direct aan de slag
-                  </button>
-                  <button className={classes.skip} onClick={() => this.gotoActivePhase()}>
-                      Ga direct naar de pagina
+                      Ga direct aan de slag!
                   </button>
               </div>
-          </React.Fragment>
+          </div>
         );
     }
 }

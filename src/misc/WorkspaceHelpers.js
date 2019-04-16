@@ -2,7 +2,34 @@ export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
 
 export function getActivePhaseUrl(playground) {
-    return `/workspace/${playground.id}${getPhases().firstPhase.steps[0].link}`;
+    const activePhase = getActivePhase(playground);
+
+    return `/workspace/${playground.id}${activePhase.steps[0].link}`;
+}
+
+export function getOpenedPhase(phases, pathname) {
+    const openedStepTitle = getOpenedStepTitle(phases, pathname);
+
+    return openedStepTitle !== null
+      ? openedStepTitle
+      : 'none';
+}
+
+export function getActivePhase(playground) {
+    const status = getStatus(playground);
+    const phases = getPhases();
+
+    const foundPhase = Object.keys(phases)
+      .find((phaseName) => !!(phases[phaseName].title === status));
+
+    return foundPhase ? phases[foundPhase] : null;
+}
+
+export function getStatus(playground) {
+    const playgroundStatus = playground ? playground.status : null;
+    const result = playgroundStatuses.find(element => element === playgroundStatus);
+
+    return result ? playgroundLabels[playgroundStatuses.indexOf(result)] : null;
 }
 
 export function getPhases() {
@@ -89,7 +116,7 @@ export function getPhases() {
  * phases{Object}
  * pathname{String}
  */
-export function getCurrentStep(phases, pathname) {
+export function getCurrentPhaseByStep(phases, pathname) {
     return Object.keys(phases)
       .find((phaseName) => !!phases[phaseName].steps.find(({ link }) => pathname.includes(link)));
 }
@@ -159,7 +186,7 @@ export function getNextStep(phases, pathname) {
 }
 
 export function getOpenedStepTitle(phases, pathname) {
-    const foundPhase = getCurrentStep(phases, pathname);
+    const foundPhase = getCurrentPhaseByStep(phases, pathname);
 
     return foundPhase
       ? phases[foundPhase].title
