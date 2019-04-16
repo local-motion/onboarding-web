@@ -30,7 +30,6 @@ import {
     getNextStep,
     getOpenedStepTitle,
     getPrevStep,
-    playgroundLabels,
 } from "../../../misc/WorkspaceHelpers";
 
 const PaginationIcon = (props) => (
@@ -63,18 +62,10 @@ class WorkspacePage extends PureComponent {
         this.selectActivePhase();
     }
 
-    getActivePhase() {
+    selectActivePhase() {
         const { location: { pathname }, phases } = this.props;
 
-        const openedStepTitle = getOpenedStepTitle(phases, pathname);
-
-        return openedStepTitle !== null
-          ? openedStepTitle
-          : playgroundLabels[0];
-    }
-
-    selectActivePhase() {
-        const activePhase = this.getActivePhase();
+        const activePhase = getOpenedStepTitle(phases, pathname);
 
         this.selectPhase(activePhase);
     }
@@ -225,7 +216,7 @@ class WorkspacePage extends PureComponent {
                                       </Button>
                                     ) : <div style={{ width: '45px' }} />}
 
-                                    {user && <Button variant="contained" className={"pagination-button-step"}>ik heb deze stap volbracht!</Button>}
+                                    <Button variant="contained" className={"pagination-button-step"} disabled={!user}>ik heb deze stap volbracht!</Button>
 
                                     {next.stepLink ? (
                                       <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
