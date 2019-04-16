@@ -225,7 +225,7 @@ class WorkspacePage extends PureComponent {
                                       </Button>
                                     ) : <div style={{ width: '45px' }} />}
 
-                                    {user && <Button variant="contained" className={"pagination-button-step"}>ik heb deze stap volbracht!</Button>}
+                                    <Button variant="contained" className={"pagination-button-step"} disabled={!user}>ik heb deze stap volbracht!</Button>
 
                                     {next.stepLink ? (
                                       <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
