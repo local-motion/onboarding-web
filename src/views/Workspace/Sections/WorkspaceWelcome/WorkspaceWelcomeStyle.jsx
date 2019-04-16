@@ -12,9 +12,6 @@ const WorkspaceWelcomeStyle = theme => ({
       width: '100%',
     },
   },
-  statistics: {
-
-  },
   title: {
     fontFamily: "'dk_black_bamboo-webfont'",
     fontSize: 40,
@@ -53,8 +50,8 @@ const WorkspaceWelcomeStyle = theme => ({
     marginBottom: 50
   },
   button: {
-    maxWidth: '100%',
-    width: 280,
+    width: 'fit-content',
+    maxWidth: 380,
     height: 50,
     display: 'inline-block',
     cursor: 'pointer',
@@ -73,8 +70,10 @@ const WorkspaceWelcomeStyle = theme => ({
     border: 0,
     boxShadow: 'none',
     appearance: 'none',
+    padding: '0 40px',
     '&:hover': {
-      color: '#f1f1f1'
+      color: '#f1f1f1',
+      backgroundColor: '#ef8149',
     },
     '&:active': {
       transform: 'translateY(1px)'
