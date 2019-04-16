@@ -31,6 +31,7 @@ import {
     getOpenedStepTitle,
     getPrevStep,
 } from "../../../misc/WorkspaceHelpers";
+import BackButton from "../../../components/BackButton/BackButton";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -123,6 +124,7 @@ class WorkspacePage extends PureComponent {
               />
 
               <div className={classNames(classes.container + " phase-explainer-container")}>
+                  <BackButton />
 
                   <GridContainer className={"grid-container"}>
                       <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>

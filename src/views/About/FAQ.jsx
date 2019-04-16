@@ -15,6 +15,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Link } from 'react-router-dom'
+import BackButton from "../../components/BackButton/BackButton";
 
 class FAQ extends React.Component {
 
@@ -34,6 +35,8 @@ class FAQ extends React.Component {
                     }}
                     {...rest}
                 />
+
+                <BackButton className={classes.backButton} />
 
                 <div style={{background: "transparent", marginTop: "100px"}}>
                     <GridContainer className={"grid-container"}>

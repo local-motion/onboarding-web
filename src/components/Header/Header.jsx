@@ -18,7 +18,6 @@ import headerStyle from "assets/jss/material-kit-react/components/headerStyle.js
 import { connect } from 'react-redux'
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { Button } from "@material-ui/core";
-import { ArrowLeftRounded } from "@material-ui/icons";
 import { Link } from 'react-router-dom'
 import EuroIcon from '@material-ui/icons/EuroSymbol';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -111,7 +110,6 @@ class Header extends React.Component {
             brand,
             fixed,
             absolute,
-            disableBackButton,
             user,
             openPetitionDialog,
             openDonationDialog
@@ -130,17 +128,6 @@ class Header extends React.Component {
         return (
             <AppBar className={appBarClasses + " lm-header"}>
                 <Toolbar className={classes.container}>
-
-                    { !disableBackButton &&
-                        <Button
-                            component={Link} to="/"
-                            color="default"
-
-                        >
-                            <ArrowLeftRounded/>
-                            <span>Kaart</span>
-                        </Button>
-                    }
 
                     {leftLinks !== undefined ? brandComponent : null}
                     <div className={classes.flex}>

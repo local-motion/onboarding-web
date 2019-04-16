@@ -9,6 +9,7 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
+import BackButton from "../../components/BackButton/BackButton";
 
 
 class Terms extends React.Component {
@@ -29,6 +30,8 @@ class Terms extends React.Component {
                     }}
                     {...rest}
                 />
+
+                <BackButton className={classes.backButton} />
 
                 <div className={classes.mainDown}>
                   <GridContainer className={"grid-container"}>
