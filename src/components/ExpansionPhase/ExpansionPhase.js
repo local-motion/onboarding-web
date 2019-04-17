@@ -101,7 +101,7 @@ const Icon = withStyles({
     iconWrapper: {
         display: 'block',
         marginBottom: '6px',
-        width: '30px',
+        width: '100%',
         height: '30px',
         textAlign: 'center',
     },
