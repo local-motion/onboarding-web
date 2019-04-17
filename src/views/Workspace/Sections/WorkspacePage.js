@@ -112,7 +112,6 @@ class WorkspacePage extends PureComponent {
               <Header
                 playground={playground}
                 rightLinks={<HeaderLinks />}
-                showStats
                 fixed
                 color="white"
                 changeColorOnScroll={{
