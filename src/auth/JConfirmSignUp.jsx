@@ -17,6 +17,7 @@ class JConfirmSignUp extends Component {
         this.confirmSignUp = this.confirmSignUp.bind(this);
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
+        this.isValidInput = this.isValidInput.bind(this);
         this.inputs = {};
         this.state = {
             message: '',
@@ -108,12 +109,29 @@ class JConfirmSignUp extends Component {
         }
     }
 
+    isValidInput() {
+        const username = document.getElementById('confirmsignup_username') && document.getElementById('confirmsignup_username').value
+        const verificationCode = document.getElementById('confirmsignup_verificationcode') && document.getElementById('confirmsignup_verificationcode').value
+        const RGEX = new RegExp(/([0-9])\d{5}/g);
+        const validatedResult = RGEX.test(verificationCode);
+        console.log('validating input, username, code, testresult', username, verificationCode, validatedResult)
+        return username && username.length > 0 && validatedResult
+    }
+    // componentDidUpdate() {
+    //     const verificationCode = this.props.authState.split(':')[1]
+    //     if (verificationCode && this.props.authState.startsWith('confirmSignUp'))
+    //         this.validateCode(verificationCode)
+    // }
+
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
         const {authState, authData} = this.props;
-        if (authState !== 'confirmSignUp') {
+        if (!authState.startsWith('confirmSignUp')) {
             return null;
         }
+        const verificationCode = authState.split(':')[1]
+        const validInput = this.isValidInput()
+        console.log('Rendering jsignup, valid input:' + validInput)
 
         const style = {
             width: '20rem',
@@ -146,6 +164,7 @@ class JConfirmSignUp extends Component {
                         >
                             <div>
                                 <Input
+                                    id="confirmsignup_username"
                                     type="text"
                                     placeholder="Gebruikersnaam"
                                     defaultValue={authData || ''}
@@ -160,8 +179,10 @@ class JConfirmSignUp extends Component {
                             </div>
                             <div>
                                 <Input
+                                    id="confirmsignup_verificationcode"
                                     type="text"
                                     placeholder="Code"
+                                    defaultValue={verificationCode}
                                     style={style.input}
                                     className={
                                         "input-container last " + (validateCode === "validated" ? 'success' : 'error') + (codeLength === 0 ? " untouched" : " dirty")
@@ -185,7 +206,8 @@ class JConfirmSignUp extends Component {
                                     style={style.button}
                                     onClick={this.confirmSignUp}
                                     disabled={
-                                        !this.state.filled
+                                        // !this.state.filled
+                                        !validInput
                                     }
                                 >
                                     Bevestig

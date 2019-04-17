@@ -15,10 +15,7 @@ const initialState = {
 
 // Selectors
 
-// export const getUser = (state) => state.userprofile.user
-export const getUser = (state) => {
-  return state.userprofile.user
-}
+export const getUser = (state) => state.userprofile.user
 export const getJwtToken = (state) => state.userprofile.cognitoUser ? state.userprofile.cognitoUser.signInUserSession.idToken.jwtToken : ''
 
 

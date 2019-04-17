@@ -6,6 +6,7 @@ import JForgotPasswordReset from "./JForgotPasswordReset";
 import JConfirmSignIn from "./JConfirmSignIn";
 import JConfirmSignUp from "./JConfirmSignUp";
 import { Authenticator } from 'aws-amplify-react';
+import VerificationLinkHandler from "./VerificationLinkHandler";
 
 
 const CustomAuthenticator = (props) => {
@@ -20,6 +21,7 @@ const CustomAuthenticator = (props) => {
             <JForgotPasswordReset />
             <JConfirmSignIn />
             <JConfirmSignUp />
+            <VerificationLinkHandler />
         </Authenticator>
     );
 }
