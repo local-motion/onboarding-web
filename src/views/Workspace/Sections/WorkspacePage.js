@@ -32,6 +32,7 @@ import {
     getPrevStep,
     playgroundLabels,
 } from "../../../misc/WorkspaceHelpers";
+import TeamCard from "../Cards/TeamCard";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -213,8 +214,8 @@ class WorkspacePage extends PureComponent {
                                   <Route exact path="/workspace/:initiativeId/magnify" key="Evaluate"
                                          render={(props) => <EvaluateCard {...props} playground={playground} user={user} />}/>
 
-                                  <Route exact path="/workspace/:initiativeId/team" key="RecruitVolunteersTeam"
-                                         render={(props) => <RecruitVolunteersCard {...props} playground={playground} user={user} />}/>
+                                  <Route exact path="/workspace/:initiativeId/team" key="Team"
+                                         render={(props) => <TeamCard {...props} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/chat" key="WorkspaceChat"
                                          render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
                               </Switch>
