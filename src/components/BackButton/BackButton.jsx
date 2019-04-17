@@ -10,14 +10,20 @@ const styles = theme => ({
 });
 
 
-const BackButton = ({ history, classes, className }) => {
-    function goBack() {
-        history.goBack();
+const BackButton = ({ history, classes, className, where = 'back' }) => {
+    function go() {
+        if (where === 'back') {
+            history.goBack();
+        }
+
+        if (where === 'home') {
+            history.push('/')
+        }
     }
 
     return (
       <div className={className}>
-          <Button color="default" onClick={goBack} className={classes.button}>
+          <Button color="default" onClick={go} className={classes.button}>
               <ArrowLeftRounded />
               <span>Terug</span>
           </Button>

@@ -124,7 +124,7 @@ class WorkspacePage extends PureComponent {
               />
 
               <div className={classNames(classes.container + " phase-explainer-container")}>
-                  <BackButton />
+                  <BackButton where="home" />
 
                   <GridContainer className={"grid-container"}>
                       <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
