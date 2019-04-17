@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import Paper from "@material-ui/core/Paper/Paper";
 import Button from "@material-ui/core/Button";
 import SvgIcon from "@material-ui/core/SvgIcon";
+import Check from "@material-ui/icons/Check";
 import classNames from "classnames";
 
 import { StyledStepButton, StyledStepLink } from "../../../components/Step/Step";
@@ -49,6 +50,8 @@ class WorkspacePage extends PureComponent {
 
         this.toggleAddPlayground = this.toggleAddPlayground.bind(this);
         this.clickPhase = this.clickPhase.bind(this);
+        this.setCta = this.setCta.bind(this);
+        this.unsetCta = this.unsetCta.bind(this);
         this.gotoPrevStep = this.gotoPrevStep.bind(this);
         this.gotoNextStep = this.gotoNextStep.bind(this);
     }
@@ -56,6 +59,10 @@ class WorkspacePage extends PureComponent {
     state = {
         isAddPlaygroundOpen: false,
         expandedPhase: 'none',
+        ctaText: 'ik heb deze stap volbracht',
+        ctaAction: () => null,
+        ctaDisabled: () => true,
+        ctaDone: false,
     };
 
     componentDidMount() {
@@ -71,11 +78,24 @@ class WorkspacePage extends PureComponent {
     }
 
     selectPhase(phase) {
-        this.setState(({ expandedPhase: phase }));
+        this.setState({ expandedPhase: phase });
     }
 
     clickPhase(phase) {
         this.selectPhase(this.state.expandedPhase !== phase ? phase : 'none');
+    }
+
+    setCta({ ctaText, ctaAction, ctaDisabled, ctaDone }) {
+        this.setState({ ctaText, ctaAction, ctaDisabled, ctaDone });
+    }
+
+    unsetCta() {
+        this.setState({
+            ctaText: 'ik heb deze stap volbracht',
+            ctaAction: () => null,
+            ctaDisabled: () => true,
+            ctaDone: false,
+        });
     }
 
     toggleAddPlayground() {
@@ -100,7 +120,7 @@ class WorkspacePage extends PureComponent {
 
     render() {
         const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
-        const { expandedPhase, isAddPlaygroundOpen } = this.state;
+        const { expandedPhase, isAddPlaygroundOpen, ctaText, ctaAction, ctaDisabled, ctaDone } = this.state;
 
         const prev = getPrevStep(phases, pathname);
         const next = getNextStep(phases, pathname);
@@ -180,32 +200,32 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} onSignIn={this.props.signInHandler}/>} />
+                                         render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/workspace/:initiativeId/add-team-member" key="RecruitVolunteers"
-                                         render={(props) => <RecruitVolunteersCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
-                                         render={(props) => <DistributeFlyersCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="CollectOpinions"
-                                         render={(props) => <CollectOpinionsCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactManagement"
-                                         render={(props) => <ContactManagementCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/commitment" key="WeWillBecomeSmokefree"
-                                         render={(props) => <WeWillBecomeSmokefreeCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/pick-date" key="ChooseProperIntroductionDate"
-                                         render={(props) => <ChooseProperIntroductionDateCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/shout" key="CommunicateAboutSmokefreeAgreement"
-                                         render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/signonfence" key="ShowPlaygroundIsSmokefree"
-                                         render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/celebrate" key="WeAreSmokefree"
-                                         render={(props) => <WeAreSmokefreeCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/magnify" key="Evaluate"
-                                         render={(props) => <EvaluateCard {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
-                                         render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
+                                         render={(props) => <PlaygroundChatBox {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                               </Switch>
 
                               {openedStepTitle && (
@@ -214,15 +234,17 @@ class WorkspacePage extends PureComponent {
                                       <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined" className={"pagination-button"}>
                                           <PaginationIcon />
                                       </Button>
-                                    ) : <div style={{ width: '45px' }} />}
+                                    ) : <div className={classes.noButton} />}
 
-                                    <Button variant="contained" className={"pagination-button-step"} disabled={!user}>ik heb deze stap volbracht!</Button>
+                                    {ctaText && <Button onClick={ctaAction} variant="contained" className={"pagination-button-step"} disabled={ctaDisabled()}>
+                                        {ctaText} {ctaDone && <Check className={classes.ctaDone} />}
+                                        </Button>}
 
                                     {next.stepLink ? (
                                       <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
                                           <PaginationIcon className={"pagination-button-icon-right"} />
                                       </Button>
-                                    ) : <div style={{ width: '45px' }} />}
+                                    ) : <div className={classes.noButton} />}
                                 </div>
                               )}
                           </GridItem>

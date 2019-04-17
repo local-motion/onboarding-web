@@ -32,6 +32,18 @@ class JSignIn extends Component {
         this.state = {error: '', signInPage: true}
     }
 
+    componentDidMount() {
+        this.props.setCta && this.props.setCta({
+            ctaAction: () => this.changeState('signUp'),
+            ctaText: 'Maak een account',
+            ctaDisabled: () => false,
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.unsetCta && this.props.unsetCta();
+    }
+
     changeState(state, data) {
         const {onStateChange} = this.props;
         if (onStateChange) {

@@ -52,6 +52,12 @@ const componentsStyle = {
         fontFamily: "'dk_black_bamboo-webfont'",
         color: '#085ca6',
     },
+    noButton: {
+
+    },
+    ctaDone: {
+        marginLeft: 10,
+    },
 };
 
 export default componentsStyle;
