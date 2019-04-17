@@ -6,7 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { getErrorMessage } from '../api/ErrorMessages';
 import { createCookie } from '../utils/CookieUtils';
-import { VERIFICATION_TYPE_COOKIE, VERIFICATION_TYPE_SIGNUP, VERIFICATION_USERNAME_COOKIE } from './VerificationLinkHandler';
+import { VERIFICATION_TYPE_COOKIE, VERIFICATION_TYPE_SIGNUP, VERIFICATION_USERNAME_COOKIE, setSignupConfirmCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JSignUp');
 
@@ -52,8 +52,7 @@ class JSignUp extends Component {
             .catch(err => this.signUpError(err));
 
         // Save the user name in a cookie so it can be picked up when the user clicks the link in the verification mail
-        createCookie(VERIFICATION_USERNAME_COOKIE, username, 2)
-        createCookie(VERIFICATION_TYPE_COOKIE, VERIFICATION_TYPE_SIGNUP, 2)
+        setSignupConfirmCookies(username)
     }
 
     signUpSuccess(username) {

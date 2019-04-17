@@ -4,7 +4,7 @@ import {Button, Input, Typography} from '@material-ui/core'
 import {Auth, JS, Logger} from 'aws-amplify';
 import querySearch from "stringquery";
 import { getErrorMessage } from '../api/ErrorMessages';
-import { readCookie } from '../utils/CookieUtils';
+import { readCookie, eraseCookie, createCookie } from '../utils/CookieUtils';
 import { getUser } from '../components/UserProfile/UserProfileReducer';
 import { connect } from 'react-redux'
 import { history } from '../setup';
@@ -24,10 +24,30 @@ const mapDispatchToProps = dispatch => ({
 })
 
 // Cookies
-export const VERIFICATION_USERNAME_COOKIE = 'verificationUsername'
-export const VERIFICATION_TYPE_COOKIE = 'verificationTtype'
-export const VERIFICATION_TYPE_SIGNUP = 'signup'
-export const VERIFICATION_TYPE_RESET_PASSWORD = 'reset_password'
+const VERIFICATION_USERNAME_COOKIE = 'verificationUsername'
+const VERIFICATION_INITIATIVE_COOKIE = 'verificationInitiative'
+const VERIFICATION_TYPE_COOKIE = 'verificationTtype'
+const VERIFICATION_TYPE_SIGNUP = 'signup'
+const VERIFICATION_TYPE_RESET_PASSWORD = 'reset_password'
+
+export const setSignupConfirmCookies = (username, initiativeId) => {
+    createCookie(VERIFICATION_USERNAME_COOKIE, username, 2)
+    createCookie(VERIFICATION_TYPE_COOKIE, VERIFICATION_TYPE_SIGNUP, 2)
+    if (initiativeId)
+        createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
+}
+
+export const setPasswordResetCookies = (username, initiativeId) => {
+    createCookie(VERIFICATION_USERNAME_COOKIE, username, 2)
+    createCookie(VERIFICATION_TYPE_COOKIE, VERIFICATION_TYPE_RESET_PASSWORD, 2)
+    if (initiativeId)
+        createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
+}
+
+export const clearVerificationCookies = () => {
+    eraseCookie(VERIFICATION_USERNAME_COOKIE)
+    eraseCookie(VERIFICATION_TYPE_COOKIE)
+}
 
 /**
  * This class handles a verfication url that is clicked by the user in a verification mail.
@@ -66,7 +86,7 @@ class VerificationLinkHandler extends Component {
 
         if (authenticatedUser) {
             this.props.history.push('/');
-            this.openAlreadyLoggedInDialog();
+            this.props.openAlreadyLoggedInDialog();
         }
 
         if (username && verificationType === VERIFICATION_TYPE_SIGNUP) {

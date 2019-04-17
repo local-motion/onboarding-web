@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
+import { clearVerificationCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JConfirmSignUp');
 
@@ -62,7 +63,7 @@ class JConfirmSignUp extends Component {
 
     confirmSignUp() {
         const username = this.props.authData || this.inputs.username;
-        const {code} = this.inputs;
+        const code = this.inputs.code || this.props.authState.split(':')[1]
         logger.info('confirm sign up with ' + code);
         Auth.confirmSignUp(username, code)
             .then(() => this.confirmSuccess(username))
@@ -78,6 +79,7 @@ class JConfirmSignUp extends Component {
     }
 
     confirmSuccess(username) {
+        clearVerificationCookies();
         logger.info('confirm sign up success with ' + username);
         this.setState({message: '', error: ''});
         this.changeState('signIn', username);
@@ -109,19 +111,14 @@ class JConfirmSignUp extends Component {
         }
     }
 
-    isValidInput() {
-        const username = document.getElementById('confirmsignup_username') && document.getElementById('confirmsignup_username').value
-        const verificationCode = document.getElementById('confirmsignup_verificationcode') && document.getElementById('confirmsignup_verificationcode').value
+    isValidInput(defaultUsername, defaultVerificationCode) {
+        const username = document.getElementById('confirmsignup_username') ? document.getElementById('confirmsignup_username').value : defaultUsername
+        const verificationCode = document.getElementById('confirmsignup_verificationcode') ? document.getElementById('confirmsignup_verificationcode').value : defaultVerificationCode
         const RGEX = new RegExp(/([0-9])\d{5}/g);
         const validatedResult = RGEX.test(verificationCode);
         console.log('validating input, username, code, testresult', username, verificationCode, validatedResult)
         return username && username.length > 0 && validatedResult
     }
-    // componentDidUpdate() {
-    //     const verificationCode = this.props.authState.split(':')[1]
-    //     if (verificationCode && this.props.authState.startsWith('confirmSignUp'))
-    //         this.validateCode(verificationCode)
-    // }
 
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
@@ -130,7 +127,7 @@ class JConfirmSignUp extends Component {
             return null;
         }
         const verificationCode = authState.split(':')[1]
-        const validInput = this.isValidInput()
+        const validInput = this.isValidInput(authData, verificationCode)
         console.log('Rendering jsignup, valid input:' + validInput)
 
         const style = {
@@ -206,7 +203,6 @@ class JConfirmSignUp extends Component {
                                     style={style.button}
                                     onClick={this.confirmSignUp}
                                     disabled={
-                                        // !this.state.filled
                                         !validInput
                                     }
                                 >
