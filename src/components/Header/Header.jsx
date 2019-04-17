@@ -19,14 +19,9 @@ import { connect } from 'react-redux'
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { Button } from "@material-ui/core";
 import { Link } from 'react-router-dom'
-import { openConfirmationDialog } from "../ConfirmationDialog/ConfirmationDialogActions";
 
 const mapStateToProps = state => ({
     user: getUser(state)
-})
-const mapDispatchToProps = dispatch => ({
-    openPetitionDialog:    () => dispatch(openConfirmationDialog('Petitie tekenen', 'Het is helaas nog niet mogelijk om petities te tekenen')),
-    openDonationDialog:    () => dispatch(openConfirmationDialog('Doneren', 'Het is helaas nog niet mogelijk te doneren')),
 })
 
 class Header extends React.Component {
@@ -88,8 +83,6 @@ class Header extends React.Component {
             fixed,
             absolute,
             user,
-            openPetitionDialog,
-            openDonationDialog
         } = this.props
 
         const appBarClasses = classNames({
@@ -211,4 +204,4 @@ Header.propTypes = {
 
 
 
-export default withRouter(withStyles(headerStyle)(connect(mapStateToProps, mapDispatchToProps)(Header)))
+export default withRouter(withStyles(headerStyle)(connect(mapStateToProps)(Header)))
