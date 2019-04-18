@@ -60,7 +60,7 @@ class WorkspacePage extends PureComponent {
     state = {
         isAddPlaygroundOpen: false,
         expandedPhase: 'none',
-        ctaText: 'ik heb deze stap volbracht',
+        ctaText: '',
         ctaAction: () => null,
         ctaDisabled: true,
         ctaDone: false,
@@ -93,7 +93,7 @@ class WorkspacePage extends PureComponent {
 
     unsetCta() {
         this.setState({
-            ctaText: 'ik heb deze stap volbracht',
+            ctaText: '',
             ctaAction: () => null,
             ctaDisabled: true,
             ctaDone: false,

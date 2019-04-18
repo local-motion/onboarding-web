@@ -85,14 +85,7 @@ class ChooseProperIntroductionDateCard extends React.Component {
     }
 
     setCta() {
-        const { setCta, playground, user } = this.props;
-        const userIsManager = isUserManagerOfPlayground(user, playground);
-
-        setCta(
-          userIsManager
-            ? { CustomButton: this.renderCustomButton }
-            : { ctaText: "Kies een geschikt moment" }
-        );
+        this.props.setCta({ CustomButton: this.renderCustomButton });
     }
 
     renderCustomButton() {
@@ -100,11 +93,13 @@ class ChooseProperIntroductionDateCard extends React.Component {
         const date = playground.smokeFreeDate || new Date();
         const userIsManager = isUserManagerOfPlayground(user, playground);
 
+        const disabled = !userIsManager || playground.status === "NOT_STARTED";
+
         return (
           <div className={classes.datePickerWrapper}>
               <DatePicker
                 ref={(ref) => {this.datePicker = ref}}
-                disabled={!userIsManager || playground.status === "NOT_STARTED"}
+                disabled={disabled}
                 className={classes.invisible}
                 dateFormat="dd-MM-YYYY"
                 selected={date}
@@ -116,7 +111,7 @@ class ChooseProperIntroductionDateCard extends React.Component {
                 variant="contained"
                 className={`pagination-button-step${playground.smokeFreeDate ? '-done' : ''}`}
                 onClick={() => this.datePicker.setOpen(true)}
-                disabled={!isUserVolunteerOfPlayground(user, playground) || playground.status === "NOT_STARTED"}
+                disabled={disabled}
               >
                   {
                       playground.smokeFreeDate

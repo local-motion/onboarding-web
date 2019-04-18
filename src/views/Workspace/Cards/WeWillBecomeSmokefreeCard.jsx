@@ -33,7 +33,7 @@ class WeWillBecomeSmokefreeCard extends React.Component {
     setCta() {
         const { setCta, playground, user } = this.props;
 
-        const decisionTaken  = playground.status === 'IN_PROGRESS' || playground.status === 'FINISHED';
+        const decisionTaken  = user && (playground.status === 'IN_PROGRESS' || playground.status === 'FINISHED');
 
         if (!decisionTaken) {
             setCta({
