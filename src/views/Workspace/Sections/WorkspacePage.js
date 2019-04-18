@@ -30,8 +30,8 @@ import {
     getNextStep,
     getOpenedStepTitle,
     getPrevStep,
-    playgroundLabels,
 } from "../../../misc/WorkspaceHelpers";
+import BackButton from "../../../components/BackButton/BackButton";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -63,18 +63,10 @@ class WorkspacePage extends PureComponent {
         this.selectActivePhase();
     }
 
-    getActivePhase() {
+    selectActivePhase() {
         const { location: { pathname }, phases } = this.props;
 
-        const openedStepTitle = getOpenedStepTitle(phases, pathname);
-
-        return openedStepTitle !== null
-          ? openedStepTitle
-          : playgroundLabels[0];
-    }
-
-    selectActivePhase() {
-        const activePhase = this.getActivePhase();
+        const activePhase = getOpenedStepTitle(phases, pathname);
 
         this.selectPhase(activePhase);
     }
@@ -121,7 +113,6 @@ class WorkspacePage extends PureComponent {
               <Header
                 playground={playground}
                 rightLinks={<HeaderLinks />}
-                showStats
                 fixed
                 color="white"
                 changeColorOnScroll={{
@@ -132,6 +123,7 @@ class WorkspacePage extends PureComponent {
               />
 
               <div className={classNames(classes.container + " phase-explainer-container")}>
+                  <BackButton where="home" />
 
                   <GridContainer className={"grid-container"}>
                       <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
@@ -225,7 +217,7 @@ class WorkspacePage extends PureComponent {
                                       </Button>
                                     ) : <div style={{ width: '45px' }} />}
 
-                                    {user && <Button variant="contained" className={"pagination-button-step"}>ik heb deze stap volbracht!</Button>}
+                                    <Button variant="contained" className={"pagination-button-step"} disabled={!user}>ik heb deze stap volbracht!</Button>
 
                                     {next.stepLink ? (
                                       <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>

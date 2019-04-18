@@ -8,6 +8,7 @@ import Header from "components/Header/Header.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import PrivacyText from "./PrivacyText";
+import BackButton from "../../components/BackButton/BackButton";
 
 
 class Privacy extends React.Component {
@@ -28,6 +29,8 @@ class Privacy extends React.Component {
                     }}
                     {...rest}
                 />
+
+                <BackButton className={classes.backButton} />
 
                 <div className={classes.mainDown}>
                     <PrivacyText />

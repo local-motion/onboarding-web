@@ -1,11 +1,21 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import {Button, Input} from '@material-ui/core'
 import {Auth, JS, Logger} from 'aws-amplify';
 import querySearch from "stringquery";
+
 import { getErrorMessage } from '../api/ErrorMessages';
+import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
+import { getActivePhaseUrl } from "../misc/WorkspaceHelpers";
 
 const logger = new Logger('JSignIn');
+
+const mapStateToProps = (state, ownProps) => ({
+    playground: ownProps.match.params.initiativeId
+      ? getPlaygroundDetails(state, ownProps.match.params.initiativeId)
+      : null,
+});
 
 /**
  * A mix between
@@ -68,8 +78,14 @@ class JSignIn extends Component {
     }
 
     goToTargetUrl = () => {
-        const parsedSearch = querySearch(this.props.location.search);
-        const url = parsedSearch["target"] || this.props.location.pathname.replace('/login', '');
+        const { location: { search, pathname }, playground } = this.props;
+        const parsedSearch = querySearch(search);
+        const url = parsedSearch["target"]
+          || (
+            playground
+              ? getActivePhaseUrl(playground)
+              : pathname.replace('/login', '')
+          );
 
         this.props.history.push(url);
     };
@@ -174,4 +190,4 @@ class JSignIn extends Component {
     }
 }
 
-export default withRouter(JSignIn);
+export default withRouter(connect(mapStateToProps)(JSignIn));

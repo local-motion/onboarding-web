@@ -57,10 +57,10 @@ class ChooseProperIntroductionDateCard extends React.Component {
                           href="http://www.jantjebeton.nl">www.jantjebeton.nl</a>)</li>
                     </ul>
 
-                    <Typography component="p" className={classes.contentItem}>Selecteer de datum waarop de speeltuin rookvrij wordt. (Alleen de beheerder kan deze actie uitvoeren.)</Typography>
-
                     {(playground.smokeFreeDate || userIsManager) &&
                     <div className={"card-datepicker"}>
+                        <Typography component="p" className={classes.contentItem}>Selecteer de datum waarop de speeltuin rookvrij wordt. (Alleen de beheerder kan deze actie uitvoeren.)</Typography>
+
                         <DatePicker
                           className={classes.contentItem}
                           disabled={!userIsManager || playground.status === "NOT_STARTED"}

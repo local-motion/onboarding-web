@@ -8,6 +8,7 @@ import Header from "components/Header/Header.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import TermsText from "./TermsText";
+import BackButton from "../../components/BackButton/BackButton";
 
 class Terms extends React.Component {
   render() {
@@ -25,6 +26,7 @@ class Terms extends React.Component {
           }}
           {...rest}
         />
+        <BackButton className={classes.backButton} />
 
         <div className={classes.mainDown}>
           <TermsText />
