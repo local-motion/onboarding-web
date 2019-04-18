@@ -63,6 +63,7 @@ class WorkspacePage extends PureComponent {
         ctaAction: () => null,
         ctaDisabled: () => true,
         ctaDone: false,
+        CustomButton: null,
     };
 
     componentDidMount() {
@@ -85,8 +86,8 @@ class WorkspacePage extends PureComponent {
         this.selectPhase(this.state.expandedPhase !== phase ? phase : 'none');
     }
 
-    setCta({ ctaText, ctaAction, ctaDisabled, ctaDone }) {
-        this.setState({ ctaText, ctaAction, ctaDisabled, ctaDone });
+    setCta({ ctaText, ctaAction, ctaDisabled, ctaDone, CustomButton }) {
+        this.setState({ ctaText, ctaAction, ctaDisabled, ctaDone, CustomButton });
     }
 
     unsetCta() {
@@ -95,6 +96,7 @@ class WorkspacePage extends PureComponent {
             ctaAction: () => null,
             ctaDisabled: () => true,
             ctaDone: false,
+            CustomButton: null,
         });
     }
 
@@ -118,9 +120,23 @@ class WorkspacePage extends PureComponent {
         this.selectPhase(next.title);
     }
 
+    renderCtaButton() {
+        const { ctaText, ctaAction, ctaDisabled, ctaDone, CustomButton } = this.state;
+
+        if (CustomButton) {
+            return <CustomButton />;
+        }
+
+        return (
+          <Button onClick={ctaAction} variant="contained" className={"pagination-button-step"} disabled={ctaDisabled()}>
+              {ctaText} {ctaDone && <Check className={this.props.classes.ctaDone} />}
+          </Button>
+        )
+    }
+
     render() {
         const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
-        const { expandedPhase, isAddPlaygroundOpen, ctaText, ctaAction, ctaDisabled, ctaDone } = this.state;
+        const { expandedPhase, isAddPlaygroundOpen, ctaText } = this.state;
 
         const prev = getPrevStep(phases, pathname);
         const next = getNextStep(phases, pathname);
@@ -236,9 +252,7 @@ class WorkspacePage extends PureComponent {
                                       </Button>
                                     ) : <div className={classes.noButton} />}
 
-                                    {ctaText && <Button onClick={ctaAction} variant="contained" className={"pagination-button-step"} disabled={ctaDisabled()}>
-                                        {ctaText} {ctaDone && <Check className={classes.ctaDone} />}
-                                        </Button>}
+                                    {ctaText && this.renderCtaButton()}
 
                                     {next.stepLink ? (
                                       <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
