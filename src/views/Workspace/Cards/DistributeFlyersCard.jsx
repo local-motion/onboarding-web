@@ -6,6 +6,7 @@ import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCheckbox";
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 import { setCheckbox } from "../../../components/Playground/PlaygroundActions";
+import { checkBox } from "../../../misc/WorkspaceHelpers";
 
 const mapDispatchToProps = dispatch => ({
     setCheckbox: (initiativeId, checklistItem, isChecked, user) =>
@@ -89,8 +90,8 @@ class DistributeFlyersCard extends React.Component {
 
     checkBox(name) {
         const { setCheckbox, playground, user } = this.props;
-        const currentState = playground.jointChecklistItems.includes(name);
-        setCheckbox(playground.id, name, !currentState, user);
+
+        checkBox({ setCheckbox, playground, user, name });
     }
 
     render() {
