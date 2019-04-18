@@ -2,9 +2,15 @@ import { container } from "assets/jss/material-kit-react.jsx";
 
 const WorkspaceWelcomeStyle = theme => ({
   container,
-  page: {
-    padding: '100px 0 0px',
-    backgroundColor: '#fff'
+  workspaceWelcomeContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  mainImage: {
+    '& img': {
+      width: '100%',
+    },
   },
   title: {
     fontFamily: "'dk_black_bamboo-webfont'",
@@ -32,7 +38,7 @@ const WorkspaceWelcomeStyle = theme => ({
   icons: {
     display: 'flex',
     justifyContent: 'center',
-    margin: '40px 0 48px',
+    margin: '-60px 0 30px',
     [theme.breakpoints.down("sm")]: {
       flexWrap: 'wrap',
     },
@@ -44,8 +50,8 @@ const WorkspaceWelcomeStyle = theme => ({
     marginBottom: 50
   },
   button: {
-    maxWidth: '100%',
-    width: 350,
+    width: 'fit-content',
+    maxWidth: 380,
     height: 50,
     display: 'inline-block',
     cursor: 'pointer',
@@ -64,8 +70,10 @@ const WorkspaceWelcomeStyle = theme => ({
     border: 0,
     boxShadow: 'none',
     appearance: 'none',
+    padding: '0 40px',
     '&:hover': {
-      color: '#f1f1f1'
+      color: '#f1f1f1',
+      backgroundColor: '#ef8149',
     },
     '&:active': {
       transform: 'translateY(1px)'
@@ -74,26 +82,5 @@ const WorkspaceWelcomeStyle = theme => ({
   passive: {
     backgroundColor: '#adabab'
   },
-  skip: {
-    color: '#626262',
-    margin: '10px 0 0',
-    fontSize: 16,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    fontWeight: 'normal',
-    lineHeight: 1.5,
-    fontStretch: 'normal',
-    letterSpacing: 'normal',
-    textDecoration: 'underline',
-    cursor: 'pointer',
-    outline: 'none',
-    border: 0,
-    boxShadow: 'none',
-    appearance: 'none',
-    backgroundColor: 'transparent',
-    '&:hover': {
-      color: '#626262'
-    }
-  }
 });
 export default WorkspaceWelcomeStyle;
