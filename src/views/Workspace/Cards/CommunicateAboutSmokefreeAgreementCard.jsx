@@ -29,6 +29,7 @@ const mapDispatchToProps = dispatch => ({
       dispatch(setCheckbox(initiativeId, checklistItem, isChecked, user)),
 });
 
+
 // Step: 'Communiceer Over De Rookvrije Afspraak'
 class CommunicateAboutSmokefreeAgreementCard extends React.Component {
     componentDidMount() {
