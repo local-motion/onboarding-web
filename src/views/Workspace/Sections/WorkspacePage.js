@@ -127,6 +127,10 @@ class WorkspacePage extends PureComponent {
             return <CustomButton />;
         }
 
+        if (!ctaText) {
+            return null;
+        }
+
         return (
           <Button onClick={ctaAction} variant="contained" className={"pagination-button-step"} disabled={ctaDisabled()}>
               {ctaText} {ctaDone && <Check className={this.props.classes.ctaDone} />}
@@ -136,7 +140,7 @@ class WorkspacePage extends PureComponent {
 
     render() {
         const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
-        const { expandedPhase, isAddPlaygroundOpen, ctaText } = this.state;
+        const { expandedPhase, isAddPlaygroundOpen } = this.state;
 
         const prev = getPrevStep(phases, pathname);
         const next = getNextStep(phases, pathname);
@@ -252,7 +256,7 @@ class WorkspacePage extends PureComponent {
                                       </Button>
                                     ) : <div className={classes.noButton} />}
 
-                                    {ctaText && this.renderCtaButton()}
+                                    {this.renderCtaButton()}
 
                                     {next.stepLink ? (
                                       <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>

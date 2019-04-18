@@ -43,7 +43,7 @@ const styles = ({
             width: 0,
             height: 0,
         },
-        '& > button:first-child': {
+        '& > button': {
             flexGrow: 1,
         },
     },
@@ -86,9 +86,9 @@ class ChooseProperIntroductionDateCard extends React.Component {
 
         if (!playground.smokeFreeDate && userIsManager) {
             setCta({
-                ctaAction: () => this.props.setDecideSmokefree(playground.id),
+                ctaAction: () => null,
                 ctaText: 'Kies een geschikt moment',
-                ctaDisabled: () => !isUserVolunteerOfPlayground(user, playground) || playground.status === "NOT_STARTED",
+                ctaDisabled: () => null,
                 CustomButton: this.renderCustomButton,
             });
         } else {
@@ -122,6 +122,7 @@ class ChooseProperIntroductionDateCard extends React.Component {
                 variant="contained"
                 className={"pagination-button-step"}
                 onClick={() => this.datePicker.setOpen(true)}
+                disabled={!isUserVolunteerOfPlayground(user, playground) || playground.status === "NOT_STARTED"}
               >
                   Kies een geschikt moment
               </Button>

@@ -5,7 +5,7 @@ import { Button, Typography, withStyles } from "@material-ui/core";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import ContentDialog from "../../../components/Dialogs/ContentDialog";
 import { claimManagerRole } from "../../../components/Playground/PlaygroundActions";
-import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+import { isUserManagerOfPlayground, isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 const mapDispatchToProps = dispatch => ({
     claimManagerRole:    (initiativeId) =>     dispatch(claimManagerRole(initiativeId)),
@@ -52,7 +52,7 @@ class ContactManagementCard extends React.Component {
           "Sluit%20je%20bij%20ons%20aan%20op%20rookvrij.nl:%20" +
           "techoverflow-p.aws.abnamro.org/workspace/" + playground.id + "%0A";
 
-        if (playground.managers.length === 0) {
+        if (!isUserManagerOfPlayground(user, playground)) {
             setCta({
                 ctaAction: () => window.open(inviteButtonHref),
                 ctaText: 'Stuur uitnodiging',
@@ -112,7 +112,7 @@ class ContactManagementCard extends React.Component {
                         <Typography component="p" className={classes.contentItem}>Let op: wanneer het om een gemeentelijke, onbeheerde, speeltuin gaat, is het belangrijk om ook contact te leggen met de gemeente. Een gemeente kan een speelplek op vrijwillige basis rookvrij maken, door een rookvrij informatiebord te (laten) plaatsen. Veel speelplekken krijgen subsidie van de gemeente.</Typography>
 
                         {
-                            !playground.managers.length && (
+                            !isUserManagerOfPlayground(user, playground) && (
                               <div>
                                   <Button
                                     variant="contained" size="small" color="primary"
