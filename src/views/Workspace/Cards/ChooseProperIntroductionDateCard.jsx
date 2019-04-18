@@ -12,6 +12,7 @@ import {
 } from "../../../components/Playground/PlaygroundReducer";
 import { setSmokefreeDate } from "../../../components/Playground/PlaygroundActions";
 import Button from "@material-ui/core/Button/Button";
+import Check from "@material-ui/icons/Check";
 
 const mapDispatchToProps = dispatch => ({
     setSmokefreeDate: (initiativeId, smokeFreeDate) => dispatch(setSmokefreeDate(initiativeId, smokeFreeDate))
@@ -46,6 +47,9 @@ const styles = ({
         '& > button': {
             flexGrow: 1,
         },
+    },
+    ctaDone: {
+        marginLeft: 10,
     },
 });
 
@@ -84,21 +88,11 @@ class ChooseProperIntroductionDateCard extends React.Component {
         const { setCta, playground, user } = this.props;
         const userIsManager = isUserManagerOfPlayground(user, playground);
 
-        if (!playground.smokeFreeDate && userIsManager) {
-            setCta({
-                ctaAction: () => null,
-                ctaText: 'Kies een geschikt moment',
-                ctaDisabled: () => null,
-                CustomButton: this.renderCustomButton,
-            });
-        } else {
-            setCta({
-                ctaAction: () => null,
-                ctaText: playground.smokeFreeDate && dateToString(playground.smokeFreeDate),
-                ctaDisabled: () => true,
-                ctaDone: true,
-            });
-        }
+        setCta(
+          userIsManager
+            ? { CustomButton: this.renderCustomButton }
+            : { ctaText: "Kies een geschikt moment" }
+        );
     }
 
     renderCustomButton() {
@@ -120,11 +114,20 @@ class ChooseProperIntroductionDateCard extends React.Component {
 
               <Button
                 variant="contained"
-                className={"pagination-button-step"}
+                className={`pagination-button-step${playground.smokeFreeDate ? '-done' : ''}`}
                 onClick={() => this.datePicker.setOpen(true)}
                 disabled={!isUserVolunteerOfPlayground(user, playground) || playground.status === "NOT_STARTED"}
               >
-                  Kies een geschikt moment
+                  {
+                      playground.smokeFreeDate
+                        ? (
+                          <React.Fragment>
+                              {dateToString(playground.smokeFreeDate)}
+                              <Check className={this.props.classes.ctaDone} />
+                          </React.Fragment>
+                        )
+                        : "Kies een geschikt moment"
+                  }
               </Button>
           </div>
         );

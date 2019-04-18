@@ -36,7 +36,7 @@ class JSignIn extends Component {
         this.props.setCta && this.props.setCta({
             ctaAction: () => this.changeState('signUp'),
             ctaText: 'Maak een account',
-            ctaDisabled: () => false,
+            ctaDisabled: false,
         });
     }
 

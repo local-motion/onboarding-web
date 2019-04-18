@@ -44,7 +44,7 @@ class RecruitVolunteersCard extends React.Component {
         setCta({
             ctaAction: () => { window.open(inviteButtonHref) },
             ctaText: 'Deel via e-mail',
-            ctaDisabled: () => !isUserVolunteerOfPlayground(user, playground),
+            ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
         });
     }
 

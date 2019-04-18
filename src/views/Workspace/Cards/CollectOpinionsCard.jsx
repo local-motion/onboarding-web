@@ -30,7 +30,7 @@ class CollectOpinionsCard extends React.Component {
         setCta({
             ctaAction: () => history.push(`${getWorkspaceStartLink(playground)}/team`),
             ctaText: 'Chat with teammembers',
-            ctaDisabled: () => !isUserVolunteerOfPlayground(user, playground),
+            ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
         });
     }
 

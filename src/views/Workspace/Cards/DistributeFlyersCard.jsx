@@ -50,7 +50,7 @@ class DistributeFlyersCard extends React.Component {
                         this.checkBox("order_flyers");
                     },
                     ctaText: 'Bestel flyers',
-                    ctaDisabled: () => !isUserVolunteerOfPlayground(user, playground),
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
                 });
 
                 return;
@@ -65,7 +65,7 @@ class DistributeFlyersCard extends React.Component {
                         this.checkBox("distribute_flyers");
                     },
                     ctaText: 'Flyers uitdelen',
-                    ctaDisabled: () => !isUserVolunteerOfPlayground(user, playground),
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
                 });
 
                 return;
@@ -76,7 +76,7 @@ class DistributeFlyersCard extends React.Component {
                 setCta({
                     ctaAction: () => null,
                     ctaText: 'Flyers zijn uitgedeeld',
-                    ctaDisabled: () => true,
+                    ctaDisabled: true,
                     ctaDone: true,
                 });
 

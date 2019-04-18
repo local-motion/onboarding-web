@@ -56,13 +56,13 @@ class ContactManagementCard extends React.Component {
             setCta({
                 ctaAction: () => window.open(inviteButtonHref),
                 ctaText: 'Stuur uitnodiging',
-                ctaDisabled: () => !isUserVolunteerOfPlayground(user, playground),
+                ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
             });
         } else {
             setCta({
                 ctaAction: () => null,
                 ctaText: 'Beheerder goedgekeurd',
-                ctaDisabled: () => true,
+                ctaDisabled: true,
                 ctaDone: true,
             });
         }

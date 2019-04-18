@@ -62,7 +62,7 @@ class WorkspacePage extends PureComponent {
         expandedPhase: 'none',
         ctaText: 'ik heb deze stap volbracht',
         ctaAction: () => null,
-        ctaDisabled: () => true,
+        ctaDisabled: true,
         ctaDone: false,
         CustomButton: null,
     };
@@ -87,7 +87,7 @@ class WorkspacePage extends PureComponent {
         this.selectPhase(this.state.expandedPhase !== phase ? phase : 'none');
     }
 
-    setCta({ ctaText, ctaAction, ctaDisabled, ctaDone, CustomButton }) {
+    setCta({ ctaText = '', ctaAction = () => null, ctaDisabled = true, ctaDone = false, CustomButton = null }) {
         this.setState({ ctaText, ctaAction, ctaDisabled, ctaDone, CustomButton });
     }
 
@@ -95,7 +95,7 @@ class WorkspacePage extends PureComponent {
         this.setState({
             ctaText: 'ik heb deze stap volbracht',
             ctaAction: () => null,
-            ctaDisabled: () => true,
+            ctaDisabled: true,
             ctaDone: false,
             CustomButton: null,
         });
@@ -133,7 +133,7 @@ class WorkspacePage extends PureComponent {
         }
 
         return (
-          <Button onClick={ctaAction} variant="contained" className={"pagination-button-step"} disabled={ctaDisabled()}>
+          <Button onClick={ctaAction} variant="contained" className={"pagination-button-step"} disabled={ctaDisabled}>
               {ctaText} {ctaDone && <Check className={this.props.classes.ctaDone} />}
           </Button>
         )

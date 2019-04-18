@@ -39,13 +39,13 @@ class WeWillBecomeSmokefreeCard extends React.Component {
             setCta({
                 ctaAction: () => this.props.setDecideSmokefree(playground.id),
                 ctaText: 'Ja, wij worden rookvrij',
-                ctaDisabled: () => !isUserManagerOfPlayground(user, playground) || decisionTaken,
+                ctaDisabled: !isUserManagerOfPlayground(user, playground) || decisionTaken,
             });
         } else {
             setCta({
                 ctaAction: () => null,
                 ctaText: 'Ons besluit staat vast',
-                ctaDisabled: () => true,
+                ctaDisabled: true,
                 ctaDone: true,
             });
         }
