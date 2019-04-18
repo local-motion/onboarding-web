@@ -9,6 +9,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Check from "@material-ui/icons/Check";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
@@ -16,7 +17,8 @@ import { recordPlaygroundObservation } from "../../../components/Playground/Play
 
 const styles = theme => ({
     smokefreeButton: {
-        backgroundColor: "green"
+        backgroundColor: "green",
+        marginRight: 15,
     },
     notSmokefreeButton: {
         backgroundColor: "red"
@@ -26,10 +28,20 @@ const styles = theme => ({
     },
     notDoneIcon: {},
     contentItem: {
-        marginBottom: '20px',
+        marginBottom: 20,
     },
     contentItemSmallMargin: {
-        marginBottom: '10px',
+        marginBottom: 10,
+    },
+    ctaWrapper: {
+        display: "flex",
+        '& > button': {
+            flexGrow: 1,
+            padding: "6px 16px",
+        },
+    },
+    ctaDone: {
+        marginLeft: 10,
     },
 });
 
@@ -45,6 +57,77 @@ class EvaluateCard extends React.Component {
     state = {
         commentDialogOpen: false,
         comment: ""
+    };
+
+    componentDidMount() {
+        this.setCta();
+    }
+
+    componentDidUpdate(prevProps) {
+        const { user, playground } = this.props;
+
+        if (
+          (!prevProps.user && user)
+          || prevProps.playground.playgroundObservations.length !== playground.playgroundObservations.length
+        ) {
+            this.setCta();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.unsetCta();
+    }
+
+    setCta() {
+        const { setCta } = this.props;
+        const todaysInfo = this.getTodaysInfo();
+
+        setCta({ CustomButton: () => this.renderCustomButton(todaysInfo) });
+    }
+
+    renderCustomButton({ todaysObserver, todayWasSmokefree }) {
+        const { classes, playground, user } = this.props;
+        const disabled = !isUserVolunteerOfPlayground(user, playground) || todaysObserver;
+
+        return (
+          <div className={classes.ctaWrapper}>
+              <Button
+                variant="contained" size="small" color="primary"
+                disabled={disabled}
+                className={classes.smokefreeButton}
+                onClick={this.smokefreeObservation}
+              >
+                  Rookvrij { todayWasSmokefree === true && <Check className={classes.ctaDone} /> }
+              </Button>
+
+              <Button
+                variant="contained" size="small" color="primary"
+                disabled={disabled}
+                className={classes.notSmokefreeButton}
+                onClick={this.notSmokefreeObservation}
+              >
+                  Niet rookvrij { todayWasSmokefree === false && <Check className={classes.ctaDone} /> }
+              </Button>
+          </div>
+        );
+    }
+
+    getTodaysInfo = () => {
+        const observations = this.props.playground.playgroundObservations;
+        const todaysInfo = {
+            todaysObserver: null,
+            todayWasSmokefree: null,
+        };
+
+        if (observations.length) {
+            const lastObservation = observations[observations.length - 1];
+            if (isSameDate(new Date(lastObservation.observationDate), new Date())) {
+                todaysInfo.todaysObserver = lastObservation.observerName;
+                todaysInfo.todayWasSmokefree = lastObservation.smokefree;
+            }
+        }
+
+        return todaysInfo;
     };
 
     smokefreeObservation = () => {
@@ -90,20 +173,11 @@ class EvaluateCard extends React.Component {
     };
 
     render() {
-        const { classes, playground, user } = this.props;
+        const { classes, playground } = this.props;
 
         if (!playground) return "Loading...";
 
-        const observations = this.props.playground.playgroundObservations;
-        let todaysObserver = null;
-        let todayWasSmokefree = null;
-        if (observations.length) {
-            const lastObservation = observations[observations.length - 1];
-            if (isSameDate(new Date(lastObservation.observationDate), new Date())) {
-                todaysObserver = lastObservation.observerName;
-                todayWasSmokefree = lastObservation.smokefree;
-            }
-        }
+        const { todaysObserver, todayWasSmokefree } = this.getTodaysInfo();
 
         const { streak } = this.calculateStats();
 
@@ -125,33 +199,11 @@ class EvaluateCard extends React.Component {
                             <li>Vraag eventueel ook ouders en kinderen naar hun mening en suggesties.</li>
                         </ul>
 
-                        {todaysObserver
-                            ? (
-                                <Typography className={classes.contentItem} component='span'>
-                                    {todaysObserver + (todayWasSmokefree ? " zag dat onze speeltuin vandaag rookvrij was!" : " zag iemand roken vandaag :(")}
-                                </Typography>
-                            ) : (
-                                <div className={classes.contentItem}>
-                                    <Typography component="p">Geef aan of je iemand hebt zien roken
-                                vandaag.</Typography>
-                                    <Button
-                                        variant="contained" size="small" color="primary"
-                                        disabled={!isUserVolunteerOfPlayground(user, playground)}
-                                        className={classes.smokefreeButton}
-                                        onClick={this.smokefreeObservation}
-                                    >
-                                        Rookvrij
-                            </Button>
-                                    &nbsp;&nbsp;&nbsp;
-                            <Button
-                                        variant="contained" size="small" color="primary"
-                                        disabled={!isUserVolunteerOfPlayground(user, playground)}
-                                        className={classes.notSmokefreeButton}
-                                        onClick={this.notSmokefreeObservation}
-                                    >
-                                        Niet rookvrij
-                            </Button>
-                                </div>
+                        {
+                            todaysObserver && (
+                              <Typography className={classes.contentItem} component='span'>
+                                  {todaysObserver + (todayWasSmokefree ? " zag dat onze speeltuin vandaag rookvrij was!" : " zag iemand roken vandaag :(")}
+                              </Typography>
                             )
                         }
 
