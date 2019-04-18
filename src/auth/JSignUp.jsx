@@ -227,6 +227,7 @@ class JSignUp extends Component {
                               onClose={this.toggleTermsDialog}
                               title="Gebruiksvoorwaarden"
                               content={<TermsText />}
+                              maxWidth="lg"
                             />
 
                             <ContentDialog
@@ -234,6 +235,7 @@ class JSignUp extends Component {
                               onClose={this.togglePrivacyDialog}
                               title="Privacyverklaring"
                               content={<PrivacyText />}
+                              maxWidth="lg"
                             />
 
                             <div>

@@ -56,7 +56,7 @@ const DialogActions = withStyles(theme => ({
 class ContentDialog extends React.Component {
 
   render() {
-    const {title, content, open, onClose} = this.props
+    const {title, content, open, onClose, ...rest} = this.props
     const buttonLabel = this.props.buttonLabel || 'OK'
 
     return (
@@ -64,6 +64,7 @@ class ContentDialog extends React.Component {
           open={open}
           onClose={onClose}
           aria-labelledby="customized-dialog-title"
+          {...rest}
         >
           <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
             {title}
