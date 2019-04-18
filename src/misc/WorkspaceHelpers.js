@@ -104,8 +104,8 @@ export function getPhases() {
 
         community: {
             title: 'Community',
-            icon: '',
-            expandedIcon: '',
+            icon: require('assets/img/icon-community.svg'),
+            expandedIcon: require('assets/img/icon-community-active.svg'),
             steps: [
                 {
                     name: 'Chat',

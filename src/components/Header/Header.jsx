@@ -18,34 +18,11 @@ import headerStyle from "assets/jss/material-kit-react/components/headerStyle.js
 import { connect } from 'react-redux'
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { Button } from "@material-ui/core";
-import { ArrowLeftRounded } from "@material-ui/icons";
 import { Link } from 'react-router-dom'
-import EuroIcon from '@material-ui/icons/EuroSymbol';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import { openConfirmationDialog } from "../ConfirmationDialog/ConfirmationDialogActions";
 
 const mapStateToProps = state => ({
     user: getUser(state)
 })
-const mapDispatchToProps = dispatch => ({
-    openPetitionDialog:    () => dispatch(openConfirmationDialog('Petitie tekenen', 'Het is helaas nog niet mogelijk om petities te tekenen')),
-    openDonationDialog:    () => dispatch(openConfirmationDialog('Doneren', 'Het is helaas nog niet mogelijk te doneren')),
-})
-
-const toolbarButtonStyles = {
-    root: {
-        marginRight: 12,
-    },
-  }
-const ToolbarButton = withStyles(toolbarButtonStyles)(props => (<Button {...props} />))
-
-const lastToolbarButtonStyles = {
-    root: {
-        marginRight:  50,
-    },
-  }
-const LastToolbarButton = withStyles(lastToolbarButtonStyles)(props => (<Button {...props} />))
-
 
 class Header extends React.Component {
     constructor(props) {
@@ -92,11 +69,6 @@ class Header extends React.Component {
             window.removeEventListener("scroll", this.headerColorChange);
     }
 
-    gotoTeamPage = () => {
-        if (this.props.playground)
-            this.props.history.push("/workspace/" + this.props.playground.id + "/team")
-    }
-
     signInClick = () => {
         this.props.history.push(`/login?target=${this.props.location.pathname}`)
     }
@@ -107,14 +79,10 @@ class Header extends React.Component {
             color,
             rightLinks,
             leftLinks,
-            showStats,
             brand,
             fixed,
             absolute,
-            disableBackButton,
             user,
-            openPetitionDialog,
-            openDonationDialog
         } = this.props
 
         const appBarClasses = classNames({
@@ -131,17 +99,6 @@ class Header extends React.Component {
             <AppBar className={appBarClasses + " lm-header"}>
                 <Toolbar className={classes.container}>
 
-                    { !disableBackButton &&
-                        <Button
-                            component={Link} to="/"
-                            color="default"
-
-                        >
-                            <ArrowLeftRounded/>
-                            <span>Kaart</span>
-                        </Button>
-                    }
-
                     {leftLinks !== undefined ? brandComponent : null}
                     <div className={classes.flex}>
                         {leftLinks !== undefined ? (
@@ -152,25 +109,6 @@ class Header extends React.Component {
                             brandComponent
                         )}
                     </div>
-
-                    {showStats && (
-                        <React.Fragment>
-                            {/*<ToolbarButton color="default" className={classes.button} onClick={() => this.gotoTeamPage()}>*/}
-                                {/*<GroupIcon className={classes.rightIcon} />*/}
-                                {/*&nbsp;{nrOfVolunteers}*/}
-                            {/*</ToolbarButton>*/}
-
-                            <ToolbarButton color="default" className={classes.button} onClick={openPetitionDialog}>
-                                <ThumbUpIcon className={classes.rightIcon} />
-                                &nbsp;235
-                            </ToolbarButton>
-
-                            <LastToolbarButton color="default" className={classes.button} onClick={openDonationDialog}>
-                                <EuroIcon className={classes.rightIcon} />
-                                &nbsp;53.60
-                            </LastToolbarButton>
-                        </React.Fragment>
-                    )}
 
                     <Hidden smDown implementation="css">
                         {rightLinks}
@@ -266,4 +204,4 @@ Header.propTypes = {
 
 
 
-export default withRouter(withStyles(headerStyle)(connect(mapStateToProps, mapDispatchToProps)(Header)))
+export default withRouter(withStyles(headerStyle)(connect(mapStateToProps)(Header)))
