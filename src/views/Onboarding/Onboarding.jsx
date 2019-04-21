@@ -1,18 +1,12 @@
 import React from "react";
-// nodejs library that concatenates classes
+import { connect } from 'react-redux'
 import classNames from "classnames";
-// react components for routing our app without refresh
-// import {Link} from "react-router-dom";
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 import { withTranslation } from "react-i18next";
 
-import Header from "components/Header/Header.jsx";
-import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Explanation from "components/Explanation/Explanation.jsx";
-import Parallax from "components/Parallax/Parallax.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 
@@ -21,35 +15,31 @@ import PlaygroundMap from "./Sections/PlaygroundMap";
 import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
 import CallToAction from "./Sections/CallToAction";
 import AddPlayground from "./Sections/AddPlayground";
-import { connect } from 'react-redux'
 import { ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
-
+import Startscreen from "./Sections/Startscreen";
 
 const mapStateToProps = state => ({
-        playgrounds: getAllPlaygrounds(state).map(playground => ({
-                id: playground.id,
-                name: playground.name,
-                lat: playground.lat,
-                lng: playground.lng,
-                vol: playground.volunteerCount,
-                votes: playground.votes,
-                slug: playground.name + " Rookvrij",
-                zoom: 18,
-                default: false,
-            })
-        ),
-        user: getUser(state)
-})
+    playgrounds: getAllPlaygrounds(state).map(playground => ({
+            id: playground.id,
+            name: playground.name,
+            lat: playground.lat,
+            lng: playground.lng,
+            vol: playground.volunteerCount,
+            votes: playground.votes,
+            slug: playground.name + " Rookvrij",
+            zoom: 18,
+            default: false,
+        })
+    ),
+    user: getUser(state)
+});
 
-const mapDispatchToProps = dispatch => {
-    return {
-        ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
-      }
-}
+const mapDispatchToProps = dispatch => ({
+    ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
+});
 
-// Define this variable here to set it once when the module is loaded
 
 class Onboarding extends React.Component {
     constructor(props) {
@@ -88,31 +78,19 @@ class Onboarding extends React.Component {
     }
 
     render() {
-        const {playgrounds, classes, user, ...rest } = this.props;
+        const {playgrounds, classes, user } = this.props;
         const {playground, map} = this.state;
 
         return (
             <div className={"onboarding-wrapper"}>
 
-                <Header
-                    brand={"Rookvrije generatie"}
-                    rightLinks={<HeaderLinks/>}
-                    fixed
-                    color="white"
-                    changeColorOnScroll={{
-                        height: 50,
-                        color: "white"
-                    }}
-                    {...rest}
-                />
+                <Startscreen />
 
-               <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")} className={"parralax onboarding"} >
-                    <div className={classes.container + " onboarding-header"}>
-                        <CallToAction playground={playground}/>
-                    </div>
-                </Parallax>
+                <div className={classes.container + " onboarding-header"}>
+                    <CallToAction playground={playground}/>
+                </div>
 
-                <div className={classNames(classes.main, classes.mainRaised) + " onboarding-container"}>
+                <div className={classNames(classes.main) + " onboarding-container"}>
                     <GridContainer className={"grid-container"}>
                         <GridItem xs={12} sm={12} md={6} className={"playground-map-container"}>
                             <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange} playgrounds={playgrounds}/>
