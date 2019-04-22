@@ -19,6 +19,7 @@ import { ensurePlaygrounds } from "../../components/Playground/PlaygroundActions
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
 import Startscreen from "./Sections/Startscreen";
+import Statistics from "./Sections/Statistics";
 
 const mapStateToProps = state => ({
     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -86,9 +87,7 @@ class Onboarding extends React.Component {
 
                 <Startscreen />
 
-                <div className={classes.container + " onboarding-header"}>
-                    <CallToAction playground={playground}/>
-                </div>
+                <Statistics />
 
                 <div className={classNames(classes.main) + " onboarding-container"}>
                     <GridContainer className={"grid-container"}>
@@ -101,8 +100,8 @@ class Onboarding extends React.Component {
                                 center={map.latlng}
                                 zoom={map.zoom}
                             />
-                            { this.state.playground.default && 
-                                <AddPlayground playgrounds={playgrounds} user={user}/> 
+                            { this.state.playground.default &&
+                                <AddPlayground playgrounds={playgrounds} user={user}/>
                             }
                         </GridItem>
                         <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
