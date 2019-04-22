@@ -9,7 +9,7 @@ import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 import { container } from "../../../assets/jss/material-kit-react.jsx";
 
 const ArrowIcon = () => (
-  <SvgIcon width="18px" height="14px" viewBox="0 0 18 14">
+  <SvgIcon width="18px" height="14px" viewBox="0 0 24 17">
       <path fillRule="evenodd"
             d="M16.739,6.288 L10.661,0.288 C10.269,-0.100 9.636,-0.095 9.248,
             0.298 C8.860,0.691 8.864,1.324 9.258,1.712 L13.601,6.000 L1.963,
@@ -56,9 +56,9 @@ const styles = theme => ({
         fontWeight: 'bold',
         lineHeight: 1.2,
         marginTop: 45,
-        maxHeight: 62,
-        maxWidth: 280,
-        padding: '20px 45px',
+        maxHeight: 57,
+        maxWidth: 270,
+        padding: '14px 45px',
         textTransform: 'none',
         transition: 'all .2s',
         '& > span': {
@@ -69,6 +69,7 @@ const styles = theme => ({
         '& svg': {
             fill: 'rgb(8, 92, 166)',
             marginLeft: 10,
+            marginTop: 4,
         },
         '&:hover': {
             color: 'rgb(37, 142, 204)',
