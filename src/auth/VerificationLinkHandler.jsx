@@ -7,7 +7,6 @@ import { getErrorMessage } from '../api/ErrorMessages';
 import { readCookie, eraseCookie, createCookie } from '../utils/CookieUtils';
 import { getUser } from '../components/UserProfile/UserProfileReducer';
 import { connect } from 'react-redux'
-import { history } from '../setup';
 import { openConfirmationDialog } from '../components/ConfirmationDialog/ConfirmationDialogActions';
 
 const logger = new Logger('JSignIn');
@@ -47,6 +46,7 @@ export const setPasswordResetCookies = (username, initiativeId) => {
 export const clearVerificationCookies = () => {
     eraseCookie(VERIFICATION_USERNAME_COOKIE)
     eraseCookie(VERIFICATION_TYPE_COOKIE)
+    eraseCookie(VERIFICATION_INITIATIVE_COOKIE)
 }
 
 /**
@@ -59,11 +59,10 @@ export const clearVerificationCookies = () => {
 class VerificationLinkHandler extends Component {
     constructor(props) {
         super(props);
-        this.signIn = this.signIn.bind(this);
         this.checkContact = this.checkContact.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: '', signInPage: true, verificationLinkHandled: false}
+        this.state = {error: '', signInPage: true}
     }
 
     changeState(state, data) {
@@ -90,46 +89,27 @@ class VerificationLinkHandler extends Component {
         }
 
         if (username && verificationType === VERIFICATION_TYPE_SIGNUP) {
-            console.log('redirecting from component did mount')
-            this.gotoConfirmSignUp(username, verificationCode)
+            const initiativeId = readCookie(VERIFICATION_INITIATIVE_COOKIE)
+            if (initiativeId) {
+                // Let the VerificationLinkHandler within the particular workspace handle this
+                this.props.history.push('/workspace/' + initiativeId + '/verify/' + verificationCode)
+            }
+            else {
+                this.gotoConfirmSignUp(username, verificationCode)
+            }
         }
         
     }
 
-    signIn() {
-        const {password} = this.inputs;
-
-        // We are taking the username straight from the DOM here, because the inputs may contains an old value from a previous display of the form which
-        // can happen in the signup process (user gets presented a signin form, elects to signup and afterwards is directed to signin again).
-        // After signup the username field will contain the just enrolled username (from authData), which will not be propagated to the input if the user
-        // does not edit the username field. 
-        const username = document.getElementById('SigninFormUserName').value
-
-        logger.info('attempting sign in with ' + username);
-        Auth.signIn(username, password)
-            .then(user => this.signInSuccess(user))
-            .catch(err => this.signInError(err));
-    }
-
-    signInSuccess(user) {
-        logger.info('sign in success', user);
-        this.setState({error: ''});
-
-        // There are other sign in challenges we don't cover here.
-        // SMS_MFA, SOFTWARE_TOKEN_MFA, NEW_PASSWORD_REQUIRED, MFA_SETUP ...
-        if (user.challengeName === 'SMS_MFA' || user.challengeName === 'SOFTWARE_TOKEN_MFA') {
-            this.changeState('confirmSignIn', user);
-        } else {
-            this.checkContact(user);
-        }
-    }
 
     gotoConfirmSignUp(username, verificationCode) {
         console.log('verification link handler directing to confirm signup')
-        // this.setState({error: '', verificationLinkHandled: true});
-        // this.setState({error: ''});
-
         this.changeState('confirmSignUp:' + verificationCode, username);
+    }
+
+    gotoPasswordReset(username, verificationCode) {
+        console.log('verification link handler directing to password reset')
+        this.changeState('forgotPassword:' + verificationCode, username);
     }
 
     signInError(err) {
@@ -141,13 +121,6 @@ class VerificationLinkHandler extends Component {
         */
         this.setState({error: getErrorMessage(err.code, err.message)})
     }
-
-    goToTargetUrl = () => {
-        const parsedSearch = querySearch(this.props.location.search);
-        const url = parsedSearch["target"] || this.props.location.pathname.replace('/login', '');
-
-        this.props.history.push(url);
-    };
 
     checkContact(user) {
         Auth.verifiedContact(user)
@@ -240,23 +213,6 @@ class VerificationLinkHandler extends Component {
                             </span>
                         </form>
                         {error && <p className={"error"}>{error}</p>}
-                        <div style={style.links} className={"extra-info"}>
-                            <div style={style.left}>
-                                <button
-                                    style={style.extraButton}
-                                    onClick={() => this.changeState('signUp')}
-                                >
-                                    Maak een account
-                                </button>
-                            </div>
-                            <div style={style.left}>
-                                <button style={style.extraButton}
-                                        onClick={() => this.changeState('forgotPassword')}
-                                >
-                                    Wachtwoord vergeten?
-                                </button>
-                            </div>
-                        </div>
 
                     </div>
                 </div>

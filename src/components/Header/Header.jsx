@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-// nodejs library that concatenates classes
+// nodejs library that concatenates classesnpm 
 import classNames from "classnames";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
