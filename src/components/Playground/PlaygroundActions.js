@@ -30,6 +30,7 @@ const getPlaygroundsQuery = gql`
       lat
       status
       volunteerCount
+      smokeFreeDate
       votes
     }
     totalVolunteers

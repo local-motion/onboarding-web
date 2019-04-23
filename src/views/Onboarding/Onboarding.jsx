@@ -59,19 +59,24 @@ class Onboarding extends React.Component {
     handlePlaygroundChange(playground) {
         const isPlayground = playground.id;
 
-        this.setState({
+        const newState = {
             view: 'default',
             playground: isPlayground
-                ? playground
-                : {
-                    default: true,
-                    name: this.props.t("playground.default.area")
-                },
-            map: {
+              ? playground
+              : {
+                  default: true,
+                  name: this.props.t("playground.default.area")
+              },
+        };
+
+        if (playground.lat && playground.lng) {
+            newState.map = {
                 latlng: {lat: playground.lat, lng: playground.lng},
                 zoom: playground.zoom || 10
-            }
-        });
+            };
+        }
+
+        this.setState(newState);
     }
 
     toggleAddPlayground() {

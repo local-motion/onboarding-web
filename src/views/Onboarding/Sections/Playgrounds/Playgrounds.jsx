@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Close from "@material-ui/icons/Close";
 
 import componentsStyle from "../../../../assets/jss/material-kit-react/views/components";
 import PlaygroundSearch from "./PlaygroundSearch";
@@ -21,6 +22,10 @@ class Playgrounds extends Component {
             user,
             handlePlaygroundChange,
         } = this.props;
+
+        const defaultPlayground = {
+            default: true,
+        };
 
         return (
           <div className={classNames(classes.main) + " onboarding-container"}>
@@ -43,7 +48,13 @@ class Playgrounds extends Component {
                   {
                       !playground.default && (
                         <GridItem xs={12} sm={12} md={3} className={"playground-stat-container"}>
-                            <WorkspaceWelcomeContent playground={playground} user={user} />
+                            <div
+                              className={classes.closeIconWrapper}
+                              onClick={() => handlePlaygroundChange(defaultPlayground)}
+                            >
+                                <Close className={classes.closeIcon} />
+                            </div>
+                            <WorkspaceWelcomeContent playground={playground} user={user} view="small" />
                         </GridItem>
                       )
                   }

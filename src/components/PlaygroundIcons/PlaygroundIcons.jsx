@@ -5,7 +5,10 @@ import playgroundIconsStyle from "./PlaygroundIconsStyle.jsx";
 
 class PlaygroundIcons extends React.PureComponent {
     render() {
-        const { classes, icon } = this.props;
+        const { classes, icon, view } = this.props;
+
+        const isViewSmall = view === 'small';
+        const getSmallClassFor = name => isViewSmall ? classes[name] : '';
 
         return (
           <div className={classes.icon}>
@@ -13,16 +16,16 @@ class PlaygroundIcons extends React.PureComponent {
                 style={{
                     backgroundImage: `url(${icon.bg})`
                 }}
-                className={classes.iconBgImage}>
+                className={`${classes.iconBgImage} ${getSmallClassFor('smallIconBgImage')}`}>
                   <div
                     style={{
                         backgroundImage: `url(${icon.icon})`
                     }}
-                    className={classes.iconImage}
+                    className={`${classes.iconImage} ${getSmallClassFor('smallIconImage')}`}
                   />
               </div>
-              <div className={classes.iconTitle}>{icon.title}</div>
-              <div className={classes.iconText}>Actieve fase</div>
+              <div className={`${classes.iconTitle} ${getSmallClassFor('smallIconTitle')}`}>{icon.title}</div>
+              <div className={`${classes.iconText} ${getSmallClassFor('smallIconText')}`}>Actieve fase</div>
           </div>
         );
     }

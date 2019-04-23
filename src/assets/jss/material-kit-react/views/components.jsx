@@ -77,6 +77,31 @@ const componentsStyle = {
         marginBottom: 20,
         marginLeft: 30,
     },
+    closeIconWrapper: {
+        alignItems: 'center',
+        background: '#FFF',
+        border: '1px solid rgb(231, 231, 231)',
+        borderRadius: '50%',
+        boxShadow: '0px 17px 44.64px 3.36px rgba(40, 40, 40, 0.17)',
+        display: 'flex',
+        justifyContent: 'center',
+        left: -40,
+        position: 'absolute',
+        top: 10,
+        width: 29,
+        height: 29,
+        cursor: 'pointer',
+        '&:hover': {
+            background: '#258ecc',
+        },
+        '&:hover $closeIcon': {
+            fill: '#FFF',
+        },
+    },
+    closeIcon: {
+        width: 15,
+        height: 15,
+    },
 };
 
 export default componentsStyle;
