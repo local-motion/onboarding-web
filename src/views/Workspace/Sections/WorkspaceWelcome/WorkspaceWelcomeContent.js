@@ -88,9 +88,13 @@ class WorkspaceWelcomeContent extends Component {
 
         return (
           <div className={`${classes.workspaceWelcomeContent} ${getSmallClassFor('smallWorkspaceWelcomeContent')}`}>
-              <div className={classes.headerTitleWrapper}>
-                  <div className={classes.headerTitle}>{playground.name}</div>
-              </div>
+              {
+                  isViewSmall && (
+                    <div className={classes.headerTitleWrapper}>
+                        <div className={classes.headerTitle}>{playground.name}</div>
+                    </div>
+                  )
+              }
               <div className={`${classes.mainImage} ${getSmallClassFor('smallMainImage')}`} />
 
               <div className={`${classes.icons} ${getSmallClassFor('smallIcons')}`}>
