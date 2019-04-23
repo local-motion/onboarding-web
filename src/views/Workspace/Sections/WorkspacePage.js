@@ -71,6 +71,12 @@ class WorkspacePage extends PureComponent {
         this.selectActivePhase();
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.location.pathname !== this.props.location.pathname) {
+            this.selectActivePhase();
+        }
+    }
+
     selectActivePhase() {
         const { location: { pathname }, phases } = this.props;
 
@@ -110,7 +116,6 @@ class WorkspacePage extends PureComponent {
         const url = startPathUrl + prev.stepLink;
 
         history.push(url);
-        this.selectPhase(prev.title);
     }
 
     gotoNextStep(next) {
@@ -118,7 +123,6 @@ class WorkspacePage extends PureComponent {
         const url = startPathUrl + next.stepLink;
 
         history.push(url);
-        this.selectPhase(next.title);
     }
 
     renderCtaButton() {
@@ -227,7 +231,7 @@ class WorkspacePage extends PureComponent {
                                   <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
                                          render={(props) => <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="CollectOpinions"
-                                         render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactManagement"
                                          render={(props) => <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/commitment" key="WeWillBecomeSmokefree"
