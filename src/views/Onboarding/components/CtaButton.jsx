@@ -77,12 +77,31 @@ const styles = theme => ({
             fill: '#FFF',
             marginLeft: 22,
         },
+    },
+    square: {
+        background: '#eb621b',
+        color: '#FFF',
+        borderRadius: 5,
+        '& svg': {
+            fill: '#FFF',
+            marginLeft: 10,
+            marginTop: 4,
+        },
+        '&:hover': {
+            color: '#FFF',
+            borderColor: '#FFF',
+            backgroundColor: 'rgba(235, 98, 27, .8)',
+        },
+        '&:hover svg': {
+            fill: '#FFF',
+            marginLeft: 22,
+        },
     }
 });
 
 
-const CtaButton = ({ classes, onClick, text, type }) => (
-  <Button onClick={onClick} className={classnames(classes.ctaButton, classes[type])}>
+const CtaButton = ({ classes, onClick, text, type, customStyle }) => (
+  <Button onClick={onClick} className={classnames(classes.ctaButton, classes[type], customStyle)}>
       <span className={classes.buttonTitle}>{text}</span>
       <ArrowIcon />
   </Button>

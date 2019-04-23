@@ -3,7 +3,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import { container } from "../../../assets/jss/material-kit-react";
 import StatisticsBanner from "./StatisticsBanner";
-import CtaButton from "./CtaButton";
+import CtaButton from "../components/CtaButton";
 
 const styles = theme => ({
     container: {
@@ -34,12 +34,8 @@ const styles = theme => ({
 });
 
 class Statistics extends Component {
-    onClick() {
-        console.log('do action');
-    }
-
     render() {
-        const { classes } = this.props;
+        const { classes, onCtaClick } = this.props;
 
         return (
           <section className={`${classes.statisticsWrapper} ${classes.container}`}>
@@ -50,7 +46,7 @@ class Statistics extends Component {
                   <div className={classes.text}>Rookvrijspelen is een initiatief van Longfonds en ABN AMRO. Wij streven ernaar dat elk kind dat vanaf 2017 wordt geboren Rookvrij kan opgroeien. Dat kan in een omgeving, zonder verleidingen en met goede voorbeelden om je heen. Hoe minder mensen je ziet roken, hoe minder vanzelfsprekend het wordt om zelf te gaan roken. Iedereen kan helpen met het Rookvrij maken van onze omgeving.</div>
                   <CtaButton
                     text={"Start enn actie"}
-                    onClick={this.onClick}
+                    onClick={onCtaClick}
                     type={"outlined"}
                   />
               </div>

@@ -11,9 +11,9 @@ import markerGreen from "assets/img/markers/playground-green.svg";
 import markerWhite from "assets/img/markers/playground-white.svg";
 import markerBlue from "assets/img/markers/playground-blue.svg";
 import { connect } from 'react-redux'
-import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
-import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
-import { getGoogleMapsKey } from "../../../misc/ConfigReducer";
+import { ensurePlaygrounds } from "../../../../components/Playground/PlaygroundActions";
+import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
+import { getGoogleMapsKey } from "../../../../misc/ConfigReducer";
 
 
 class PlaygroundMap extends React.Component {

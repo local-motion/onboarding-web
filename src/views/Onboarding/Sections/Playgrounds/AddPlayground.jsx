@@ -1,23 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import { withRouter } from "react-router-dom";
+import AddLocation from "@material-ui/icons/AddLocation";
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import TextField from '@material-ui/core/TextField';
 import withStyles from "@material-ui/core/styles/withStyles";
 import {withTranslation} from "react-i18next";
-import AddLocation from "@material-ui/icons/AddLocation";
+
+import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import PlaygroundMap from "./PlaygroundMap";
-import { createInitiative, CREATE_INITIATIVE } from '../../../components/Playground/PlaygroundActions';
-import { connect } from 'react-redux'
-import { createLoadingSelector } from '../../../api/Selectors';
-import { history } from '../../../setup';
-import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
-import { getUser } from "../../../components/UserProfile/UserProfileReducer";
+import { createInitiative, CREATE_INITIATIVE } from '../../../../components/Playground/PlaygroundActions';
+import { createLoadingSelector } from '../../../../api/Selectors';
+import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
+import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
 
 class AddPlayground extends React.Component {
     constructor(props) {
@@ -42,8 +42,12 @@ class AddPlayground extends React.Component {
     }
 
     submit = () => {
+        const { user, history, createInitiative } = this.props;
+
+        if (!user) return history.push('/login');
+
         if (!this.validateName(this.state.name) && this.isValidState)
-            this.props.createInitiative(this.state.name, this.state.lat, this.state.lng, (data) => history.push('/workspace/' + data.createInitiative.id))
+            createInitiative(this.state.name, this.state.lat, this.state.lng, (data) => history.push('/workspace/' + data.createInitiative.id))
     }
 
     handleClickOpen = () => {
@@ -126,21 +130,13 @@ class AddPlayground extends React.Component {
 
 
     render() {
-        const {classes, user, toggleOpen, isOpen} = this.props;
+        const {classes, toggleOpen, isOpen} = this.props;
         const {map} = this.state;
         const error = this.state.error;
         const isFromWorkspace = isOpen !== undefined;
 
         return (
             <div className={"FormDialog-container"}>
-                { (user && !isFromWorkspace) &&
-                    <Button
-                        className={"btn btn-highlight map-add"}
-                        onClick={this.handleClickOpen}
-                    >
-                        <AddLocation/>
-                    </Button>
-                }
                 <Dialog
                     fullScreen
                     open={isFromWorkspace ? isOpen : this.state.open}
@@ -222,4 +218,4 @@ const mapDispatchToProps = dispatch => {
 
 const connectedAddPlayground = connect(mapStateToProps, mapDispatchToProps)(AddPlayground);
 
-export default withStyles(componentsStyle)(withTranslation("translations")(connectedAddPlayground));
+export default withStyles(componentsStyle)(withTranslation("translations")(withRouter(connectedAddPlayground)));

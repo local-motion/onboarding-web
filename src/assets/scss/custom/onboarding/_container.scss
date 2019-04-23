@@ -1,9 +1,15 @@
 .onboarding-wrapper{
     background-color: #FFF;
+
     .onboarding-container, .grid-container{
         @include breakpoint-max($breakpoints-lg){
             margin-left: 0 !important;
             margin-right: 0 !important;
         }
+    }
+
+    .grid-container-map {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 }

@@ -18,7 +18,7 @@ import CommunicateAboutSmokefreeAgreementCard from "../Cards/CommunicateAboutSmo
 import ShowPlaygroundIsSmokefreeCard from "../Cards/ShowPlaygroundIsSmokefreeCard";
 import WeAreSmokefreeCard from "../Cards/WeAreSmokefreeCard";
 import EvaluateCard from "../Cards/EvaluateCard";
-import AddPlayground from "../../Onboarding/Sections/AddPlayground";
+import AddPlayground from "../../Onboarding/Sections/Playgrounds/AddPlayground";
 import Header from "../../../components/Header/Header";
 import HeaderLinks from "../../../components/Header/HeaderLinks";
 import GridContainer from "../../../components/Grid/GridContainer";

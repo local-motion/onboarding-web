@@ -5,7 +5,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import OnboardingHeader from "./OnboardingHeader";
 import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 import { container } from "../../../assets/jss/material-kit-react.jsx";
-import CtaButton from "./CtaButton";
+import CtaButton from "../components/CtaButton";
 
 const styles = theme => ({
     container: {
@@ -41,12 +41,8 @@ const mapStateToProps = state => ({
 
 
 class Startscreen extends Component {
-    onClick() {
-        console.log('do some action');
-    }
-
     render() {
-        const { classes, user } = this.props;
+        const { classes, user, onCtaClick } = this.props;
         return (
           <section className={classes.startscreen}>
               <OnboardingHeader user={user} />
@@ -54,7 +50,7 @@ class Startscreen extends Component {
               <div className={`${classes.cta} ${classes.container}`}>
                   <span className={classes.ctaTitle}>Maak een speeltuin bij jou<br />in de buurt rookvruij</span>
 
-                  <CtaButton onClick={this.onClick} text={"Start enn actie"} />
+                  <CtaButton onClick={onCtaClick} text={"Start enn actie"} />
               </div>
           </section>
         );
