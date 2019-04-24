@@ -13,6 +13,7 @@ import Startscreen from "./Sections/Startscreen";
 import Statistics from "./Sections/Statistics";
 import Playgrounds from "./Sections/Playgrounds/Playgrounds";
 import AddPlayground from "./Sections/Playgrounds/AddPlayground";
+import AboutUs from "./Sections/AboutUs";
 
 const mapStateToProps = state => ({
     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -103,7 +104,7 @@ class Onboarding extends React.Component {
                   onCtaClick={this.toggleAddPlayground}
                 />
 
-                <Explanation />
+                <AboutUs />
 
                 <Footer onlyLinks />
 
