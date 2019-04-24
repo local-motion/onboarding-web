@@ -13,7 +13,6 @@ const styles = theme => ({
         margin: '0 0 20px',
         '&:hover $iconBgImage': {
             boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
-            transform: 'scale(1.05)',
         },
     },
     iconBgImage: {

@@ -43,9 +43,9 @@ class Statistics extends Component {
 
               <div className={classes.statisticInfo}>
                   <div className={classes.title}>Kinderen rookvrij laten opgroeien</div>
-                  <div className={classes.text}>Rookvrijspelen is een initiatief van Longfonds en ABN AMRO. Wij streven ernaar dat elk kind dat vanaf 2017 wordt geboren Rookvrij kan opgroeien. Dat kan in een omgeving, zonder verleidingen en met goede voorbeelden om je heen. Hoe minder mensen je ziet roken, hoe minder vanzelfsprekend het wordt om zelf te gaan roken. Iedereen kan helpen met het Rookvrij maken van onze omgeving.</div>
+                  <div className={classes.text}>Iedereen wil dat kinderen spelen in een gezonde en veilige omgeving. Jonge longen zijn kwetsbaar. Zien roken, doet roken. Als kinderen anderen zien roken, lijkt dat normaal en misschien zelfs aantrekkelijk. Met een rookvrije speeltuin geef je het goede voorbeeld aan kinderen en voorkom je bovendien het schadelijke meeroken. Voorbeelden van speeltuinen zijn bijvoorbeeld een speeltuin, een kinderboerderij of een buitenzwembad. Rookvrijspelen.nl biedt een stappenplan en helpt je bij het rookvrij maken van jouw speeltuin.</div>
                   <CtaButton
-                    text={"Start enn actie"}
+                    text={"Start een actie"}
                     onClick={onCtaClick}
                     type={"outlined"}
                   />

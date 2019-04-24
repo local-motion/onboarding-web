@@ -33,8 +33,8 @@ const styles = theme => ({
 const PlaygroundCta = ({ onCtaClick, classes }) => {
     return (
       <div className={classes.wrapper}>
-          <div className={classes.text}>Green actie in jouw buurt?<br />Start je eigen actie.</div>
-          <CtaButton customStyle={classes.button} onClick={onCtaClick} type="square" text={"Start enn actie"} />
+          <div className={classes.text}>Geen actie in jouw buurt?<br />Start je eigen actie.</div>
+          <CtaButton customStyle={classes.button} onClick={onCtaClick} type="square" text={"Start een actie"} />
       </div>
     );
 };

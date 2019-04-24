@@ -19,7 +19,7 @@ const styles = theme => ({
     },
     title: {
         fontSize: 58,
-        color: 'rgb(207, 26, 49)',
+        color: '#085ca6',
         lineHeight: 1.2,
         textAlign: 'center',
         fontFamily: "'dk_black_bamboo-webfont'",
@@ -56,7 +56,7 @@ const SmokefreePhases = ({ classes, onCtaClick }) => {
           </div>
 
           <CtaButton
-            text={"Start enn actie"}
+            text={"Start een actie"}
             onClick={onCtaClick}
             type={"outlined"}
             customStyle={classes.button}

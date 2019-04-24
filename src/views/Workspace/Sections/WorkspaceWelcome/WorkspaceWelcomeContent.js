@@ -83,7 +83,7 @@ class WorkspaceWelcomeContent extends Component {
           : 'Doe mee en meld je aan!';
 
         const buttonText = isViewSmall
-          ? 'Bekijk speelplaats'
+          ? 'Bekijk speeltuin'
           : mainButtonText;
 
         return (

@@ -48,9 +48,9 @@ class Startscreen extends Component {
               <OnboardingHeader user={user} />
 
               <div className={`${classes.cta} ${classes.container}`}>
-                  <span className={classes.ctaTitle}>Maak een speeltuin bij jou<br />in de buurt rookvruij</span>
+                  <span className={classes.ctaTitle}>Maak een speeltuin bij jou<br />in de buurt rookvrij</span>
 
-                  <CtaButton onClick={onCtaClick} text={"Start enn actie"} />
+                  <CtaButton onClick={onCtaClick} text={"Start een actie"} />
               </div>
           </section>
         );
