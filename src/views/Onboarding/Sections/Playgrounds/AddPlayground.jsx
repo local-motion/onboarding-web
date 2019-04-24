@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter } from "react-router-dom";
-import AddLocation from "@material-ui/icons/AddLocation";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';

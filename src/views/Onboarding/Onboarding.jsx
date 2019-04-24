@@ -5,7 +5,6 @@ import componentsStyle from "../../assets/jss/material-kit-react/views/component
 import { withTranslation } from "react-i18next";
 
 import Footer from "components/Footer/Footer.jsx";
-import Explanation from "components/Explanation/Explanation.jsx";
 import { ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
@@ -14,6 +13,7 @@ import Statistics from "./Sections/Statistics";
 import Playgrounds from "./Sections/Playgrounds/Playgrounds";
 import AddPlayground from "./Sections/Playgrounds/AddPlayground";
 import AboutUs from "./Sections/AboutUs";
+import SmokefreePhases from "./Sections/SmokefreePhases";
 
 const mapStateToProps = state => ({
     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -105,6 +105,8 @@ class Onboarding extends React.Component {
                 />
 
                 <AboutUs />
+
+                <SmokefreePhases onCtaClick={this.toggleAddPlayground} />
 
                 <Footer onlyLinks />
 
