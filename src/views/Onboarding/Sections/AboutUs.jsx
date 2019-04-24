@@ -11,6 +11,8 @@ const styles = theme => ({
         marginTop: 80,
         zIndex: 9,
         position: 'relative',
+        paddingBottom: 140,
+        background: `url(${require("../../../assets/img/landing/about-bg.png")}) repeat-x bottom`,
     },
     title: {
         fontSize: 58,
@@ -65,7 +67,9 @@ const AboutUs = ({ classes }) => {
               <a
                 href="https://www.kwf.nl/"
                 className={classes.link}
-                target="_blank">
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                   <img
                     className={classes.image}
                     src={require("assets/img/logo-kwf.png")}
@@ -75,7 +79,9 @@ const AboutUs = ({ classes }) => {
               <a
                 href="https://www.longfonds.nl/"
                 className={classes.link}
-                target="_blank">
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                   <img
                     className={classes.image}
                     src={require("assets/img/logo-longfonds.png")}
@@ -85,7 +91,9 @@ const AboutUs = ({ classes }) => {
               <a
                 href="https://www.hartstichting.nl/"
                 className={classes.link}
-                target="_blank">
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                   <img
                     className={classes.image}
                     src={require("assets/img/logo-hartstichting-horizontal.png")}
