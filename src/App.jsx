@@ -43,7 +43,8 @@ class App extends React.Component {
                 <Router history={history}>
                     <Switch>
                         <Route exact path="/login" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
-                        <Route exact path="/verify/:verificationCode" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
+                        {/* <Route exact path="/verify?type=:verificationType&user=:username&code=:verificationCode" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
+                        {/* <Route exact path="/verify" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
 
                         <Route exact path="/about" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>
@@ -54,7 +55,7 @@ class App extends React.Component {
                         <Route exact path="/workspace/" key="Workspace" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
-                        <Route exact path="/workspace/:initiativeId/verify/:verificationCode" key="WorkspaceVerify" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
+                        {/* <Route exact path="/workspace/:initiativeId/verify/:verificationCode" key="WorkspaceVerify" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
                         <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
 
                         <Route path="/workspace/:initiativeId/" component={Workspace}/>

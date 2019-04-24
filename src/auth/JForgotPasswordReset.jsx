@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
+import { onResetPasswordSuccess, clearVerificationCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JForgotPasswordReset');
 
@@ -33,7 +34,8 @@ class JForgotPasswordReset extends Component {
             return;
         }
 
-        const {code, password} = this.inputs;
+        const {password} = this.inputs;
+        const code = this.inputs.code || this.props.authState.split(':')[1]
         logger.info('reset password for ' + username);
         Auth.forgotPasswordSubmit(username, code, password)
             .then(data => this.submitSuccess(username, data))
@@ -42,7 +44,8 @@ class JForgotPasswordReset extends Component {
 
     submitSuccess(username, data) {
         logger.info('forgot password reset success for ' + username, data);
-        this.changeState('signIn', username);
+        clearVerificationCookies();
+        this.changeState('complete', username);
     }
 
     handleError(err) {
@@ -54,10 +57,13 @@ class JForgotPasswordReset extends Component {
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
         const {authState} = this.props;
-        if (authState !== 'forgotPasswordReset') {
+        if (!authState.startsWith('forgotPasswordReset')) {
             return null;
         }
 
+        console.log('rendering password reset')
+
+        const verificationCode = authState.split(':')[1]
         const style = {
             width: '100%',
             input: {borderRadius: '0', display: 'block'},
@@ -87,9 +93,10 @@ class JForgotPasswordReset extends Component {
                                     type="text"
                                     placeholder="Code"
                                     name={"code"}
+                                    defaultValue={verificationCode}
                                     style={style.input}
                                     onChange={event => this.inputs.code = event.target.value}
-                                    autoFocus
+                                    autoFocus={!verificationCode}
                                     autoComplete='new-password'
                                 />
                             </div>
@@ -99,6 +106,7 @@ class JForgotPasswordReset extends Component {
                                     type="password"
                                     placeholder="Wachtwoord"
                                     name={"password"}
+                                    autoFocus={!!verificationCode}
                                     style={style.input}
                                     onChange={event => this.inputs.password = event.target.value}
                                     autoComplete='new-password'

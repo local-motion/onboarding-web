@@ -50,8 +50,10 @@ class JSignUp extends Component {
             .then(() => this.signUpSuccess(username))
             .catch(err => this.signUpError(err));
 
-        // Save the user name in a cookie so it can be picked up when the user clicks the link in the verification mail
-        setSignupConfirmCookies(username, this.props.match.params.initiativeId)
+        // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
+        const {initiativeId} = this.props.match.params
+        if (initiativeId)
+            setSignupConfirmCookies(initiativeId)
     }
 
     signUpSuccess(username) {

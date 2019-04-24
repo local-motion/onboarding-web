@@ -8,6 +8,8 @@ import { readCookie, eraseCookie, createCookie } from '../utils/CookieUtils';
 import { getUser } from '../components/UserProfile/UserProfileReducer';
 import { connect } from 'react-redux'
 import { openConfirmationDialog } from '../components/ConfirmationDialog/ConfirmationDialogActions';
+import queryString from 'query-string';
+import { history } from '../setup';
 
 const logger = new Logger('JSignIn');
 
@@ -29,32 +31,25 @@ const VERIFICATION_TYPE_COOKIE = 'verificationTtype'
 const VERIFICATION_TYPE_SIGNUP = 'signup'
 const VERIFICATION_TYPE_RESET_PASSWORD = 'reset_password'
 
-export const setSignupConfirmCookies = (username, initiativeId) => {
-    createCookie(VERIFICATION_USERNAME_COOKIE, username, 2)
-    createCookie(VERIFICATION_TYPE_COOKIE, VERIFICATION_TYPE_SIGNUP, 2)
-    if (initiativeId)
-        createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
+export const setSignupConfirmCookies = (initiativeId) => {
+    createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
 }
 
-export const setPasswordResetCookies = (username, initiativeId) => {
-    createCookie(VERIFICATION_USERNAME_COOKIE, username, 2)
-    createCookie(VERIFICATION_TYPE_COOKIE, VERIFICATION_TYPE_RESET_PASSWORD, 2)
-    if (initiativeId)
-        createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
+export const setPasswordResetCookies = (initiativeId) => {
+    createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
 }
 
 export const clearVerificationCookies = () => {
-    eraseCookie(VERIFICATION_USERNAME_COOKIE)
-    eraseCookie(VERIFICATION_TYPE_COOKIE)
     eraseCookie(VERIFICATION_INITIATIVE_COOKIE)
 }
 
+
 /**
- * This class handles a verfication url that is clicked by the user in a verification mail.
- * It checks whether the user is logged in and otherwise change the state to show a login dialog.
- * When the user is authenticated the verification type (confirm_signup or password_reset) is read from a cookie 
- * and the appropriate verification action is executed. When no cookie is present the user is prompted to
- * specify the type.
+ * This class handles a verification url that is clicked by the user in a verification mail.
+ * It checks whether the user is logged in and if so prompts the user to signout and then re-click the link in the mail.
+ * If an active initiave is found in the designated cookie to flow is directed to a verificationl link handler within the
+ * workspace of that initiative.
+ * Based on the verfication type in the url the flow is either directed to the signup confirmation or the password reset.
  */
 class VerificationLinkHandler extends Component {
     constructor(props) {
@@ -62,7 +57,7 @@ class VerificationLinkHandler extends Component {
         this.checkContact = this.checkContact.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: '', signInPage: true}
+        this.state = {error: '', signInPage: true, complete: false}
     }
 
     changeState(state, data) {
@@ -73,13 +68,24 @@ class VerificationLinkHandler extends Component {
     }
 
     componentDidUpdate() {
-        const isInCard = !!this.props.match.params.initiativeId;
-        const verificationCode = this.props.match.params.verificationCode;
-        const username = readCookie(VERIFICATION_USERNAME_COOKIE)
-        const verificationType = readCookie(VERIFICATION_TYPE_COOKIE)
-        const {authState, authData, authenticatedUser, openAlreadyLoggedInDialog} = this.props;
+        const params = queryString.parse(this.props.location.search)
+        const verificationType = params.type
+        const username = params.user
+        const verificationCode = params.code
+        const initiativeId = readCookie(VERIFICATION_INITIATIVE_COOKIE)
 
-        if (!verificationCode || !authState === 'signIn' /* note that signIn is the default state */ ) {
+        console.log('props: ', this.props)
+        console.log('parsed (type, name, code): ', verificationType, username, verificationCode)
+
+        const {authState, authData, authenticatedUser, openAlreadyLoggedInDialog} = this.props
+
+        if (authState === 'complete') {
+            this.setState({complete: true})
+            this.changeState('signIn', authData)
+            return
+        }
+
+        if (this.state.complete || !verificationCode || !username || !verificationType || !authState === 'signIn' /* note that signIn is the default state */ ) {
             return
         }
 
@@ -88,16 +94,17 @@ class VerificationLinkHandler extends Component {
             this.props.openAlreadyLoggedInDialog();
         }
 
-        if (username && verificationType === VERIFICATION_TYPE_SIGNUP) {
-            const initiativeId = readCookie(VERIFICATION_INITIATIVE_COOKIE)
-            if (initiativeId) {
-                // Let the VerificationLinkHandler within the particular workspace handle this
-                this.props.history.push('/workspace/' + initiativeId + '/verify/' + verificationCode)
-            }
-            else {
-                this.gotoConfirmSignUp(username, verificationCode)
-            }
+        if (initiativeId) {
+            // Let the VerificationLinkHandler within the particular workspace handle this
+            this.props.history.push(`/workspace/${initiativeId}/verify?type=${verificationType}&user=${username}&code=${verificationCode}`)
+            return
         }
+
+        console.log('verification type: ' + verificationType)
+        if (verificationType === VERIFICATION_TYPE_SIGNUP)
+            this.gotoConfirmSignUp(username, verificationCode)
+        else if (verificationType === VERIFICATION_TYPE_RESET_PASSWORD)
+            this.gotoPasswordReset(username, verificationCode)
         
     }
 
@@ -109,7 +116,7 @@ class VerificationLinkHandler extends Component {
 
     gotoPasswordReset(username, verificationCode) {
         console.log('verification link handler directing to password reset')
-        this.changeState('forgotPassword:' + verificationCode, username);
+        this.changeState('forgotPasswordReset:' + verificationCode, username);
     }
 
     signInError(err) {

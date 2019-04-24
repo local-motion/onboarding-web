@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
+import { setPasswordResetCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JForgotPassword');
 
@@ -33,6 +34,11 @@ class JForgotPassword extends Component {
         Auth.forgotPassword(username)
             .then(data => this.sendSuccess(username, data))
             .catch(err => this.handleError(err));
+    
+        // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
+        const {initiativeId} = this.props.match.params
+        if (initiativeId)
+            setPasswordResetCookies(initiativeId)
     }
 
     sendSuccess(username, data) {

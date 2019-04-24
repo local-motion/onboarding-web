@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
-import { clearVerificationCookies } from './VerificationLinkHandler';
+import { clearVerificationCookies, onSignupSuccess } from './VerificationLinkHandler';
 
 const logger = new Logger('JConfirmSignUp');
 
@@ -16,6 +16,7 @@ class JConfirmSignUp extends Component {
     constructor(props) {
         super(props);
         this.confirmSignUp = this.confirmSignUp.bind(this);
+        this.confirmSuccess = this.confirmSuccess.bind(this);
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.isValidInput = this.isValidInput.bind(this);
@@ -82,7 +83,7 @@ class JConfirmSignUp extends Component {
         clearVerificationCookies();
         logger.info('confirm sign up success with ' + username);
         this.setState({message: '', error: ''});
-        this.changeState('signIn', username);
+        this.changeState('complete', username);
         this.setState({codeLength: 0, error: '', validateCode: "unvalidated"});
     }
 
@@ -129,6 +130,7 @@ class JConfirmSignUp extends Component {
         const verificationCode = authState.split(':')[1]
         const validInput = this.isValidInput(authData, verificationCode)
         console.log('Rendering jsignup, valid input:' + validInput)
+        console.log('Rendering jsignup, authState: ', authState)
 
         const style = {
             width: '20rem',
