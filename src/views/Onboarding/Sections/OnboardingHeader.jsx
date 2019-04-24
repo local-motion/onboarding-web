@@ -5,11 +5,12 @@ import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import HeaderLinks from "../../../components/Header/HeaderLinks";
+import { container } from "../../../assets/jss/material-kit-react";
 
 const styles = theme => ({
     landingAppBar: {
+        ...container,
         color: '#626262',
-        maxWidth: 1300,
         width: '80%',
         display: 'flex',
         flexDirection: 'row',
