@@ -126,7 +126,7 @@ class JSignIn extends Component {
             justifyContent: 'center',
             input: {borderRadius: 0, display: 'block', marginBottom: 10},
             links: {fontSize: '0.9em', minHeight: "25px"},
-            extraButton: {border: 0, marginBottom: "15px", cursor: 'pointer'},
+            extraButton: {marginTop: 15},
             signUpButton: {marginTop: 10},
             loginButton: {margin: '0 auto', width: 'fit-content'},
             left: {float: "left"},
@@ -185,17 +185,17 @@ class JSignIn extends Component {
                             >
                                 Inloggen
                             </Button>
+
+                            <Button
+                              variant="text"
+                              style={{...style.loginButton, ...style.extraButton }}
+                              onClick={() => this.changeState('forgotPassword')}
+                            >
+                                Wachtwoord vergeten?
+                            </Button>
                         </form>
                         {error && <p className={"error"}>{error}</p>}
                         <div style={style.links} className={"extra-info"}>
-                            <div>
-                                <button style={style.extraButton}
-                                        onClick={() => this.changeState('forgotPassword')}
-                                >
-                                    Wachtwoord vergeten?
-                                </button>
-                            </div>
-
                             <div style={style.createAccountTitle}>Ben je hier voor de eerste keer?</div>
                             <div>Je hoeft je slechts éénmalig te registreren om deel te nemen aan een actie. Na het registeren kun je meteen starten om de speeltuin rookvrij te maken.</div>
 
