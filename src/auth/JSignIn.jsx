@@ -134,7 +134,6 @@ class JSignIn extends Component {
             media: {height: '300px', margin: '-25px', marginBottom: 30, backgroundPositionY: -130},
             secureAppContainer: {margin: '0 auto'},
             createAccountTitle: {fontWeight: 'bold'},
-            createAccountDescription: {},
         };
 
         const {error} = this.state;
