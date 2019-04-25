@@ -193,6 +193,13 @@ export function getOpenedStepTitle(phases, pathname) {
       : null;
 }
 
+export function getFirstStepLinkOfPhase(phase, phases, playgroundId) {
+    const phaseObjectName = Object.keys(phases).find((phaseName) => phases[phaseName].title === phase);
+    const phaseObject = phases[phaseObjectName];
+
+    return phaseObject ? `/workspace/${playgroundId}${phaseObject.steps[0].link}` : null;
+}
+
 export function shouldWorkspaceUpdate(props, nextProps) {
     const { playground: currentPlayground, user: currentUser }= props;
     const { playground: nextPlayground, user: nextUser } = nextProps;
