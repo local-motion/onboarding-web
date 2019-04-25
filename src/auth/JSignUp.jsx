@@ -5,6 +5,9 @@ import {Auth, Logger} from 'aws-amplify';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { getErrorMessage } from '../api/ErrorMessages';
+import ContentDialog from "../components/Dialogs/ContentDialog";
+import TermsText from "../views/Legal/TermsText";
+import PrivacyText from "../views/Legal/PrivacyText";
 
 const logger = new Logger('JSignUp');
 
@@ -16,17 +19,24 @@ const logger = new Logger('JSignUp');
 class JSignUp extends Component {
     constructor(props) {
         super(props);
-        this.signUp = this.signUp.bind(this);
-        this.changeState = this.changeState.bind(this);
+
         this.inputs = {};
+
         this.state = {
             error: '',
             acceptedTerms: false,
             filledPass: false,
             filledUsername: false,
             filledEmail: false,
-            filled: false
-        }
+            filled: false,
+            isTermsOpened: false,
+            isPrivacyOpened: false,
+        };
+
+        this.signUp = this.signUp.bind(this);
+        this.changeState = this.changeState.bind(this);
+        this.togglePrivacyDialog = this.togglePrivacyDialog.bind(this);
+        this.toggleTermsDialog = this.toggleTermsDialog.bind(this);
     }
 
     handleChange = name => event => {
@@ -120,6 +130,14 @@ class JSignUp extends Component {
         }
     }
 
+    toggleTermsDialog() {
+        this.setState(({ isTermsOpened }) => ({ isTermsOpened: !isTermsOpened }));
+    }
+
+    togglePrivacyDialog() {
+        this.setState(({ isPrivacyOpened }) => ({ isPrivacyOpened: !isPrivacyOpened }));
+    }
+
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
         const {authState} = this.props;
@@ -198,10 +216,26 @@ class JSignUp extends Component {
                                 }
                                 label={[
                                     <span key="1">Ik ga akkoord met de </span>,
-                                    <a key="2" target="_blank" rel="noopener noreferrer" href={"/terms"}>Gebruiksvoorwaarden</a>,
+                                    <a key="2" onClick={this.toggleTermsDialog}>Gebruiksvoorwaarden</a>,
                                     <span key="3"> en de </span>,
-                                    <a key="4" target="_blank" rel="noopener noreferrer" href={"/privacy"}>Privacyverklaring</a>
+                                    <a key="4" onClick={this.togglePrivacyDialog}>Privacyverklaring</a>
                                 ]}
+                            />
+
+                            <ContentDialog
+                              open={this.state.isTermsOpened}
+                              onClose={this.toggleTermsDialog}
+                              title="Gebruiksvoorwaarden"
+                              content={<TermsText />}
+                              maxWidth="lg"
+                            />
+
+                            <ContentDialog
+                              open={this.state.isPrivacyOpened}
+                              onClose={this.togglePrivacyDialog}
+                              title="Privacyverklaring"
+                              content={<PrivacyText />}
+                              maxWidth="lg"
                             />
 
                             <div>
