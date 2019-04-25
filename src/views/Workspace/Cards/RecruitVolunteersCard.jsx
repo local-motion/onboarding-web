@@ -20,13 +20,39 @@ const styles = theme => ({
 
 // step: "Mensen Verzamelen"
 class RecruitVolunteersCard extends React.Component {
+    componentDidMount() {
+        this.setCta();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            (!prevProps.user && this.props.user)
+            || (prevProps.playground.volunteers.length !== this.props.playground.volunteers.length)
+        ) {
+            this.setCta();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.unsetCta();
+    }
+
+    setCta() {
+        const { setCta, playground, user } = this.props;
+        const inviteButtonHref = "mailto:?subject=Maak%20speeltuin%20rookvrij&body=Ik%20wil%20graag%20speeltuin%20rookvrij%20maken.%0AHelp%20jij%20met%20me%20mee%3F";
+
+        setCta({
+            ctaAction: () => { window.open(inviteButtonHref) },
+            ctaText: 'Deel via e-mail',
+            ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+        });
+    }
+
     render() {
         const {playground, user, classes} = this.props;
         
         if (!playground) return "Loading...";
 
-        const inviteButtonHref = "mailto:?subject=Maak%20speeltuin%20rookvrij&body=Ik%20wil%20graag%20speeltuin%20rookvrij%20maken.%0AHelp%20jij%20met%20me%20mee%3F";
-        const inviteButtonLabel = "Deel link via email";
         const targetNrOfVolunteers = 2;
 
         return (
@@ -36,19 +62,11 @@ class RecruitVolunteersCard extends React.Component {
                 image={require("assets/img/backgrounds/team.jpg")}
                 customStyle={{ backgroundPositionY: '-70px' }}
                 content={"Steun krijgen van (of binnen) het bestuur is een belangrijke eerste stap. De kans om deze steun te krijgen, is groter wanneer je een aantal mensen om je heen verzamelt die de speelplek ook rookvrij willen maken."}
-                primaryCta={{
-                    action: inviteButtonHref,
-                    text: inviteButtonLabel
-                }}
                 expandContent={
                     <React.Fragment>
                         <GridContainer>
                             <GridItem xs={12} sm={12} md={8}>
                                 <Typography component="p" className={classes.contentParagraph}>Probeer om minimaal {targetNrOfVolunteers} mensen te verzamelen.</Typography>
-                                <Typography component="p" className={classes.contentParagraph}>Deel de link om mensen uit te nodigen voor deze actiepagina:</Typography>
-                                <Button disabled={!isUserVolunteerOfPlayground(user, playground)} size="small" color="primary" href={inviteButtonHref}>{inviteButtonLabel}</Button>
-                                <br />
-                                <br />
                                 <Typography component="p" className={classes.contentParagraph}>Deel link door middel van social media</Typography>
                                 <SocialMedia playground={playground}/>
                             </GridItem>

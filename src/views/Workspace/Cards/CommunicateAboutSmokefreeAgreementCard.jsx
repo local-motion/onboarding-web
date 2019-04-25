@@ -1,10 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Button, Typography } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCheckbox";
 import SocialMedia from "../forms/SocialMedia";
+import { setCheckbox } from "../../../components/Playground/PlaygroundActions";
+import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+import { checkBox } from "../../../misc/WorkspaceHelpers";
 
 const styles = ({
     contentItem: {
@@ -20,9 +24,96 @@ const styles = ({
     },
 });
 
+const mapDispatchToProps = dispatch => ({
+    setCheckbox: (initiativeId, checklistItem, isChecked, user) =>
+      dispatch(setCheckbox(initiativeId, checklistItem, isChecked, user)),
+});
+
 
 // Step: 'Communiceer Over De Rookvrije Afspraak'
 class CommunicateAboutSmokefreeAgreementCard extends React.Component {
+    componentDidMount() {
+        this.setCta();
+    }
+
+    componentDidUpdate(prevProps) {
+        const { user, playground } = this.props;
+
+        if (
+          (!prevProps.user && user)
+          || (prevProps.playground.jointChecklistItems.length !== playground.jointChecklistItems.length)
+        ) {
+            this.setCta();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.unsetCta();
+    }
+
+    setCta() {
+        const { setCta, playground, user } = this.props;
+
+        switch(true) {
+            case !playground.jointChecklistItems.includes("newsletter_announcement"): {
+                setCta({
+                    ctaAction: () => {
+                        this.checkBox("newsletter_announcement");
+                    },
+                    ctaText: 'Artikel in nieuwsbrief',
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+                });
+
+                return;
+            }
+
+            case !playground.jointChecklistItems.includes("website_announcement"): {
+                setCta({
+                    ctaAction: () => {
+                        this.checkBox("website_announcement");
+                    },
+                    ctaText: 'Plaats het op je website',
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+                });
+
+                return;
+            }
+
+            case !playground.jointChecklistItems.includes("press_announcement"): {
+                setCta({
+                    ctaAction: () => {
+                        this.checkBox("press_announcement");
+                    },
+                    ctaText: 'Publiceer een persbericht',
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+                });
+
+                return;
+            }
+
+            case playground.jointChecklistItems.includes("newsletter_announcement")
+            && playground.jointChecklistItems.includes("website_announcement")
+            && playground.jointChecklistItems.includes("press_announcement"): {
+                setCta({
+                    ctaAction: () => null,
+                    ctaText: 'Persbericht is gepubliceerd',
+                    ctaDisabled: true,
+                    ctaDone: true,
+                });
+
+                return;
+            }
+
+            default: {}
+        }
+    }
+
+    checkBox(name) {
+        const { setCheckbox, playground, user } = this.props;
+
+        checkBox({ setCheckbox, playground, user, name });
+    }
+
     render() {
         const { playground, classes } = this.props;
 
@@ -98,5 +189,5 @@ class CommunicateAboutSmokefreeAgreementCard extends React.Component {
     }
 }
 
-export default withStyles(styles)(CommunicateAboutSmokefreeAgreementCard);
+export default withStyles(styles)(connect(null, mapDispatchToProps)(CommunicateAboutSmokefreeAgreementCard));
 

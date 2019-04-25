@@ -1,10 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Typography } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCheckbox";
 import SocialMedia from "../forms/SocialMedia";
+import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+import { checkBox } from "../../../misc/WorkspaceHelpers";
+import { setCheckbox } from "../../../components/Playground/PlaygroundActions";
 
 const styles = ({
     contentItem: {
@@ -12,9 +16,59 @@ const styles = ({
     },
 });
 
+const mapDispatchToProps = dispatch => ({
+    setCheckbox: (initiativeId, checklistItem, isChecked, user) =>
+      dispatch(setCheckbox(initiativeId, checklistItem, isChecked, user)),
+});
+
 
 // step: "We Zijn Rookvrij"
 class WeAreSmokefreeCard extends React.Component {
+    componentDidMount() {
+        this.setCta();
+    }
+
+    componentDidUpdate(prevProps) {
+        const { user, playground } = this.props;
+
+        if (
+          (!prevProps.user && user)
+          || (prevProps.playground.jointChecklistItems.length !== playground.jointChecklistItems.length)
+        ) {
+            this.setCta();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.unsetCta();
+    }
+
+    setCta() {
+        const { setCta, playground, user } = this.props;
+
+        setCta(
+          playground.jointChecklistItems.includes("press_announcement_smokefree")
+            ? {
+                ctaAction: () => null,
+                ctaText: 'Persbericht is gepubliceerd',
+                ctaDisabled: true,
+                ctaDone: true,
+            } : {
+                ctaAction: () => {
+                    this.checkBox("press_announcement_smokefree");
+                },
+                ctaText: 'Publiceer een persbericht',
+                ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+            }
+        );
+    }
+
+    checkBox(name) {
+        const { setCheckbox, playground, user } = this.props;
+
+        checkBox({ setCheckbox, playground, user, name });
+    }
+
     render() {
         const { playground, classes } = this.props;
 
@@ -49,5 +103,5 @@ class WeAreSmokefreeCard extends React.Component {
     }
 }
 
-export default withStyles(styles)(WeAreSmokefreeCard);
+export default withStyles(styles)(connect(null, mapDispatchToProps)(WeAreSmokefreeCard));
 

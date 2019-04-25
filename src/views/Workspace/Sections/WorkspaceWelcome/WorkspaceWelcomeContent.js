@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import PlaygroundIcon from "../../../../components/PlaygroundIcons/PlaygroundIcons";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle";
-import { getActivePhaseUrl, getStatus } from "../../../../misc/WorkspaceHelpers";
+import { getActivePhaseUrl, getStatus, getWorkspaceStartLink } from "../../../../misc/WorkspaceHelpers";
 import { playgroundIcons } from "../../../../components/PlaygroundIcons/playgroundIconsConstants";
 import Statistics from "../../../../components/Statistics/Statistics";
 
@@ -50,9 +50,9 @@ class WorkspaceWelcomeContent extends Component {
     }
 
     goToJoinPage() {
-        const { match: { params: { initiativeId } }, user, history } = this.props;
+        const { playground, user, history } = this.props;
 
-        const startUrl = `/workspace/${initiativeId}`;
+        const startUrl = getWorkspaceStartLink(playground);
         const loginUrl = `/login?target=${startUrl}`;
 
         history.push(
