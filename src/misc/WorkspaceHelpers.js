@@ -104,8 +104,12 @@ export function getPhases() {
             expandedIcon: require('assets/img/icon-community-active.svg'),
             steps: [
                 {
-                    name: 'Chat',
+                    name: 'Team',
                     link: '/team',
+                },
+                {
+                    name: 'Chat',
+                    link: '/chat',
                 },
             ],
         },
