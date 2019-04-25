@@ -216,8 +216,10 @@ class JSignUp extends Component {
                                 }
                                 label={[
                                     <span key="1">Ik ga akkoord met de </span>,
+                                    // eslint-disable-next-line
                                     <a key="2" onClick={this.toggleTermsDialog}>Gebruiksvoorwaarden</a>,
                                     <span key="3"> en de </span>,
+                                    // eslint-disable-next-line
                                     <a key="4" onClick={this.togglePrivacyDialog}>Privacyverklaring</a>
                                 ]}
                             />
