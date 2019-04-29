@@ -72,6 +72,12 @@ const componentsStyle = {
         fontFamily: "'dk_black_bamboo-webfont'",
         color: '#085ca6',
     },
+    noButton: {
+        width: 45,
+    },
+    ctaDone: {
+        marginLeft: 10,
+    },
     backButton: {
         marginTop: 70,
         marginBottom: 20,

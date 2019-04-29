@@ -1,10 +1,13 @@
 import React from "react";
-import { Button, Typography } from "@material-ui/core";
+import { connect } from "react-redux";
+import { Typography } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCheckbox";
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+import { setCheckbox } from "../../../components/Playground/PlaygroundActions";
+import { checkBox } from "../../../misc/WorkspaceHelpers";
 
 const styles = ({
     contentItem: {
@@ -15,11 +18,117 @@ const styles = ({
     },
 });
 
+const mapDispatchToProps = dispatch => ({
+    setCheckbox: (initiativeId, checklistItem, isChecked, user) =>
+      dispatch(setCheckbox(initiativeId, checklistItem, isChecked, user)),
+});
+
 
 // step: "Laat Zien Dat De Speelplek Rookvrij Is"
 class ShowPlaygroundIsSmokefreeCard extends React.Component {
+    componentDidMount() {
+        this.setCta();
+    }
+
+    componentDidUpdate(prevProps) {
+        const { user, playground } = this.props;
+
+        if (
+          (!prevProps.user && user)
+          || (prevProps.playground.jointChecklistItems.length !== playground.jointChecklistItems.length)
+        ) {
+            this.setCta();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.unsetCta();
+    }
+
+    setCta() {
+        const { setCta, playground, user } = this.props;
+        const inviteButtonHref = "mailto:service@longfonds.nl?" +
+          "subject=Bord%20bestellen&" +
+          "body=Hallo,%0A%0A" +
+          "Ik%20wil%20graag%20een%20bord%20bestellen%20voor%20speeltuin%20" + playground.name + ".%0A" +
+          "Mijn%20adres%20is%20...%20VUL%20HIER%20JE%20ADRESGEGEVENS%20IN%20...";
+
+        switch(true) {
+            case !playground.jointChecklistItems.includes("order_sign"): {
+                setCta({
+                    ctaAction: () => {
+                        window.open(inviteButtonHref);
+                        this.checkBox("order_sign");
+                    },
+                    ctaText: 'Bestel bord',
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+                });
+
+                return;
+            }
+
+            case !playground.jointChecklistItems.includes("place_sign"): {
+                setCta({
+                    ctaAction: () => {
+                        this.checkBox("place_sign");
+                    },
+                    ctaText: 'Hang het bord bij de ingang van de tuin',
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+                });
+
+                return;
+            }
+
+            case !playground.jointChecklistItems.includes("adjust_regulations"): {
+                setCta({
+                    ctaAction: () => {
+                        this.checkBox("adjust_regulations");
+                    },
+                    ctaText: 'Pas je reglementen aan',
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+                });
+
+                return;
+            }
+
+            case !playground.jointChecklistItems.includes("publish_regulations"): {
+                setCta({
+                    ctaAction: () => {
+                        this.checkBox("publish_regulations");
+                    },
+                    ctaText: 'Publiceer nieuwe regels op je website',
+                    ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
+                });
+
+                return;
+            }
+
+            case playground.jointChecklistItems.includes("order_sign")
+            && playground.jointChecklistItems.includes("place_sign")
+            && playground.jointChecklistItems.includes("adjust_regulations")
+            && playground.jointChecklistItems.includes("publish_regulations"): {
+                setCta({
+                    ctaAction: () => null,
+                    ctaText: 'Nieuwe regels zijn gepubliceerd',
+                    ctaDisabled: true,
+                    ctaDone: true,
+                });
+
+                return;
+            }
+
+            default: {}
+        }
+    }
+
+    checkBox(name) {
+        const { setCheckbox, playground, user } = this.props;
+
+        checkBox({ setCheckbox, playground, user, name });
+    }
+
     render() {
-        const { playground, user, classes } = this.props;
+        const { playground, classes } = this.props;
 
         if (!playground) return "Loading...";
 
@@ -27,30 +136,15 @@ class ShowPlaygroundIsSmokefreeCard extends React.Component {
           <WorkspaceCard
             title={"Laat Zien Dat De Speelplek Rookvrij Is"}
             done={
-                playground.jointChecklistItems.includes("adjust_regulations") &&
-                playground.jointChecklistItems.includes("publish_regulations") &&
-                playground.jointChecklistItems.includes("order_sign") &&
-                playground.jointChecklistItems.includes("place_sign")
+                playground.jointChecklistItems.includes("order_sign")
+                && playground.jointChecklistItems.includes("place_sign")
+                && playground.jointChecklistItems.includes("adjust_regulations")
+                && playground.jointChecklistItems.includes("publish_regulations")
             }
             image={require("assets/img/backgrounds/signonfence.jpg")}
             content={"Een mooi moment! Plaats de rookvrij-borden. Zo is voor iedereen zichtbaar dat de speeltuin rookvrij is. Bestel het bord van de Rookvrije Generatie om bij de ingang van de speeltuin te hangen."}
             expandContent={
                 <div>
-                    <Button
-                      className={classes.contentItemSmallMargin}
-                      disabled={!isUserVolunteerOfPlayground(user, playground)} variant="contained"
-                      size="small" color="primary"
-                      href={
-                          "mailto:service@longfonds.nl?" +
-                          "subject=Bord%20bestellen&" +
-                          "body=Hallo,%0A%0A" +
-                          "Ik%20wil%20graag%20een%20bord%20bestellen%20voor%20speeltuin%20" + playground.name + ".%0A" +
-                          "Mijn%20adres%20is%20...%20VUL%20HIER%20JE%20ADRESGEGEVENS%20IN%20..."
-                      }
-                    >
-                        Bestel
-                    </Button>
-
                     <div>
                         <ConnectedCheckbox
                           playground={playground}
@@ -95,4 +189,4 @@ class ShowPlaygroundIsSmokefreeCard extends React.Component {
     }
 }
 
-export default withStyles(styles)(ShowPlaygroundIsSmokefreeCard);
+export default withStyles(styles)(connect(null, mapDispatchToProps)(ShowPlaygroundIsSmokefreeCard));

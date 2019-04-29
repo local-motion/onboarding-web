@@ -15,6 +15,7 @@ import { history } from "../../../../setup.js";
 import {withTranslation} from "react-i18next";
 import { getStatistics } from "../../../../components/Playground/PlaygroundReducer.js";
 import { connect } from 'react-redux'
+import { getWorkspaceStartLink } from "../../../misc/WorkspaceHelpers";
 
 
 const mapStateToProps = state => ({
@@ -76,7 +77,7 @@ class PlaygroundStatistics extends React.Component {
                                 <div style={{display: generalStatistics ? 'none' : 'block'}}>
                                     <Button
                                         className={"btn btn-highlight pr-25 pull-left"}
-                                        onClick={() => history.push(`/workspace/${playground.id}`) }
+                                        onClick={() => history.push(getWorkspaceStartLink(playground)) }
                                     >
                                         <span>Bezoek deze speeltuin</span>
                                     </Button>
