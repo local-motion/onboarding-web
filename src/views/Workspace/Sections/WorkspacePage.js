@@ -28,9 +28,10 @@ import Footer from "../../../components/Footer/Footer";
 import WorkspaceWelcomeContent from "./WorkspaceWelcome/WorkspaceWelcomeContent";
 import PlaygroundChatBox from "../../../components/Chatbox/PlaygroundChatBox";
 import {
+    getFirstStepLinkOfPhase,
     getNextStep,
     getOpenedStepTitle,
-    getPrevStep,
+    getPrevStep
 } from "../../../misc/WorkspaceHelpers";
 import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
@@ -91,7 +92,16 @@ class WorkspacePage extends PureComponent {
     }
 
     clickPhase(phase) {
-        this.selectPhase(this.state.expandedPhase !== phase ? phase : 'none');
+        this.selectPhase(phase);
+        this.gotoFirstStep(phase);
+    }
+
+    gotoFirstStep(phase) {
+        const { history, phases, playground } = this.props;
+
+        const firstStepLink = getFirstStepLinkOfPhase(phase, phases, playground.id);
+
+        if (firstStepLink) history.push(firstStepLink);
     }
 
     setCta({ ctaText = '', ctaAction = () => null, ctaDisabled = true, ctaDone = false, CustomButton = null }) {
