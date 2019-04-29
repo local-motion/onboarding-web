@@ -1,146 +1,121 @@
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// react components for routing our app without refresh
-// import {Link} from "react-router-dom";
-// @material-ui/core components
+import { connect } from 'react-redux'
 import withStyles from "@material-ui/core/styles/withStyles";
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 import { withTranslation } from "react-i18next";
 
-import Header from "components/Header/Header.jsx";
-import HeaderLinks from "components/Header/HeaderLinks.jsx";
-import Footer from "components/Footer/Footer.jsx";
-import Explanation from "components/Explanation/Explanation.jsx";
-import Parallax from "components/Parallax/Parallax.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-
-import PlaygroundSearch from "./Sections/PlaygroundSearch";
-import PlaygroundMap from "./Sections/PlaygroundMap";
-import PlaygroundStatistics from "./Sections/PlaygroundStatistics";
-import CallToAction from "./Sections/CallToAction";
-import AddPlayground from "./Sections/AddPlayground";
-import { connect } from 'react-redux'
 import { ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
-
+import Startscreen from "./Sections/Startscreen";
+import Statistics from "./Sections/Statistics";
+import Playgrounds from "./Sections/Playgrounds/Playgrounds";
+import AddPlayground from "./Sections/Playgrounds/AddPlayground";
+import AboutUs from "./Sections/AboutUs";
+import SmokefreePhases from "./Sections/SmokefreePhases";
+import OnboardingFooter from "./Sections/OnboardingFooter";
 
 const mapStateToProps = state => ({
-        playgrounds: getAllPlaygrounds(state).map(playground => ({
-                id: playground.id,
-                name: playground.name,
-                lat: playground.lat,
-                lng: playground.lng,
-                vol: playground.volunteerCount,
-                votes: playground.votes,
-                slug: playground.name + " Rookvrij",
-                zoom: 18,
-                default: false,
-            })
-        ),
-        user: getUser(state)
-})
+    playgrounds: getAllPlaygrounds(state).map(playground => ({
+            id: playground.id,
+            name: playground.name,
+            lat: playground.lat,
+            lng: playground.lng,
+            vol: playground.volunteerCount,
+            votes: playground.votes,
+            slug: playground.name + " Rookvrij",
+            zoom: 18,
+            default: false,
+        })
+    ),
+    user: getUser(state)
+});
 
-const mapDispatchToProps = dispatch => {
-    return {
-        ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
-      }
-}
+const mapDispatchToProps = dispatch => ({
+    ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
+});
 
-// Define this variable here to set it once when the module is loaded
 
 class Onboarding extends React.Component {
     constructor(props) {
         super(props);
-        this.handlePlaygroundChange = this.handlePlaygroundChange.bind(this);
-        const { t } = this.props;
+
         this.state = {
             playground: {
                 default: true,
-                name: t("playground.default.area")
+                name: this.props.t("playground.default.area")
             },
             map: {
                 latlng: {lat: 52.092876, lng: 5.10448},
                 zoom: 8
             },
-            view: 'default'
+            view: 'default',
+            isAddPlaygroundOpen: false
         };
+
+        this.handlePlaygroundChange = this.handlePlaygroundChange.bind(this);
+        this.toggleAddPlayground = this.toggleAddPlayground.bind(this);
     }
 
     handlePlaygroundChange(playground) {
         const isPlayground = playground.id;
 
-        this.setState({
+        const newState = {
             view: 'default',
             playground: isPlayground
-                ? playground
-                : {
-                    default: true,
-                    name: this.props.t("playground.default.area")
-                },
-            map: {
+              ? playground
+              : {
+                  default: true,
+                  name: this.props.t("playground.default.area")
+              },
+        };
+
+        if (playground.lat && playground.lng) {
+            newState.map = {
                 latlng: {lat: playground.lat, lng: playground.lng},
                 zoom: playground.zoom || 10
-            }
-        });
+            };
+        }
+
+        this.setState(newState);
+    }
+
+    toggleAddPlayground() {
+        this.setState(({ isAddPlaygroundOpen }) => ({ isAddPlaygroundOpen: !isAddPlaygroundOpen }));
     }
 
     render() {
-        const {playgrounds, classes, user, ...rest } = this.props;
-        const {playground, map} = this.state;
+        const { playgrounds, classes, user } = this.props;
+        const { playground, map, isAddPlaygroundOpen } = this.state;
 
         return (
             <div className={"onboarding-wrapper"}>
+                <Startscreen onCtaClick={this.toggleAddPlayground} />
 
-                <Header
-                    brand={"Rookvrije generatie"}
-                    rightLinks={<HeaderLinks/>}
-                    fixed
-                    color="white"
-                    changeColorOnScroll={{
-                        height: 50,
-                        color: "white"
-                    }}
-                    {...rest}
+                <Statistics onCtaClick={this.toggleAddPlayground} />
+
+                <Playgrounds
+                  playgrounds={playgrounds}
+                  classes={classes}
+                  user={user}
+                  playground={playground}
+                  map={map}
+                  handlePlaygroundChange={this.handlePlaygroundChange}
+                  onCtaClick={this.toggleAddPlayground}
                 />
 
-               <Parallax image={require("assets/img/backgrounds/bg-zand.jpg")} className={"parralax onboarding"} >
-                    <div className={classes.container + " onboarding-header"}>
-                        <CallToAction playground={playground}/>
-                    </div>
-                </Parallax>
+                <AboutUs />
 
-                <div className={classNames(classes.main, classes.mainRaised) + " onboarding-container"}>
-                    <GridContainer className={"grid-container"}>
-                        <GridItem xs={12} sm={12} md={6} className={"playground-map-container"}>
-                            <PlaygroundSearch onPlaygroundChange={this.handlePlaygroundChange} playgrounds={playgrounds}/>
-                            <PlaygroundMap
-                                isMarkerShown
-                                viewOnly={true}
-                                onPlaygroundChange={this.handlePlaygroundChange}
-                                center={map.latlng}
-                                zoom={map.zoom}
-                            />
-                            { this.state.playground.default && 
-                                <AddPlayground playgrounds={playgrounds} user={user}/> 
-                            }
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={6} className={"playground-stat-container"}>
-                            <div>
-                                <PlaygroundStatistics
-                                    playgrounds={playgrounds}
-                                    playground={playground}
-                                    onBackButton={this.handlePlaygroundChange}
-                                    defaultView={playground.default}
-                                />
-                            </div>
-                        </GridItem>
-                    </GridContainer>
-                </div>
-                <Explanation />
-                <Footer onlyLinks />
+                <SmokefreePhases onCtaClick={this.toggleAddPlayground} />
+
+                <OnboardingFooter />
+
+                <AddPlayground
+                  playgrounds={playgrounds}
+                  user={user}
+                  toggleOpen={this.toggleAddPlayground}
+                  isOpen={isAddPlaygroundOpen}
+                />
             </div>
         );
     }
