@@ -65,6 +65,7 @@
         display: flex;
         justify-content: space-between;
         padding: 20px;
+        align-items: center;
     }
 
     .pagination-button {
@@ -72,6 +73,7 @@
         height: 45px;
         min-width: 45px;
         width: 45px;
+        margin: 0 5px;
     }
 
     .pagination-button-step {
