@@ -90,28 +90,28 @@ const styles = theme => ({
     }
 });
 
-const isSameDate = (date1, date2) => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()
-const getTimeString = date => date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
-const getPrettyMessageDatetime = messageDateString => {
-    const displayOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const displayOptionsThisWeek = { weekday: 'long'}
+// const isSameDate = (date1, date2) => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()
+// const getTimeString = date => date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
+// const getPrettyMessageDatetime = messageDateString => {
+//     const displayOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+//     const displayOptionsThisWeek = { weekday: 'long'}
 
-    const now = new Date()
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const yesterday = new Date(today-1)
-    const sixDaysAgo = new Date(today-6)
+//     const now = new Date()
+//     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+//     const yesterday = new Date(today-1)
+//     const sixDaysAgo = new Date(today-6)
 
-    const messageDate = new Date(messageDateString)
+//     const messageDate = new Date(messageDateString)
 
-    if (isSameDate(messageDate, today))
-        return getTimeString(messageDate)
-    else if (isSameDate(messageDate, yesterday))
-        return 'gisteren ' + getTimeString(messageDate)
-    else if (messageDate > sixDaysAgo)
-        return messageDate.toLocaleDateString('nl-NL', displayOptionsThisWeek) + ' ' + getTimeString(messageDate)
-    else
-        return messageDate.toLocaleDateString('nl-NL', displayOptions) + ' ' + getTimeString(messageDate)
-}
+//     if (isSameDate(messageDate, today))
+//         return getTimeString(messageDate)
+//     else if (isSameDate(messageDate, yesterday))
+//         return 'gisteren ' + getTimeString(messageDate)
+//     else if (messageDate > sixDaysAgo)
+//         return messageDate.toLocaleDateString('nl-NL', displayOptionsThisWeek) + ' ' + getTimeString(messageDate)
+//     else
+//         return messageDate.toLocaleDateString('nl-NL', displayOptions) + ' ' + getTimeString(messageDate)
+// }
 
 const getPrettyDate = messageDateString =>
   formatDistance(parseISO(messageDateString), new Date(), { locale: nl });
