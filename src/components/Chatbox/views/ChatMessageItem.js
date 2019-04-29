@@ -2,6 +2,9 @@ import React from 'react'
 import { ListItem, Avatar, Typography, ListItemAvatar, Grid } from '@material-ui/core';
 import withStyles from "@material-ui/core/styles/withStyles";
 import { deepPurple } from "@material-ui/core/colors";
+import { parseISO, formatDistance } from 'date-fns';
+import { nl } from 'date-fns/locale';
+
 import EditPencil from "assets/img/edit-pencil.svg";
 
 const styles = theme => ({
@@ -110,6 +113,8 @@ const getPrettyMessageDatetime = messageDateString => {
         return messageDate.toLocaleDateString('nl-NL', displayOptions) + ' ' + getTimeString(messageDate)
 }
 
+const getPrettyDate = messageDateString =>
+  formatDistance(parseISO(messageDateString), new Date(), { locale: nl });
 
 
 const ChatMessageItem = ({userName, author, creationTime, text, classes, isTyping}) => {
@@ -137,7 +142,7 @@ const ChatMessageItem = ({userName, author, creationTime, text, classes, isTypin
                     <Grid container direction="row" className={classes.userInfo}>
                         <Grid item><Typography className={classes.authorText}>{author}</Typography></Grid>
                         <Grid item><Typography
-                          className={classes.dateText}>{getPrettyMessageDatetime(creationTime)}</Typography></Grid>
+                          className={classes.dateText}>{getPrettyDate(creationTime)}</Typography></Grid>
                     </Grid>
                 </Grid>
                 <Grid item>
