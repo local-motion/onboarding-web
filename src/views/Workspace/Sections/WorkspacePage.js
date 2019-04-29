@@ -251,7 +251,7 @@ class WorkspacePage extends PureComponent {
                                          render={(props) => <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
-                                         render={(props) => <PlaygroundChatBox {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => <TeamCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/chat" key="WorkspaceChat"
                                          render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
                               </Switch>
