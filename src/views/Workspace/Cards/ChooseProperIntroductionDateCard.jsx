@@ -7,8 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import {
-    isUserManagerOfPlayground,
-    isUserVolunteerOfPlayground
+    isUserManagerOfPlayground
 } from "../../../components/Playground/PlaygroundReducer";
 import { setSmokefreeDate } from "../../../components/Playground/PlaygroundActions";
 import Button from "@material-ui/core/Button/Button";

@@ -1,7 +1,7 @@
 import React from "react";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import SocialMedia from "../forms/SocialMedia";
-import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@material-ui/core";
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 import GridItem from "../../../components/Grid/GridItem";

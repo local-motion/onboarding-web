@@ -128,7 +128,7 @@ class ShowPlaygroundIsSmokefreeCard extends React.Component {
     }
 
     render() {
-        const { playground, user, classes } = this.props;
+        const { playground, classes } = this.props;
 
         if (!playground) return "Loading...";
 
