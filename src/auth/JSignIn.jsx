@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import {Button, Input} from '@material-ui/core'
+import {Button, CardMedia} from '@material-ui/core'
 import {Auth, JS, Logger} from 'aws-amplify';
 import querySearch from "stringquery";
 
 import { getErrorMessage } from '../api/ErrorMessages';
 import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import { getActivePhaseUrl } from "../misc/WorkspaceHelpers";
+import TextField from "@material-ui/core/TextField/TextField";
 
 const logger = new Logger('JSignIn');
 
@@ -132,12 +133,19 @@ class JSignIn extends Component {
 
         const style = {
             width: '20rem',
-            input: {borderRadius: '0', display: 'block'},
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            input: {borderRadius: 0, display: 'block', marginBottom: 10},
             links: {fontSize: '0.9em', minHeight: "25px"},
-            button: {width: '100%', marginBottom: "15px"},
-            extraButton: {border: "0", marginBottom: "15px", marginRight: "15px", cursor: "pointer"},
+            extraButton: {marginTop: 15},
+            signUpButton: {marginTop: 10},
+            loginButton: {margin: '0 auto', width: 'fit-content'},
             left: {float: "left"},
-            alert: {fontSize: '0.8em'}
+            alert: {fontSize: '0.8em'},
+            media: {height: '300px', margin: '-25px', marginBottom: 30, backgroundPositionY: -130},
+            secureAppContainer: {margin: '0 auto'},
+            createAccountTitle: {fontWeight: 'bold'},
         };
 
         const {error} = this.state;
@@ -145,8 +153,16 @@ class JSignIn extends Component {
         return (
             <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
                 {isInCard || <div className={"secure-app-background"}></div>}
-                <div className={"secure-app-container"}>
-                    <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+                <div className={"secure-app-container"} style={isInCard ? style.secureAppContainer : {}}>
+                    {isInCard && (
+                      <CardMedia
+                        style={style.media}
+                        image={require("../assets/img/backgrounds/login-bg.jpg")}
+                        title={"Inloggen"}
+                      />
+                    )}
+                    <h1 className={"grunge-title"}>Inloggen</h1>
+                    <p>Geef een gebruikersnaam en wachtwoord op</p>
                     <div className={"signin-wrapper"}>
                         <form
                             style={style}
@@ -154,44 +170,56 @@ class JSignIn extends Component {
                                 event => this.catchEnterSubmit(event)
                             }
                         >
-                            <Input
+                            <TextField
                                 id="SigninFormUserName"
                                 type="text"
+                                fullWidth
+                                variant={"outlined"}
                                 placeholder="Gebruikersnaam"
                                 style={style.input}
                                 defaultValue={authData || ''}
                                 onChange={event => this.inputs.username = event.target.value}
                                 autoFocus
                             />
-                            <Input
+                            <TextField
                                 type="password"
+                                fullWidth
+                                variant={"outlined"}
                                 placeholder="Wachtwoord"
                                 onChange={event => this.inputs.password = event.target.value}
                                 style={style.input}
                             />
                             <Button
-                                style={style.button}
+                                style={style.loginButton}
                                 onClick={this.signIn}
+                                variant="contained"
+                                className={"pagination-button-step"}
                             >
                                 Inloggen
+                            </Button>
+
+                            <Button
+                              variant="text"
+                              style={{...style.loginButton, ...style.extraButton }}
+                              onClick={() => this.changeState('forgotPassword')}
+                            >
+                                Wachtwoord vergeten?
                             </Button>
                         </form>
                         {error && <p className={"error"}>{error}</p>}
                         <div style={style.links} className={"extra-info"}>
-                            <div style={style.left}>
-                                <button
-                                    style={style.extraButton}
-                                    onClick={() => this.changeState('signUp')}
+                            <div style={style.createAccountTitle}>Ben je hier voor de eerste keer?</div>
+                            <div>Je hoeft je slechts éénmalig te registreren om deel te nemen aan een actie. Na het registeren kun je meteen starten om de speeltuin rookvrij te maken.</div>
+
+                            <div>
+                                <Button
+                                  style={style.signUpButton}
+                                  onClick={() => this.changeState('signUp')}
+                                  variant="contained"
+                                  className={"pagination-button-step"}
                                 >
                                     Maak een account
-                                </button>
-                            </div>
-                            <div style={style.left}>
-                                <button style={style.extraButton}
-                                        onClick={() => this.changeState('forgotPassword')}
-                                >
-                                    Wachtwoord vergeten?
-                                </button>
+                                </Button>
                             </div>
                         </div>
 

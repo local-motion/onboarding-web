@@ -8,11 +8,11 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
-import {withStyles} from "@material-ui/core/styles";
-import { connect } from 'react-redux';
+import { withStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 
-import { ensurePlaygrounds } from "../../../components/Playground/PlaygroundActions";
-import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
+import { ensurePlaygrounds } from "../../../../components/Playground/PlaygroundActions";
+import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
 import cities from "assets/nl-cities.json";
 
 // const mapStateToProps = state => ({
@@ -30,61 +30,76 @@ import cities from "assets/nl-cities.json";
 // })
 const mapStateToProps = state => ({
     playgrounds: [...cities, ...getAllPlaygrounds(state)]
-})
+});
 
 const mapDispatchToProps = dispatch => {
     return {
         ensurePlaygrounds:    () =>     dispatch(ensurePlaygrounds()),
       }
-}
-
-
+};
 
 function renderInputComponent(inputProps) {
     const {
-        classes, inputRef = () => {
-        }, ref, ...other
+        classes, inputRef = () => {}, ref, ...other
     } = inputProps;
 
     return (
-        <TextField
-            fullWidth
-            InputProps={{
-                inputRef: node => {
-                    ref(node);
-                    inputRef(node);
-                },
-                classes: {
-                    input: classes.input
-                }
-            }}
-            {...other}
-        />
+      <TextField
+        fullWidth
+        InputProps={{
+            inputRef: node => {
+                ref(node);
+                inputRef(node);
+            },
+            classes: {
+                input: classes.input
+            },
+            disableUnderline: true,
+        }}
+        {...other}
+      />
     );
 }
 
-function renderSuggestion(suggestion, {query, isHighlighted}) {
+const suggestionStyles = {
+    hovered: {
+        backgroundColor: '#258ecc',
+        color: '#FFF',
+    },
+    notHovered: {
+        color: '#626262',
+    },
+};
+
+function renderSuggestion(suggestion, { query, isHighlighted }) {
     const matches = match(suggestion.name, query);
     const parts = parse(suggestion.name, matches);
 
     return (
-        <div className="playground-suggestionContainer">
-            <MenuItem selected={isHighlighted} component="div">
-                <div>
-                    {parts.map((part, index) => {
-                        return part.highlight ? (
-                            <span key={index} style={{fontWeight: 500}}>
-                                {part.text}
-                            </span>
-                        ) : (
-                            <strong key={index} style={{fontWeight: 300}}>
-                                {part.text}
-                            </strong>
-                        );
-                    })}
-                </div>
-            </MenuItem>
-        </div>
+      <div className="playground-suggestionContainer">
+          <MenuItem
+            selected={isHighlighted}
+            component="div"
+            style={isHighlighted
+              ? suggestionStyles.hovered
+              : suggestionStyles.notHovered
+            }
+          >
+              <div>
+                  {parts.map((part, index) => {
+                      return part.highlight ? (
+                        <span key={index} style={{ fontWeight: 500 }}>
+                            {part.text}
+                        </span>
+                      ) : (
+                        <strong key={index} style={{ fontWeight: 300 }}>
+                            {part.text}
+                        </strong>
+                      );
+                  })}
+              </div>
+          </MenuItem>
+      </div>
     );
 }
 
@@ -93,16 +108,16 @@ function getSuggestions(value, suggestions) {
     let count = 0;
 
     return inputValue.length === 0
-        ? []
-        : suggestions.filter(suggestion => {
-            const keep =
-                count < 5 &&
-                deburr(suggestion.name).toLowerCase().indexOf(inputValue) > -1
-            if (keep)
-                count++
+      ? []
+      : suggestions.filter(suggestion => {
+          const keep =
+            count < 5 &&
+            deburr(suggestion.name).toLowerCase().indexOf(inputValue) > -1;
+          if (keep)
+              count++;
 
-                return keep
-        });
+          return keep;
+      });
 }
 
 function getSuggestionValue(suggestion) {
@@ -111,17 +126,26 @@ function getSuggestionValue(suggestion) {
 
 const styles = theme => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
+        border: 'none',
+        backgroundColor: "#FFF",
+        boxShadow: "0px 10px 23px 1px rgba(40, 40, 40, 0.15)",
+        position: "absolute",
+        left: 30,
+        top: 30,
+        width: 438,
+        height: 50,
+        zIndex: 4,
+        borderRadius: 6,
     },
     container: {
-        position: "relative",
+        position: "relative"
     },
     suggestionsContainerOpen: {
         position: "absolute",
         zIndex: 99,
-        marginTop: theme.spacing.unit,
         left: 0,
-        right: 0
+        right: 0,
     },
     suggestion: {
         display: "block"
@@ -129,8 +153,14 @@ const styles = theme => ({
     suggestionsList: {
         margin: 0,
         padding: 0,
-        listStyleType: "none"
-    }
+        listStyleType: "none",
+    },
+    renderSuggestionsContainer: {
+        margin: '5px 0',
+        borderRadius: 10,
+        overflow: 'hidden',
+        boxShadow: 'none',
+    },
 });
 
 class IntegrationAutosuggest extends React.Component {
@@ -149,7 +179,7 @@ class IntegrationAutosuggest extends React.Component {
         // this.props.ensurePlaygrounds()
     }
 
-    handleSuggestionsFetchRequested = ({value}) => {
+    handleSuggestionsFetchRequested = ({ value }) => {
         const playgrounds = this.props.playgrounds;
         this.setState({
             suggestions: getSuggestions(value, playgrounds)
@@ -161,9 +191,10 @@ class IntegrationAutosuggest extends React.Component {
             suggestions: []
         });
     };
-    handleChange = name => (event, {newValue}) => {
-        if (event.key === 'Enter')
-            this.selectPlayground()
+
+    handleChange = name => (event, { newValue }) => {
+        if (event.key === "Enter")
+            this.selectPlayground();
         else
             this.setState({
                 [name]: newValue
@@ -173,18 +204,18 @@ class IntegrationAutosuggest extends React.Component {
     // If the search field contains the full playground name then select this playground (will select the playground stats and entry options)
     selectPlayground = () => {
         const self = this;
-        window.setTimeout(function () {
+        window.setTimeout(function() {
             const suggestion = self.state.popper;
             let result = self.props.playgrounds.find(a => a.name === suggestion);
             self.props.onPlaygroundChange.bind(self, result)();
         }, 110);
-    }
+    };
 
     render() {
-        const {playgrounds, classes} = this.props;
+        const { playgrounds, classes } = this.props;
 
         if (!playgrounds)
-            return "loading..."
+            return "loading...";
 
         const autosuggestProps = {
             renderInputComponent,
@@ -193,16 +224,17 @@ class IntegrationAutosuggest extends React.Component {
             onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
             getSuggestionValue,
             renderSuggestion
-        }
+        };
 
         return (
-            <div className={classes.root + " playground autosuggest"}>
-                <div className={classes.divider}/>
-                <Autosuggest
+          <div className={classes.root}>
+              <div className="playground autosuggest">
+                  <div className={classes.divider}/>
+                  <Autosuggest
                     {...autosuggestProps}
                     inputProps={{
                         classes,
-                        placeholder: "Vul hier de naam van een speeltuin in om te zoeken",
+                        placeholder: "Zoek speeltuin",
                         value: this.state.popper,
                         onChange: this.handleChange("popper"),
                         inputRef: node => {
@@ -231,14 +263,16 @@ class IntegrationAutosuggest extends React.Component {
                                     style={{
                                         width: this.popperNode ? this.popperNode.clientWidth : null
                                     }}
+                                    className={classes.renderSuggestionsContainer}
                                 >
                                     {options.children}
                                 </Paper>
                             </Popper>
                         </div>
                     )}
-                />
-            </div>
+                  />
+              </div>
+          </div>
         );
     }
 }

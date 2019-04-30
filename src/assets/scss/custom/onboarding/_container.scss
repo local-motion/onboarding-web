@@ -1,8 +1,22 @@
 .onboarding-wrapper{
+    background-color: #FFF;
+
     .onboarding-container, .grid-container{
         @include breakpoint-max($breakpoints-lg){
             margin-left: 0 !important;
             margin-right: 0 !important;
         }
+    }
+
+    .grid-container-map {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .playground-stat-container {
+        padding: 0;
+        height: 580px;
+        box-shadow: 0px 10px 23.75px 1.25px rgba(40, 40, 40, 0.15);
+        position: relative;
     }
 }

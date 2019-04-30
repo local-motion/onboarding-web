@@ -2,7 +2,9 @@ import React from 'react'
 import { ListItem, Avatar, Typography, ListItemAvatar, Grid } from '@material-ui/core';
 import withStyles from "@material-ui/core/styles/withStyles";
 import { deepPurple } from "@material-ui/core/colors";
+
 import EditPencil from "assets/img/edit-pencil.svg";
+import { getPrettyHybridMessageDatetime } from './DateTimeUtils';
 
 const styles = theme => ({
     avatar: {
@@ -87,30 +89,7 @@ const styles = theme => ({
     }
 });
 
-const isSameDate = (date1, date2) => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()
-const getTimeString = date => date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
-const getPrettyMessageDatetime = messageDateString => {
-    const displayOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const displayOptionsThisWeek = { weekday: 'long'}
-
-    const now = new Date()
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const yesterday = new Date(today-1)
-    const sixDaysAgo = new Date(today-6)
-
-    const messageDate = new Date(messageDateString)
-
-    if (isSameDate(messageDate, today))
-        return getTimeString(messageDate)
-    else if (isSameDate(messageDate, yesterday))
-        return 'gisteren ' + getTimeString(messageDate)
-    else if (messageDate > sixDaysAgo)
-        return messageDate.toLocaleDateString('nl-NL', displayOptionsThisWeek) + ' ' + getTimeString(messageDate)
-    else
-        return messageDate.toLocaleDateString('nl-NL', displayOptions) + ' ' + getTimeString(messageDate)
-}
-
-
+const getPrettyDate = messageDateString => getPrettyHybridMessageDatetime(messageDateString)
 
 const ChatMessageItem = ({userName, author, creationTime, text, classes, isTyping}) => {
     const iconText = (author || '??').substring(0, 2)
@@ -137,7 +116,7 @@ const ChatMessageItem = ({userName, author, creationTime, text, classes, isTypin
                     <Grid container direction="row" className={classes.userInfo}>
                         <Grid item><Typography className={classes.authorText}>{author}</Typography></Grid>
                         <Grid item><Typography
-                          className={classes.dateText}>{getPrettyMessageDatetime(creationTime)}</Typography></Grid>
+                          className={classes.dateText}>{getPrettyDate(creationTime)}</Typography></Grid>
                     </Grid>
                 </Grid>
                 <Grid item>

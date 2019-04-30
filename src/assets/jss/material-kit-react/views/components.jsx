@@ -36,6 +36,26 @@ const componentsStyle = {
         boxShadow:
             "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)"
     },
+    playgroundsBg: {
+        background: `url(${require('../../../img/landing/playground-map-bg.png')}) no-repeat right bottom`,
+        backgroundPositionX: 200,
+        position: 'absolute',
+        right: 0,
+        bottom: -250,
+        width: 720,
+        height: 720,
+    },
+    playgroundsTitle: {
+        background: '#FFF',
+        borderTop: '1px solid rgb(217, 220, 232)',
+        boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
+        fontSize: 36,
+        color: 'rgb(8, 92, 166)',
+        lineHeight: 1.2,
+        textAlign: 'center',
+        padding: '10px 0',
+        fontFamily: 'dk_black_bamboo-webfont',
+    },
     link: {
         textDecoration: "none"
     },
@@ -62,6 +82,31 @@ const componentsStyle = {
         marginTop: 70,
         marginBottom: 20,
         marginLeft: 30,
+    },
+    closeIconWrapper: {
+        alignItems: 'center',
+        background: '#FFF',
+        border: '1px solid rgb(231, 231, 231)',
+        borderRadius: '50%',
+        boxShadow: '0px 17px 44.64px 3.36px rgba(40, 40, 40, 0.17)',
+        display: 'flex',
+        justifyContent: 'center',
+        left: -40,
+        position: 'absolute',
+        top: 10,
+        width: 29,
+        height: 29,
+        cursor: 'pointer',
+        '&:hover': {
+            background: '#258ecc',
+        },
+        '&:hover $closeIcon': {
+            fill: '#FFF',
+        },
+    },
+    closeIcon: {
+        width: 15,
+        height: 15,
     },
 };
 

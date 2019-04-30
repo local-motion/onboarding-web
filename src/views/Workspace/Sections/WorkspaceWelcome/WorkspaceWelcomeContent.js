@@ -27,9 +27,9 @@ class WorkspaceWelcomeContent extends Component {
     }
 
     goToActivePhaseIfJoined() {
-        const { user } = this.props;
+        const { user, playground } = this.props;
 
-        if (!user)
+        if (!user || !playground.volunteers)
             return;
 
         if (this.isUserAlreadyJoined()) {
@@ -53,11 +53,18 @@ class WorkspaceWelcomeContent extends Component {
         const { playground, user, history } = this.props;
 
         const startUrl = getWorkspaceStartLink(playground);
+        // const startUrl = `/workspace/${playground.id}`;
         const loginUrl = `/login?target=${startUrl}`;
 
         history.push(
           `${startUrl}${user ? '' : loginUrl}/join`
         );
+    }
+
+    goToWorkspaceWelcomePage() {
+        const { playground, history } = this.props;
+
+        history.push(`/workspace/${playground.id}`);
     }
 
     getPhaseIcon() {
@@ -67,29 +74,45 @@ class WorkspaceWelcomeContent extends Component {
     }
 
     render() {
-        const { classes, playground, user } = this.props;
+        const { classes, playground, user, view } = this.props;
+
+        const isViewSmall = view === 'small';
+        const getSmallClassFor = name => isViewSmall ? classes[name] : '';
 
         const mainButtonText = user
           ? 'Doe mee, ga naar de actieve stap!'
           : 'Doe mee en meld je aan!';
 
+        const buttonText = isViewSmall
+          ? 'Bekijk speeltuin'
+          : mainButtonText;
+
         return (
-          <div className={classes.workspaceWelcomeContent}>
-              <div className={classes.mainImage}>
-                  <img src={require('assets/img/backgrounds/workspace-welcome-bg.jpg')} alt="WorkspaceWelcome" />
+          <div className={`${classes.workspaceWelcomeContent} ${getSmallClassFor('smallWorkspaceWelcomeContent')}`}>
+              {
+                  isViewSmall && (
+                    <div className={classes.headerTitleWrapper}>
+                        <div className={classes.headerTitle}>{playground.name}</div>
+                    </div>
+                  )
+              }
+              <div className={`${classes.mainImage} ${getSmallClassFor('smallMainImage')}`} />
+
+              <div className={`${classes.icons} ${getSmallClassFor('smallIcons')}`}>
+                  <PlaygroundIcon view={view} icon={this.getPhaseIcon()} />
               </div>
 
-              <div className={classes.icons}>
-                  <PlaygroundIcon icon={this.getPhaseIcon()} />
-              </div>
+              <Statistics playground={playground} view={view} />
 
-              <Statistics playground={playground} />
-
-              <div className={classes.buttonContainer}>
+              <div className={`${classes.buttonContainer} ${getSmallClassFor('smallButtonContainer')}`}>
                   <button
-                    className={classes.button}
-                    onClick={() => this.goToJoinPage()}>
-                      {mainButtonText}
+                    className={`${classes.button} ${getSmallClassFor('smallButton')}`}
+                    onClick={() => {
+                        isViewSmall
+                          ? this.goToWorkspaceWelcomePage()
+                          : this.goToJoinPage();
+                    }}>
+                      {buttonText}
                   </button>
               </div>
           </div>

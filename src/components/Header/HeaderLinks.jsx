@@ -15,7 +15,7 @@ import {AccountCircle, Menu, ArrowLeftRounded, ArrowDownwardRounded, ArrowDropDo
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
 import Hidden from "@material-ui/core/Hidden";
 
-import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.jsx";
+import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 import JSignOut from "../../auth/JSignOut";
 import { connect } from 'react-redux'
 import { Button, Typography } from "@material-ui/core";
@@ -32,14 +32,14 @@ const mapDispatchToProps = dispatch => ({
 })
 
 function HeaderLinks(props) {
-    const {classes, user} = props;
+    const {classes, user, className} = props;
 
     const profileButtonIcon = () => <span><AccountCircle /><ArrowDropDownRounded/></span>
 
     const devModeIndicator = isDeveloperMode() ? 'on' : 'off'
 
     return (
-        <List className={classes.list}>
+        <List className={`${classes.list} ${className || ''}`}>
 
              {/* For now do not include the menu as there are no items to display */}
 
