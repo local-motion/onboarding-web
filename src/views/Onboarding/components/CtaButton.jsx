@@ -56,6 +56,8 @@ const styles = theme => ({
         '&:hover $buttonTitle': {
             marginLeft: 12,
         },
+
+
     },
     buttonTitle: {},
     outlined: {

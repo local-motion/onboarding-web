@@ -15,6 +15,7 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        flexWrap: 'wrap',
         background: '#FFF',
         boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
         borderRadius: 5,
@@ -24,6 +25,7 @@ const styles = theme => ({
     links: {
         display: 'flex',
         justifyContent: 'center',
+        flexWrap: 'wrap',
     },
     link: {
         margin: '35px 20px',
@@ -54,6 +56,7 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        flexWrap: 'wrap',
     },
     logoLink: {
         margin: '0 20px',

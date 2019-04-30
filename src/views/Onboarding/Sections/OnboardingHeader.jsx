@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Hidden from "@material-ui/core/Hidden/Hidden";
 
 import HeaderLinks from "../../../components/Header/HeaderLinks";
 import { container } from "../../../assets/jss/material-kit-react";
@@ -22,13 +23,27 @@ const styles = theme => ({
         boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
         backgroundColor: '#fff !important',
         position: 'relative',
+
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        },
     },
     logo: {
         width: 300,
         padding: 25,
+
+        [theme.breakpoints.down('sm')]: {
+            width: 200,
+            margin: 20,
+            padding: 0,
+        },
     },
     menu: {
         padding: '10px 25px',
+
+        [theme.breakpoints.down('sm')]: {
+            padding: 0,
+        },
     },
     loginButton: {
         color: '#FFF',
@@ -44,6 +59,34 @@ const styles = theme => ({
 
         '&:hover': {
             backgroundColor: '#ee6a6f',
+        },
+
+        [theme.breakpoints.down('sm')]: {
+            margin: 0,
+            borderRadius: '0 5px 5px 0',
+            padding: 20,
+            boxShadow: 'none',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+    },
+    loginText: {
+        display: 'block',
+
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
+    },
+    addUserIcon: {
+        background: `url(${require('../../../assets/img/landing/add-user.png')}) no-repeat center`,
+        width: 22,
+        height: 22,
+        display: 'none',
+        backgroundSize: 'contain',
+
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
         },
     },
 });
@@ -71,7 +114,8 @@ const OnboardingHeader = ({ classes, history, location, user }) => {
                   onClick={signInClick}
                   className={classes.loginButton}
                 >
-                    <span>Inloggen</span>
+                    <span className={classes.loginText}>Inloggen</span>
+                    <div className={classes.addUserIcon} />
                 </Button>
               )
           }

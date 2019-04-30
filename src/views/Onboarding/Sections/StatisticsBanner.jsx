@@ -4,6 +4,11 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const styles = theme => ({
     bannerWrapper: {
         position: 'relative',
+        width: 520,
+
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        },
     },
     bannerDots: {
         background: `url(${require('../../../assets/img/landing/nederland-map-dots-bg.png')}) no-repeat left`,
@@ -14,6 +19,12 @@ const styles = theme => ({
         top: 40,
         width: 860,
         zIndex: 3,
+
+        [theme.breakpoints.down('md')]: {
+            display: 'none',
+            maxWidth: 860,
+            width: '100%',
+        },
     },
     banner: {
         alignItems: 'center',
@@ -29,8 +40,22 @@ const styles = theme => ({
         marginTop: -110,
         position: 'relative',
         textAlign: 'center',
-        width: 520,
+        maxWidth: 520,
+        width: '100%',
         zIndex: 5,
+
+        [theme.breakpoints.down('md')]: {
+            margin: '-170px auto 0',
+        },
+
+        [theme.breakpoints.down('sm')]: {
+            paddingBottom: 45,
+            height: 'auto',
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: '100%',
+        },
     },
     freePlaygroundNumber: {
         alignItems: 'center',
@@ -41,18 +66,31 @@ const styles = theme => ({
         lineHeight: 1.2,
         marginTop: 45,
         textShadow: '0px 5px 10px rgba(40, 40, 40, 0.1)',
+
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 55,
+        },
     },
     playgroundPin: {
         background: `url(${require('../../../assets/img/landing/pin.png')}) no-repeat center`,
         backgroundSize: 'contain',
         height: 97,
         width: 109,
+
+        [theme.breakpoints.down('sm')]: {
+            height: 75,
+            width: 77,
+        },
     },
     freePlaygroundText: {
         fontSize: 20,
         fontWeight: 'bold',
         lineHeight: 1.2,
         marginTop: 30,
+
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 20,
+        },
     },
     freePlaygroundTitle: {
         fontFamily: "'dk_black_bamboo-webfont'",
@@ -60,6 +98,11 @@ const styles = theme => ({
         fontWeight: 'bold',
         lineHeight: 1.2,
         marginTop: 20,
+
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 35,
+            marginTop: 15,
+        },
     },
     peopleIcon: {
         background: `url(${require('../../../assets/img/landing/happy-kids.png')}) no-repeat center`,
@@ -67,6 +110,10 @@ const styles = theme => ({
         height: 79,
         marginTop: 35,
         width: 112,
+
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 25,
+        },
     },
     peopleNumber: {
         fontSize: 70,
@@ -74,6 +121,10 @@ const styles = theme => ({
         lineHeight: 1.2,
         marginTop: 25,
         textShadow: '0px 5px 10px rgba(40, 40, 40, 0.1)',
+
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 48,
+        },
     },
     peopleText: {
         fontSize: 18,
@@ -81,6 +132,11 @@ const styles = theme => ({
         lineHeight: 1.5,
         marginTop: 15,
         maxWidth: '80%',
+
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 10,
+            maxWidth: '60%',
+        },
     },
 });
 
@@ -96,7 +152,7 @@ const StatisticsBanner = ({ classes }) => {
 
               <div className={classes.peopleIcon} />
               <div className={classes.peopleNumber}>62,820</div>
-              <div className={classes.peopleText}>Keer aangemeld voor een actie in heel Nederland.<br />We zijn hard op weg naar een <br />Rookvrije Generatie!</div>
+              <div className={classes.peopleText}>Keer aangemeld voor een actie in heel Nederland.<br />We zijn hard op weg naar een Rookvrije Generatie!</div>
           </div>
       </div>
     );
