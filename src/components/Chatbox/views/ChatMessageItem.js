@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { deepPurple } from "@material-ui/core/colors";
 
 import EditPencil from "assets/img/edit-pencil.svg";
-import { getPrettyMessageDatetime } from './DateTimeUtils';
+import { getPrettyHybridMessageDatetime } from './DateTimeUtils';
 
 const styles = theme => ({
     avatar: {
@@ -89,10 +89,7 @@ const styles = theme => ({
     }
 });
 
-const getPrettyDate = messageDateString =>
-    getPrettyMessageDatetime(messageDateString)
-    // getDistanceMessageDatetime(messageDateString)
-
+const getPrettyDate = messageDateString => getPrettyHybridMessageDatetime(messageDateString)
 
 const ChatMessageItem = ({userName, author, creationTime, text, classes, isTyping}) => {
     const iconText = (author || '??').substring(0, 2)

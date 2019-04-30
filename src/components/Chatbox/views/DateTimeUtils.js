@@ -5,7 +5,12 @@ import { nl } from 'date-fns/locale';
 const isSameDate = (date1, date2) => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()
 const getTimeString = date => date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
 
-export const getPrettyMessageDatetime = messageDateString => {
+
+/**
+ * Returns the absolute date and time. The date is omitted if equal to today. On all other days of the same week the day-of-week is printed and the full date in all other cases.
+ * @param {*} messageDateString UTC date time string to prettify
+ */
+export const getPrettyAbsoluteMessageDatetime = messageDateString => {
 
     // Convert the messageDateString to a valid ECMAScript format.
     // So 2019-04-03T18:28:20.437+0000 should become 2019-04-03T18:28:20.437Z
@@ -31,5 +36,25 @@ export const getPrettyMessageDatetime = messageDateString => {
         return messageDate.toLocaleDateString('nl-NL', displayOptions) + ' ' + getTimeString(messageDate)
 }
 
-export const getDistanceMessageDatetime = messageDateString =>
-  formatDistance(parseISO(messageDateString), new Date(), { locale: nl });
+/**
+ * Returns the relative date and time as is 'X minutes/hours/days ago'.
+ * @param {*} messageDateString UTC date time string to prettify
+ */
+export const getPrettyRelativeMessageDatetime = messageDateString =>
+  formatDistance(parseISO(messageDateString), new Date(), { locale: nl }) + ' geleden';
+
+/**
+ * Returns the relative date and time for datetimes less than 5 days ago and the absolute date/time for all before that
+ * @param {*} messageDateString UTC date time string to prettify
+ */
+export const getPrettyHybridMessageDatetime = messageDateString => {
+    // Convert the messageDateString to a valid ECMAScript format.
+    // So 2019-04-03T18:28:20.437+0000 should become 2019-04-03T18:28:20.437Z
+    const dateString = messageDateString.indexOf('+') !== -1 ? messageDateString.substring(0,messageDateString.indexOf('+')) + 'Z' : messageDateString
+
+    const messageDate = new Date(dateString)
+    const now = new Date()
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const fiveDaysAgo = new Date(today-5)
+    return messageDate > fiveDaysAgo ? getPrettyRelativeMessageDatetime(messageDateString) : getPrettyAbsoluteMessageDatetime(messageDateString)
+}
