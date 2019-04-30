@@ -32,7 +32,7 @@ class Playgrounds extends Component {
               <div className={classes.playgroundsTitle}>Zoek een speeltuin in jouw buurt een doe mee!</div>
               <div className={classes.playgroundsBg} />
               <GridContainer className={"grid-container-map"}>
-                  <GridItem xs={12} sm={12} md={playground.default ? 12 : 9} className={"playground-map-container"}>
+                  <GridItem xs={12} sm={12} md={playground.default ? 12 : 7} lg={playground.default ? 12 : 8} className={"playground-map-container"}>
                       <PlaygroundSearch onPlaygroundChange={handlePlaygroundChange} playgrounds={playgrounds}/>
 
                       <PlaygroundMap
@@ -47,7 +47,7 @@ class Playgrounds extends Component {
                   </GridItem>
                   {
                       !playground.default && (
-                        <GridItem xs={12} sm={12} md={3} className={"playground-stat-container"}>
+                        <GridItem xs={12} sm={12} md={5} lg={4} className={"playground-stat-container"}>
                             <div
                               className={classes.closeIconWrapper}
                               onClick={() => handlePlaygroundChange(defaultPlayground)}

@@ -26,6 +26,7 @@ const styles = theme => ({
 
         [theme.breakpoints.down('md')]: {
             width: '100%',
+            padding: 0,
         },
     },
     logo: {

@@ -61,6 +61,7 @@ const styles = theme => ({
             margin: '45px auto 0',
             width: '100%',
             maxWidth: '100%',
+            fontSize: 16,
         },
     },
 });

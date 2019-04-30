@@ -24,6 +24,7 @@ const WorkspaceWelcomeStyle = theme => ({
         justifyContent: 'center',
         width: "auto",
         height: 270,
+        backgroundSize: 'cover',
     },
     title: {
         fontFamily: "'dk_black_bamboo-webfont'",

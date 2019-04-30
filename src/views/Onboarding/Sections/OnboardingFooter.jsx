@@ -8,6 +8,10 @@ const styles = theme => ({
         marginTop: 30,
         padding: '60px 0 30px',
         background: `url(${require('../../../assets/img/landing/footer-base.jpg')}) repeat-x top`,
+
+        [theme.breakpoints.down('sm')]: {
+            padding: '70px 20px 30px',
+        },
     },
     contentWrapper: {
         ...container,
@@ -21,14 +25,33 @@ const styles = theme => ({
         borderRadius: 5,
         padding: 0,
         margin: '0 auto',
+
+        [theme.breakpoints.down('md')]: {
+            justifyContent: 'center',
+        },
+
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            padding: 0,
+        },
     },
     links: {
+        alignItems: 'center',
         display: 'flex',
         justifyContent: 'center',
         flexWrap: 'wrap',
+        margin: '35px 0',
+
+        [theme.breakpoints.down('md')]: {
+            marginTop: 37,
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+        },
     },
     link: {
-        margin: '35px 20px',
+        margin: '0 10px',
         fontSize: 14,
         color: '#626262',
         lineHeight: 1.2,
@@ -51,21 +74,41 @@ const styles = theme => ({
                 visibility: 'visible',
             },
         },
+
+        [theme.breakpoints.down('md')]: {
+            margin: '8px 20px',
+        },
     },
     logos: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         flexWrap: 'wrap',
+
+        [theme.breakpoints.down('md')]: {
+            marginBottom: 35,
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: 15,
+        },
     },
     logoLink: {
         margin: '0 20px',
         cursor: 'pointer',
         textDecoration: 'none',
+
+        [theme.breakpoints.down('xs')]: {
+            margin: '0 20px 20px',
+        },
     },
     image: {
         width: 'auto',
         height: 20,
+
+        [theme.breakpoints.down('md')]: {
+            height: 40,
+        },
     },
 });
 
