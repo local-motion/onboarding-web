@@ -120,5 +120,30 @@ const WorkspaceWelcomeStyle = theme => ({
         fontWeight: 'bold',
         lineHeight: 1.2,
     },
+    closeIconWrapper: {
+        alignItems: 'center',
+        background: 'rgba(255, 255, 255, .2)',
+        borderRadius: '50%',
+        boxShadow: '0px 17px 44.64px 3.36px rgba(40, 40, 40, 0.17)',
+        display: 'flex',
+        justifyContent: 'center',
+        right: 15,
+        position: 'absolute',
+        top: 15,
+        width: 29,
+        height: 29,
+        cursor: 'pointer',
+        '&:hover': {
+            background: '#FFF',
+        },
+        '&:hover $closeIcon': {
+            fill: '#000',
+        },
+    },
+    closeIcon: {
+        fill: '#FFF',
+        width: 20,
+        height: 20,
+    },
 });
 export default WorkspaceWelcomeStyle;
