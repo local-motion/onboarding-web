@@ -9,6 +9,10 @@ const styles = theme => ({
         [theme.breakpoints.down('md')]: {
             width: '100%',
         },
+
+        [theme.breakpoints.down('xs')]: {
+            display: 'none',
+        },
     },
     bannerDots: {
         background: `url(${require('../../../assets/img/landing/nederland-map-dots-bg.png')}) no-repeat left`,
@@ -22,8 +26,6 @@ const styles = theme => ({
 
         [theme.breakpoints.down('md')]: {
             display: 'none',
-            maxWidth: 860,
-            width: '100%',
         },
     },
     banner: {

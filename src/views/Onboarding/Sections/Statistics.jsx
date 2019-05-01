@@ -30,6 +30,10 @@ const styles = theme => ({
             marginLeft: 0,
             marginTop: 35,
         },
+
+        [theme.breakpoints.down('xs')]: {
+            marginTop: -55,
+        },
     },
     title: {
         color: 'rgb(207, 26, 49)',
