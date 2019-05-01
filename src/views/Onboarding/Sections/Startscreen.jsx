@@ -44,9 +44,10 @@ const styles = theme => ({
         color: '#FFF',
         lineHeight: 1.2,
         textShadow: '0px 5px 10px rgba(40, 40, 40, 0.1)',
+        maxWidth: 880,
 
-        [theme.breakpoints.up('sm')]: {
-            maxWidth: 880,
+        [theme.breakpoints.down('md')]: {
+            maxWidth: '100%',
         },
 
         [theme.breakpoints.down('sm')]: {
