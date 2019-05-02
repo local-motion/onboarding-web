@@ -149,8 +149,9 @@ export function getCurrentPhaseByStep(phases, pathname) {
 
 export function getPrevStep(phases, pathname) {
     const prev = {
-        title: '',
-        stepLink: '',
+        title: null,
+        stepLink: null,
+        condition: null,
     };
 
     Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
@@ -158,16 +159,15 @@ export function getPrevStep(phases, pathname) {
             if (pathname.includes(step.link)) {
                 if (stepIndex > 0) {
                     prev.stepLink = phases[phaseName].steps[stepIndex - 1].link;
+                    prev.condition = phases[phaseName].steps[stepIndex - 1].condition;
                     prev.title = phases[phaseName].title;
                 } else {
                     if (phaseIndex > 0) {
                         const phase = phases[phasesKeys[phaseIndex - 1]];
 
                         prev.stepLink = phase.steps[phase.steps.length - 1].link;
+                        prev.condition = phase.steps[phase.steps.length - 1].condition;
                         prev.title = phase.title;
-                    } else {
-                        prev.stepLink = null;
-                        prev.title = null;
                     }
                 }
             }
@@ -179,8 +179,9 @@ export function getPrevStep(phases, pathname) {
 
 export function getNextStep(phases, pathname) {
     const next = {
-        title: '',
-        stepLink: '',
+        title: null,
+        stepLink: null,
+        condition: null,
     };
 
     Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
@@ -192,6 +193,7 @@ export function getNextStep(phases, pathname) {
             if (pathname.includes(step.link)) {
                 if (stepIndex < (stepsLength - 1)) {
                     next.stepLink = phases[phaseName].steps[stepIndex + 1].link;
+                    next.condition = phases[phaseName].steps[stepIndex + 1].condition;
                     next.title = phases[phaseName].title;
                 } else {
                     if (phaseIndex < (phasesLength - 1)) {
@@ -199,9 +201,7 @@ export function getNextStep(phases, pathname) {
 
                         next.stepLink = phase.steps[0].link;
                         next.title = phase.title;
-                    } else {
-                        next.stepLink = null;
-                        next.title = null;
+                        next.condition = phase.condition;
                     }
                 }
             }

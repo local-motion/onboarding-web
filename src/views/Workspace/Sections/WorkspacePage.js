@@ -117,15 +117,23 @@ class WorkspacePage extends PureComponent {
     }
 
     gotoPrevStep(prev) {
-        const { history, startPathUrl } = this.props;
+        const { history, startPathUrl, playground, user, phases } = this.props;
         const url = startPathUrl + prev.stepLink;
+
+        if (prev.condition && !prev.condition({ playground, user })) {
+            return this.gotoPrevStep(getPrevStep(phases, url));
+        }
 
         history.push(url);
     }
 
     gotoNextStep(next) {
-        const { history, startPathUrl } = this.props;
+        const { history, startPathUrl, playground, user, phases } = this.props;
         const url = startPathUrl + next.stepLink;
+
+        if (next.condition && !next.condition({ playground, user })) {
+            return this.gotoNextStep(getNextStep(phases, url));
+        }
 
         history.push(url);
     }
