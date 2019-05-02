@@ -16,6 +16,13 @@ const styles = theme => ({
         padding: 20,
         position: 'absolute',
         width: 330,
+
+        [theme.breakpoints.down('xs')]: {
+            left: 20,
+            bottom: 20,
+            width: 'calc(100% - 40px)',
+            padding: 0,
+        },
     },
     text: {
         color: 'rgb(8, 92, 166)',
@@ -23,9 +30,21 @@ const styles = theme => ({
         fontWeight: 'bold',
         lineHeight: 1.5,
         textAlign: 'center',
+
+        [theme.breakpoints.down('xs')]: {
+            marginTop: 20,
+            fontSize: 16,
+            lineHeight: 1,
+        },
     },
     button: {
         marginTop: 20,
+
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: '100%',
+            borderRadius: '0 0 10px 10px',
+            fontSize: 16,
+        },
     },
 });
 
@@ -33,7 +52,7 @@ const styles = theme => ({
 const PlaygroundCta = ({ onCtaClick, classes }) => {
     return (
       <div className={classes.wrapper}>
-          <div className={classes.text}>Geen actie in jouw buurt?<br />Start je eigen actie.</div>
+          <div className={classes.text}>Geen actie in jouw buurt? Start je eigen actie.</div>
           <CtaButton customStyle={classes.button} onClick={onCtaClick} type="square" text={"Start een actie"} />
       </div>
     );
