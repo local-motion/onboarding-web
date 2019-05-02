@@ -93,7 +93,6 @@ class Header extends React.Component {
         })
         const brandContent = <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />;
         const brandComponent = brand ? <div align='center'><Link to={'/'}>{brandContent}</Link></div> : null;
-        // const nrOfVolunteers = playground ? playground.volunteerCount : 250; // for now mock the total number of volunteers for smokefree playgrounds
 
         return (
             <AppBar className={appBarClasses + " lm-header"}>

@@ -39,8 +39,12 @@ const mapDispatchToProps = dispatch => ({
 
 class WorkspaceTemplate extends React.Component {
     componentDidMount() {
-        console.log("starting stream playground details of " + this.props.match.params.initiativeId);
-        this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId);
+        const { ensurePlaygroundDetails, match: { params: { initiativeId } } } = this.props;
+
+        if (!initiativeId) return;
+
+        console.log("starting stream playground details of " + initiativeId);
+        ensurePlaygroundDetails(initiativeId);
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -48,27 +52,31 @@ class WorkspaceTemplate extends React.Component {
     }
 
     componentWillUnmount() {
-        console.log('stopping stream: ', this.props.match.params.initiativeId);
-        this.props.stopPlaygroundDetailsStream(this.props.match.params.initiativeId);
+        const { stopPlaygroundDetailsStream, match: { params: { initiativeId } } } = this.props;
+
+        if (!initiativeId) return;
+
+        console.log('stopping stream: ', initiativeId);
+        stopPlaygroundDetailsStream(initiativeId);
     }
 
     render() {
-        const { playground, user, classes, signInHandler, ...rest } = this.props;
+        const { playground, user, classes, signInHandler, match: { path }, history, ...rest } = this.props;
 
         // const activePhaseIdx = this.getStatusIndex();                        // the active phase represents the current state of this playground
         // const phaseIdx = this.props.match.params.phaseId - 1;                // The phase that the user has selected, if any
         // const phase = playgroundLabels[activePhaseIdx];                      // the label of phase that is displayed in the phases view
 
-        if (!playground)
-            return "loading..";
+        // if (!playground)
+        //     return "loading..";
+
+        if (path === '/workspace/') {
+            history.push(`/workspace${user ? '/add-find-playground' : '/login'}`)
+        }
 
         const startPathUrl = getWorkspaceStartLink(playground);
 
         const phases = getPhases();
-
-        if (!user) {
-            phases.firstPhase.steps.unshift({ name: 'Inloggen', link: '/login' });
-        }
 
         return (
             <div className={"workspace-wrapper"}>

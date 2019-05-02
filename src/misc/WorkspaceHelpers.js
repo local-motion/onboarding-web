@@ -2,7 +2,7 @@ export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
 
 export function getWorkspaceStartLink(playground) {
-    return `/workspace/${playground.id}`;
+    return playground ? `/workspace/${playground.id}` : '/workspace';
 }
 
 export function checkBox({ playground, user, name, setCheckbox }) {
@@ -44,6 +44,34 @@ export function getStatus(playground) {
 
 export function getPhases() {
     return {
+        community: {
+            title: 'Community',
+            icon: require('assets/img/icon-community.svg'),
+            expandedIcon: require('assets/img/icon-community-active.svg'),
+            steps: [
+                {
+                    name: 'Inloggen',
+                    link: '/login',
+                    condition: ({ user }) => !user,
+                },
+                {
+                    name: 'Speeltuin toevoegen',
+                    link: '/add-find-playground',
+                    condition: ({ playground }) => !playground,
+                },
+                {
+                    name: 'Team',
+                    link: '/team',
+                    condition: ({ playground }) => playground,
+                },
+                {
+                    name: 'Chat',
+                    link: '/chat',
+                    condition: ({ playground }) => playground,
+                },
+            ],
+        },
+
         firstPhase: {
             title: playgroundLabels[0],
             icon: require('assets/img/icon-cooperate@2x.png'),
@@ -104,22 +132,6 @@ export function getPhases() {
                 {
                     name: 'Evalueren',
                     link: '/magnify',
-                },
-            ],
-        },
-
-        community: {
-            title: 'Community',
-            icon: require('assets/img/icon-community.svg'),
-            expandedIcon: require('assets/img/icon-community-active.svg'),
-            steps: [
-                {
-                    name: 'Team',
-                    link: '/team',
-                },
-                {
-                    name: 'Chat',
-                    link: '/chat',
                 },
             ],
         },
@@ -207,11 +219,13 @@ export function getOpenedStepTitle(phases, pathname) {
       : null;
 }
 
-export function getFirstStepLinkOfPhase(phase, phases, playgroundId) {
+export function getFirstStepLinkOfPhase(phase, phases, playground) {
     const phaseObjectName = Object.keys(phases).find((phaseName) => phases[phaseName].title === phase);
     const phaseObject = phases[phaseObjectName];
 
-    return phaseObject ? `/workspace/${playgroundId}${phaseObject.steps[0].link}` : null;
+    console.log('phaseObject', phaseObject);
+
+    return phaseObject ? `/workspace${playground ? `/${playground.id}` : ''}${phaseObject.steps[0].link}` : null;
 }
 
 export function shouldWorkspaceUpdate(props, nextProps) {

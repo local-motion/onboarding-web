@@ -42,7 +42,7 @@ class CollectOpinionsCard extends React.Component {
           <WorkspaceCard
             title={"Meningen inventariseren"}
             done={null}
-            image={require("assets/img/backgrounds/collect-opinions.jpg")}
+            image={require("../../../assets/img/backgrounds/workspace-welcome.jpg")}
             customStyle={{ backgroundPositionY: -300 }}
             content={"Bepaal bij een positief besluit van het bestuur wanneer en hoe je dit wilt voorleggen aan andere betrokkenen, bijvoorbeeld medewerkers, vrijwilligers, ouders en/of bezoekers. Onderzoek wat mensen vinden van het rookvrij maken van de speelplek. Beantwoord hun vragen en luister naar de bezwaren. Dit kan bijvoorbeeld in een gesprek met enkele ouders en bezoekers of via een vragenlijst. Wees duidelijk over de plannen, geef eventueel tegenargumenten en neem goede ideeën mee."}
             expandContent={<p>

@@ -6,7 +6,7 @@ import SvgIcon from "@material-ui/core/SvgIcon";
 import Check from "@material-ui/icons/Check";
 import classNames from "classnames";
 
-import { StyledStepButton, StyledStepLink } from "../../../components/Step/Step";
+import { StyledStepLink } from "../../../components/Step/Step";
 import ExpansionPhase from "../../../components/ExpansionPhase/ExpansionPhase";
 import CustomAuthenticator from "../../../auth/CustomAuthenticator";
 import RecruitVolunteersCard from "../Cards/RecruitVolunteersCard";
@@ -19,7 +19,6 @@ import CommunicateAboutSmokefreeAgreementCard from "../Cards/CommunicateAboutSmo
 import ShowPlaygroundIsSmokefreeCard from "../Cards/ShowPlaygroundIsSmokefreeCard";
 import WeAreSmokefreeCard from "../Cards/WeAreSmokefreeCard";
 import EvaluateCard from "../Cards/EvaluateCard";
-import AddPlayground from "../../Onboarding/Sections/Playgrounds/AddPlayground";
 import Header from "../../../components/Header/Header";
 import HeaderLinks from "../../../components/Header/HeaderLinks";
 import GridContainer from "../../../components/Grid/GridContainer";
@@ -35,6 +34,7 @@ import {
 } from "../../../misc/WorkspaceHelpers";
 import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
+import AddFindPlayground from "../Cards/AddFindPlayground";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -51,7 +51,6 @@ class WorkspacePage extends PureComponent {
     constructor() {
         super();
 
-        this.toggleAddPlayground = this.toggleAddPlayground.bind(this);
         this.clickPhase = this.clickPhase.bind(this);
         this.setCta = this.setCta.bind(this);
         this.unsetCta = this.unsetCta.bind(this);
@@ -60,7 +59,6 @@ class WorkspacePage extends PureComponent {
     }
 
     state = {
-        isAddPlaygroundOpen: false,
         expandedPhase: 'none',
         ctaText: '',
         ctaAction: () => null,
@@ -99,7 +97,7 @@ class WorkspacePage extends PureComponent {
     gotoFirstStep(phase) {
         const { history, phases, playground } = this.props;
 
-        const firstStepLink = getFirstStepLinkOfPhase(phase, phases, playground.id);
+        const firstStepLink = getFirstStepLinkOfPhase(phase, phases, playground);
 
         if (firstStepLink) history.push(firstStepLink);
     }
@@ -116,10 +114,6 @@ class WorkspacePage extends PureComponent {
             ctaDone: false,
             CustomButton: null,
         });
-    }
-
-    toggleAddPlayground() {
-        this.setState(({ isAddPlaygroundOpen }) => ({ isAddPlaygroundOpen: !isAddPlaygroundOpen }));
     }
 
     gotoPrevStep(prev) {
@@ -156,7 +150,7 @@ class WorkspacePage extends PureComponent {
 
     render() {
         const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
-        const { expandedPhase, isAddPlaygroundOpen } = this.state;
+        const { expandedPhase } = this.state;
 
         const prev = getPrevStep(phases, pathname);
         const next = getNextStep(phases, pathname);
@@ -166,7 +160,6 @@ class WorkspacePage extends PureComponent {
         return (
           <React.Fragment>
               <Header
-                playground={playground}
                 rightLinks={<HeaderLinks />}
                 fixed
                 color="white"
@@ -183,41 +176,12 @@ class WorkspacePage extends PureComponent {
                   <GridContainer className={"grid-container"}>
                       <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
                           <div className={"title-wrapper"}>
-                              <h2 className={classes.playgroundTitle}>{playground.name}</h2>
+                              <h2 className={classes.playgroundTitle}>{playground ? playground.name : 'Actiepagina'}</h2>
                           </div>
                       </GridItem>
 
                       <Paper className={classes.workspacePaper}>
                           <GridItem xs={4} sm={4} md={3} className={"workspace-menu-column"}>
-                              <ExpansionPhase
-                                title={phases.firstPhase.title}
-                                icon={phases.firstPhase.icon}
-                                expandedIcon={phases.firstPhase.expandedIcon}
-                                expandedPhase={expandedPhase}
-                                onChange={this.clickPhase}
-                              >
-                                  {!playground && <StyledStepButton onClick={this.toggleAddPlayground} name="Speeltuin toevoegen" />}
-
-                                  {phases.firstPhase.steps.map(step=> <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
-                              </ExpansionPhase>
-                              <ExpansionPhase
-                                title={phases.secondPhase.title}
-                                icon={phases.secondPhase.icon}
-                                expandedIcon={phases.secondPhase.expandedIcon}
-                                expandedPhase={expandedPhase}
-                                onChange={this.clickPhase}
-                              >
-                                  {phases.secondPhase.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
-                              </ExpansionPhase>
-                              <ExpansionPhase
-                                title={phases.thirdPhase.title}
-                                icon={phases.thirdPhase.icon}
-                                expandedIcon={phases.thirdPhase.expandedIcon}
-                                expandedPhase={expandedPhase}
-                                onChange={this.clickPhase}
-                              >
-                                  {phases.thirdPhase.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
-                              </ExpansionPhase>
                               <ExpansionPhase
                                 title={phases.community.title}
                                 icon={phases.community.icon}
@@ -225,18 +189,36 @@ class WorkspacePage extends PureComponent {
                                 expandedPhase={expandedPhase}
                                 onChange={this.clickPhase}
                               >
-                                  {phases.community.steps.map(step => <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                  {phases.community.steps.map(step => step.condition({ playground, user  }) && <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
+
+                              {
+                                  Object.keys(phases).filter(n => n !== 'community').map((phaseName) => (
+                                    <ExpansionPhase
+                                      title={phases[phaseName].title}
+                                      icon={phases[phaseName].icon}
+                                      expandedIcon={phases[phaseName].expandedIcon}
+                                      expandedPhase={expandedPhase}
+                                      onChange={this.clickPhase}
+                                      disabled={!playground}
+                                      key={phaseName}
+                                    >
+                                        {phases[phaseName].steps.map(step=> <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                    </ExpansionPhase>
+                                  ))
+                              }
                           </GridItem>
 
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
                               <Switch>
+                                  <Route exact path="/workspace/login" key="WorkspaceLogin"
+                                         render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+                                  <Route exact path="/workspace/add-find-playground" key="AddFindPlayground"
+                                         render={(props) => <AddFindPlayground {...props} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
                                          render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
-                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/workspace/:initiativeId/add-team-member" key="RecruitVolunteers"
                                          render={(props) => <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
@@ -288,7 +270,6 @@ class WorkspacePage extends PureComponent {
                   </GridContainer>
               </div>
 
-              <AddPlayground isOpen={isAddPlaygroundOpen} toggleOpen={this.toggleAddPlayground} />
               <Footer />
           </React.Fragment>
         );

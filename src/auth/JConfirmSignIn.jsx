@@ -65,7 +65,7 @@ class JConfirmSignIn extends Component {
     }
 
     render() {
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = this.props.location.pathname.includes('workspace');
         const {authState} = this.props;
         if (authState !== 'confirmSignIn') {
             return null;
