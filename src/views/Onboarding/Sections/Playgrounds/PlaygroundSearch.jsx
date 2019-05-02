@@ -137,6 +137,12 @@ const styles = theme => ({
         height: 50,
         zIndex: 4,
         borderRadius: 6,
+
+        [theme.breakpoints.down('sm')]: {
+            left: 20,
+            top: 20,
+            width: 'calc(100% - 40px)',
+        },
     },
     container: {
         position: "relative"

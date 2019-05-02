@@ -6,6 +6,11 @@ const styles = theme => ({
     container: {
         ...container,
         width: '80%',
+
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            padding: '0 30px',
+        },
     },
     aboutUs: {
         marginTop: 80,
@@ -13,6 +18,10 @@ const styles = theme => ({
         position: 'relative',
         paddingBottom: 140,
         background: `url(${require("../../../assets/img/landing/about-bg.png")}) repeat-x bottom`,
+
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 40,
+        },
     },
     title: {
         fontSize: 58,
@@ -21,6 +30,11 @@ const styles = theme => ({
         textAlign: 'center',
         fontFamily: "'dk_black_bamboo-webfont'",
         marginBottom: 35,
+
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 40,
+            marginBottom: 25,
+        },
     },
     text: {
         fontSize: 16,
@@ -33,18 +47,27 @@ const styles = theme => ({
         },
     },
     link: {
-        margin: '0 50px 10px',
+        margin: '0 50px 20px',
         cursor: 'pointer',
         textDecoration: 'none',
+
+        [theme.breakpoints.down('xs')]: {
+            margin: '0 10px 10px',
+        },
     },
     image: {
         width: 'auto',
         height: 80,
+
+        [theme.breakpoints.down('xs')]: {
+            height: 40,
+        },
     },
     logos: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        flexWrap: 'wrap',
     },
 });
 

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Close from "@material-ui/icons/Close";
 
 import PlaygroundIcon from "../../../../components/PlaygroundIcons/PlaygroundIcons";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle";
@@ -74,7 +75,7 @@ class WorkspaceWelcomeContent extends Component {
     }
 
     render() {
-        const { classes, playground, user, view } = this.props;
+        const { classes, playground, user, view, onClosePopup } = this.props;
 
         const isViewSmall = view === 'small';
         const getSmallClassFor = name => isViewSmall ? classes[name] : '';
@@ -93,6 +94,15 @@ class WorkspaceWelcomeContent extends Component {
                   isViewSmall && (
                     <div className={classes.headerTitleWrapper}>
                         <div className={classes.headerTitle}>{playground.name}</div>
+
+                        {onClosePopup && (
+                          <div
+                            className={classes.closeIconWrapper}
+                            onClick={onClosePopup}
+                          >
+                              <Close className={classes.closeIcon} />
+                          </div>
+                        )}
                     </div>
                   )
               }

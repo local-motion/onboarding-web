@@ -70,28 +70,23 @@ function HeaderLinks(props) {
 
             { user &&
                 <ListItem className={classes.listItem}>
-                    <Hidden smDown implementation="css">
-                        <CustomDropdown
-                            noLiPadding
-                            buttonText=""
-                            buttonProps={{
-                                className: classes.navLink,
-                                color: "transparent"
-                            }}
-                            buttonIcon={profileButtonIcon}
-                            dropdownList={[
-                                <Typography>Ingelogd als {user.name}</Typography>,
-                                {divider: true},
-                                <Button >Mijn profiel</Button>, 
-                                <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>, 
-                                <Button onClick={props.deleteUser}>Uitschrijven</Button>, 
-                                <Button onClick={props.signOutUser}>Uitloggen</Button>, 
-                            ]}
-                        />
-                    </Hidden>
-                    <Hidden mdUp>
-                        <JSignOut layout={"list"}/>
-                    </Hidden>
+                    <CustomDropdown
+                        noLiPadding
+                        buttonText=""
+                        buttonProps={{
+                            className: classes.navLink,
+                            color: "transparent"
+                        }}
+                        buttonIcon={profileButtonIcon}
+                        dropdownList={[
+                            <Typography>Ingelogd als {user.name}</Typography>,
+                            {divider: true},
+                            <Button >Mijn profiel</Button>,
+                            <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,
+                            <Button onClick={props.deleteUser}>Uitschrijven</Button>,
+                            <Button onClick={props.signOutUser}>Uitloggen</Button>,
+                        ]}
+                    />
                 </ListItem>
                 }
         </List>
