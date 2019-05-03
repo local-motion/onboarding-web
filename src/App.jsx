@@ -21,13 +21,10 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
-
-const mapStateToProps = (state) => ({
-  })
   
 const mapDispatchToProps = (dispatch) => ({
-onUserSignedIn: user => dispatch(userSignedIn(user))
-})
+    onUserSignedIn: user => dispatch(userSignedIn(user))
+});
   
   
 class App extends React.Component {
@@ -35,7 +32,7 @@ class App extends React.Component {
     signInHandler = (username) => {
         console.log('signed in with ' + username);
         this.props.onUserSignedIn(username);
-    }
+    };
 
     render() {
         return (
@@ -83,4 +80,4 @@ class App extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(App)

@@ -17,14 +17,6 @@ export function getActivePhaseUrl(playground) {
     return `${getWorkspaceStartLink(playground)}${activePhase.steps[0].link}`;
 }
 
-export function getOpenedPhase(phases, pathname) {
-    const openedStepTitle = getOpenedStepTitle(phases, pathname);
-
-    return openedStepTitle !== null
-      ? openedStepTitle
-      : 'none';
-}
-
 export function getActivePhase(playground) {
     const status = getStatus(playground);
     const phases = getPhases();
@@ -52,22 +44,22 @@ export function getPhases() {
                 {
                     name: 'Inloggen',
                     link: '/login',
-                    condition: ({ user }) => !user,
+                    visible: ({ user }) => !user,
                 },
                 {
                     name: 'Speeltuin toevoegen',
                     link: '/add-find-playground',
-                    condition: ({ playground }) => !playground,
+                    visible: ({ playground }) => !playground,
                 },
                 {
                     name: 'Team',
                     link: '/team',
-                    condition: ({ playground }) => playground,
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Chat',
                     link: '/chat',
-                    condition: ({ playground }) => playground,
+                    visible: ({ playground }) => !!playground,
                 },
             ],
         },
@@ -80,22 +72,27 @@ export function getPhases() {
                 {
                     name: 'Mensen verzamelen',
                     link: '/add-team-member',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Flyers verspreiden',
                     link: '/flyer',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Meningen inventariseren',
                     link: '/meningen-inventariseren',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Contact leggen met bestuur',
                     link: '/involve-administrator',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Wij worden rookvrij',
                     link: '/commitment',
+                    visible: ({ playground }) => !!playground,
                 },
             ],
         },
@@ -108,14 +105,17 @@ export function getPhases() {
                 {
                     name: 'Kies moment van invoering',
                     link: '/pick-date',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Communiceer over de rookvrije afspraak',
                     link: '/shout',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Laat zien dat de speeltuin rookvrij is',
                     link: '/signonfence',
+                    visible: ({ playground }) => !!playground,
                 },
             ],
         },
@@ -128,10 +128,12 @@ export function getPhases() {
                 {
                     name: 'We zijn rookvrij',
                     link: '/celebrate',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Evalueren',
                     link: '/magnify',
+                    visible: ({ playground }) => !!playground,
                 },
             ],
         },
@@ -151,7 +153,7 @@ export function getPrevStep(phases, pathname) {
     const prev = {
         title: null,
         stepLink: null,
-        condition: null,
+        visible: null,
     };
 
     Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
@@ -159,14 +161,14 @@ export function getPrevStep(phases, pathname) {
             if (pathname.includes(step.link)) {
                 if (stepIndex > 0) {
                     prev.stepLink = phases[phaseName].steps[stepIndex - 1].link;
-                    prev.condition = phases[phaseName].steps[stepIndex - 1].condition;
+                    prev.visible = phases[phaseName].steps[stepIndex - 1].visible;
                     prev.title = phases[phaseName].title;
                 } else {
                     if (phaseIndex > 0) {
                         const phase = phases[phasesKeys[phaseIndex - 1]];
 
                         prev.stepLink = phase.steps[phase.steps.length - 1].link;
-                        prev.condition = phase.steps[phase.steps.length - 1].condition;
+                        prev.visible = phase.steps[phase.steps.length - 1].visible;
                         prev.title = phase.title;
                     }
                 }
@@ -181,7 +183,7 @@ export function getNextStep(phases, pathname) {
     const next = {
         title: null,
         stepLink: null,
-        condition: null,
+        visible: null,
     };
 
     Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
@@ -193,7 +195,7 @@ export function getNextStep(phases, pathname) {
             if (pathname.includes(step.link)) {
                 if (stepIndex < (stepsLength - 1)) {
                     next.stepLink = phases[phaseName].steps[stepIndex + 1].link;
-                    next.condition = phases[phaseName].steps[stepIndex + 1].condition;
+                    next.visible = phases[phaseName].steps[stepIndex + 1].visible;
                     next.title = phases[phaseName].title;
                 } else {
                     if (phaseIndex < (phasesLength - 1)) {
@@ -201,7 +203,7 @@ export function getNextStep(phases, pathname) {
 
                         next.stepLink = phase.steps[0].link;
                         next.title = phase.title;
-                        next.condition = phase.condition;
+                        next.visible = phase.steps[0].visible;
                     }
                 }
             }
@@ -219,24 +221,28 @@ export function getOpenedStepTitle(phases, pathname) {
       : null;
 }
 
-export function getFirstStepLinkOfPhase(phase, phases, playground) {
+export function getFirstStepLinkOfPhase(phase, phases, playground, user) {
     const phaseObjectName = Object.keys(phases).find((phaseName) => phases[phaseName].title === phase);
     const phaseObject = phases[phaseObjectName];
 
-    console.log('phaseObject', phaseObject);
+    const step = phaseObject.steps.find((step) => {
+        return !(step.visible && !step.visible({ playground, user }));
+    });
 
-    return phaseObject ? `/workspace${playground ? `/${playground.id}` : ''}${phaseObject.steps[0].link}` : null;
+    return phaseObject ? `/workspace${playground ? `/${playground.id}` : ''}${step ? step.link : ''}` : null;
 }
 
 export function shouldWorkspaceUpdate(props, nextProps) {
     const { playground: currentPlayground, user: currentUser }= props;
     const { playground: nextPlayground, user: nextUser } = nextProps;
 
+    if (!currentUser && nextUser) return true;
+    if (currentUser && !nextUser) return true;
+
     if (!currentPlayground && !nextPlayground) return false;
 
+    if (currentPlayground && !nextPlayground) return true;
     if (!currentPlayground && nextPlayground) return true;
-
-    if (!currentUser && nextUser) return true;
 
     const {
         id,

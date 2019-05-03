@@ -68,7 +68,13 @@ class WorkspacePage extends PureComponent {
     };
 
     componentDidMount() {
+        const { match: { path }, history } = this.props;
+
         this.selectActivePhase();
+
+        if (path === '/workspace/') {
+            history.push('/workspace/add-find-playground')
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -95,9 +101,9 @@ class WorkspacePage extends PureComponent {
     }
 
     gotoFirstStep(phase) {
-        const { history, phases, playground } = this.props;
+        const { history, phases, playground, user } = this.props;
 
-        const firstStepLink = getFirstStepLinkOfPhase(phase, phases, playground);
+        const firstStepLink = getFirstStepLinkOfPhase(phase, phases, playground, user);
 
         if (firstStepLink) history.push(firstStepLink);
     }
@@ -120,22 +126,24 @@ class WorkspacePage extends PureComponent {
         const { history, startPathUrl, playground, user, phases } = this.props;
         const url = startPathUrl + prev.stepLink;
 
-        if (prev.condition && !prev.condition({ playground, user })) {
-            return this.gotoPrevStep(getPrevStep(phases, url));
+        if (prev.visible && !prev.visible({ playground, user })) {
+            return this.gotoPrevStep(getPrevStep(phases, url, playground));
         }
 
-        history.push(url);
+        if (prev.stepLink) history.push(url);
     }
 
     gotoNextStep(next) {
         const { history, startPathUrl, playground, user, phases } = this.props;
         const url = startPathUrl + next.stepLink;
 
-        if (next.condition && !next.condition({ playground, user })) {
-            return this.gotoNextStep(getNextStep(phases, url));
+        if (next.title !== 'Community' && !playground) return;
+
+        if (next.visible && !next.visible({ playground, user })) {
+            return this.gotoNextStep(getNextStep(phases, url, playground));
         }
 
-        history.push(url);
+        if (next.stepLink) history.push(url);
     }
 
     renderCtaButton() {
@@ -197,7 +205,7 @@ class WorkspacePage extends PureComponent {
                                 expandedPhase={expandedPhase}
                                 onChange={this.clickPhase}
                               >
-                                  {phases.community.steps.map(step => step.condition({ playground, user  }) && <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                  {phases.community.steps.map(step => step.visible({ playground, user }) && <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
                               </ExpansionPhase>
 
                               {
@@ -224,36 +232,38 @@ class WorkspacePage extends PureComponent {
                                   <Route exact path="/workspace/add-find-playground" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user} />}/>
 
+                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
+                                         render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
-                                         render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/add-team-member" key="RecruitVolunteers"
-                                         render={(props) => <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
-                                         render={(props) => <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="CollectOpinions"
-                                         render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactManagement"
-                                         render={(props) => <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/commitment" key="WeWillBecomeSmokefree"
-                                         render={(props) => <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/pick-date" key="ChooseProperIntroductionDate"
-                                         render={(props) => <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/shout" key="CommunicateAboutSmokefreeAgreement"
-                                         render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/signonfence" key="ShowPlaygroundIsSmokefree"
-                                         render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/celebrate" key="WeAreSmokefree"
-                                         render={(props) => <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/magnify" key="Evaluate"
-                                         render={(props) => <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
                                   <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
-                                         render={(props) => <TeamCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <TeamCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/chat" key="WorkspaceChat"
-                                         render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
+                                         render={(props) => playground && <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
                               </Switch>
 
                               {openedStepTitle && (
@@ -267,7 +277,7 @@ class WorkspacePage extends PureComponent {
                                     {this.renderCtaButton()}
 
                                     {next.stepLink ? (
-                                      <Button onClick={() => this.gotoPrevStep(next)} variant="outlined" className={"pagination-button"}>
+                                      <Button onClick={() => this.gotoNextStep(next)} variant="outlined" className={"pagination-button"}>
                                           <PaginationIcon className={"pagination-button-icon-right"} />
                                       </Button>
                                     ) : <div className={classes.noButton} />}
