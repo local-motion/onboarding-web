@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
+import { clearVerificationCookies, onSignupSuccess } from './VerificationLinkHandler';
 
 const logger = new Logger('JConfirmSignUp');
 
@@ -15,8 +16,10 @@ class JConfirmSignUp extends Component {
     constructor(props) {
         super(props);
         this.confirmSignUp = this.confirmSignUp.bind(this);
+        this.confirmSuccess = this.confirmSuccess.bind(this);
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
+        this.isValidInput = this.isValidInput.bind(this);
         this.inputs = {};
         this.state = {
             message: '',
@@ -61,7 +64,7 @@ class JConfirmSignUp extends Component {
 
     confirmSignUp() {
         const username = this.props.authData || this.inputs.username;
-        const {code} = this.inputs;
+        const code = this.inputs.code || this.props.authState.split(':')[1]
         logger.info('confirm sign up with ' + code);
         Auth.confirmSignUp(username, code)
             .then(() => this.confirmSuccess(username))
@@ -77,9 +80,10 @@ class JConfirmSignUp extends Component {
     }
 
     confirmSuccess(username) {
+        clearVerificationCookies();
         logger.info('confirm sign up success with ' + username);
         this.setState({message: '', error: ''});
-        this.changeState('signIn', username);
+        this.changeState('complete', username);
         this.setState({codeLength: 0, error: '', validateCode: "unvalidated"});
     }
 
@@ -108,12 +112,25 @@ class JConfirmSignUp extends Component {
         }
     }
 
+    isValidInput(defaultUsername, defaultVerificationCode) {
+        const username = document.getElementById('confirmsignup_username') ? document.getElementById('confirmsignup_username').value : defaultUsername
+        const verificationCode = document.getElementById('confirmsignup_verificationcode') ? document.getElementById('confirmsignup_verificationcode').value : defaultVerificationCode
+        const RGEX = new RegExp(/([0-9])\d{5}/g);
+        const validatedResult = RGEX.test(verificationCode);
+        console.log('validating input, username, code, testresult', username, verificationCode, validatedResult)
+        return username && username.length > 0 && validatedResult
+    }
+
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
         const {authState, authData} = this.props;
-        if (authState !== 'confirmSignUp') {
+        if (!authState.startsWith('confirmSignUp')) {
             return null;
         }
+        const verificationCode = authState.split(':')[1]
+        const validInput = this.isValidInput(authData, verificationCode)
+        console.log('Rendering jsignup, valid input:' + validInput)
+        console.log('Rendering jsignup, authState: ', authState)
 
         const style = {
             width: '20rem',
@@ -146,6 +163,7 @@ class JConfirmSignUp extends Component {
                         >
                             <div>
                                 <Input
+                                    id="confirmsignup_username"
                                     type="text"
                                     placeholder="Gebruikersnaam"
                                     defaultValue={authData || ''}
@@ -160,8 +178,10 @@ class JConfirmSignUp extends Component {
                             </div>
                             <div>
                                 <Input
+                                    id="confirmsignup_verificationcode"
                                     type="text"
                                     placeholder="Code"
+                                    defaultValue={verificationCode}
                                     style={style.input}
                                     className={
                                         "input-container last " + (validateCode === "validated" ? 'success' : 'error') + (codeLength === 0 ? " untouched" : " dirty")
@@ -185,7 +205,7 @@ class JConfirmSignUp extends Component {
                                     style={style.button}
                                     onClick={this.confirmSignUp}
                                     disabled={
-                                        !this.state.filled
+                                        !validInput
                                     }
                                 >
                                     Bevestig

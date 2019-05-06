@@ -8,6 +8,7 @@ import { getErrorMessage } from '../api/ErrorMessages';
 import ContentDialog from "../components/Dialogs/ContentDialog";
 import TermsText from "../views/Legal/TermsText";
 import PrivacyText from "../views/Legal/PrivacyText";
+import { setSignupConfirmCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JSignUp');
 
@@ -58,6 +59,11 @@ class JSignUp extends Component {
         Auth.signUp(username, password, email, phone_number)
             .then(() => this.signUpSuccess(username))
             .catch(err => this.signUpError(err));
+
+        // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
+        const {initiativeId} = this.props.match.params
+        if (initiativeId)
+            setSignupConfirmCookies(initiativeId)
     }
 
     signUpSuccess(username) {

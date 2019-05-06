@@ -43,6 +43,8 @@ class App extends React.Component {
                 <Router history={history}>
                     <Switch>
                         <Route exact path="/login" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
+                        {/* <Route exact path="/verify?type=:verificationType&user=:username&code=:verificationCode" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
+                        {/* <Route exact path="/verify" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
 
                         <Route exact path="/about" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>
@@ -53,20 +55,10 @@ class App extends React.Component {
                         <Route exact path="/workspace/" key="Workspace" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
                         <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
+                        {/* <Route exact path="/workspace/:initiativeId/verify/:verificationCode" key="WorkspaceVerify" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
                         <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
 
                         <Route path="/workspace/:initiativeId/" component={Workspace}/>
-
-                        {/* <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/flyer" key="Flyer" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/commitment" key="Commitment" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/pick-date" key="PickDate" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/shout" key="Shout" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/signonfence" key="Signonfence" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/celebrate" key="Celebrate" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/magnify" key="Magnify" component={Workspace}/> */}
 
                         <Route exact path="/" key="Onboarding" component={Onboarding}/>
 
