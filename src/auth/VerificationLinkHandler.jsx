@@ -68,6 +68,7 @@ class VerificationLinkHandler extends Component {
     }
 
     componentDidUpdate() {
+        const isInCard = !!this.props.match.params.initiativeId;
         const params = queryString.parse(this.props.location.search)
         const verificationType = params.type
         const username = params.user
@@ -91,12 +92,13 @@ class VerificationLinkHandler extends Component {
 
         if (authenticatedUser) {
             this.props.history.push('/');
-            this.props.openAlreadyLoggedInDialog();
+            openAlreadyLoggedInDialog();
         }
 
-        if (initiativeId) {
+        if (!isInCard && initiativeId) {
             // Let the VerificationLinkHandler within the particular workspace handle this
-            this.props.history.push(`/workspace/${initiativeId}/verify?type=${verificationType}&user=${username}&code=${verificationCode}`)
+            console.log('redirecting from verification link handler to workspace ' + initiativeId)
+            this.props.history.push(`/workspace/${initiativeId}/login?type=${verificationType}&user=${username}&code=${verificationCode}&target=/workspace/${initiativeId}/join`)
             return
         }
 
