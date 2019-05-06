@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
-import { clearVerificationCookies, onSignupSuccess } from './VerificationLinkHandler';
+import { clearVerificationCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JConfirmSignUp');
 
@@ -20,6 +20,7 @@ class JConfirmSignUp extends Component {
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.isValidInput = this.isValidInput.bind(this);
+        this.componentDidUpdate = this.componentDidUpdate.bind(this);
         this.inputs = {};
         this.state = {
             message: '',
@@ -27,7 +28,8 @@ class JConfirmSignUp extends Component {
             validatedCode: '',
             codeLength: 0,
             filledUsername: false,
-            filled: false
+            filled: false,
+            autoSubmitTriggered: false
         }
     }
 
@@ -68,7 +70,13 @@ class JConfirmSignUp extends Component {
         logger.info('confirm sign up with ' + code);
         Auth.confirmSignUp(username, code)
             .then(() => this.confirmSuccess(username))
-            .catch(err => this.handleError(err));
+            .catch(err => {
+                console.log('error in confirm signup: ', err)
+                if (err.code === "NotAuthorizedException" && err.message === "User cannot be confirm. Current status is CONFIRMED")
+                    this.confirmSuccess(username)
+                else
+                    this.handleError(err)
+            })
     }
 
     resendCode() {
@@ -119,6 +127,15 @@ class JConfirmSignUp extends Component {
         const validatedResult = RGEX.test(verificationCode);
         console.log('validating input, username, code, testresult', username, verificationCode, validatedResult)
         return username && username.length > 0 && validatedResult
+    }
+
+    componentDidUpdate() {
+        const {authState} = this.props;
+        const verificationCode = authState.split(':')[1]
+        if (authState.startsWith('confirmSignUp') && verificationCode && !this.state.autoSubmitTriggered) {
+            this.setState({autoSubmitTriggered: true})
+            this.confirmSignUp()
+        }
     }
 
     render() {

@@ -1,17 +1,11 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
-import {Button, Input, Typography} from '@material-ui/core'
-import {Auth, JS, Logger} from 'aws-amplify';
-import querySearch from "stringquery";
-import { getErrorMessage } from '../api/ErrorMessages';
+import {Button, Typography} from '@material-ui/core'
 import { readCookie, eraseCookie, createCookie } from '../utils/CookieUtils';
 import { getUser } from '../components/UserProfile/UserProfileReducer';
 import { connect } from 'react-redux'
 import { openConfirmationDialog } from '../components/ConfirmationDialog/ConfirmationDialogActions';
 import queryString from 'query-string';
-import { history } from '../setup';
-
-const logger = new Logger('JSignIn');
 
 const mapStateToProps = state => ({
     authenticatedUser: getUser(state)
@@ -19,15 +13,13 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     openAlreadyLoggedInDialog:    () => dispatch(openConfirmationDialog(
-                        'U bent reeds ingelogd', 
-                        'Als u met een andere gebruikersnaam wilt inloggen log dan eerst uit en klikt dan nogmaals op de verificatielink',
+                        'Je bent reeds ingelogd', 
+                        'Als je met een andere gebruikersnaam wilt inloggen log dan eerst uit en klik dan nogmaals op de verificatielink',
                         )),
 })
 
 // Cookies
-const VERIFICATION_USERNAME_COOKIE = 'verificationUsername'
 const VERIFICATION_INITIATIVE_COOKIE = 'verificationInitiative'
-const VERIFICATION_TYPE_COOKIE = 'verificationTtype'
 const VERIFICATION_TYPE_SIGNUP = 'signup'
 const VERIFICATION_TYPE_RESET_PASSWORD = 'reset_password'
 
@@ -54,10 +46,10 @@ export const clearVerificationCookies = () => {
 class VerificationLinkHandler extends Component {
     constructor(props) {
         super(props);
-        this.checkContact = this.checkContact.bind(this);
         this.changeState = this.changeState.bind(this);
+        this.gotoLogin = this.gotoLogin.bind(this);
         this.inputs = {};
-        this.state = {error: '', signInPage: true, complete: false}
+        this.state = {error: '', complete: false}
     }
 
     changeState(state, data) {
@@ -80,13 +72,14 @@ class VerificationLinkHandler extends Component {
 
         const {authState, authData, authenticatedUser, openAlreadyLoggedInDialog} = this.props
 
-        if (authState === 'complete') {
+
+        if (authState === 'complete' && verificationType === VERIFICATION_TYPE_RESET_PASSWORD) {
             this.setState({complete: true})
             this.changeState('signIn', authData)
             return
         }
 
-        if (this.state.complete || !verificationCode || !username || !verificationType || !authState === 'signIn' /* note that signIn is the default state */ ) {
+        if (this.state.complete || !verificationCode || !username || !verificationType || authState !== 'signIn' /* note that signIn is the default state */ ) {
             return
         }
 
@@ -121,57 +114,16 @@ class VerificationLinkHandler extends Component {
         this.changeState('forgotPasswordReset:' + verificationCode, username);
     }
 
-    signInError(err) {
-        logger.info('sign in error', err);
-        /*
-          err can be in different structure:
-            1) plain text message;
-            2) object { code: ..., message: ..., name: ... }
-        */
-        this.setState({error: getErrorMessage(err.code, err.message)})
+    gotoLogin() {
+        console.log('verification link handler directing to login')
+        this.setState({complete: true})
+        this.changeState('signIn', this.props.authData)   
     }
-
-    checkContact(user) {
-        Auth.verifiedContact(user)
-            .then(data => {
-                if (!JS.isEmpty(data.verified)) {
-                    this.changeState('signedIn', user);
-                    this.props.onSignIn(user);
-                    this.goToTargetUrl();
-                } else {
-                    user = Object.assign(user, data);
-                    this.changeState('verifyContact', user);
-                }
-            });
-    }
-
-    catchEnterSubmit(e){
-        if(e.keyCode === 13 && e.shiftKey === false) {
-            this.signIn();
-        }
-    }
-
 
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
-        const verificationCode = this.props.match.params.verificationCode;
-        const username = readCookie(VERIFICATION_USERNAME_COOKIE)
-        const verificationType = readCookie(VERIFICATION_TYPE_COOKIE)
-        const {authState, authData, authenticatedUser, openAlreadyLoggedInDialog} = this.props;
+        const {authState} = this.props;
 
-        if (!verificationCode || !authState === 'signIn' /* note that signIn is the default state */ ) {
-            return null;
-        }
-
-        if (authenticatedUser) {
-            this.props.history.push('/');
-            openAlreadyLoggedInDialog();
-        }
-
-        // if (username && verificationType === VERIFICATION_TYPE_SIGNUP)
-        //     this.gotoConfirmSignUp(username, verificationCode)
-
-        
         const style = {
             width: '20rem',
             input: {borderRadius: '0', display: 'block'},
@@ -184,49 +136,36 @@ class VerificationLinkHandler extends Component {
 
         const {error} = this.state;
 
-        return (
-            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
-                {isInCard || <div className={"secure-app-background"}></div>}
-                <div className={"secure-app-container"}>
-                    <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
-                    <div className={"signin-wrapper"}>
-                        <form
-                            style={style}
-                            onKeyDown={
-                                event => this.catchEnterSubmit(event)
-                            }
-                        >
-                            <Typography>Uw verificatiecode is {verificationCode}, wat wilt u hiermee doen?</Typography>
-                            {/* <Input
-                                id="SigninFormUserName"
-                                type="text"
-                                placeholder="Verificatiecode"
-                                style={style.input}
-                                defaultValue={verificationCode}
-                                onChange={event => this.inputs.username = event.target.value}
-                                autoFocus
-                            /> */}
-                            <span>
-                            <Button
-                                style={style.button}
-                                onClick={() => this.gotoConfirmSignUp(username, verificationCode)}
-                            >
-                                Emailadres bevestigen
-                            </Button>
-                            <Button
-                                style={style.button}
-                                onClick={this.signIn}
-                            >
-                                Wachtwoord resetten
-                            </Button>
-                            </span>
-                        </form>
-                        {error && <p className={"error"}>{error}</p>}
+        if (authState === 'complete') {
 
+            return (
+                <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+                    {isInCard || <div className={"secure-app-background"}></div>}
+                    <div className={"secure-app-container"}>
+                        <h1 className={"grunge-title"}>Rookvrije Generatie</h1>
+                        <div className={"signin-wrapper"}>
+                            <form
+                                style={style}
+                            >
+                                <Typography>Je email adres is gevalideerd!</Typography>
+                                <span>
+                                <Button
+                                    style={style.button}
+                                    onClick={() => this.gotoLogin()}
+                                >
+                                    Ga verder met inloggen
+                                </Button>
+                                </span>
+                            </form>
+                            {error && <p className={"error"}>{error}</p>}
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }
+
+        return null;
     }
 }
 

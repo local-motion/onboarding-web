@@ -22,6 +22,8 @@ export const ErrorCode = {
     UserNotConfirmedException:  {developerMessage: 'User\'s email is not confirmed', message: 'Uw emailadres is nog niet bevestigd. Vraag een nieuwe code aan.'},
     UsernameExistsException:    {developerMessage: 'User already exists', message: 'Er bestaat al een gebruiker met deze naam'},
     CodeMismatchException:      {developerMessage: 'Invalid verification code provided', message: 'Ongeldige verificatiecode'},
+    ExpiredCodeException:       {developerMessage: 'Invalid code provided, please request a code again.', message: 'Deze verificatiecode is verlopen, vraag een nieuwe code aan'},
+    LimitExceededException:     {developerMessage: 'Attempt limit exceeded, please try after some time.', message: 'Teveel wachtwoord resets in korte tijd. Probeer het later nog eens.'},
 
 
 // Functional validation errors

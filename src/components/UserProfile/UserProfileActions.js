@@ -21,6 +21,18 @@ export const fetchUserProfile = () => executeQuery( {
           }
       }
     `, 
+    onSuccessPrepublish: (result, dispatch) => {
+      console.log( 'onSuccessPrepublish', result)
+      if (!result.profile) {
+        dispatch(openConfirmationDialog(
+          'Gebruikersprofiel niet aanwezig', 
+          'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
+          'OK', 
+          () => dispatch(signOutUser()))
+        )
+        return true   // terminate event execution
+      }
+    }
   })
 
 export const createUser = (onSuccessCallback) => executeQuery( {

@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
-import { onResetPasswordSuccess, clearVerificationCookies } from './VerificationLinkHandler';
+import { clearVerificationCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JForgotPasswordReset');
 
@@ -54,6 +54,12 @@ class JForgotPasswordReset extends Component {
         this.setState({error: getErrorMessage(err.code, err.message)});
     }
 
+    catchEnterSubmit(e){
+        if(e.keyCode === 13 && e.shiftKey === false) {
+            this.submit();
+        }
+    }
+
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
         const {authState} = this.props;
@@ -86,7 +92,12 @@ class JForgotPasswordReset extends Component {
                         <div>
                             <h2>Wachtwoord reset code</h2>
                         </div>
-                        <form name={"pass-reset-with-code"} autoComplete={"new-password"}>
+                        <form   name={"pass-reset-with-code"} 
+                                autoComplete={"new-password"}
+                                onKeyDown={
+                                    event => this.catchEnterSubmit(event)
+                                }
+                        >
                             <div>
                                 Code:
                                 <Input
@@ -113,7 +124,7 @@ class JForgotPasswordReset extends Component {
                                 />
                             </div>
                             <div>
-                                <Button style={style.button} onClick={this.submit}>Reset password</Button>
+                                <Button style={style.button} onClick={this.submit}>Reset wachtwoord</Button>
                             </div>
                             {error && <div style={style.alert}>{error}</div>}
                         </form>
@@ -122,7 +133,7 @@ class JForgotPasswordReset extends Component {
                                 <Button
                                     style={style.button}
                                     onClick={() => this.changeState('forgotPassword')}>
-                                    Back to forgot password
+                                    Terug naar nieuw wachtwoord aanvragen
                                 </Button>
                             </div>
                         </div>

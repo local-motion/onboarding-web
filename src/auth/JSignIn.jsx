@@ -179,7 +179,7 @@ class JSignIn extends Component {
                                 style={style.input}
                                 defaultValue={authData || ''}
                                 onChange={event => this.inputs.username = event.target.value}
-                                autoFocus
+                                autoFocus={!authData}
                             />
                             <TextField
                                 type="password"
@@ -188,6 +188,7 @@ class JSignIn extends Component {
                                 placeholder="Wachtwoord"
                                 onChange={event => this.inputs.password = event.target.value}
                                 style={style.input}
+                                autoFocus={!!authData}
                             />
                             <Button
                                 style={style.loginButton}
