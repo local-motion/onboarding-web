@@ -1,12 +1,21 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core";
+
+import { compose, withProps, lifecycle } from "recompose";
+import { withScriptjs } from "react-google-maps";
+import StandaloneSearchBox from "react-google-maps/lib/components/places/StandaloneSearchBox";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import AddPlayground from "../../Onboarding/Sections/Playgrounds/AddPlayground";
 import TextField from "@material-ui/core/TextField/TextField";
 import Button from "@material-ui/core/Button/Button";
+import Search from "@material-ui/icons/Search";
 import SvgIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
+import { getGoogleMapsKey } from "../../../misc/ConfigReducer";
+import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
 
 const styles = theme => ({
     wrapper: {},
@@ -14,6 +23,9 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        padding: '0 30px 30px',
+        margin: '0 -30px',
+        borderBottom: '1px solid rgb(231, 231, 231)',
     },
     searchBar: {
         display: 'flex',
@@ -22,6 +34,7 @@ const styles = theme => ({
     },
     textInput: {
         marginRight: 10,
+        width: 400,
     },
     cssLabel: {
         transform: 'translate(12px, 14px) scale(1)',
@@ -30,21 +43,6 @@ const styles = theme => ({
         },
     },
     cssFocused: {},
-    searchButton: {
-        background: '#eb621b',
-        color: '#FFF',
-        borderRadius: 5,
-        boxShadow: 'none',
-        height: 43,
-        minWidth: 80,
-
-        '&:hover': {
-            color: '#FFF',
-            borderColor: '#FFF',
-            backgroundColor: 'rgba(235, 98, 27, .8)',
-            boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
-        },
-    },
     gotoMapButton: {
         padding: '10px 17px',
         paddingRight: 40,
@@ -58,7 +56,28 @@ const styles = theme => ({
             right: 5,
         }
     },
+    results: {
+
+    },
 });
+
+function getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);  // deg2rad below
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c * 1000; // Distance in meters
+
+    return d;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
 
 const ArrowIcon = () => (
   <SvgIcon width="18px" height="14px" viewBox="0 0 24 17">
@@ -75,30 +94,142 @@ const ArrowIcon = () => (
   </SvgIcon>
 );
 
+const mapStateToProps = state => ({
+    playgrounds: getAllPlaygrounds(state),
+    googleMapsKey: getGoogleMapsKey(state),
+});
+
+
+const PlacesWithStandaloneSearchBox = props => (
+  <PlacesWithStandaloneSearchBoxImpl
+    {...props}
+    googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${props.googleMapsKey}&v=3.exp&libraries=places`}
+  />
+);
+
+const PlacesWithStandaloneSearchBoxImpl = compose(
+  withProps({
+      loadingElement: <div style={{ height: `100%` }} />,
+      containerElement: <div style={{ height: `400px` }} />,
+  }),
+  lifecycle({
+      componentWillMount() {
+          const refs = {};
+
+          this.setState({
+              places: [],
+              onSearchBoxMounted: ref => {
+                  refs.searchBox = ref;
+              },
+              onPlacesChanged: () => {
+                  const places = refs.searchBox.getPlaces();
+
+                  this.props.getResults(places[0]);
+
+                  this.setState({
+                      places,
+                  });
+              },
+          })
+      },
+  }),
+  withScriptjs
+)(props =>
+  <div data-standalone-searchbox="" className={props.searchBar}>
+      <StandaloneSearchBox
+        ref={props.onSearchBoxMounted}
+        bounds={props.bounds}
+        onPlacesChanged={props.onPlacesChanged}
+      >
+          <TextField
+            type="text"
+            variant="outlined"
+            name="search"
+            className={props.classes.textInput}
+            label="Zoek in je plaats"
+            autoFocus
+            placeholder="e.g. 9402 AS"
+            InputLabelProps={{
+                classes: {
+                    root: props.classes.cssLabel,
+                    focused: props.classes.cssFocused,
+                }
+            }}
+            InputProps={{
+                endAdornment:
+                  <InputAdornment disablePointerEvents position="end">
+                      <Search color="disabled" />
+                  </InputAdornment>,
+            }}
+            inputProps={{
+                style: {
+                    padding: '12px 14px'
+                }
+            }}
+          />
+      </StandaloneSearchBox>
+  </div>
+);
+
 
 class AddFindPlayground extends Component {
     constructor(props) {
         super(props);
 
         this.toggleAddPlayground = this.toggleAddPlayground.bind(this);
-        this.search = this.search.bind(this);
+        this.getResults = this.getResults.bind(this);
+        this.renderResults = this.renderResults.bind(this);
     }
 
     state = {
         isAddPlaygroundOpen: false,
-
+        results: null,
     };
 
     toggleAddPlayground() {
         this.setState(({ isAddPlaygroundOpen }) => ({ isAddPlaygroundOpen: !isAddPlaygroundOpen }));
     }
 
-    search(event) {
-        event.preventDefault();
+    getResults({ geometry: { location } }) {
+        const userLat = location.lat();
+        const userLng = location.lng();
+
+        const results = this.props.playgrounds.map((playground) => {
+            const { lat, lng } = playground;
+
+            return {
+                ...playground,
+                distance: getDistanceFromLatLonInM(lat, lng, userLat, userLng),
+            };
+        })
+          .sort((a, b) => a.distance - b.distance)
+          .slice(0, 3);
+
+        this.setState({ results });
+    }
+
+    renderResults() {
+        const { results } = this.state;
+
+        if (!results) return;
+
+        if (results.length === 0) return <div>Er zijn geen resultaten.</div>;
+
+        return this.state.results.map(({ name, distance, volunteerCount, id }) => {
+            const convertedDistance = distance >= 1000
+              ? `< ${Math.round(distance / 1000)} km`
+              : `< ${Math.round(distance)} m`;
+
+            return (
+              <div key={name} className={this.props.classes.results}>
+                  {name}, {convertedDistance}
+              </div>
+            );
+        });
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, googleMapsKey } = this.props;
         const { isAddPlaygroundOpen } = this.state;
 
         return (
@@ -110,57 +241,18 @@ class AddFindPlayground extends Component {
                 content={"De eerste stap is om je aan te sluiten bij de actiepagina van jouw speeltuin, of om deze aan te maken. Vul je gegevens in om te beginnen."}
                 expandContent={
                     <div className={classes.wrapper}>
-                        <form onSubmit={this.search} className={classes.search}>
-                            <div className={classes.searchBar}>
-                                <TextField
-                                  type="text"
-                                  variant="outlined"
-                                  name="postcode"
-                                  className={classes.textInput}
-                                  label="Postcode"
-                                  autoFocus
-                                  InputLabelProps={{
-                                      classes: {
-                                          root: classes.cssLabel,
-                                          focused: classes.cssFocused,
-                                      }
-                                  }}
-                                  inputProps={{
-                                      style: {
-                                          padding: '12px 14px'
-                                      }
-                                  }}
-                                />
-
-                                <TextField
-                                  type="text"
-                                  variant="outlined"
-                                  className={classes.textInput}
-                                  name="house"
-                                  label="Huisnummer"
-                                  InputLabelProps={{
-                                      classes: {
-                                          root: classes.cssLabel,
-                                          focused: classes.cssFocused,
-                                      }
-                                  }}
-                                  inputProps={{
-                                      style: {
-                                          padding: '12px 14px'
-                                      }
-                                  }}
-                                />
-
-                                <Button type="submit" variant="contained" className={classes.searchButton}>
-                                    Zoek
-                                </Button>
-                            </div>
+                        <div className={classes.search}>
+                            <PlacesWithStandaloneSearchBox getResults={this.getResults} classes={classes} googleMapsKey={googleMapsKey} />
 
                             <Button className={classes.gotoMapButton}>
                                 Of zoek op de kaart
                                 <ArrowIcon />
                             </Button>
-                        </form>
+                        </div>
+
+                        <div className={classes.results}>
+                            {this.renderResults()}
+                        </div>
                     </div>
                 }
               />
@@ -171,4 +263,4 @@ class AddFindPlayground extends Component {
     }
 }
 
-export default withRouter(withStyles(styles)(AddFindPlayground));
+export default withRouter(withStyles(styles)(connect(mapStateToProps)(AddFindPlayground)));
