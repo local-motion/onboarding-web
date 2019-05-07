@@ -32,6 +32,7 @@ class JSignUp extends Component {
             filled: false,
             isTermsOpened: false,
             isPrivacyOpened: false,
+            waitingForServerResponse: false,
         };
 
         this.signUp = this.signUp.bind(this);
@@ -56,6 +57,7 @@ class JSignUp extends Component {
     signUp() {
         const {username, password, email, phone_number} = this.inputs;
         logger.info('sign up with ' + username);
+        this.setState({waitingForServerResponse: true})
         Auth.signUp(username, password, email, phone_number)
             .then(() => this.signUpSuccess(username))
             .catch(err => this.signUpError(err));
@@ -68,7 +70,7 @@ class JSignUp extends Component {
 
     signUpSuccess(username) {
         logger.info('sign up success with ' + username);
-        this.setState({error: ''});
+        this.setState({error: '', waitingForServerResponse: false});
 
         this.changeState('confirmSignUp', username);
     }
@@ -77,11 +79,11 @@ class JSignUp extends Component {
         logger.info('sign up error', err);
         let message = getErrorMessage(err.code, err.message)
         if (err.message && (err.message.includes("password") || err.message.includes("Password")))
-            message = 'Je wachtwoord heeft minimaal 6 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.';
+            message = 'Je wachtwoord heeft minimaal 8 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.';
         else if (err.message && err.message.includes("email"))
             message = 'Ongeldig email adres';
         
-        this.setState({error: message});
+        this.setState({error: message, waitingForServerResponse: false});
     }
 
     isFilled() {
@@ -146,7 +148,7 @@ class JSignUp extends Component {
 
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
-        const {authState} = this.props;
+        const {authState, authData} = this.props;
         if (authState !== 'signUp') {
             return null;
         }
@@ -182,9 +184,8 @@ class JSignUp extends Component {
                                     placeholder="Gebruikersnaam"
                                     style={style.input}
                                     className={"code"}
-                                    onChange={
-                                        event => this.isDirty("username", event.target.value)
-                                    }
+                                    defaultValue={authData || ''}
+                                    onChange={ event => this.isDirty("username", event.target.value) }
                                     autoFocus
                                     autoComplete='off'
                                 />
@@ -250,7 +251,7 @@ class JSignUp extends Component {
                                 <Button
                                     style={style.button}
                                     disabled={
-                                        !this.state.filled
+                                        !this.state.filled || this.state.waitingForServerResponse
                                     }
                                     onClick={this.signUp}>
                                     Maak het account

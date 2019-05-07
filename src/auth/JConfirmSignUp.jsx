@@ -29,7 +29,8 @@ class JConfirmSignUp extends Component {
             codeLength: 0,
             filledUsername: false,
             filled: false,
-            autoSubmitTriggered: false
+            autoSubmitTriggered: false,
+            waitingForServerResponse: false,
         }
     }
 
@@ -68,6 +69,7 @@ class JConfirmSignUp extends Component {
         const username = this.props.authData || this.inputs.username;
         const code = this.inputs.code || this.props.authState.split(':')[1]
         logger.info('confirm sign up with ' + code);
+        this.setState({waitingForServerResponse: true})
         Auth.confirmSignUp(username, code)
             .then(() => this.confirmSuccess(username))
             .catch(err => {
@@ -90,7 +92,7 @@ class JConfirmSignUp extends Component {
     confirmSuccess(username) {
         clearVerificationCookies();
         logger.info('confirm sign up success with ' + username);
-        this.setState({message: '', error: ''});
+        this.setState({message: '', error: '', waitingForServerResponse: false});
         this.changeState('complete', username);
         this.setState({codeLength: 0, error: '', validateCode: "unvalidated"});
     }
@@ -98,7 +100,7 @@ class JConfirmSignUp extends Component {
     handleError(err) {
         logger.info('confirm sign up error', err);
         // this.setState({message: '', error: err.message || err});
-        this.setState({message: '', error: getErrorMessage(err.code, err.message)});
+        this.setState({message: '', error: getErrorMessage(err.code, err.message), waitingForServerResponse: false});
     }
 
     isDirty(event) {

@@ -18,7 +18,7 @@ class JForgotPassword extends Component {
         this.sendCode = this.sendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: '', usernameFilled: false}
+        this.state = {error: '', usernameFilled: false, waitingForServerResponse: false}
     }
 
     changeState(state, data) {
@@ -31,6 +31,7 @@ class JForgotPassword extends Component {
     sendCode() {
         const username = this.props.authData || this.inputs.username;
         logger.info('resend code to ' + username);
+        this.setState({waitingForServerResponse: true})
         Auth.forgotPassword(username)
             .then(data => this.sendSuccess(username, data))
             .catch(err => this.handleError(err));
@@ -43,11 +44,13 @@ class JForgotPassword extends Component {
 
     sendSuccess(username, data) {
         logger.info('sent code for ' + username, data);
+        this.setState({waitingForServerResponse: false})
         this.changeState('forgotPasswordReset', username);
     }
 
     handleError(err) {
         logger.info('forgot password send code error', err);
+        this.setState({waitingForServerResponse: false})
         // this.setState({error: err.message || err});
         this.setState({error: getErrorMessage(err.code, err.message)});
     }
@@ -67,6 +70,7 @@ class JForgotPassword extends Component {
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
         const {authState, authData} = this.props;
+        console.log("props for forgot password:", this.props)
         if (authState !== 'forgotPassword') {
             return null;
         }
@@ -102,22 +106,20 @@ class JForgotPassword extends Component {
                         >
                             <div>
                                 <Input
-                                    type="text"
-                                    style={style.input}
-                                    placeholder="Gebruikersnaam"
-                                    defaultValue={authData || ''}
-                                    onChange={
-                                        event => this.isDirty(event.target.value)
-                                    }
-                                    autoFocus
-                                    autoComplete='new-password'
+                                  type="text"
+                                  style={style.input}
+                                  placeholder="Gebruikersnaam"
+                                  defaultValue={authData || ''}
+                                  onChange={ event => this.isDirty(event.target.value) }
+                                  autoFocus
+                                  autoComplete='new-password'
                                 />
                             </div>
                             <div>
                                 <Button
                                     style={style.button}
                                     onClick={this.sendCode}
-                                    disabled={!this.state.usernameFilled}
+                                    disabled={!this.state.usernameFilled || this.state.waitingForServerResponse}
                                 >
                                     Verstuur wachtwoord reset code
                                 </Button>

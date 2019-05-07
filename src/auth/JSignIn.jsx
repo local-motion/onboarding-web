@@ -30,7 +30,7 @@ class JSignIn extends Component {
         this.checkContact = this.checkContact.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: '', signInPage: true}
+        this.state = {error: '', signInPage: true, waitingForServerResponse: false}
     }
 
     componentDidMount() {
@@ -62,6 +62,7 @@ class JSignIn extends Component {
         const username = document.getElementById('SigninFormUserName').value
 
         logger.info('attempting sign in with ' + username);
+        this.setState({waitingForServerResponse: true})
         Auth.signIn(username, password)
             .then(user => this.signInSuccess(user))
             .catch(err => this.signInError(err));
@@ -69,7 +70,7 @@ class JSignIn extends Component {
 
     signInSuccess(user) {
         logger.info('sign in success', user);
-        this.setState({error: ''});
+        this.setState({error: '', waitingForServerResponse: false});
 
         // There are other sign in challenges we don't cover here.
         // SMS_MFA, SOFTWARE_TOKEN_MFA, NEW_PASSWORD_REQUIRED, MFA_SETUP ...
@@ -87,7 +88,7 @@ class JSignIn extends Component {
             1) plain text message;
             2) object { code: ..., message: ..., name: ... }
         */
-        this.setState({error: getErrorMessage(err.code, err.message)})
+        this.setState({error: getErrorMessage(err.code, err.message), waitingForServerResponse: false})
     }
 
     goToTargetUrl = () => {
@@ -104,8 +105,10 @@ class JSignIn extends Component {
     };
 
     checkContact(user) {
+        this.setState({waitingForServerResponse: true})
         Auth.verifiedContact(user)
             .then(data => {
+                this.setState({waitingForServerResponse: false})
                 if (!JS.isEmpty(data.verified)) {
                     this.changeState('signedIn', user);
                     this.props.onSignIn(user);
@@ -195,6 +198,7 @@ class JSignIn extends Component {
                                 onClick={this.signIn}
                                 variant="contained"
                                 className={"pagination-button-step"}
+                                disabled={this.state.waitingForServerResponse}
                             >
                                 Inloggen
                             </Button>

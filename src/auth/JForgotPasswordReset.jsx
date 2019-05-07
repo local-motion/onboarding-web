@@ -17,7 +17,7 @@ class JForgotPasswordReset extends Component {
         this.submit = this.submit.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: ''}
+        this.state = {error: '', waitingForServerResponse: false}
     }
 
     changeState(state, data) {
@@ -37,6 +37,7 @@ class JForgotPasswordReset extends Component {
         const {password} = this.inputs;
         const code = this.inputs.code || this.props.authState.split(':')[1]
         logger.info('reset password for ' + username);
+        this.setState({waitingForServerResponse: true})
         Auth.forgotPasswordSubmit(username, code, password)
             .then(data => this.submitSuccess(username, data))
             .catch(err => this.handleError(err));
@@ -44,6 +45,7 @@ class JForgotPasswordReset extends Component {
 
     submitSuccess(username, data) {
         logger.info('forgot password reset success for ' + username, data);
+        this.setState({waitingForServerResponse: false})
         clearVerificationCookies();
         this.changeState('complete', username);
     }
@@ -51,7 +53,7 @@ class JForgotPasswordReset extends Component {
     handleError(err) {
         logger.info('forgot password reset error', err);
         // this.setState({error: err.message || err});
-        this.setState({error: getErrorMessage(err.code, err.message)});
+        this.setState({error: getErrorMessage(err.code, err.message), waitingForServerResponse: false});
     }
 
     catchEnterSubmit(e){
@@ -124,7 +126,13 @@ class JForgotPasswordReset extends Component {
                                 />
                             </div>
                             <div>
-                                <Button style={style.button} onClick={this.submit}>Reset wachtwoord</Button>
+                                <Button 
+                                    style={style.button} 
+                                    disabled={this.state.waitingForServerResponse}
+                                    onClick={this.submit}
+                                >
+                                    Reset wachtwoord
+                                </Button>
                             </div>
                             {error && <div style={style.alert}>{error}</div>}
                         </form>
