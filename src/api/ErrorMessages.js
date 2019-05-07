@@ -33,7 +33,8 @@ export const ErrorCode = {
 
 const translations = [
     ['Network error', 'Er is een probleem met de verbinding'],
-    ['User cannot be confirm. Current status is CONFIRMED', 'Deze gebruiker is al bevestigd, ga verder met inloggen']
+    ['User cannot be confirm. Current status is CONFIRMED', 'Deze gebruiker is al bevestigd, ga verder met inloggen'],
+    ['User is already confirmed.', 'Deze gebruiker is al bevestigd, ga verder met inloggen']
 ]
 
 export const getTranslatedMessage = (sourceMessage) => {

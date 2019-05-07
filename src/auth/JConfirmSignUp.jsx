@@ -132,6 +132,7 @@ class JConfirmSignUp extends Component {
     componentDidUpdate() {
         const {authState} = this.props;
         const verificationCode = authState.split(':')[1]
+        console.log('update confirmsignup (authstate, verification code, auto submit triggered): ', authState, verificationCode, this.state.autoSubmitTriggered)
         if (authState.startsWith('confirmSignUp') && verificationCode && !this.state.autoSubmitTriggered) {
             this.setState({autoSubmitTriggered: true})
             this.confirmSignUp()
