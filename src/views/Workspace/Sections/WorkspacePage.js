@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import Paper from "@material-ui/core/Paper/Paper";
 import Button from "@material-ui/core/Button";
 import SvgIcon from "@material-ui/core/SvgIcon";
@@ -35,6 +36,7 @@ import {
 import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
 import AddFindPlayground from "../Cards/AddFindPlayground";
+import { ensurePlaygroundDetails, stopPlaygroundDetailsStream } from "../../../components/Playground/PlaygroundActions";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -68,18 +70,32 @@ class WorkspacePage extends PureComponent {
     };
 
     componentDidMount() {
-        const { match: { path }, history } = this.props;
+        const { ensurePlaygroundDetails, match: { path, params: { initiativeId } }, history } = this.props;
 
         this.selectActivePhase();
 
         if (path === '/workspace/') {
             history.push('/workspace/add-find-playground')
         }
+
+        if (initiativeId) {
+            console.log("starting stream playground details of " + initiativeId);
+            ensurePlaygroundDetails(initiativeId);
+        }
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.location.pathname !== this.props.location.pathname) {
             this.selectActivePhase();
+        }
+    }
+
+    componentWillUnmount() {
+        const { stopPlaygroundDetailsStream, match: { params: { initiativeId } } } = this.props;
+
+        if (initiativeId) {
+            console.log('stopping stream: ', initiativeId);
+            stopPlaygroundDetailsStream(initiativeId);
         }
     }
 
@@ -227,43 +243,49 @@ class WorkspacePage extends PureComponent {
 
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
                               <Switch>
+
                                   <Route exact path="/workspace/login" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/workspace/add-find-playground" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user} />}/>
-
                                   <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
-                                  <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
-                                         render={(props) => playground && <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
 
-                                  <Route exact path="/workspace/:initiativeId/add-team-member" key="RecruitVolunteers"
-                                         render={(props) => playground && <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
-                                         render={(props) => playground && <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="CollectOpinions"
-                                         render={(props) => playground && <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactManagement"
-                                         render={(props) => playground && <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/commitment" key="WeWillBecomeSmokefree"
-                                         render={(props) => playground && <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                  {
+                                      playground && (
+                                        <React.Fragment>
+                                            <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
+                                                   render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/add-team-member" key="RecruitVolunteers"
+                                                   render={(props) => <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
+                                                   render={(props) => <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="CollectOpinions"
+                                                   render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactManagement"
+                                                   render={(props) => <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/commitment" key="WeWillBecomeSmokefree"
+                                                   render={(props) => <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                  <Route exact path="/workspace/:initiativeId/pick-date" key="ChooseProperIntroductionDate"
-                                         render={(props) => playground && <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/shout" key="CommunicateAboutSmokefreeAgreement"
-                                         render={(props) => playground && <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/signonfence" key="ShowPlaygroundIsSmokefree"
-                                         render={(props) => playground && <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/pick-date" key="ChooseProperIntroductionDate"
+                                                   render={(props) => <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/shout" key="CommunicateAboutSmokefreeAgreement"
+                                                   render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/signonfence" key="ShowPlaygroundIsSmokefree"
+                                                   render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                  <Route exact path="/workspace/:initiativeId/celebrate" key="WeAreSmokefree"
-                                         render={(props) => playground && <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/magnify" key="Evaluate"
-                                         render={(props) => playground && <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/celebrate" key="WeAreSmokefree"
+                                                   render={(props) => <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/magnify" key="Evaluate"
+                                                   render={(props) => <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                  <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
-                                         render={(props) => playground && <TeamCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/chat" key="WorkspaceChat"
-                                         render={(props) => playground && <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
+                                                   render={(props) => <TeamCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/workspace/:initiativeId/chat" key="WorkspaceChat"
+                                                   render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
+                                        </React.Fragment>
+                                      )
+                                  }
                               </Switch>
 
                               {openedStepTitle && (
@@ -294,4 +316,10 @@ class WorkspacePage extends PureComponent {
     }
 }
 
-export default withRouter(WorkspacePage);
+
+const mapDispatchToProps = dispatch => ({
+    ensurePlaygroundDetails:        (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
+    stopPlaygroundDetailsStream:    (initiativeId) =>     dispatch(stopPlaygroundDetailsStream(initiativeId)),
+});
+
+export default withRouter(connect(null, mapDispatchToProps)(WorkspacePage));

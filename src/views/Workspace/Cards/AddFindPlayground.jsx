@@ -1,21 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core";
-
 import { compose, withProps, lifecycle } from "recompose";
 import { withScriptjs } from "react-google-maps";
 import StandaloneSearchBox from "react-google-maps/lib/components/places/StandaloneSearchBox";
-
-import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
-import AddPlayground from "../../Onboarding/Sections/Playgrounds/AddPlayground";
 import TextField from "@material-ui/core/TextField/TextField";
 import Button from "@material-ui/core/Button/Button";
 import Search from "@material-ui/icons/Search";
 import SvgIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
+
+import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
+import AddPlayground from "../../Onboarding/Sections/Playgrounds/AddPlayground";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 import { getGoogleMapsKey } from "../../../misc/ConfigReducer";
-import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
 
 const styles = theme => ({
     wrapper: {},
@@ -56,8 +55,79 @@ const styles = theme => ({
             right: 5,
         }
     },
-    results: {
+    resultsTitle: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        fontFamily: "'dk_black_bamboo-webfont'",
+        color: '#085ca6',
+        margin: '20px 0',
+    },
+    result: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 12,
+        borderRadius: 5,
+        border: '1px solid #c5e3f5',
+        marginBottom: 5,
 
+        '&:nth-child(even)': {
+            background: '#f6fafd',
+        },
+    },
+    resultProperty: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        width: 200,
+    },
+    resultTitle: {
+        color: '#085ca6',
+        fontSize: 12,
+        lineHeight: 1.2,
+        fontWeight: 'bold',
+    },
+    resultSubtitle: {
+        color: '#626262',
+        lineHeight: 1.2,
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    resultMap: {
+        width: 60,
+        height: 60,
+    },
+    resultButton: {
+        boxShadow: 'none',
+        fontSize: 13,
+
+        '&:hover': {
+            background: '#51a5d6',
+            boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
+            color: '#FFF',
+        },
+    },
+    addPlaygroundButton: {
+        background: '#eb621b',
+        color: '#FFF',
+        padding: '10px 47px 10px 20px',
+        marginTop: 30,
+
+        '&:hover': {
+            color: '#FFF',
+            borderColor: '#FFF',
+            backgroundColor: 'rgba(235, 98, 27, .8)',
+        },
+
+        '& svg': {
+            position: 'absolute',
+            right: 15,
+            top: 11,
+        },
+        '&:hover svg': {
+            right: 10,
+        }
     },
 });
 
@@ -183,6 +253,7 @@ class AddFindPlayground extends Component {
 
     state = {
         isAddPlaygroundOpen: false,
+        userAddress: null,
         results: null,
     };
 
@@ -193,6 +264,14 @@ class AddFindPlayground extends Component {
     getResults({ geometry: { location } }) {
         const userLat = location.lat();
         const userLng = location.lng();
+
+        this.setState({
+            userAddress: {
+                lat: userLat,
+                lng: userLng,
+                zoom: 15,
+            },
+        });
 
         const results = this.props.playgrounds.map((playground) => {
             const { lat, lng } = playground;
@@ -209,28 +288,66 @@ class AddFindPlayground extends Component {
     }
 
     renderResults() {
+        const { classes } = this.props;
         const { results } = this.state;
 
         if (!results) return;
 
         if (results.length === 0) return <div>Er zijn geen resultaten.</div>;
 
-        return this.state.results.map(({ name, distance, volunteerCount, id }) => {
-            const convertedDistance = distance >= 1000
-              ? `< ${Math.round(distance / 1000)} km`
-              : `< ${Math.round(distance)} m`;
+        return (
+          <div>
+              <div className={classes.resultsTitle}>Zoekresulaten:</div>
 
-            return (
-              <div key={name} className={this.props.classes.results}>
-                  {name}, {convertedDistance}
-              </div>
-            );
-        });
+              {
+                  results.map(({ name, distance = 0, volunteerCount, id }) => {
+                      const convertedDistance = distance >= 1000
+                        ? `< ${Math.round(distance / 1000)} km`
+                        : `< ${Math.round(distance)} m`;
+
+                      return (
+                        <div key={name} className={classes.result}>
+                            <div className={classes.resultProperty}>
+                                <div className={classes.resultTitle}>Naam</div>
+                                <div className={classes.resultSubtitle}>{name}</div>
+                            </div>
+
+                            <div className={classes.resultProperty}>
+                                <div className={classes.resultTitle}>Afstand</div>
+                                <div className={classes.resultSubtitle}>{convertedDistance}</div>
+                            </div>
+
+                            <div className={classes.resultProperty}>
+                                <div className={classes.resultTitle}>Deelneemers</div>
+                                <div className={classes.resultSubtitle}>{volunteerCount}</div>
+                            </div>
+
+                            <Button
+                              className={classes.resultButton}
+                              color="primary"
+                              component={Link}
+                              to={`/workspace/${id}`}
+                              variant="contained"
+                            >Sluit je aan</Button>
+                        </div>
+                      );
+                  })
+              }
+
+              <Button
+                className={classes.addPlaygroundButton}
+                onClick={this.toggleAddPlayground}
+              >
+                  Mijn speeltuin staat er nog niet bij
+                  <ArrowIcon />
+              </Button>
+          </div>
+        );
     }
 
     render() {
         const { classes, googleMapsKey } = this.props;
-        const { isAddPlaygroundOpen } = this.state;
+        const { isAddPlaygroundOpen, userAddress } = this.state;
 
         return (
           <div>
@@ -242,9 +359,16 @@ class AddFindPlayground extends Component {
                 expandContent={
                     <div className={classes.wrapper}>
                         <div className={classes.search}>
-                            <PlacesWithStandaloneSearchBox getResults={this.getResults} classes={classes} googleMapsKey={googleMapsKey} />
+                            <PlacesWithStandaloneSearchBox
+                              getResults={this.getResults}
+                              classes={classes}
+                              googleMapsKey={googleMapsKey}
+                            />
 
-                            <Button className={classes.gotoMapButton}>
+                            <Button
+                              className={classes.gotoMapButton}
+                              onClick={this.toggleAddPlayground}
+                            >
                                 Of zoek op de kaart
                                 <ArrowIcon />
                             </Button>
@@ -257,7 +381,11 @@ class AddFindPlayground extends Component {
                 }
               />
 
-              <AddPlayground isOpen={isAddPlaygroundOpen} toggleOpen={this.toggleAddPlayground} />
+              <AddPlayground
+                isOpen={isAddPlaygroundOpen}
+                toggleOpen={this.toggleAddPlayground}
+                userAddress={userAddress}
+              />
           </div>
         );
     }

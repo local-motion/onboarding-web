@@ -10,6 +10,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
+import Search from "@material-ui/icons/Search";
 
 import { ensurePlaygrounds } from "../../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
@@ -55,6 +57,10 @@ function renderInputComponent(inputProps) {
                 input: classes.input
             },
             disableUnderline: true,
+            endAdornment:
+              <InputAdornment className={classes.searchIcon} disablePointerEvents position="end">
+                  <Search color="disabled" />
+              </InputAdornment>
         }}
         {...other}
       />
@@ -161,6 +167,11 @@ const styles = theme => ({
         overflow: 'hidden',
         boxShadow: 'none',
     },
+    searchIcon: {
+        position: 'absolute',
+        right: 15,
+        top: 25,
+    }
 });
 
 class IntegrationAutosuggest extends React.Component {

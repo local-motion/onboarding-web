@@ -4,12 +4,13 @@ import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
-import { GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, stopPlaygroundDetailsStream } from "../../components/Playground/PlaygroundActions.js";
+import { GET_PLAYGROUND_DETAILS } from "../../components/Playground/PlaygroundActions.js";
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getPhases, getWorkspaceStartLink, shouldWorkspaceUpdate } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
+import { createInitiative } from "../../components/Playground/PlaygroundActions";
 
 const mapStateToProps = (state, ownProps) => ({
     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -32,33 +33,39 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    ensurePlaygroundDetails:        (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
-    stopPlaygroundDetailsStream:    (initiativeId) =>     dispatch(stopPlaygroundDetailsStream(initiativeId)),
+    createInitiative:    (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
 });
 
 
 class WorkspaceTemplate extends React.Component {
     componentDidMount() {
-        const { ensurePlaygroundDetails, match: { params: { initiativeId } } } = this.props;
-
-        if (!initiativeId) return;
-
-        console.log("starting stream playground details of " + initiativeId);
-        ensurePlaygroundDetails(initiativeId);
+        this.createLocalPlayground();
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         return shouldWorkspaceUpdate(this.props, nextProps);
     }
 
-    componentWillUnmount() {
-        const { stopPlaygroundDetailsStream, match: { params: { initiativeId } } } = this.props;
-
-        if (!initiativeId) return;
-
-        console.log('stopping stream: ', initiativeId);
-        stopPlaygroundDetailsStream(initiativeId);
+    componentDidUpdate(prevProps, prevState) {
+        if (!prevProps.user && this.props.user) {
+            this.createLocalPlayground();
+        }
     }
+
+    createLocalPlayground = () => {
+        const { createInitiative, history, user } = this.props;
+
+        const playgroundToCreate = JSON.parse(localStorage.getItem('playgroundToCreate'));
+
+        if (user && (playgroundToCreate !== null)) {
+            const { name, lat, lng } = playgroundToCreate;
+
+            createInitiative(name, lat, lng, (data) => {
+                localStorage.removeItem('playgroundToCreate');
+                history.push('/workspace/' + data.createInitiative.id);
+            });
+        }
+    };
 
     render() {
         const { playground, user, classes, signInHandler, ...rest } = this.props;
