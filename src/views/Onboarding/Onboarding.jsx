@@ -85,7 +85,7 @@ class Onboarding extends React.Component {
     }
 
     render() {
-        const { playgrounds, classes, user } = this.props;
+        const { playgrounds, user } = this.props;
         const { playground, map } = this.state;
 
         return (
@@ -96,7 +96,6 @@ class Onboarding extends React.Component {
 
                 <Playgrounds
                   playgrounds={playgrounds}
-                  classes={classes}
                   user={user}
                   playground={playground}
                   map={map}

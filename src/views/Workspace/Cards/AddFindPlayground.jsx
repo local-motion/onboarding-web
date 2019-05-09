@@ -352,10 +352,10 @@ class AddFindPlayground extends Component {
         return (
           <div>
               <WorkspaceCard
-                title={"Speeltuin toevoegen"}
+                title={"Actie starten"}
                 done={null}
                 image={require("../../../assets/img/backgrounds/workspace-welcome.jpg")}
-                content={"De eerste stap is om je aan te sluiten bij de actiepagina van jouw speeltuin, of om deze aan te maken. Vul je gegevens in om te beginnen."}
+                content={"De eerste stap is om te kijken of je je kunt aansluiten bij een bestaande actiepagina van jouw speeltuin. Misschien is een team bezig om jou speeltuin rookvrij te maken. Vul je plaatsnaam, adres of postcode in om te beginnen."}
                 expandContent={
                     <div className={classes.wrapper}>
                         <div className={classes.search}>

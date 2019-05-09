@@ -47,7 +47,7 @@ export function getPhases() {
                     visible: ({ user }) => !user,
                 },
                 {
-                    name: 'Speeltuin toevoegen',
+                    name: 'Actie starten',
                     link: '/add-find-playground',
                     visible: ({ playground }) => !playground,
                 },
