@@ -10,12 +10,21 @@ const styles = theme => ({
     container: {
         ...container,
         width: '80%',
+
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            padding: '0 20px',
+        },
     },
     phases: {
         marginTop: 30,
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
+
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 10,
+        },
     },
     title: {
         fontSize: 58,
@@ -24,6 +33,11 @@ const styles = theme => ({
         textAlign: 'center',
         fontFamily: "'dk_black_bamboo-webfont'",
         marginBottom: 35,
+
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 40,
+            marginBottom: 25,
+        },
     },
     text: {
         fontSize: 16,
@@ -38,9 +52,18 @@ const styles = theme => ({
         flexWrap: 'wrap',
         justifyContent: 'center',
         marginBottom: 10,
+
+        [theme.breakpoints.down('sm')]: {
+            justifyContent: 'flex-start',
+        },
     },
     button: {
         margin: '0 auto',
+
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: '100%',
+            fontSize: 16,
+        },
     },
 });
 
