@@ -10,9 +10,7 @@ import VerificationLinkHandler from "./VerificationLinkHandler";
 
 
 const CustomAuthenticator = (props) => {
-    console.log("CustomAuthenticator props", props, props.changeMode);
     return (
-
         <Authenticator
             hideDefault >
             <JSignIn setCta={props.setCta} unsetCta={props.unsetCta} onSignIn={props.onSignIn} />

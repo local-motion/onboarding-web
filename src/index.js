@@ -42,7 +42,6 @@ store.dispatch(publishApiBaseURL(apiBaseUrl))
 
 // Trigger a close of the confirmation dialog each time the history changes
 window.onpopstate = () => {
-    console.log('oppopstate')
     store.dispatch(closeSimpleDialog())
 }
 
@@ -84,7 +83,7 @@ store.dispatch(executeQuery({
             return {
                 headers: {
                     ...headers,
-                    Authorization2: jwtToken ? `Bearer ${jwtToken}` : ''
+                    AuthBearer: jwtToken ? `Bearer ${jwtToken}` : ''
                 }
             }
         })
@@ -121,7 +120,7 @@ store.dispatch(executeQuery({
 
 
         // Wrap the main app with providers
-        const Wrapped = [
+        const wrappedApplication = 
             <Provider store={store}>
                 <ApolloProvider client={client}>
                     <I18nextProvider i18n={i18n}>
@@ -129,7 +128,7 @@ store.dispatch(executeQuery({
                     </I18nextProvider>
                 </ApolloProvider>
             </Provider>
-        ]
+        
 
 
         // Before (re)loading this page/application, check whether there is a authenticated user (which includes the session)
@@ -146,7 +145,7 @@ store.dispatch(executeQuery({
             .finally(() => {
                 const rootElement = document.querySelector("#root")
                 ReactDOM.render(
-                    Wrapped,
+                    wrappedApplication,
                     rootElement
                 )
             })

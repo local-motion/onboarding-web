@@ -127,14 +127,12 @@ class JConfirmSignUp extends Component {
         const verificationCode = document.getElementById('confirmsignup_verificationcode') ? document.getElementById('confirmsignup_verificationcode').value : defaultVerificationCode
         const RGEX = new RegExp(/([0-9])\d{5}/g);
         const validatedResult = RGEX.test(verificationCode);
-        console.log('validating input, username, code, testresult', username, verificationCode, validatedResult)
         return username && username.length > 0 && validatedResult
     }
 
     componentDidUpdate() {
         const {authState} = this.props;
         const verificationCode = authState.split(':')[1]
-        console.log('update confirmsignup (authstate, verification code, auto submit triggered): ', authState, verificationCode, this.state.autoSubmitTriggered)
         if (authState.startsWith('confirmSignUp') && verificationCode && !this.state.autoSubmitTriggered) {
             this.setState({autoSubmitTriggered: true})
             this.confirmSignUp()
@@ -149,8 +147,6 @@ class JConfirmSignUp extends Component {
         }
         const verificationCode = authState.split(':')[1]
         const validInput = this.isValidInput(authData, verificationCode)
-        console.log('Rendering jsignup, valid input:' + validInput)
-        console.log('Rendering jsignup, authState: ', authState)
 
         const style = {
             width: '20rem',

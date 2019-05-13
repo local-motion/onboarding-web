@@ -162,7 +162,7 @@ const executeRestQuery = (queryOptions) => {
           body: JSON.stringify(variables),
           headers: {
             'Content-Type': 'application/json',
-            Authorization2: "Bearer " + getJwtToken(getState())
+            AuthBearer: "Bearer " + getJwtToken(getState())
           }
         })
 

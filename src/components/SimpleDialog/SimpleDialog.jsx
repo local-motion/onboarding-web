@@ -43,9 +43,6 @@ class SimpleDialog extends React.Component {
 
   render() {
     const {type, title, message, buttonMessage, cancelButtonMessage, onConfirm} = this.props
-
-    console.log('rendering simple dialog:', this.props)
-
     return (
       <div>
         <Dialog
@@ -70,7 +67,7 @@ class SimpleDialog extends React.Component {
             :
               // CONFIRMATION_DIALOG
               <DialogActions>
-                <Button onClick={this.handleClose} color="secundary">
+                <Button onClick={this.handleClose} color="secondary">
                   {cancelButtonMessage || 'Annuleren'}
                 </Button>
                 <Button onClick={onConfirm} color="primary">

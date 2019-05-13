@@ -83,6 +83,7 @@ class JSignIn extends Component {
     signInSuccess(user) {
         logger.info('sign in success', user);
         console.log('sign in success', user);
+        this.inputs.password = ''                                            // clear password from memory
         this.setState({error: '', waitingForServerResponse: false});
 
         if (user.attributes.email_verified !== true) {
@@ -100,6 +101,7 @@ class JSignIn extends Component {
 
     signInError(err) {
         logger.info('sign in error', err);
+        this.inputs.password = ''                                            // clear password from memory
         /*
           err can be in different structure:
             1) plain text message;

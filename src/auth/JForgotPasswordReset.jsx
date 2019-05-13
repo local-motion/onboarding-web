@@ -69,8 +69,6 @@ class JForgotPasswordReset extends Component {
             return null;
         }
 
-        console.log('rendering password reset')
-
         const verificationCode = authState.split(':')[1]
         const style = {
             width: '100%',

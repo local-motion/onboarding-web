@@ -29,22 +29,14 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
     signOutUser:    () =>     dispatch(signOutUser()),
-    // deleteUser:    () =>     dispatch(deleteUser()),
     deleteUser:     () =>      dispatch(openConfirmationDialog( 'Bevestig uitschrijven', 
                                                                 'Weet je zeker dat je je wilt uitschrijven?',
-                                                                null, null, () => {
-                                                                    console.log('really deleting user...')
-                                                                    dispatch(deleteUser())
-                                                                } 
+                                                                null, null, () => dispatch(deleteUser())
                                                                 ))
 })
 
 class HeaderLinks extends React.Component {
 
-    // confirmDeleteUser = () => {
-
-    // }
-    
     render() {
         const {classes, user, className, deleteUser, signOutUser} = this.props;
 

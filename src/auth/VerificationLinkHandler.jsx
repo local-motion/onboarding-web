@@ -66,10 +66,6 @@ class VerificationLinkHandler extends Component {
         const username = params.user
         const verificationCode = params.code
         const initiativeId = readCookie(VERIFICATION_INITIATIVE_COOKIE)
-
-        console.log('props: ', this.props)
-        console.log('parsed (type, name, code): ', verificationType, username, verificationCode)
-
         const {authState, authData, authenticatedUser, openAlreadyLoggedInDialog} = this.props
 
 

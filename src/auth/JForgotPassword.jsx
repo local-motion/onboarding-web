@@ -57,7 +57,6 @@ class JForgotPassword extends Component {
 
     catchEnterSubmit(e){
         if(e.keyCode === 13 && e.shiftKey === false && this.state.usernameFilled) {
-            console.log('sendcode');
             this.sendCode();
         }
     }
@@ -70,7 +69,6 @@ class JForgotPassword extends Component {
     render() {
         const isInCard = !!this.props.match.params.initiativeId;
         const {authState, authData} = this.props;
-        console.log("props for forgot password:", this.props)
         if (authState !== 'forgotPassword') {
             return null;
         }

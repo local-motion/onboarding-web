@@ -89,6 +89,7 @@ class JSignUp extends Component {
 
     signUpSuccess(username) {
         logger.info('sign up success with ' + username);
+        this.inputs.password = ''                                            // clear password from memory
         this.setState({error: '', waitingForServerResponse: false});
 
         this.changeState('confirmSignUp', username);
@@ -96,6 +97,7 @@ class JSignUp extends Component {
 
     signUpError(err) {
         logger.info('sign up error', err);
+        this.inputs.password = ''                                            // clear password from memory
         let message = getErrorMessage(err.code, err.message)
         if (err.message && (err.message.includes("password") || err.message.includes("Password")))
             message = 'Je wachtwoord heeft minimaal 8 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.';

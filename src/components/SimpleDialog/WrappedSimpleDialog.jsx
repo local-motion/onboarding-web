@@ -18,9 +18,6 @@ const mapDispatchToProps = dispatch => ({
 
 const WrappedSimpleDialog = props => {
     const {simpleDialog, closeSimpleDialog, confirmConfirmationDialog} = props
-
-    console.log('wrapped simple dialog:' , simpleDialog)
-
     return simpleDialog ?
         <SimpleDialog
             type={simpleDialog.type}

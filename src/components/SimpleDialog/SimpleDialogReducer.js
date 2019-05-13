@@ -30,10 +30,8 @@ export const CONFIRMATION_DIALOG = 'CONFIRMATION_DIALOG'
 
 // Selectors
 
-export const getSimpleDialog = (state) => {
-  console.log('simple dialog selector returning: ', state.simpleDialog, state)
-  return state.simpleDialog
-}
+export const getSimpleDialog = state => state.simpleDialog
+
 
 
 // Reducer
@@ -42,7 +40,6 @@ const SimpleDialogReducer = (state = initialState, action) => {
   switch (action.type) {
 
     case OPEN_ERROR_DIALOG:
-    console.log("opening error dialog", action)
       return {
         type: ERROR_DIALOG,
         title: action.title,
@@ -52,7 +49,6 @@ const SimpleDialogReducer = (state = initialState, action) => {
       }
 
     case OPEN_CONFIRMATION_DIALOG:
-    console.log("opening confirmation dialog", action)
       return {
         type: CONFIRMATION_DIALOG,
         title: action.title,
@@ -64,7 +60,6 @@ const SimpleDialogReducer = (state = initialState, action) => {
       }
 
     case CLOSE_SIMPLE_DIALOG:
-      console.log('reducer clearing simple dialog')
       return initialState
 
     default:
