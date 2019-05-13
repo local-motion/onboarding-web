@@ -9,6 +9,8 @@ import { getErrorMessage } from '../api/ErrorMessages';
 import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import { getActivePhaseUrl } from "../misc/WorkspaceHelpers";
 import TextField from "@material-ui/core/TextField/TextField";
+import { openConfirmationDialog } from '../components/ConfirmationDialog/ConfirmationDialogActions';
+import { signOutUser } from '../components/UserProfile/UserProfileActions';
 
 const logger = new Logger('JSignIn');
 
@@ -17,6 +19,16 @@ const mapStateToProps = (state, ownProps) => ({
       ? getPlaygroundDetails(state, ownProps.match.params.initiativeId)
       : null,
 });
+
+const mapDispatchToProps = (dispatch) => ({
+    triggerEmailNotVerifiedError: () => dispatch(openConfirmationDialog(
+        'Emailadres niet gevalideerd', 
+        'Uw emailadres is niet langer gevalideerd. Neem contact op met de beheerder (zie contact link onderaan het scherm)', 
+        'OK', 
+        () => dispatch(signOutUser()))
+      )
+
+})
 
 /**
  * A mix between
@@ -70,8 +82,13 @@ class JSignIn extends Component {
 
     signInSuccess(user) {
         logger.info('sign in success', user);
+        console.log('sign in success', user);
         this.setState({error: '', waitingForServerResponse: false});
 
+        if (user.attributes.email_verified !== true) {
+            this.props.triggerEmailNotVerifiedError()
+            return
+        }
         // There are other sign in challenges we don't cover here.
         // SMS_MFA, SOFTWARE_TOKEN_MFA, NEW_PASSWORD_REQUIRED, MFA_SETUP ...
         if (user.challengeName === 'SMS_MFA' || user.challengeName === 'SOFTWARE_TOKEN_MFA') {
@@ -235,4 +252,4 @@ class JSignIn extends Component {
     }
 }
 
-export default withRouter(connect(mapStateToProps)(JSignIn));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(JSignIn));

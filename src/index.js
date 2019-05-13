@@ -83,7 +83,7 @@ store.dispatch(executeQuery({
             return {
                 headers: {
                     ...headers,
-                    Authorization: jwtToken ? `Bearer ${jwtToken}` : ''
+                    Authorization2: jwtToken ? `Bearer ${jwtToken}` : ''
                 }
             }
         })

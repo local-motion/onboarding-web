@@ -4,6 +4,7 @@ import { executeQuery } from '../../api/QueryActions';
 import { openConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialogActions';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
+export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
 export const CREATE_USER_PROFILE = 'CREATE_USER_PROFILE'
 export const DELETE_USER_PROFILE = 'DELETE_USER_PROFILE'
 export const USER_SIGNED_IN = 'USER_SIGNED_IN'
@@ -33,6 +34,24 @@ export const fetchUserProfile = () => executeQuery( {
         return true   // terminate event execution
       }
     }
+  })
+
+
+
+export const checkEmailExists = (emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback) => executeQuery( {
+    type: 'GRAPHQL_QUERY',
+    baseActionIdentifier: CHECK_EMAIL_EXISTS, 
+    query: gql`
+    query Query($emailAddress: String!) {
+      emailExists(emailAddress: $emailAddress)
+    }
+  `, 
+    variables: {
+      emailAddress
+    },
+    onSuccessPrepublish: onSuccessCallback,
+    onFailPrepublish: onFailCallback,
+    onCompletionPrepublish: onCompletionCallback
   })
 
 export const createUser = (onSuccessCallback) => executeQuery( {

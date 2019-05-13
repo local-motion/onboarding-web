@@ -9,8 +9,19 @@ import ContentDialog from "../components/Dialogs/ContentDialog";
 import TermsText from "../views/Legal/TermsText";
 import PrivacyText from "../views/Legal/PrivacyText";
 import { setSignupConfirmCookies } from './VerificationLinkHandler';
+import { checkEmailExists } from '../components/UserProfile/UserProfileActions';
+import { connect } from "react-redux";
 
 const logger = new Logger('JSignUp');
+
+
+const mapStateToProps = (state, ownProps) => ({
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    checkEmailExists: (emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback) => dispatch(checkEmailExists(emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback)),
+})
+
 
 /**
  * A mix between
@@ -58,9 +69,17 @@ class JSignUp extends Component {
         const {username, password, email, phone_number} = this.inputs;
         logger.info('sign up with ' + username);
         this.setState({waitingForServerResponse: true})
-        Auth.signUp(username, password, email, phone_number)
-            .then(() => this.signUpSuccess(username))
-            .catch(err => this.signUpError(err));
+        this.props.checkEmailExists(email, 
+            (result) => {
+                // on success (let errors be picked up by the default error handler)
+                if (result.emailExists === true)
+                    this.signUpError({code: 'EMAIL_ADDRESS_ALREADY_EXISTS'})
+                else
+                    Auth.signUp(username, password, email, phone_number)
+                        .then(() => this.signUpSuccess(username))
+                        .catch(err => this.signUpError(err));
+            },
+        )
 
         // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
         const {initiativeId} = this.props.match.params
@@ -282,4 +301,4 @@ class JSignUp extends Component {
     }
 }
 
-export default withRouter(JSignUp);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(JSignUp));
