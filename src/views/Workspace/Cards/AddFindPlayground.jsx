@@ -231,11 +231,11 @@ const PlacesWithStandaloneSearchBoxImpl = compose(
                       <Search color="disabled" />
                   </InputAdornment>,
             }}
-            inputProps={{
-                style: {
-                    padding: '12px 14px'
-                }
-            }}
+            // inputProps={{
+            //     style: {
+            //         padding: '12px 14px'
+            //     }
+            // }}
           />
       </StandaloneSearchBox>
   </div>
@@ -318,7 +318,7 @@ class AddFindPlayground extends Component {
                             </div>
 
                             <div className={classes.resultProperty}>
-                                <div className={classes.resultTitle}>Deelneemers</div>
+                                <div className={classes.resultTitle}>Deelnemers</div>
                                 <div className={classes.resultSubtitle}>{volunteerCount}</div>
                             </div>
 
@@ -355,7 +355,7 @@ class AddFindPlayground extends Component {
                 title={"Actie starten"}
                 done={null}
                 image={require("../../../assets/img/backgrounds/workspace-welcome.jpg")}
-                content={"De eerste stap is om te kijken of je je kunt aansluiten bij een bestaande actiepagina van jouw speeltuin. Misschien is een team bezig om jouW speeltuin rookvrij te maken. Vul je plaatsnaam, adres of postcode in om te beginnen."}
+                content={"De eerste stap is om te kijken of je je kunt aansluiten bij een bestaande actiepagina van jouw speeltuin. Misschien is een team bezig om jouw speeltuin rookvrij te maken. Vul je plaatsnaam, adres of postcode in om te beginnen."}
                 expandContent={
                     <div className={classes.wrapper}>
                         <div className={classes.search}>
