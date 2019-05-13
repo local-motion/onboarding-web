@@ -4,15 +4,15 @@ import {Button, Typography} from '@material-ui/core'
 import { readCookie, eraseCookie, createCookie } from '../utils/CookieUtils';
 import { getUser } from '../components/UserProfile/UserProfileReducer';
 import { connect } from 'react-redux'
-import { openConfirmationDialog } from '../components/ConfirmationDialog/ConfirmationDialogActions';
 import queryString from 'query-string';
+import { openErrorDialog } from '../components/SimpleDialog/SimpleDialogActions';
 
 const mapStateToProps = state => ({
     authenticatedUser: getUser(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-    openAlreadyLoggedInDialog:    () => dispatch(openConfirmationDialog(
+    openAlreadyLoggedInDialog:    () => dispatch(openErrorDialog(
                         'Je bent reeds ingelogd', 
                         'Als je met een andere gebruikersnaam wilt inloggen log dan eerst uit en klik dan nogmaals op de verificatielink',
                         )),

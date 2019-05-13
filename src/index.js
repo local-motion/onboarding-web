@@ -20,7 +20,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './RootReducer';
 import { getJwtToken } from "./components/UserProfile/UserProfileReducer";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
-import { closeConfirmationDialog } from "./components/ConfirmationDialog/ConfirmationDialogActions";
+import { closeSimpleDialog } from "./components/SimpleDialog/SimpleDialogActions";
 
 // Components to route to
 import { ensurePlaygrounds } from "./components/Playground/PlaygroundActions";
@@ -42,7 +42,8 @@ store.dispatch(publishApiBaseURL(apiBaseUrl))
 
 // Trigger a close of the confirmation dialog each time the history changes
 window.onpopstate = () => {
-    store.dispatch(closeConfirmationDialog())
+    console.log('oppopstate')
+    store.dispatch(closeSimpleDialog())
 }
 
 // Fetch the configuration from the server, proceed after getting a successful result

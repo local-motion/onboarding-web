@@ -9,8 +9,8 @@ import { getErrorMessage } from '../api/ErrorMessages';
 import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import { getActivePhaseUrl } from "../misc/WorkspaceHelpers";
 import TextField from "@material-ui/core/TextField/TextField";
-import { openConfirmationDialog } from '../components/ConfirmationDialog/ConfirmationDialogActions';
 import { signOutUser } from '../components/UserProfile/UserProfileActions';
+import { openErrorDialog } from '../components/SimpleDialog/SimpleDialogActions';
 
 const logger = new Logger('JSignIn');
 
@@ -21,7 +21,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    triggerEmailNotVerifiedError: () => dispatch(openConfirmationDialog(
+    triggerEmailNotVerifiedError: () => dispatch(openErrorDialog(
         'Emailadres niet gevalideerd', 
         'Uw emailadres is niet langer gevalideerd. Neem contact op met de beheerder (zie contact link onderaan het scherm)', 
         'OK', 

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Auth } from 'aws-amplify';
 import { executeQuery } from '../../api/QueryActions';
-import { openConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialogActions';
+import { openErrorDialog } from '../SimpleDialog/SimpleDialogActions';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
@@ -25,7 +25,7 @@ export const fetchUserProfile = () => executeQuery( {
     onSuccessPrepublish: (result, dispatch) => {
       console.log( 'onSuccessPrepublish', result)
       if (!result.profile) {
-        dispatch(openConfirmationDialog(
+        dispatch(openErrorDialog(
           'Gebruikersprofiel niet aanwezig', 
           'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
           'OK', 
@@ -81,7 +81,19 @@ export const deleteUser = () => executeQuery( {
         }
       }
     `, 
-    onSuccess: (data, dispatch, getState) => dispatch(signOutUser())
+    onSuccess: (data, dispatch, getState) => {
+      Auth.currentAuthenticatedUser().then( user => {
+        user.deleteUser( (error, data) => {
+          console.log('cognito user deleted (error, data): ', error, data)
+        })
+      })
+      .catch(error => {
+        console.log('delete user error', error)
+        dispatch(openErrorDialog('Uitschrijven mislukt',
+                                        'Er heeft zich een probleem voorgedaan met het verwijderen van je gegevens. Log opnieuw in en probeer het opnieuw.', 
+                                        'OK', () => dispatch(signOutUser()) ))
+    })
+    }
   })
 
 export const userSignedIn = cognitoUser => (dispatch, getState) =>{
@@ -97,7 +109,7 @@ export const signOutUser = () => (dispatch) => {
         })
         .catch(error => {
             console.log('sign out error', error)
-            dispatch(openConfirmationDialog('Er heeft zich een probleem voorgedaan met het uitloggen, de pagina wordt opnieuw geladen', 
+            dispatch(openErrorDialog('Er heeft zich een probleem voorgedaan met het uitloggen, de pagina wordt opnieuw geladen', 
                                             'Sign out error: ' + error, 
                                             'Sluiten', () => {window.location.reload()}))
         })

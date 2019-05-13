@@ -4,7 +4,7 @@ import { loadingReducer } from "./api/LoadingReducer";
 import playgroundReducer from "./components/Playground/PlaygroundReducer";
 import { fetchDetailsReducer } from "./api/FetchDetailsReducer";
 import userProfileReducer from "./components/UserProfile/UserProfileReducer";
-import confirmationDialogReducer from "./components/ConfirmationDialog/ConfirmationDialogReducer";
+import simpleDialogReducer from "./components/SimpleDialog/SimpleDialogReducer";
 import { streamReducer } from "./api/StreamReducer";
 import configReducer from "./misc/ConfigReducer";
 
@@ -18,7 +18,7 @@ const rootReducer = (state = {}, action) => {
     stream:             streamReducer(state.stream, action, state),
     loading:            loadingReducer(state.loading, action),
     error:              errorReducer(state.error, action),
-    confirmationdialog: confirmationDialogReducer(state.confirmationdialog, action),
+    simpleDialog:       simpleDialogReducer(state.SimpleDialog, action),
     fetchDetails:       fetchDetailsReducer(state.fetchDetails, action)
   })
 }

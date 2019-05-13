@@ -9,7 +9,7 @@ import CookieConsent from "react-cookie-consent";
 import { history } from "./setup";
 import CustomAuthenticator from "./auth/CustomAuthenticator";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
-import WrappedConfirmationDialog from "./components/ConfirmationDialog/WrappedConfirmationDialog";
+import WrappedSimpleDialog from "./components/SimpleDialog/WrappedSimpleDialog";
 import { connect } from 'react-redux'
 
 // Components to route to
@@ -81,7 +81,7 @@ class App extends React.Component {
                         </span>
                 </CookieConsent>
 
-                <WrappedConfirmationDialog/>
+                <WrappedSimpleDialog/>
                 
             </div>
         )

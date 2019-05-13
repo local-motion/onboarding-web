@@ -1,4 +1,4 @@
-import { openConfirmationDialog } from "../components/ConfirmationDialog/ConfirmationDialogActions";
+import { openErrorDialog } from "../components/SimpleDialog/SimpleDialogActions";
 import { createUser, signOutUser } from "../components/UserProfile/UserProfileActions";
 import { ErrorCode, getErrorMessage } from "./ErrorMessages";
 import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
@@ -288,13 +288,13 @@ const handleError = (error, dispatch, getState, queryOptions, message) => {
 // Helper functions
 
 const openErrorMessageDialog = (error) => (dispatch, getState) => {
-  dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', 
+  dispatch(openErrorDialog('Er is helaas iets fout gegaan', 
                                   getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => {window.location.reload()}))
 }
 
 const openErrorMessageAndLogoffDialog = (error) => (dispatch, getState) => {
   console.log('dispatching err msg and logoff')
-  dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', 
+  dispatch(openErrorDialog('Er is helaas iets fout gegaan', 
                                   getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => dispatch(signOutUser())))
 }
 
