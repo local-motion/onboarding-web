@@ -34,7 +34,7 @@ const initialState = {
 // Selectors
 
 export const getAllPlaygrounds = (state) => state.playgrounds.playgrounds
-export const getPlaygroundDetails = (state, playgroundId) => state.playgrounds.playgroundDetails[playgroundIdToKey(playgroundId)]
+export const getPlaygroundDetails = (state, playgroundId) => playgroundId ? state.playgrounds.playgroundDetails[playgroundIdToKey(playgroundId)] : null
 export const isCurrentUserManagerOfPlayground = (state, playgroundId) => isUserManagerOfPlayground(getUser(state), getPlaygroundDetails(state, playgroundId))
 
 // Public utilities
@@ -130,11 +130,15 @@ const playgroundIdToKey = (playgroundId) => 'P' + playgroundId.replace('-', '_')
 
 const updatePlaygroundDetails = (playgroundDetails, updatedPlayground) => {
   const newPlaygroundDetails = {...playgroundDetails}
-  newPlaygroundDetails[playgroundIdToKey(updatedPlayground.id)] = 
-    { 
-      ...updatedPlayground, 
-      smokeFreeDate: updatedPlayground.smokeFreeDate ? new Date(updatedPlayground.smokeFreeDate) : null   // TODO check why this conversion is required
-    }
+
+  if (updatedPlayground) {
+      newPlaygroundDetails[playgroundIdToKey(updatedPlayground.id)] =
+        {
+            ...updatedPlayground,
+            smokeFreeDate: updatedPlayground.smokeFreeDate ? new Date(updatedPlayground.smokeFreeDate) : null   // TODO check why this conversion is required
+        };
+  }
+
   return newPlaygroundDetails
 }
 

@@ -21,6 +21,7 @@ import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
 class AddPlayground extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             name: "",
             lat: "",
@@ -33,7 +34,34 @@ class AddPlayground extends React.Component {
             duplicate: false,
             error: '',
         }
-        this.submit.bind(this)
+    };
+
+    componentDidMount() {
+        this.setDefaultMap();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (
+          (!prevProps.userAddress && this.props.userAddress)
+            || (prevProps.userAddress && (prevProps.userAddress.lat !== this.props.userAddress.lat))
+            || (prevProps.userAddress && (prevProps.userAddress.lng !== this.props.userAddress.lng))
+        ) {
+            this.setDefaultMap();
+        }
+    }
+
+    setDefaultMap = () => {
+        const { userAddress } = this.props;
+        const map = userAddress
+          ? {
+              latlng: {lat: userAddress.lat, lng: userAddress.lng},
+              zoom: userAddress.zoom
+          } : {
+              latlng: {lat: 52.092876, lng: 5.10448},
+              zoom: 8
+          };
+
+        this.setState({ map });
     };
 
     isValidState = () => {
@@ -41,13 +69,24 @@ class AddPlayground extends React.Component {
     }
 
     submit = () => {
-        const { user, history, createInitiative } = this.props;
-
-        if (!user) return history.push('/login');
-
         if (!this.validateName(this.state.name) && this.isValidState)
-            createInitiative(this.state.name, this.state.lat, this.state.lng, (data) => history.push('/workspace/' + data.createInitiative.id))
-    }
+            this.createInitiativeHandler();
+    };
+
+    createInitiativeHandler = () => {
+        const { user, history, createInitiative } = this.props;
+        const { name, lat, lng } = this.state;
+
+        if (!user) return this.saveInitiativeAndGotoLogin({ name, lat, lng });
+
+        createInitiative(name, lat, lng, (data) => history.push('/workspace/' + data.createInitiative.id))
+    };
+
+    saveInitiativeAndGotoLogin = ({ name, lat, lng }) => {
+        localStorage.setItem('playgroundToCreate', JSON.stringify({ name, lat, lng }));
+
+        this.props.history.push('/workspace/login?target=/workspace/');
+    };
 
     handleClickOpen = () => {
         this.setState({open: true, name: '', duplicate: false, error: '', lat: '', lng: ''});
@@ -69,16 +108,16 @@ class AddPlayground extends React.Component {
 
     validateName = (name, stage) => {
         const validations = [
-            { 
+            {
                 validateThat: name => name.length > 2,
                 message: 'De naam van de speeltuin moet tenminste drie karakters lang zijn.',
                 stages: ['submit']
             },
-            { 
+            {
                 validateThat: name => name.length <= 40,
                 message: 'De naam van de speeltuin mag maximaal 40 karakters lang zijn.'
             },
-            { 
+            {
                 validateThat: name => this.props.playgrounds.filter(e => e.name.toLowerCase().trim() === name.toLowerCase()).length === 0,
                 message: 'Er bestaat al een speeltuin met deze naam.'
             },

@@ -124,7 +124,7 @@ class ExpansionPhase extends Component {
     };
 
     render() {
-        const { children, title, icon, expandedIcon, expandedPhase } = this.props;
+        const { children, title, icon, expandedIcon, expandedPhase, disabled } = this.props;
         const isExpanded = expandedPhase === title;
 
         return (
@@ -132,6 +132,7 @@ class ExpansionPhase extends Component {
             square
             expanded={isExpanded}
             onChange={this.handleChange}
+            disabled={disabled}
           >
               <ExpansionPanelSummary>
                   {

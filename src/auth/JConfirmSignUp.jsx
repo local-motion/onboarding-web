@@ -140,7 +140,7 @@ class JConfirmSignUp extends Component {
     }
 
     render() {
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = this.props.location.pathname.includes('workspace');
         const {authState, authData} = this.props;
         if (!authState.startsWith('confirmSignUp')) {
             return null;

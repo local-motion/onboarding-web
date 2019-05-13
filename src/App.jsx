@@ -21,13 +21,10 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
-
-const mapStateToProps = (state) => ({
-  })
   
 const mapDispatchToProps = (dispatch) => ({
-onUserSignedIn: user => dispatch(userSignedIn(user))
-})
+    onUserSignedIn: user => dispatch(userSignedIn(user))
+});
   
   
 class App extends React.Component {
@@ -35,7 +32,7 @@ class App extends React.Component {
     signInHandler = (username) => {
         console.log('signed in with ' + username);
         this.props.onUserSignedIn(username);
-    }
+    };
 
     render() {
         return (
@@ -53,10 +50,15 @@ class App extends React.Component {
                         <Route exact path="/terms" key="Terms of Use" component={Terms}/>
 
                         <Route exact path="/workspace/" key="Workspace" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
-                        {/* <Route exact path="/workspace/:initiativeId/verify/:verificationCode" key="WorkspaceVerify" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
+
+                        {/* <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
+                        <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
+                        
+                        <Route exact path="/workspace/login" key="WorkspaceLogin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
+                        <Route exact path="/workspace/add-find-playground" key="WorkspaceAddFindPlayground" component={Workspace}/>
+
                         <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
+                        <Route exact path="/workspace/:initiativeId/login" key="WorkspaceJoin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
 
                         <Route path="/workspace/:initiativeId/" component={Workspace}/>
 
@@ -88,4 +90,4 @@ class App extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(App)
