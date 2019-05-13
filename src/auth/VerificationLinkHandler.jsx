@@ -69,7 +69,7 @@ class VerificationLinkHandler extends Component {
         const {authState, authData, authenticatedUser, openAlreadyLoggedInDialog} = this.props
 
 
-        if (authState === 'complete' && verificationType === VERIFICATION_TYPE_RESET_PASSWORD) {
+        if (authState === 'signInBack' || (authState === 'complete' && verificationType === VERIFICATION_TYPE_RESET_PASSWORD)) {
             this.setState({complete: true})
             this.changeState('signIn', authData)
             return

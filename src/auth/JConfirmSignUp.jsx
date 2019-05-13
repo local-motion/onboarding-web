@@ -239,7 +239,7 @@ class JConfirmSignUp extends Component {
                             <div>
                                 <button
                                     style={style.extraButton}
-                                    onClick={() => this.changeState('signIn')}>
+                                    onClick={() => this.changeState('signInBack')}>
                                     Terug naar het inlogscherm
                                 </button>
                             </div>

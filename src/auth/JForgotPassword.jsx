@@ -128,7 +128,7 @@ class JForgotPassword extends Component {
                             <div style={style.right}>
                                 <button
                                     style={style.extraButton}
-                                    onClick={() => this.changeState('signIn')}>
+                                    onClick={() => this.changeState('signInBack')}>
                                     Terug naar het inlogscherm
                                 </button>
                             </div>

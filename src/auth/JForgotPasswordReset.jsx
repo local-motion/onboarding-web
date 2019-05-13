@@ -45,6 +45,7 @@ class JForgotPasswordReset extends Component {
 
     submitSuccess(username, data) {
         logger.info('forgot password reset success for ' + username, data);
+        this.inputs.password = ''                                            // clear password from memory
         this.setState({waitingForServerResponse: false})
         clearVerificationCookies();
         this.changeState('complete', username);
@@ -52,6 +53,7 @@ class JForgotPasswordReset extends Component {
 
     handleError(err) {
         logger.info('forgot password reset error', err);
+        this.inputs.password = ''                                            // clear password from memory
         // this.setState({error: err.message || err});
         this.setState({error: getErrorMessage(err.code, err.message), waitingForServerResponse: false});
     }
