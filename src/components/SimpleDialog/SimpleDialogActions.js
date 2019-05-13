@@ -35,7 +35,10 @@ console.log('dispatching close simple dialog')
 
 export const confirmConfirmationDialog = () => (dispatch, getState) => {
   const dialog = getSimpleDialog(getState())
-  const onConfirm = dialog && dialog.onConFirm
+
+  console.log('confirming: ', dialog)
+
+  const onConfirm = dialog && dialog.onConfirm
   dispatch({ type: CLOSE_SIMPLE_DIALOG })
   if (onConfirm)
     onConfirm()

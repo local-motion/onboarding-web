@@ -32,7 +32,10 @@ const mapDispatchToProps = dispatch => ({
     // deleteUser:    () =>     dispatch(deleteUser()),
     deleteUser:     () =>      dispatch(openConfirmationDialog( 'Bevestig uitschrijven', 
                                                                 'Weet je zeker dat je je wilt uitschrijven?',
-                                                                null, null, () => dispatch(deleteUser()) 
+                                                                null, null, () => {
+                                                                    console.log('really deleting user...')
+                                                                    dispatch(deleteUser())
+                                                                } 
                                                                 ))
 })
 
@@ -43,7 +46,7 @@ class HeaderLinks extends React.Component {
     // }
     
     render() {
-        const {classes, user, className} = this.props;
+        const {classes, user, className, deleteUser, signOutUser} = this.props;
 
         const profileButtonIcon = () => <span><AccountCircle /><ArrowDropDownRounded/></span>
 
@@ -94,8 +97,8 @@ class HeaderLinks extends React.Component {
                                 {divider: true},
                                 <Button >Mijn profiel</Button>,
                                 <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,
-                                <Button onClick={props.deleteUser}>Uitschrijven</Button>,
-                                <Button onClick={props.signOutUser}>Uitloggen</Button>,
+                                <Button onClick={deleteUser}>Uitschrijven</Button>,
+                                <Button onClick={signOutUser}>Uitloggen</Button>,
                             ]}
                         />
                     </ListItem>

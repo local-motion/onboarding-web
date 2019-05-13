@@ -8,8 +8,7 @@ import simpleDialogReducer from "./components/SimpleDialog/SimpleDialogReducer";
 import { streamReducer } from "./api/StreamReducer";
 import configReducer from "./misc/ConfigReducer";
 
-const rootReducer = (state = {}, action) => {
-  return  ({
+const rootReducer = (state = {}, action) => ({
     ...state,
     config:             configReducer(state.config, action),
     userprofile:        userProfileReducer(state.userprofile, action),
@@ -18,9 +17,8 @@ const rootReducer = (state = {}, action) => {
     stream:             streamReducer(state.stream, action, state),
     loading:            loadingReducer(state.loading, action),
     error:              errorReducer(state.error, action),
-    simpleDialog:       simpleDialogReducer(state.SimpleDialog, action),
+    simpleDialog:       simpleDialogReducer(state.simpleDialog, action),
     fetchDetails:       fetchDetailsReducer(state.fetchDetails, action)
   })
-}
 
 export default rootReducer
