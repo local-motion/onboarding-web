@@ -69,7 +69,6 @@
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
-    "babel-eslint": "9.0.0",
     "babel-plugin-import-rename": "1.0.1",
     "babel-plugin-module-resolver": "3.2.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
