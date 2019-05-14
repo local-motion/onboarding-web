@@ -2,26 +2,30 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core";
-import { compose, withProps, lifecycle } from "recompose";
-import { withScriptjs } from "react-google-maps";
-import StandaloneSearchBox from "react-google-maps/lib/components/places/StandaloneSearchBox";
-import TextField from "@material-ui/core/TextField/TextField";
+import { withTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button/Button";
-import Search from "@material-ui/icons/Search";
+import PinDrop from "@material-ui/icons/PinDrop";
+import List from "@material-ui/icons/List";
+import MyLocation from "@material-ui/icons/MyLocation";
 import SvgIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import AddPlayground from "../../Onboarding/Sections/Playgrounds/AddPlayground";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 import { getGoogleMapsKey } from "../../../misc/ConfigReducer";
+import PlaygroundMap from "../../Onboarding/Sections/Playgrounds/PlaygroundMap";
+import GooglePlacesAutocomplete from "../../Onboarding/components/GooglePlacesAutocomplete";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import Dialog from "@material-ui/core/Dialog/Dialog";
+import MiniMap from "../components/MiniMap";
 
 const styles = theme => ({
     wrapper: {},
     search: {
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         padding: '0 30px 30px',
         margin: '0 -30px',
         borderBottom: '1px solid rgb(231, 231, 231)',
@@ -29,19 +33,8 @@ const styles = theme => ({
     searchBar: {
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
     },
-    textInput: {
-        marginRight: 10,
-        width: 400,
-    },
-    cssLabel: {
-        transform: 'translate(12px, 14px) scale(1)',
-        '&$cssFocused': {
-            transform: 'translate(14px, -6px) scale(0.75)',
-        },
-    },
-    cssFocused: {},
     gotoMapButton: {
         padding: '10px 17px',
         paddingRight: 40,
@@ -62,6 +55,10 @@ const styles = theme => ({
         color: '#085ca6',
         margin: '20px 0',
     },
+    results: {
+        width: '100%',
+        minHeight: 200,
+    },
     result: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -75,12 +72,50 @@ const styles = theme => ({
             background: '#f6fafd',
         },
     },
+    miniMap: {
+        display: 'flex',
+        justifyContent: 'center',
+        width: 60,
+        paddingRight: 10,
+    },
+    miniMapContent: {
+        height: 400,
+        width: 600,
+    },
+    miniMapButton: {
+        minWidth: 36,
+    },
     resultProperty: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'center',
         width: 200,
+    },
+    resultsHeading: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    switchers: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    switcher: {
+        margin: 0,
+        color: '#626262',
+        borderRadius: 0,
+        textTransform: 'none',
+
+        '&:hover': {
+            color: '#085ca6',
+        },
+    },
+    switcherActive: {
+        color: '#085ca6',
+        background: 'rgba(0, 0, 0, 0.08)',
+    },
+    switcherIcon: {
+        marginRight: theme.spacing.unit,
     },
     resultTitle: {
         color: '#085ca6',
@@ -129,6 +164,14 @@ const styles = theme => ({
             right: 10,
         }
     },
+    buttonInsideMap: {
+        position: 'absolute',
+        bottom: 140,
+    },
+    playgroundMap: {
+        height: 550,
+        margin: '0 -30px',
+    },
 });
 
 function getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
@@ -170,78 +213,6 @@ const mapStateToProps = state => ({
 });
 
 
-const PlacesWithStandaloneSearchBox = props => (
-  <PlacesWithStandaloneSearchBoxImpl
-    {...props}
-    googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${props.googleMapsKey}&v=3.exp&libraries=places`}
-  />
-);
-
-const PlacesWithStandaloneSearchBoxImpl = compose(
-  withProps({
-      loadingElement: <div style={{ height: `100%` }} />,
-      containerElement: <div style={{ height: `400px` }} />,
-  }),
-  lifecycle({
-      componentWillMount() {
-          const refs = {};
-
-          this.setState({
-              places: [],
-              onSearchBoxMounted: ref => {
-                  refs.searchBox = ref;
-              },
-              onPlacesChanged: () => {
-                  const places = refs.searchBox.getPlaces();
-
-                  this.props.getResults(places[0]);
-
-                  this.setState({
-                      places,
-                  });
-              },
-          })
-      },
-  }),
-  withScriptjs
-)(props =>
-  <div data-standalone-searchbox="" className={props.searchBar}>
-      <StandaloneSearchBox
-        ref={props.onSearchBoxMounted}
-        bounds={props.bounds}
-        onPlacesChanged={props.onPlacesChanged}
-      >
-          <TextField
-            type="text"
-            variant="outlined"
-            name="search"
-            className={props.classes.textInput}
-            label="Zoek in je plaats"
-            autoFocus
-            placeholder="e.g. 9402 AS"
-            InputLabelProps={{
-                classes: {
-                    root: props.classes.cssLabel,
-                    focused: props.classes.cssFocused,
-                }
-            }}
-            InputProps={{
-                endAdornment:
-                  <InputAdornment disablePointerEvents position="end">
-                      <Search color="disabled" />
-                  </InputAdornment>,
-            }}
-            inputProps={{
-                style: {
-                    padding: '12px 14px'
-                }
-            }}
-          />
-      </StandaloneSearchBox>
-  </div>
-);
-
-
 class AddFindPlayground extends Component {
     constructor(props) {
         super(props);
@@ -255,23 +226,49 @@ class AddFindPlayground extends Component {
         isAddPlaygroundOpen: false,
         userAddress: null,
         results: null,
+        addressInput: '',
+        view: 'list',
+        playground: {
+            default: true,
+            name: this.props.t("playground.default.area")
+        },
+        map: {
+            latlng: {lat: 52.092876, lng: 5.10448},
+            zoom: 8
+        },
+        miniMapOpen: false,
+        playgroundMiniMap: null,
+    };
+
+    handleChange = address => {
+        this.setState({ addressInput: address });
+    };
+
+    handleSelect = address => {
+        geocodeByAddress(address)
+          .then(results => {
+              this.handleChange(address);
+
+              return getLatLng(results[0]);
+          })
+          .then(latLng => this.getResults(latLng))
+          .catch(error => console.error('Error', error));
     };
 
     toggleAddPlayground() {
         this.setState(({ isAddPlaygroundOpen }) => ({ isAddPlaygroundOpen: !isAddPlaygroundOpen }));
     }
 
-    getResults({ geometry: { location } }) {
-        const userLat = location.lat();
-        const userLng = location.lng();
-
+    getResults({ lat: userLat, lng: userLng }) {
         this.setState({
             userAddress: {
                 lat: userLat,
                 lng: userLng,
-                zoom: 15,
+                zoom: 12,
             },
         });
+
+        const howManyResults = 3;
 
         const results = this.props.playgrounds.map((playground) => {
             const { lat, lng } = playground;
@@ -282,31 +279,33 @@ class AddFindPlayground extends Component {
             };
         })
           .sort((a, b) => a.distance - b.distance)
-          .slice(0, 3);
+          .slice(0, howManyResults);
 
         this.setState({ results });
     }
 
-    renderResults() {
+    renderList() {
         const { classes } = this.props;
-        const { results } = this.state;
-
-        if (!results) return;
-
-        if (results.length === 0) return <div>Er zijn geen resultaten.</div>;
+        const { results, miniMapOpen, playgroundMiniMap } = this.state;
 
         return (
-          <div>
-              <div className={classes.resultsTitle}>Zoekresulaten:</div>
-
+          <React.Fragment>
               {
-                  results.map(({ name, distance = 0, volunteerCount, id }) => {
+                  results.map((playground) => {
+                      const { name, distance = 0, volunteerCount, id } = playground;
+
                       const convertedDistance = distance >= 1000
                         ? `< ${Math.round(distance / 1000)} km`
                         : `< ${Math.round(distance)} m`;
 
                       return (
                         <div key={name} className={classes.result}>
+                            <div className={classes.miniMap}>
+                                <Button className={classes.miniMapButton} onClick={this.handleOpenMiniMap.bind(null, playground)}>
+                                    <MyLocation />
+                                </Button>
+                            </div>
+
                             <div className={classes.resultProperty}>
                                 <div className={classes.resultTitle}>Naam</div>
                                 <div className={classes.resultSubtitle}>{name}</div>
@@ -334,20 +333,123 @@ class AddFindPlayground extends Component {
                   })
               }
 
+              <Dialog maxWidth="sm" open={miniMapOpen} onClose={this.handleCloseMiniMap}>
+                  <DialogContent className={classes.miniMapContent}>
+                      <MiniMap playground={playgroundMiniMap} />
+                  </DialogContent>
+              </Dialog>
+          </React.Fragment>
+        );
+    }
+
+    handleOpenMiniMap = (playground) => {
+        this.setState({ miniMapOpen: true, playgroundMiniMap: playground });
+    };
+
+    handleCloseMiniMap = () => {
+        this.setState({ miniMapOpen: false, playgroundMiniMap: null });
+    };
+
+    handlePlaygroundChange = (playground) => {
+        const isPlayground = playground.id;
+
+        const newState = {
+            ...this.state,
+            playground: isPlayground
+              ? playground
+              : {
+                  default: true,
+                  name: this.props.t("playground.default.area")
+              },
+        };
+
+        if (playground.lat && playground.lng) {
+            newState.map = {
+                latlng: {lat: playground.lat, lng: playground.lng},
+                zoom: playground.zoom || 10
+            };
+        }
+
+        this.setState(newState);
+    };
+
+    renderMap() {
+        const { classes } = this.props;
+        const { map, results } = this.state;
+
+        return (
+          <div className={classes.playgroundMap}>
+              <PlaygroundMap
+                viewOnly
+                onPlaygroundChange={this.handlePlaygroundChange}
+                center={map.latlng}
+                zoom={map.zoom}
+                playgroundsToRender={results}
+                showBubbles
+              />
+          </div>
+        );
+    }
+
+    switchViewToList = () => this.setState({ view: 'list' });
+    switchViewToMap = () => this.setState({ view: 'map' });
+
+    renderResults() {
+        const { classes } = this.props;
+        const { view, results } = this.state;
+
+        const isList = view === 'list';
+        const isMap = view === 'map';
+
+        if (!results) return;
+
+        return (
+          <React.Fragment>
+              <div className={classes.resultsHeading}>
+                  <div className={classes.resultsTitle}>Zoekresulaten:</div>
+
+                  <div className={classes.switchers}>
+                      <Button
+                        onClick={this.switchViewToList}
+                        size="medium"
+                        className={`${classes.switcher} ${isList ? classes.switcherActive : ''}`}
+                      >
+                          <List className={classes.switcherIcon} />
+                          Lijst
+                      </Button>
+                      <Button
+                        onClick={this.switchViewToMap}
+                        size="medium"
+                        className={`${classes.switcher} ${isMap ? classes.switcherActive : ''}`}
+                      >
+                          <PinDrop className={classes.switcherIcon} />
+                          Kaart
+                      </Button>
+                  </div>
+              </div>
+
+              {
+                  results.length === 0
+                    ? <div>Er zijn geen resultaten.</div>
+                    : isMap
+                        ? this.renderMap()
+                        : this.renderList()
+              }
+
               <Button
-                className={classes.addPlaygroundButton}
+                className={`${classes.addPlaygroundButton} ${isMap ? classes.buttonInsideMap : ''}`}
                 onClick={this.toggleAddPlayground}
               >
                   Mijn speeltuin staat er nog niet bij
                   <ArrowIcon />
               </Button>
-          </div>
+          </React.Fragment>
         );
     }
 
     render() {
         const { classes, googleMapsKey } = this.props;
-        const { isAddPlaygroundOpen, userAddress } = this.state;
+        const { isAddPlaygroundOpen, userAddress, addressInput, results } = this.state;
 
         return (
           <div>
@@ -359,10 +461,11 @@ class AddFindPlayground extends Component {
                 expandContent={
                     <div className={classes.wrapper}>
                         <div className={classes.search}>
-                            <PlacesWithStandaloneSearchBox
-                              getResults={this.getResults}
-                              classes={classes}
+                            <GooglePlacesAutocomplete
                               googleMapsKey={googleMapsKey}
+                              handleSelect={this.handleSelect}
+                              handleChange={this.handleChange}
+                              addressInput={addressInput}
                             />
 
                             <Button
@@ -385,10 +488,17 @@ class AddFindPlayground extends Component {
                 isOpen={isAddPlaygroundOpen}
                 toggleOpen={this.toggleAddPlayground}
                 userAddress={userAddress}
+                playgroundsToShow={results}
+                googleMapsKey={googleMapsKey}
+                GAHandleSelect={this.handleSelect}
+                GAHandleChange={this.handleChange}
+                GAAddressInput={addressInput}
               />
           </div>
         );
     }
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps)(AddFindPlayground)));
+export default withTranslation("translations")(withRouter(withStyles(styles)(
+  connect(mapStateToProps)(AddFindPlayground)
+)));
