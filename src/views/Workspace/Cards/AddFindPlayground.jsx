@@ -403,7 +403,6 @@ class AddFindPlayground extends Component {
         const { classes } = this.props;
         const { view, results } = this.state;
 
-        const isList = view === 'list';
         const isMap = view === 'map';
 
         if (!results) return;
