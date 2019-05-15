@@ -5,18 +5,37 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
 import withStyles from "@material-ui/core/styles/withStyles";
 import {withTranslation} from "react-i18next";
 
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import PlaygroundMap from "./PlaygroundMap";
 import { createInitiative, CREATE_INITIATIVE } from '../../../../components/Playground/PlaygroundActions';
 import { createLoadingSelector } from '../../../../api/Selectors';
 import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
+import GooglePlacesAutocomplete from "../../components/GooglePlacesAutocomplete";
+
+const styles = theme => ({
+    autocomplete: {
+        position: 'absolute',
+        zIndex: 9999,
+        background: '#FFF',
+        borderRadius: 10,
+        top: 30,
+        left: 30,
+    },
+    dialog: {
+
+    },
+    content: {
+        padding: '0 !important',
+        height: '75vh',
+    },
+    playground: {
+        height: '75vh',
+    }
+});
+
 
 class AddPlayground extends React.Component {
     constructor(props) {
@@ -33,7 +52,7 @@ class AddPlayground extends React.Component {
             open: false,
             duplicate: false,
             error: '',
-        }
+        };
     };
 
     componentDidMount() {
@@ -66,7 +85,7 @@ class AddPlayground extends React.Component {
 
     isValidState = () => {
         return !this.state.duplicate && !this.state.error && !this.props.loading && this.state.name && this.state.lat && this.state.lng
-    }
+    };
 
     submit = () => {
         if (!this.validateName(this.state.name) && this.isValidState)
@@ -104,7 +123,7 @@ class AddPlayground extends React.Component {
             this.setState({ name })
             this.validateName(name, 'entry')
         }
-    }
+    };
 
     validateName = (name, stage) => {
         const validations = [
@@ -121,12 +140,13 @@ class AddPlayground extends React.Component {
                 validateThat: name => this.props.playgrounds.filter(e => e.name.toLowerCase().trim() === name.toLowerCase()).length === 0,
                 message: 'Er bestaat al een speeltuin met deze naam.'
             },
-        ]
+        ];
 
-        let errorMessage = ''
+        let errorMessage = '';
 
         for (let i = 0; !errorMessage && i < validations.length; i++) {
-            const validation = validations[i]
+            const validation = validations[i];
+
             if (!validation.stages || !stage || validation.stages.includes(stage))
             if (!validation.validateThat(name))
                 errorMessage = validation.message
@@ -134,10 +154,10 @@ class AddPlayground extends React.Component {
 
         this.setState({
             error: errorMessage
-        })
+        });
 
-        return errorMessage
-    }
+        return errorMessage;
+    };
 
     duplicateCheck = (playgroundName) =>{
         const playgroundList = this.props.playgrounds;
@@ -152,7 +172,7 @@ class AddPlayground extends React.Component {
                 error: ''
             });
         }
-    }
+    };
 
     handlePlaygroundChange(playground) {
         // Do nothing as we do not allow to select a playground in this view
@@ -166,9 +186,18 @@ class AddPlayground extends React.Component {
         });
     };
 
-
     render() {
-        const {classes, toggleOpen, isOpen} = this.props;
+        const {
+            classes,
+            toggleOpen,
+            isOpen,
+            playgrounds,
+            playgroundsToShow,
+            googleMapsKey,
+            GAHandleSelect,
+            GAHandleChange,
+            GAAddressInput,
+        } = this.props;
         const {map} = this.state;
         const error = this.state.error;
         const isFromWorkspace = isOpen !== undefined;
@@ -180,46 +209,37 @@ class AddPlayground extends React.Component {
                     open={isFromWorkspace ? isOpen : this.state.open}
                     onClose={toggleOpen || this.handleClose}
                     aria-labelledby="form-dialog-title"
-                    className={"FormDialog"}
+                    className={classes.dialog}
                 >
-                    <DialogTitle id="form-dialog-title">Voeg een speeltuin toe</DialogTitle>
-                    <DialogContent>
-
-                        <TextField
-                            className={classes.textField + " form-control"}
-                            label="Wat is de naam van de speeltuin?"
-                            pattern="/^\w{4,}$/"
-                            onKeyUp={this.updateName}
-                            defaultValue={this.state.name}/>
-                        {error && <span className={"error alert"}>{error}</span>}
-
-                        <DialogContentText>
-                            <span className={"add-playground-pin-title"}>Geef op de kaart de locatie van de speeltuin aan:</span>
-                        </DialogContentText>
+                    <DialogContent className={classes.content}>
+                        <div className={classes.autocomplete}>
+                            <GooglePlacesAutocomplete
+                              googleMapsKey={googleMapsKey}
+                              handleSelect={GAHandleSelect}
+                              handleChange={GAHandleChange}
+                              addressInput={GAAddressInput}
+                            />
+                        </div>
 
                         <PlaygroundMap
-                            className={"playground-container"}
+                            className={classes.playground}
                             isMarkerShown
                             center={map.latlng}
                             zoom={map.zoom}
                             onPlaygroundChange={this.handlePlaygroundChange}
                             onPlaygroundCreated={this.handleCreatePlayground}
-
+                            playgrounds={playgroundsToShow || playgrounds}
+                            onCreateSubmit={this.submit}
+                            error={error}
+                            newName={this.state.name}
+                            onNewNameChange={this.updateName}
+                            showBubbles
                         />
                     </DialogContent>
                     <DialogActions className={"dialog-actions"}>
                         <Button onClick={toggleOpen || this.handleClose} color="primary">
                             Annuleren
                         </Button>
-
-                        <Button
-                                onClick={() => this.submit()}
-                                className={"btn btn-highlight" }
-                                disabled={!this.isValidState()}
-                            >
-                                    <span>Voeg een speeltuin toe</span>
-                        </Button>
-
                     </DialogActions>
                 </Dialog>
             </div>
@@ -256,4 +276,4 @@ const mapDispatchToProps = dispatch => {
 
 const connectedAddPlayground = connect(mapStateToProps, mapDispatchToProps)(AddPlayground);
 
-export default withStyles(componentsStyle)(withTranslation("translations")(withRouter(connectedAddPlayground)));
+export default withStyles(styles)(withTranslation("translations")(withRouter(connectedAddPlayground)));
