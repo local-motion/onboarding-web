@@ -59,7 +59,7 @@
     "react-redux": "7.0.3",
     "react-router-dom": "5.0.0",
     "react-scripts": "2.1.8",
-    "react-share": "2.4.0",
+    "react-share": "3.0.0",
     "react-slick": "0.24.0",
     "react-swipeable-views": "0.13.1",
     "recompose": "0.30.0",
