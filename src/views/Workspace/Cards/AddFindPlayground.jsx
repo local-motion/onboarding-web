@@ -242,7 +242,7 @@ class AddFindPlayground extends Component {
     };
 
     handleChange = address => {
-        this.setState({ addressInput: address });
+        this.setState({ addressInput: address.replace(', Netherlands', '') });
     };
 
     handleSelect = address => {

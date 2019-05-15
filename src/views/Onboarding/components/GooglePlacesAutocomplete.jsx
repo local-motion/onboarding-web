@@ -101,7 +101,7 @@ const PlacesAutocompleteImpl = compose(
                               className,
                           })}
                         >
-                            <span>{suggestion.description}</span>
+                            <span>{suggestion.description.replace(', Netherlands', '')}</span>
                         </div>
                       );
                   })}
