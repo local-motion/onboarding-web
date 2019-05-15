@@ -31,6 +31,7 @@ import App from "./App";
 
 // Determine api base endpoints
 const hostName = window.location.hostname
+ // eslint-disable-next-line 
 const baseUrl = hostName === 'localhost' ? 'http://localhost:3000/' : 'https://' + hostName + '/'
 const apiBaseUrl = hostName === 'localhost' ? 'http://localhost:8086/api/' : 'https://' + hostName + '/api/'
 console.log("apiBaseUrl is: " + apiBaseUrl);
@@ -57,22 +58,22 @@ store.dispatch(executeQuery({
         const cognitoConfig = configuration.cognitoSettings
 
         // Set up the Cognito client
-        const oauth = {
-            awsCognito: {
-                domain: cognitoConfig.domain,
-                scope: ['email', 'openid'],
-                redirectSignIn: baseUrl,
-                redirectSignOut: baseUrl,
-                responseType: 'token', // 'token' for Implicit grant, 'code' for Authorization code grant
-            }
-        }
+        // const oauth = {
+        //     awsCognito: {
+        //         domain: cognitoConfig.domain,
+        //         scope: ['email', 'openid'],
+        //         redirectSignIn: baseUrl,
+        //         redirectSignOut: baseUrl,
+        //         responseType: 'token', // 'token' for Implicit grant, 'code' for Authorization code grant
+        //     }
+        // }
         Amplify.configure({
             Auth: {
                 region: cognitoConfig.region,
                 userPoolId: cognitoConfig.userPoolId,
                 userPoolWebClientId: cognitoConfig.userPoolWebClientId,
                 mandatorySignIn: false,
-                oauth: oauth
+                // oauth: oauth
             }
         })
 
