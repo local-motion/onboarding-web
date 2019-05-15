@@ -5,8 +5,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {
     FacebookShareButton,
     FacebookIcon,
-    GooglePlusShareButton,
-    GooglePlusIcon,
     LinkedinShareButton,
     LinkedinIcon,
     TwitterShareButton,
@@ -46,10 +44,6 @@ class SocialMedia extends React.Component {
                 <FacebookShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} quote={details.description} hashtag={details.hashtags[0]}>
                     <FacebookIcon size={32} round />
                 </FacebookShareButton>
-
-                <GooglePlusShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl}>
-                    <GooglePlusIcon size={32} round />
-                </GooglePlusShareButton>
 
                 <LinkedinShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} title={details.title} description={details.description}>
                     <LinkedinIcon size={32} round />
