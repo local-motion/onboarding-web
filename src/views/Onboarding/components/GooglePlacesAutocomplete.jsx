@@ -64,7 +64,7 @@ const PlacesAutocompleteImpl = compose(
               variant="outlined"
               name="search"
               className={props.classes.textInput}
-              label="Zoek in je plaats"
+              label="Zoek naar speeltuinen bij je in de buurt"
               autoFocus
               placeholder="e.g. 9402 AS"
               InputLabelProps={{

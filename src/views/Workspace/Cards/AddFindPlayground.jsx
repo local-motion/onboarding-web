@@ -25,8 +25,8 @@ const styles = theme => ({
     search: {
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        padding: '0 30px 30px',
+        alignItems: 'center',
+        padding: '0 30px 15px',
         margin: '0 -30px',
         borderBottom: '1px solid rgb(231, 231, 231)',
     },
@@ -66,7 +66,7 @@ const styles = theme => ({
         padding: 12,
         borderRadius: 5,
         border: '1px solid #c5e3f5',
-        marginBottom: 5,
+        marginTop: 5,
 
         '&:nth-child(even)': {
             background: '#f6fafd',
@@ -81,6 +81,7 @@ const styles = theme => ({
     miniMapContent: {
         height: 400,
         width: 600,
+        padding: '0 !important',
     },
     miniMapButton: {
         minWidth: 36,
@@ -233,7 +234,7 @@ class AddFindPlayground extends Component {
             name: this.props.t("playground.default.area")
         },
         map: {
-            latlng: {lat: 52.092876, lng: 5.10448},
+            latlng: { lat: 52.092876, lng: 5.10448 },
             zoom: 8
         },
         miniMapOpen: false,
@@ -266,6 +267,10 @@ class AddFindPlayground extends Component {
                 lng: userLng,
                 zoom: 12,
             },
+            map: {
+                latlng: { lat: userLat, lng: userLng },
+                zoom: 11,
+            }
         });
 
         const howManyResults = 3;
@@ -317,7 +322,7 @@ class AddFindPlayground extends Component {
                             </div>
 
                             <div className={classes.resultProperty}>
-                                <div className={classes.resultTitle}>Deelneemers</div>
+                                <div className={classes.resultTitle}>Deelnemers</div>
                                 <div className={classes.resultSubtitle}>{volunteerCount}</div>
                             </div>
 
@@ -405,35 +410,11 @@ class AddFindPlayground extends Component {
 
         return (
           <React.Fragment>
-              <div className={classes.resultsHeading}>
-                  <div className={classes.resultsTitle}>Zoekresulaten:</div>
-
-                  <div className={classes.switchers}>
-                      <Button
-                        onClick={this.switchViewToList}
-                        size="medium"
-                        className={`${classes.switcher} ${isList ? classes.switcherActive : ''}`}
-                      >
-                          <List className={classes.switcherIcon} />
-                          Lijst
-                      </Button>
-                      <Button
-                        onClick={this.switchViewToMap}
-                        size="medium"
-                        className={`${classes.switcher} ${isMap ? classes.switcherActive : ''}`}
-                      >
-                          <PinDrop className={classes.switcherIcon} />
-                          Kaart
-                      </Button>
-                  </div>
-              </div>
-
-              {
-                  results.length === 0
-                    ? <div>Er zijn geen resultaten.</div>
-                    : isMap
-                        ? this.renderMap()
-                        : this.renderList()
+              {results.length === 0
+                ? <div>Er zijn geen resultaten.</div>
+                : isMap
+                    ? this.renderMap()
+                    : this.renderList()
               }
 
               <Button
@@ -449,7 +430,10 @@ class AddFindPlayground extends Component {
 
     render() {
         const { classes, googleMapsKey } = this.props;
-        const { isAddPlaygroundOpen, userAddress, addressInput, results } = this.state;
+        const { isAddPlaygroundOpen, userAddress, addressInput, results, view } = this.state;
+
+        const isList = view === 'list';
+        const isMap = view === 'map';
 
         return (
           <div>
@@ -468,13 +452,26 @@ class AddFindPlayground extends Component {
                               addressInput={addressInput}
                             />
 
-                            <Button
-                              className={classes.gotoMapButton}
-                              onClick={this.toggleAddPlayground}
-                            >
-                                Of zoek op de kaart
-                                <ArrowIcon />
-                            </Button>
+                            {results && (
+                              <div className={classes.switchers}>
+                                  <Button
+                                    onClick={this.switchViewToList}
+                                    size="medium"
+                                    className={`${classes.switcher} ${isList ? classes.switcherActive : ''}`}
+                                  >
+                                      <List className={classes.switcherIcon} />
+                                      Lijst
+                                  </Button>
+                                  <Button
+                                    onClick={this.switchViewToMap}
+                                    size="medium"
+                                    className={`${classes.switcher} ${isMap ? classes.switcherActive : ''}`}
+                                  >
+                                      <PinDrop className={classes.switcherIcon} />
+                                      Kaart
+                                  </Button>
+                              </div>
+                            )}
                         </div>
 
                         <div className={classes.results}>
