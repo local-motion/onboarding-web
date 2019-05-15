@@ -106,10 +106,11 @@ export const userSignedIn = cognitoUser => (dispatch, getState) =>{
 }
 
 export const signOutUser = () => (dispatch) => {
-    Auth.signOut()
+    Auth.signOut({global: true})
         .then(() => {
             console.log('sign out success')
             dispatch({ type: USER_SIGNED_OUT })
+            window.location.replace('/')
         })
         .catch(error => {
             console.log('sign out error', error)
