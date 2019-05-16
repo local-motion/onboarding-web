@@ -9,7 +9,8 @@ const WorkspaceWelcomeStyle = theme => ({
     },
     smallWorkspaceWelcomeContent: {
         background: '#FFF',
-        height: 580,
+        minHeight: 580,
+        height: '100%',
     },
     mainImage: {
         background: `url(${require('assets/img/backgrounds/workspace-welcome.jpg')}) no-repeat center`,
@@ -25,6 +26,7 @@ const WorkspaceWelcomeStyle = theme => ({
         width: "auto",
         height: 270,
         backgroundSize: 'cover',
+        flexGrow: 1,
     },
     title: {
         fontFamily: "'dk_black_bamboo-webfont'",
@@ -68,7 +70,7 @@ const WorkspaceWelcomeStyle = theme => ({
     },
     smallButtonContainer: {
         padding: '0 20px',
-        marginBottom: 10,
+        marginBottom: 25,
     },
     button: {
         width: "fit-content",
