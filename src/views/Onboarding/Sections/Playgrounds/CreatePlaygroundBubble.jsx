@@ -47,7 +47,7 @@ class CreatePlaygroundBubble extends Component {
 
         return (
           <div className={classes.wrapper}>
-              <div className={classes.title}>Speelplaats toevoegen</div>
+              <div className={classes.title}>speeltuin toevoegen</div>
 
               <TextField
                 className={classes.input}
@@ -58,7 +58,7 @@ class CreatePlaygroundBubble extends Component {
                 name="playground"
                 value={name}
                 pattern="/^\w{4,}$/"
-                placeholder="Speeltuin's naam"
+                placeholder="Naam van de speeltuin"
                 onChange={onNewNameChange}
                 InputLabelProps={{
                     classes: {

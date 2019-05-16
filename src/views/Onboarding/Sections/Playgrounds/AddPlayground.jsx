@@ -94,7 +94,9 @@ class AddPlayground extends React.Component {
 
     createInitiativeHandler = () => {
         const { user, history, createInitiative } = this.props;
-        const { name, lat, lng } = this.state;
+        const { name: enteredName, lat, lng } = this.state;
+
+        const name = enteredName.trim();
 
         if (!user) return this.saveInitiativeAndGotoLogin({ name, lat, lng });
 
@@ -119,8 +121,8 @@ class AddPlayground extends React.Component {
         if (eEvent.key === 'Enter')
             this.submit()
         else {
-            const name = eEvent.target.value.trim()
-            this.setState({ name })
+            const name = eEvent.target.value;
+            this.setState({ name });
             this.validateName(name, 'entry')
         }
     };
