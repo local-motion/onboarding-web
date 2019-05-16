@@ -1,5 +1,5 @@
-import { openConfirmationDialog } from "../components/ConfirmationDialog/ConfirmationDialogActions";
-import { createUser } from "../components/UserProfile/UserProfileActions";
+import { openErrorDialog } from "../components/SimpleDialog/SimpleDialogActions";
+import { createUser, signOutUser } from "../components/UserProfile/UserProfileActions";
 import { ErrorCode, getErrorMessage } from "./ErrorMessages";
 import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 import { getGraphQLClient } from "../misc/ConfigReducer";
@@ -162,7 +162,7 @@ const executeRestQuery = (queryOptions) => {
           body: JSON.stringify(variables),
           headers: {
             'Content-Type': 'application/json',
-            Authorization: "Bearer " + getJwtToken(getState())
+            AuthBearer: "Bearer " + getJwtToken(getState())
           }
         })
 
@@ -253,7 +253,14 @@ const noUserProfileErrorHandler = (error, dispatch, getState, queryOptions) => {
     return false  // error not handled
 }
 
-const errorHandlers = [noUserProfileErrorHandler]
+const nonUniqueUsernameOrEmailErrorHandler = (error, dispatch, getState, queryOptions) => {
+  console.log('checking error code: ', error)
+  if (error.code === 'DUPLICATE_USERNAME' || error.code === 'DUPLICATE_EMAIL_ADDRESS')
+    dispatch(openErrorMessageAndLogoffDialog(error))
+  return true   // error handled
+}
+
+const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorHandler]
 
 
 // default error handler
@@ -281,14 +288,14 @@ const handleError = (error, dispatch, getState, queryOptions, message) => {
 // Helper functions
 
 const openErrorMessageDialog = (error) => (dispatch, getState) => {
-  // const developerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].developerMessage : error.serverMessage
-  // // const consumerMessage = ErrorMessages[error.code] ? ErrorMessages[error.code].message : 'Onbekende fout'
-
-  // // TODO switch between developer mode and consumer mode
-  // dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', developerMessage, 'Sluiten', () => {window.location.reload()}))
-
-  dispatch(openConfirmationDialog('Er is helaas iets fout gegaan', 
+  dispatch(openErrorDialog('Er is helaas iets fout gegaan', 
                                   getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => {window.location.reload()}))
+}
+
+const openErrorMessageAndLogoffDialog = (error) => (dispatch, getState) => {
+  console.log('dispatching err msg and logoff')
+  dispatch(openErrorDialog('Er is helaas iets fout gegaan', 
+                                  getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => dispatch(signOutUser())))
 }
 
 

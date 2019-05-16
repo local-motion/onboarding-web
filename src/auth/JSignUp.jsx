@@ -8,8 +8,20 @@ import { getErrorMessage } from '../api/ErrorMessages';
 import ContentDialog from "../components/Dialogs/ContentDialog";
 import TermsText from "../views/Legal/TermsText";
 import PrivacyText from "../views/Legal/PrivacyText";
+import { setSignupConfirmCookies } from './VerificationLinkHandler';
+import { checkEmailExists } from '../components/UserProfile/UserProfileActions';
+import { connect } from "react-redux";
 
 const logger = new Logger('JSignUp');
+
+
+const mapStateToProps = (state, ownProps) => ({
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    checkEmailExists: (emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback) => dispatch(checkEmailExists(emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback)),
+})
+
 
 /**
  * A mix between
@@ -31,6 +43,7 @@ class JSignUp extends Component {
             filled: false,
             isTermsOpened: false,
             isPrivacyOpened: false,
+            waitingForServerResponse: false,
         };
 
         this.signUp = this.signUp.bind(this);
@@ -55,27 +68,43 @@ class JSignUp extends Component {
     signUp() {
         const {username, password, email, phone_number} = this.inputs;
         logger.info('sign up with ' + username);
-        Auth.signUp(username, password, email, phone_number)
-            .then(() => this.signUpSuccess(username))
-            .catch(err => this.signUpError(err));
+        this.setState({waitingForServerResponse: true})
+        this.props.checkEmailExists(email, 
+            (result) => {
+                // on success (let errors be picked up by the default error handler)
+                if (result.emailExists === true)
+                    this.signUpError({code: 'EMAIL_ADDRESS_ALREADY_EXISTS'})
+                else
+                    Auth.signUp(username, password, email, phone_number)
+                        .then(() => this.signUpSuccess(username))
+                        .catch(err => this.signUpError(err));
+            },
+        )
+
+        // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
+        const {initiativeId} = this.props.match.params
+        if (initiativeId)
+            setSignupConfirmCookies(initiativeId)
     }
 
     signUpSuccess(username) {
         logger.info('sign up success with ' + username);
-        this.setState({error: ''});
+        this.inputs.password = ''                                            // clear password from memory
+        this.setState({error: '', waitingForServerResponse: false});
 
         this.changeState('confirmSignUp', username);
     }
 
     signUpError(err) {
         logger.info('sign up error', err);
+        this.inputs.password = ''                                            // clear password from memory
         let message = getErrorMessage(err.code, err.message)
         if (err.message && (err.message.includes("password") || err.message.includes("Password")))
-            message = 'Je wachtwoord heeft minimaal 6 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.';
+            message = 'Je wachtwoord heeft minimaal 8 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.';
         else if (err.message && err.message.includes("email"))
             message = 'Ongeldig email adres';
         
-        this.setState({error: message});
+        this.setState({error: message, waitingForServerResponse: false});
     }
 
     isFilled() {
@@ -139,8 +168,8 @@ class JSignUp extends Component {
     }
 
     render() {
-        const isInCard = !!this.props.match.params.initiativeId;
-        const {authState} = this.props;
+        const isInCard = this.props.location.pathname.includes('workspace');
+        const {authState, authData} = this.props;
         if (authState !== 'signUp') {
             return null;
         }
@@ -176,9 +205,8 @@ class JSignUp extends Component {
                                     placeholder="Gebruikersnaam"
                                     style={style.input}
                                     className={"code"}
-                                    onChange={
-                                        event => this.isDirty("username", event.target.value)
-                                    }
+                                    defaultValue={authData || ''}
+                                    onChange={ event => this.isDirty("username", event.target.value) }
                                     autoFocus
                                     autoComplete='off'
                                 />
@@ -244,7 +272,7 @@ class JSignUp extends Component {
                                 <Button
                                     style={style.button}
                                     disabled={
-                                        !this.state.filled
+                                        !this.state.filled || this.state.waitingForServerResponse
                                     }
                                     onClick={this.signUp}>
                                     Maak het account
@@ -275,4 +303,4 @@ class JSignUp extends Component {
     }
 }
 
-export default withRouter(JSignUp);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(JSignUp));

@@ -9,7 +9,7 @@ import CookieConsent from "react-cookie-consent";
 import { history } from "./setup";
 import CustomAuthenticator from "./auth/CustomAuthenticator";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
-import WrappedConfirmationDialog from "./components/ConfirmationDialog/WrappedConfirmationDialog";
+import WrappedSimpleDialog from "./components/SimpleDialog/WrappedSimpleDialog";
 import { connect } from 'react-redux'
 
 // Components to route to
@@ -21,13 +21,10 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
-
-const mapStateToProps = (state) => ({
-  })
   
 const mapDispatchToProps = (dispatch) => ({
-onUserSignedIn: user => dispatch(userSignedIn(user))
-})
+    onUserSignedIn: user => dispatch(userSignedIn(user))
+});
   
   
 class App extends React.Component {
@@ -35,7 +32,7 @@ class App extends React.Component {
     signInHandler = (username) => {
         console.log('signed in with ' + username);
         this.props.onUserSignedIn(username);
-    }
+    };
 
     render() {
         return (
@@ -43,6 +40,8 @@ class App extends React.Component {
                 <Router history={history}>
                     <Switch>
                         <Route exact path="/login" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
+                        {/* <Route exact path="/verify?type=:verificationType&user=:username&code=:verificationCode" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
+                        {/* <Route exact path="/verify" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
 
                         <Route exact path="/about" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>
@@ -51,22 +50,17 @@ class App extends React.Component {
                         <Route exact path="/terms" key="Terms of Use" component={Terms}/>
 
                         <Route exact path="/workspace/" key="Workspace" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } />
+
+                        {/* <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
+                        <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
+                        
+                        <Route exact path="/workspace/login" key="WorkspaceLogin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
+                        <Route exact path="/workspace/add-find-playground" key="WorkspaceAddFindPlayground" component={Workspace}/>
+
                         <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
+                        <Route exact path="/workspace/:initiativeId/login" key="WorkspaceJoin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
 
                         <Route path="/workspace/:initiativeId/" component={Workspace}/>
-
-                        {/* <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/add-team-member" key="AddTeamMember" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/flyer" key="Flyer" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/involve-administrator" key="InvolveAdministrator" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/commitment" key="Commitment" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/pick-date" key="PickDate" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/shout" key="Shout" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/signonfence" key="Signonfence" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/celebrate" key="Celebrate" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/magnify" key="Magnify" component={Workspace}/> */}
 
                         <Route exact path="/" key="Onboarding" component={Onboarding}/>
 
@@ -89,11 +83,11 @@ class App extends React.Component {
                         </span>
                 </CookieConsent>
 
-                <WrappedConfirmationDialog/>
+                <WrappedSimpleDialog/>
                 
             </div>
         )
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(App)

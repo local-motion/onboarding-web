@@ -10,6 +10,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 // core components
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import { ERROR_DIALOG } from './SimpleDialogReducer';
 
 /**
  * This dialog presents a message to the user and an OK button to confirm and close the dialog
@@ -21,7 +22,7 @@ import componentsStyle from "assets/jss/material-kit-react/views/components.jsx"
  * - buttonMessage (optional): text to print on the confirm button, defaults to 'OK'
  * - onClose: function that will be called when the dialog is closed. The parent component should use this to set the 'open' prop to false or disable rendering of this dialog altogether
 */
-class ConfirmationDialog extends React.Component {
+class SimpleDialog extends React.Component {
 
   constructor(props) {
     super(props)
@@ -41,7 +42,7 @@ class ConfirmationDialog extends React.Component {
   }
 
   render() {
-    const {title, message, buttonMessage} = this.props
+    const {type, title, message, buttonMessage, cancelButtonMessage, onConfirm} = this.props
     return (
       <div>
         <Dialog
@@ -56,15 +57,28 @@ class ConfirmationDialog extends React.Component {
               {message}
             </DialogContentText>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              {buttonMessage || 'OK'}
-            </Button>
-          </DialogActions>
+          {
+            type === ERROR_DIALOG ?
+              <DialogActions>
+                <Button onClick={this.handleClose} color="primary">
+                  {buttonMessage || 'OK'}
+                </Button>
+              </DialogActions>
+            :
+              // CONFIRMATION_DIALOG
+              <DialogActions>
+                <Button onClick={this.handleClose} color="secondary">
+                  {cancelButtonMessage || 'Annuleren'}
+                </Button>
+                <Button onClick={onConfirm} color="primary">
+                  {buttonMessage || 'OK'}
+                </Button>
+              </DialogActions>
+          }
         </Dialog>
       </div>
     );
   }
 }
 
-export default withStyles(componentsStyle)(ConfirmationDialog)
+export default withStyles(componentsStyle)(SimpleDialog)

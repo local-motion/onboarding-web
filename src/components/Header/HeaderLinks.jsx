@@ -16,81 +16,87 @@ import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
 import Hidden from "@material-ui/core/Hidden";
 
 import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle.jsx";
-import JSignOut from "../../auth/JSignOut";
 import { connect } from 'react-redux'
 import { Button, Typography } from "@material-ui/core";
 import { signOutUser, deleteUser } from "../UserProfile/UserProfileActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { isDeveloperMode, setDeveloperMode } from "../../utils/DeveloperMode";
+import { openConfirmationDialog } from "../SimpleDialog/SimpleDialogActions.js";
 
 const mapStateToProps = state => ({
     user: getUser(state)
 })
 const mapDispatchToProps = dispatch => ({
     signOutUser:    () =>     dispatch(signOutUser()),
-    deleteUser:    () =>     dispatch(deleteUser()),
+    deleteUser:     () =>      dispatch(openConfirmationDialog( 'Bevestig uitschrijven', 
+                                                                'Weet je zeker dat je je wilt uitschrijven?',
+                                                                null, null, () => dispatch(deleteUser())
+                                                                ))
 })
 
-function HeaderLinks(props) {
-    const {classes, user, className} = props;
+class HeaderLinks extends React.Component {
 
-    const profileButtonIcon = () => <span><AccountCircle /><ArrowDropDownRounded/></span>
+    render() {
+        const {classes, user, className, deleteUser, signOutUser} = this.props;
 
-    const devModeIndicator = isDeveloperMode() ? 'on' : 'off'
+        const profileButtonIcon = () => <span><AccountCircle /><ArrowDropDownRounded/></span>
 
-    return (
-        <List className={`${classes.list} ${className || ''}`}>
+        const devModeIndicator = isDeveloperMode() ? 'on' : 'off'
 
-             {/* For now do not include the menu as there are no items to display */}
+        return (
+            <List className={`${classes.list} ${className || ''}`}>
 
-            {/* <ListItem className={classes.listItem}>
-                <Hidden smDown>
-                    <CustomDropdown
-                        noLiPadding
-                        buttonText=""
-                        buttonProps={{
-                            className: classes.navLink,
-                            color: "transparent"
-                        }}
-                        buttonIcon={Menu}
-                        dropdownList={[
-                            <Link to="/" className={classes.dropdownLink}>
-                                Overzicht van speeltuinen
-                            </Link>,
+                {/* For now do not include the menu as there are no items to display */}
 
-                        ]}
-                    />
-                </Hidden>
-                <Hidden mdUp implementation="css">
-                    <Link to="/" className={classes.dropdownLink}>
-                        Overzicht van speeltuinen
-                    </Link>
-                </Hidden>
-            </ListItem> */}
+                {/* <ListItem className={classes.listItem}>
+                    <Hidden smDown>
+                        <CustomDropdown
+                            noLiPadding
+                            buttonText=""
+                            buttonProps={{
+                                className: classes.navLink,
+                                color: "transparent"
+                            }}
+                            buttonIcon={Menu}
+                            dropdownList={[
+                                <Link to="/" className={classes.dropdownLink}>
+                                    Overzicht van speeltuinen
+                                </Link>,
 
-            { user &&
-                <ListItem className={classes.listItem}>
-                    <CustomDropdown
-                        noLiPadding
-                        buttonText=""
-                        buttonProps={{
-                            className: classes.navLink,
-                            color: "transparent"
-                        }}
-                        buttonIcon={profileButtonIcon}
-                        dropdownList={[
-                            <Typography>Ingelogd als {user.name}</Typography>,
-                            {divider: true},
-                            <Button >Mijn profiel</Button>,
-                            <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,
-                            <Button onClick={props.deleteUser}>Uitschrijven</Button>,
-                            <Button onClick={props.signOutUser}>Uitloggen</Button>,
-                        ]}
-                    />
-                </ListItem>
-                }
-        </List>
-    );
+                            ]}
+                        />
+                    </Hidden>
+                    <Hidden mdUp implementation="css">
+                        <Link to="/" className={classes.dropdownLink}>
+                            Overzicht van speeltuinen
+                        </Link>
+                    </Hidden>
+                </ListItem> */}
+
+                { user &&
+                    <ListItem className={classes.listItem}>
+                        <CustomDropdown
+                            noLiPadding
+                            buttonText=""
+                            buttonProps={{
+                                className: classes.navLink,
+                                color: "transparent"
+                            }}
+                            buttonIcon={profileButtonIcon}
+                            dropdownList={[
+                                <Typography>Ingelogd als {user.name}</Typography>,
+                                {divider: true},
+                                <Button >Mijn profiel</Button>,
+                                <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,
+                                <Button onClick={deleteUser}>Uitschrijven</Button>,
+                                <Button onClick={signOutUser}>Uitloggen</Button>,
+                            ]}
+                        />
+                    </ListItem>
+                    }
+            </List>
+        );
+    }
 }
 
 export default withStyles(headerLinksStyle)(connect(mapStateToProps, mapDispatchToProps)(HeaderLinks))

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 import { withTranslation } from "react-i18next";
+import { withRouter } from "react-router-dom";
 
 import { ensurePlaygrounds } from "../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
@@ -10,7 +11,6 @@ import { getUser } from "../../components/UserProfile/UserProfileReducer";
 import Startscreen from "./Sections/Startscreen";
 import Statistics from "./Sections/Statistics";
 import Playgrounds from "./Sections/Playgrounds/Playgrounds";
-import AddPlayground from "./Sections/Playgrounds/AddPlayground";
 import AboutUs from "./Sections/AboutUs";
 import SmokefreePhases from "./Sections/SmokefreePhases";
 import OnboardingFooter from "./Sections/OnboardingFooter";
@@ -81,12 +81,12 @@ class Onboarding extends React.Component {
     }
 
     toggleAddPlayground() {
-        this.setState(({ isAddPlaygroundOpen }) => ({ isAddPlaygroundOpen: !isAddPlaygroundOpen }));
+        this.props.history.push('/workspace/add-find-playground');
     }
 
     render() {
-        const { playgrounds, classes, user } = this.props;
-        const { playground, map, isAddPlaygroundOpen } = this.state;
+        const { playgrounds, user } = this.props;
+        const { playground, map } = this.state;
 
         return (
             <div className={"onboarding-wrapper"}>
@@ -96,7 +96,6 @@ class Onboarding extends React.Component {
 
                 <Playgrounds
                   playgrounds={playgrounds}
-                  classes={classes}
                   user={user}
                   playground={playground}
                   map={map}
@@ -109,18 +108,11 @@ class Onboarding extends React.Component {
                 <SmokefreePhases onCtaClick={this.toggleAddPlayground} />
 
                 <OnboardingFooter />
-
-                <AddPlayground
-                  playgrounds={playgrounds}
-                  user={user}
-                  toggleOpen={this.toggleAddPlayground}
-                  isOpen={isAddPlaygroundOpen}
-                />
             </div>
         );
     }
 }
 
 export default withStyles(componentsStyle)(
-    withTranslation("translations")(connect(mapStateToProps, mapDispatchToProps)(Onboarding))
+    withTranslation("translations")(connect(mapStateToProps, mapDispatchToProps)(withRouter(Onboarding)))
 );

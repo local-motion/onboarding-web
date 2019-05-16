@@ -7,4 +7,4 @@ projects:
         dev:
           url: 'http://localhost:8086/api/graphql'
           headers:
-            Authorization: "Bearer ${env:ID_TOKEN}"
+            AuthBearer: "Bearer ${env:ID_TOKEN}"
