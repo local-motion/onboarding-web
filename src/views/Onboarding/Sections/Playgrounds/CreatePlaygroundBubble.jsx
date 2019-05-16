@@ -40,8 +40,6 @@ const styles = theme => ({
 });
 
 class CreatePlaygroundBubble extends Component {
-    onSubmit = () => this.props.onSubmit();
-
     render() {
         const { classes, name, onNewNameChange, error } = this.props;
 
@@ -69,6 +67,9 @@ class CreatePlaygroundBubble extends Component {
                 inputProps={{
                     style: {
                         padding: '12px 14px'
+                    },
+                    onKeyPress: (event) => {
+                        if (event.key === 'Enter') this.props.onSubmit();
                     }
                 }}
               />
@@ -81,7 +82,7 @@ class CreatePlaygroundBubble extends Component {
                 variant="contained"
                 className={classes.button}
                 disabled={!name}
-                onClick={this.onSubmit}
+                onClick={this.props.onSubmit}
               >Bevestig</Button>
           </div>
         );

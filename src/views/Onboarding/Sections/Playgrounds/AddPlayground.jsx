@@ -118,13 +118,10 @@ class AddPlayground extends React.Component {
     };
 
     updateName = (eEvent) => {
-        if (eEvent.key === 'Enter')
-            this.submit()
-        else {
-            const name = eEvent.target.value;
-            this.setState({ name });
-            this.validateName(name, 'entry')
-        }
+        const name = eEvent.target.value.replace('.', '').replace('  ', ' ');
+
+        this.setState({ name });
+        this.validateName(name, 'entry')
     };
 
     validateName = (name, stage) => {
