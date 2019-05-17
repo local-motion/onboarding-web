@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { compose, withStateHandlers, withProps } from "recompose";
-import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow } from "react-google-maps";
+import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow, KmlLayer } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { withRouter } from "react-router-dom";
 
@@ -86,6 +86,11 @@ const PlaygroundMapImpl = compose(
             { elementType: "labels", featureType: "road.highway", stylers: [{ visibility: "off" }] }
         ]}}
       >
+          <KmlLayer
+            url="https://storage.googleapis.com/mapsgoogl/provincesnl.kml"
+            options={{ preserveViewport: true }}
+          />
+
           <MarkerClusterer
             onClick={props.onMarkerClustererClick.bind(this)}
             averageCenter
