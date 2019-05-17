@@ -1,21 +1,42 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Typography } from "@material-ui/core";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import Button from "@material-ui/core/Button/Button";
+import Dialog from "@material-ui/core/Dialog/Dialog";
+import withStyles from "@material-ui/core/styles/withStyles";
+import { Document, Page, pdfjs } from 'react-pdf';
 
+import flyer from "../../../assets/Flyer.Rookvrij.spelen.online.def.pdf";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCheckbox";
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 import { setCheckbox } from "../../../components/Playground/PlaygroundActions";
 import { checkBox } from "../../../misc/WorkspaceHelpers";
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
 const mapDispatchToProps = dispatch => ({
     setCheckbox: (initiativeId, checklistItem, isChecked, user) =>
       dispatch(setCheckbox(initiativeId, checklistItem, isChecked, user)),
 });
 
+const styles = theme => ({
+    page: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
+});
+
 
 // step:  "Flyers Verspreiden"
 class DistributeFlyersCard extends React.Component {
+    state = {
+        isOpen: false,
+        pageNumber: 1,
+    };
+
     componentDidMount() {
         this.setCta();
     }
@@ -37,18 +58,12 @@ class DistributeFlyersCard extends React.Component {
 
     setCta() {
         const { setCta, playground, user } = this.props;
-        const inviteButtonHref = "mailto:service@longfonds.nl?" +
-          "subject=Flyers%20bestellen&" +
-          "body=Hallo,%0A%0A" +
-          "Ik%20wil%20graag%20flyers%20bestellen%20voor%20speeltuin%20" + playground.name + ".%0A" +
-          "Mijn%20adres%20is%20...%20VUL%20HIER%20JE%20ADRESGEGEVENS%20IN%20...";
 
         switch(true) {
             case !playground.jointChecklistItems.includes("order_flyers"): {
                 setCta({
                     ctaAction: () => {
-                        window.open(inviteButtonHref);
-                        this.checkBox("order_flyers");
+                        this.toggleOpen();
                     },
                     ctaText: 'Bestel flyers',
                     ctaDisabled: !isUserVolunteerOfPlayground(user, playground),
@@ -76,7 +91,7 @@ class DistributeFlyersCard extends React.Component {
               && playground.jointChecklistItems.includes("order_flyers"): {
                 setCta({
                     ctaAction: () => null,
-                    ctaText: 'Flyers zijn uitgedeeld',
+                    ctaText: 'Ik heb flyers uitgedeeld',
                     ctaDisabled: true,
                     ctaDone: true,
                 });
@@ -88,14 +103,35 @@ class DistributeFlyersCard extends React.Component {
         }
     }
 
-    checkBox(name) {
+    openSendMail = () => {
+        const inviteButtonHref = "mailto:service@longfonds.nl?" +
+          "subject=Flyers%20bestellen&" +
+          "body=Hallo,%0A%0A" +
+          "Ik%20wil%20graag%20flyers%20bestellen%20voor%20speeltuin%20" + this.props.playground.name + ".%0A" +
+          "Mijn%20adres%20is%20...%20VUL%20HIER%20JE%20ADRESGEGEVENS%20IN%20...";
+
+        window.open(inviteButtonHref);
+        this.checkFlyers();
+    };
+
+    checkBox = (name) => {
         const { setCheckbox, playground, user } = this.props;
 
         checkBox({ setCheckbox, playground, user, name });
-    }
+    };
+
+    toggleOpen = () => this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
+
+    onDocumentLoadSuccess = ({ numPages }) => this.setState({ numPages });
+
+    checkFlyers = () => {
+        this.checkBox("order_flyers");
+        this.toggleOpen();
+    };
 
     render() {
-        const {playground} = this.props;
+        const { playground, classes } = this.props;
+        const { isOpen, numPages } = this.state;
 
         if (!playground) return "Loading...";
         
@@ -111,6 +147,52 @@ class DistributeFlyersCard extends React.Component {
                         <Typography component="p">Ga nu samen de flyers uitdelen in de buurt.</Typography>
 
                         <ConnectedCheckbox playground={playground} checklistItem="distribute_flyers" label="De flyers zijn uitgedeeld" />
+
+                        <Dialog
+                          fullWidth
+                          maxWidth="sm"
+                          open={isOpen}
+                          onClose={this.toggleOpen}
+                          aria-labelledby="form-dialog-title"
+                        >
+                            <DialogContent>
+                                <Document
+                                  file={`${window.location.origin}${flyer}`}
+                                  onLoadSuccess={this.onDocumentLoadSuccess}
+                                >
+                                    {Array.from(
+                                      new Array(numPages),
+                                      (el, index) => (
+                                        <Page
+                                          key={`page_${index + 1}`}
+                                          pageNumber={index + 1}
+                                          className={classes.page}
+                                        />
+                                      ),
+                                    )}
+                                </Document>
+                            </DialogContent>
+                            <DialogActions className={"dialog-actions"}>
+                                <Button variant="contained" href={flyer} target="_blank" onClick={this.checkFlyers} color="primary">
+                                    Download
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  href="https://webshop.rookvrijegeneratie.nl/UserContentStart.aspx?category=35"
+                                  target="_blank"
+                                  onClick={this.checkFlyers}
+                                  color="secondary"
+                                >
+                                    Visit webshop
+                                </Button>
+                                <Button variant="contained" onClick={() => this.openSendMail()} color="default">
+                                    Send mail
+                                </Button>
+                                <Button onClick={this.toggleOpen} color="primary">
+                                    Annuleren
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </div>
                 }
             />
@@ -118,5 +200,5 @@ class DistributeFlyersCard extends React.Component {
     }
 }
 
-export default connect(null, mapDispatchToProps)(DistributeFlyersCard);
+export default connect(null, mapDispatchToProps)(withStyles(styles)(DistributeFlyersCard));
 
