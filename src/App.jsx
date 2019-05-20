@@ -7,7 +7,6 @@ import "assets/scss/material-kit-react.css?v=1.2.0";
 import CookieConsent from "react-cookie-consent";
 
 import { history } from "./setup";
-import CustomAuthenticator from "./auth/CustomAuthenticator";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
 import WrappedSimpleDialog from "./components/SimpleDialog/WrappedSimpleDialog";
 import { connect } from 'react-redux'
@@ -21,6 +20,7 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
+import Authenticator from "./authentication/Authenticator";
   
 const mapDispatchToProps = (dispatch) => ({
     onUserSignedIn: user => dispatch(userSignedIn(user))
@@ -39,7 +39,7 @@ class App extends React.Component {
             <div>
                 <Router history={history}>
                     <Switch>
-                        <Route exact path="/login" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
+                        <Route exact path="/login" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}/> } />
                         {/* <Route exact path="/verify?type=:verificationType&user=:username&code=:verificationCode" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
                         {/* <Route exact path="/verify" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
 

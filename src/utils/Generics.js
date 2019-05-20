@@ -16,3 +16,15 @@ export function generateUuid() {
 export function isFunction(functionToCheck) {
     return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
 }
+
+/**
+ * Binds all provided methods to the object. Typically used for binding methods in a class to 'this'
+ * @param {*} methods array of method names
+ * @param {*} object the object to bind the methods to. Typically 'this' when invoked from the class constructor.
+ */
+export const bindMethods = (methods, object) => {
+    for (let i = 0; i < methods.length; i++) {
+        const method = methods[i]
+        object[method] = object[method].bind(object)
+    }
+}
