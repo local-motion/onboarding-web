@@ -108,7 +108,7 @@ export const findPlaygroundsByName = ({ initiativeName, playgrounds }) => {
     if (!initiativeName || !playgrounds.length) return null;
 
     const nameId = initiativeName.slice(-4);
-    const normalizedNameArray = initiativeName.replace('-', ' ').split(' ');
+    const normalizedNameArray = initiativeName.replace(/-/g, ' ').split(' ');
 
     const playground = playgrounds
       .find(({ id, name }) => name.toLowerCase().includes(normalizedNameArray[0]) && id.includes(nameId));
@@ -118,7 +118,7 @@ export const findPlaygroundsByName = ({ initiativeName, playgrounds }) => {
 
 export const slugifyPlaygroundName = ({ id, name }) => {
     const nameId = id.slice(9, 13);
-    const sluggedName = name.toLowerCase().replace(' ', '-');
+    const sluggedName = name.toLowerCase().replace(/ /g, '-');
 
     return `${sluggedName}-${nameId}`;
 };
@@ -146,7 +146,6 @@ export const createInitiative = (name, lat, lng, onSuccessCallback) => {
         mutation CreateInitiative($input: CreateInitiativeInput!) {
             createInitiative(input: $input) {
               id
-              name
             }
         }
       `, 

@@ -58,7 +58,13 @@ class WorkspaceTemplate extends React.Component {
 
             createInitiative(name, lat, lng, (data) => {
                 localStorage.removeItem('playgroundToCreate');
-                history.push('/actie/' + slugifyPlaygroundName(data.createInitiative));
+
+                const playground = {
+                    id: data.createInitiative.id,
+                    name,
+                };
+
+                history.push('/actie/' + slugifyPlaygroundName(playground));
             });
         }
     };

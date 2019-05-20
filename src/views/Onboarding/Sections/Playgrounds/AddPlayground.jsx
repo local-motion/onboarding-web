@@ -104,7 +104,14 @@ class AddPlayground extends React.Component {
 
         if (!user) return this.saveInitiativeAndGotoLogin({ name, lat, lng });
 
-        createInitiative(name, lat, lng, (data) => history.push('/actie/' + slugifyPlaygroundName(data.createInitiative)))
+        createInitiative(name, lat, lng, (data) => {
+            const playground = {
+                id: data.createInitiative.id,
+                name,
+            };
+
+            history.push('/actie/' + slugifyPlaygroundName(playground))
+        })
     };
 
     saveInitiativeAndGotoLogin = ({ name, lat, lng }) => {

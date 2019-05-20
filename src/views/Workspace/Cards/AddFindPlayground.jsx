@@ -19,6 +19,7 @@ import GooglePlacesAutocomplete from "../../Onboarding/components/GooglePlacesAu
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import MiniMap from "../components/MiniMap";
+import { slugifyPlaygroundName } from "../../../components/Playground/PlaygroundActions";
 
 const styles = theme => ({
     wrapper: {},
@@ -330,7 +331,7 @@ class AddFindPlayground extends Component {
                               className={classes.resultButton}
                               color="primary"
                               component={Link}
-                              to={`/workspace/${id}`}
+                              to={`/actie/${slugifyPlaygroundName(playground)}`}
                               variant="contained"
                             >Sluit je aan</Button>
                         </div>
