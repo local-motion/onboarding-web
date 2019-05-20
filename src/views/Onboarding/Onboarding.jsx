@@ -81,7 +81,7 @@ class Onboarding extends React.Component {
     }
 
     toggleAddPlayground() {
-        this.props.history.push('/actie/add-find-playground');
+        this.props.history.push('/actie/zoeken');
     }
 
     render() {

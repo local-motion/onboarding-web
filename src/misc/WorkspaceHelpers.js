@@ -50,7 +50,7 @@ export function getPhases() {
                 },
                 {
                     name: 'Actie starten',
-                    link: '/add-find-playground',
+                    link: '/zoeken',
                     visible: ({ playground }) => !playground,
                 },
                 {

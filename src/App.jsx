@@ -55,7 +55,7 @@ class App extends React.Component {
                         <Route exact path="/actie/:initiativeName/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
                         
                         <Route exact path="/actie/login" key="WorkspaceLogin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
-                        <Route exact path="/actie/add-find-playground" key="WorkspaceAddFindPlayground" component={Workspace}/>
+                        <Route exact path="/actie/zoeken" key="WorkspaceAddFindPlayground" component={Workspace}/>
 
                         <Route exact path="/actie/:initiativeName/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
                         <Route exact path="/actie/:initiativeName/login" key="WorkspaceJoin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
