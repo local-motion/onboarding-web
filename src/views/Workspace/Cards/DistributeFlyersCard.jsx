@@ -27,6 +27,15 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'center'
     },
+    buttons: {
+        marginBottom: 10,
+    },
+    button: {
+        marginRight: 10,
+        '&:hover': {
+            color: '#FFF',
+        },
+    },
 });
 
 
@@ -144,6 +153,22 @@ class DistributeFlyersCard extends React.Component {
                     <div>
                         <ConnectedCheckbox playground={playground} checklistItem="order_flyers" label="De flyers zijn besteld" />
 
+                        <div className={classes.buttons}>
+                            <Button
+                              variant="contained"
+                              href="https://webshop.rookvrijegeneratie.nl/UserContentStart.aspx?category=35"
+                              target="_blank"
+                              onClick={this.checkFlyers}
+                              color="primary"
+                              className={classes.button}
+                            >
+                                Bezoek webshop
+                            </Button>
+                            <Button variant="contained" onClick={this.openSendMail} color="secondary">
+                                Verstuur e-mail
+                            </Button>
+                        </div>
+
                         <Typography component="p">Ga nu samen de flyers uitdelen in de buurt.</Typography>
 
                         <ConnectedCheckbox playground={playground} checklistItem="distribute_flyers" label="De flyers zijn uitgedeeld" />
@@ -173,20 +198,8 @@ class DistributeFlyersCard extends React.Component {
                                 </Document>
                             </DialogContent>
                             <DialogActions className={"dialog-actions"}>
-                                <Button variant="contained" href={flyer} target="_blank" onClick={this.checkFlyers} color="primary">
+                                <Button className={classes.button} variant="contained" href={flyer} target="_blank" onClick={this.checkFlyers} color="primary">
                                     Download
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  href="https://webshop.rookvrijegeneratie.nl/UserContentStart.aspx?category=35"
-                                  target="_blank"
-                                  onClick={this.checkFlyers}
-                                  color="secondary"
-                                >
-                                    Visit webshop
-                                </Button>
-                                <Button variant="contained" onClick={() => this.openSendMail()} color="default">
-                                    Send mail
                                 </Button>
                                 <Button onClick={this.toggleOpen} color="primary">
                                     Annuleren
