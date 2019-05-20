@@ -110,7 +110,7 @@ class AddPlayground extends React.Component {
     saveInitiativeAndGotoLogin = ({ name, lat, lng }) => {
         localStorage.setItem('playgroundToCreate', JSON.stringify({ name, lat, lng }));
 
-        this.props.history.push('/actie/login?target=/actie/');
+        this.props.history.push('/actie/inloggen?target=/actie/');
     };
 
     handleClickOpen = () => {

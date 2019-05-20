@@ -55,7 +55,7 @@ class WorkspaceWelcomeContent extends Component {
         const { playground, user, history } = this.props;
 
         const startUrl = getWorkspaceStartLink(playground);
-        const loginUrl = `/login?target=${startUrl}`;
+        const loginUrl = `/inloggen?target=${startUrl}`;
 
         history.push(
           `${startUrl}${user ? '' : loginUrl}/join`

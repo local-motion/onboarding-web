@@ -45,7 +45,7 @@ export function getPhases() {
             steps: [
                 {
                     name: 'Inloggen',
-                    link: '/login',
+                    link: '/inloggen',
                     visible: ({ user }) => !user,
                 },
                 {

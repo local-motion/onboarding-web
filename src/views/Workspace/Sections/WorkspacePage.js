@@ -263,11 +263,11 @@ class WorkspacePage extends PureComponent {
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
                               <Switch>
 
-                                  <Route exact path="/actie/login" key="WorkspaceLogin"
+                                  <Route exact path="/actie/inloggen" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/actie/zoeken" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user} />}/>
-                                  <Route exact path="/actie/:initiativeName/login" key="WorkspaceLogin"
+                                  <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
 
                                   {

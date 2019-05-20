@@ -117,7 +117,7 @@ class JSignIn extends Component {
           || (
             playground
               ? getActivePhaseUrl(playground)
-              : pathname.replace('/login', '')
+              : pathname.replace('/inloggen', '')
           );
 
         this.props.history.push(url);
