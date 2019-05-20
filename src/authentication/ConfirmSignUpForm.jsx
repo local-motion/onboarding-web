@@ -7,10 +7,11 @@ import {Auth} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
 import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import TextField from "@material-ui/core/TextField/TextField";
-import { signOutUser } from '../components/UserProfile/UserProfileActions';
-import { openErrorDialog } from '../components/SimpleDialog/SimpleDialogActions';
+import { openInformationDialog } from '../components/SimpleDialog/SimpleDialogActions';
 import { style } from './AuthenticatorStyles';
 import { bindMethods } from '../utils/Generics';
+import { allVerificationCodeCharactersPattern, verificationCodeLength, isValidVerificationCode } from './AuthenticatorValidations';
+import { clearVerificationCookies } from '../auth/VerificationLinkHandler';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -20,33 +21,21 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    triggerGenericError: message => dispatch(openErrorDialog(
-        'Fout bij het inloggen',
-        message, 
+    triggerCodeSentNotification: () => dispatch(openInformationDialog(
+        'Code verstuurd', 
+        'De verification code is naar jouw emailadres verstuurd.', 
         'OK', 
       )),
-    triggerEmailNotVerifiedError: () => dispatch(openErrorDialog(
-        'Emailadres niet gevalideerd', 
-        'Je emailadres is niet langer gevalideerd. Neem contact op met de beheerder (zie contact link onderaan het scherm)', 
-        'OK', 
-        () => dispatch(signOutUser())
-      )),
-    triggerUserNotConfirmedError: callback => dispatch(openErrorDialog(
-        'Emailadres niet gevalideerd', 
-        'Je emailadres is nog niet gevalideerd. Check je inbox of vraag een nieuwe code aan', 
-        'OK', 
-        () => callback())
-      ),
 })
 
 /**
  * This form allows an existing user to authenticate himself and thereby create a user session
  */
-class SignInForm extends Component {
+class ConfirmSignUpForm extends Component {
     constructor(props) {
         super(props);
         this.signIn = this.signIn.bind(this);
-        bindMethods(['onChangeUsername', 'onChangePassword'], this)
+        bindMethods(['onChangeUsername', 'onChangeVerificationCode'], this)
         // this.checkContact = this.checkContact.bind(this);
     }
 
@@ -61,6 +50,48 @@ class SignInForm extends Component {
     componentWillUnmount() {
         this.props.unsetCta && this.props.unsetCta();
     }
+
+    confirmSignUp() {
+        const {username, verificationCode} = this.props
+        console.log('confirm sign up with ' + verificationCode);
+
+        this.props.setWaitingForServerResponse()
+
+        Auth.confirmSignUp(username, verificationCode)
+            .then(() => this.confirmSuccess(username))
+            .catch(error => {
+                console.log('error in confirm signup: ', error)
+                if (error.code === "NotAuthorizedException" && error.message === "User cannot be confirm. Current status is CONFIRMED")
+                    this.confirmSuccess(username)
+                else
+                    this.handleError(error)
+            })
+    }
+
+    resendCode() {
+        const {username} = this.props
+        console.log('resend code to ' + username);
+        Auth.resendSignUp(username)
+            .then(() => {
+                this.props.triggerCodeSentNotification()
+            })
+            .catch(error => this.handleError(error));
+    }
+
+    confirmSuccess(username) {
+        console.log('confirm sign up success with ' + username);
+        clearVerificationCookies()
+        this.props.setVerificationCode('')
+        this.props.clearWaitingForServerResponse()
+        this.props.changeForm('signIn')
+    }
+
+    handleError(error) {
+        console.log('confirm sign up error', error);
+        clearVerificationCookies()
+        this.props.setError(getErrorMessage(error.code, error.message))
+    }
+
 
     signIn() {
         const {username, password} = this.props;
@@ -87,14 +118,13 @@ class SignInForm extends Component {
             .catch(error => {
                 console.log('sign in error', error);
                 this.props.setPassword('')                                    // clear password from memory
-                this.props.clearWaitingForServerResponse()
 
                 if (error.code === 'UserNotConfirmedException') {
                     this.props.triggerUserNotConfirmedError(() => this.props.changeForm('SignUpConfirm'))
                     return
                 }
-                this.props.triggerGenericError(getErrorMessage(error.code, error.message))
-                // this.props.setError(getErrorMessage(error.code, error.message))
+                this.props.setError(getErrorMessage(error.code, error.message))
+                this.props.clearWaitingForServerResponse()
             })
     }
 
@@ -124,27 +154,13 @@ class SignInForm extends Component {
     }
 
 
-    // checkContact(user) {
-    //     this.setState({waitingForServerResponse: true})
-    //     Auth.verifiedContact(user)
-    //         .then(data => {
-    //             this.setState({waitingForServerResponse: false})
-    //             if (!JS.isEmpty(data.verified)) {
-    //                 this.changeForm('signedIn', user);
-    //                 this.props.onSignIn(user);
-    //                 this.goToTargetUrl();
-    //             } else {
-    //                 user = Object.assign(user, data);
-    //                 this.changeForm('verifyContact', user);
-    //             }
-    //         });
-    // }
-
     onChangeUsername(event) {
         this.props.setUsername(event.target.value)
     }
-    onChangePassword(event) {
-        this.props.setPassword(event.target.value)
+    onChangeVerificationCode(event) {
+        const verificationCode = event.target.value
+        if (allVerificationCodeCharactersPattern.test(verificationCode) && verificationCode.length <= verificationCodeLength)
+            this.props.setVerificationCode(verificationCode)
     }
 
     catchEnterSubmit(e){
@@ -154,16 +170,13 @@ class SignInForm extends Component {
     }
 
     render() {
-        const   {   username, password, error, waitingForServerResponse, 
+        const   {   username, verificationCode, error, waitingForServerResponse, 
                     changeForm
                 } = this.props
 
         const isInCard = this.props.location.pathname.includes('workspace');
 
-        // To allow for the browser to auto-populate the username and password field, which we cannot detect the submit button is shown when both
-        // fields are populated, but also when a field is not present yet.
-        const showSubmitButton =    !document.getElementById('signInFormUsername') || !document.getElementById('signInFormPassword') ||
-                                    (document.getElementById('signInFormUsername').value && document.getElementById('signInFormPassword').value)
+        const showSubmitButton = username && verificationCode && isValidVerificationCode(verificationCode)
 
         return (
             <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
@@ -176,8 +189,8 @@ class SignInForm extends Component {
                         title={"Inloggen"}
                       />
                     )}
-                    <h1 className={"grunge-title"}>Inloggen</h1>
-                    <p>Geef je gebruikersnaam en wachtwoord op</p>
+                    <h1 className={"grunge-title"}>Bevestig je account</h1>
+                    <p>Geef de code uit de bevestigingsmail op</p>
                     <div className={"signin-wrapper"}>
                         <form
                             style={style}
@@ -186,7 +199,7 @@ class SignInForm extends Component {
                             }
                         >
                             <TextField
-                                id="signInFormUsername"
+                                // id="signInFormUsername"
                                 type="text"
                                 fullWidth
                                 variant={"outlined"}
@@ -197,13 +210,13 @@ class SignInForm extends Component {
                                 autoFocus={!username}
                             />
                             <TextField
-                                id="signInFormPassword"
-                                type="password"
+                                // id="signInFormPassword"
+                                type="text"
                                 fullWidth
                                 variant={"outlined"}
-                                placeholder="Wachtwoord"
-                                value={password}
-                                onChange={this.onChangePassword}
+                                placeholder="Code"
+                                value={verificationCode}
+                                onChange={this.onChangeVerificationCode}
                                 style={style.input}
                                 autoFocus={!!username}
                             />
@@ -215,7 +228,7 @@ class SignInForm extends Component {
                                 className={"pagination-button-step"}
                                 disabled={!showSubmitButton || waitingForServerResponse}
                             >
-                                Inloggen
+                                Bevestig
                             </Button>
 
                             <Button
@@ -223,22 +236,20 @@ class SignInForm extends Component {
                               style={{...style.loginButton, ...style.extraButton }}
                               onClick={() => changeForm('forgotPassword')}
                             >
-                                Wachtwoord vergeten?
+                                Stuur code opnieuw
                             </Button>
-                            {error && <p className={"error"}>{error}</p>}
+                            </form>
+                        {error && <p className={"error"}>{error}</p>}
 
-                            <p style={style.createAccountTitle}>Ben je hier voor de eerste keer?</p>
-                            <p> Je hoeft je slechts éénmalig te registreren om deel te nemen aan een actie. Na het registeren kun je meteen starten om de speeltuin rookvrij te maken.</p>
-
-                            <Button
-                                style={style.signUpButton}
-                                onClick={() => changeForm('signUp')}
-                                variant="contained"
-                                className={"pagination-button-step"}
-                            >
-                                Maak een account
-                            </Button>
-                        </form>
+                        <div style={style.links} className={"extra-info"}>
+                            <div style={style.left}>
+                                <Button
+                                    style={style.extraButton}
+                                    onClick={() => changeForm('signIn')}>
+                                    Ga terug naar login
+                                </Button>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -247,4 +258,4 @@ class SignInForm extends Component {
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignInForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfirmSignUpForm));

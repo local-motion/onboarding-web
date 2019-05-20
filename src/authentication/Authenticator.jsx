@@ -8,6 +8,7 @@ import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import { getActivePhaseUrl } from '../misc/WorkspaceHelpers';
 import { bindMethods } from '../utils/Generics';
+import ConfirmSignUpForm from './ConfirmSignUpForm';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -55,7 +56,12 @@ class Authenticator extends Component {
         this.props.unsetCta && this.props.unsetCta();
     }
 
-    changeForm(newForm)                     {   this.setState({form: newForm})                          }
+    changeForm(newForm) {   
+        if (newForm === 'signUp')
+            this.setPassword('')
+        this.setState({form: newForm})                          
+    }
+
     setUsername(username)                   {   this.setState({username})                               }
     setPassword(password)                   {   this.setState({password})                               }
     setEmailAddress(emailAddress)           {   this.setState({emailAddress})                           }
@@ -81,7 +87,7 @@ class Authenticator extends Component {
     }
 
     render() {
-        const isInCard = this.props.location.pathname.includes('workspace');
+        // const isInCard = this.props.location.pathname.includes('workspace');
 
         const formProps = {
             username: this.state.username, 
@@ -106,6 +112,8 @@ class Authenticator extends Component {
                 return <SignInForm {...formProps} onSignInSuccess={this.onSignInSuccess}/>
             case 'signUp':
                 return <SignUpForm {...formProps}/>
+            case 'confirmSignUp':
+                return <ConfirmSignUpForm {...formProps}/>
             default:
                 return <div>Invalid form state: {this.state.form}</div> 
         }

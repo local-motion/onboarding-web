@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import { setSignupConfirmCookies } from '../auth/VerificationLinkHandler';
 import { validateToMessage } from '../components/validation/Validations';
 import { style } from './AuthenticatorStyles';
-import { passwordMaximumLength, passwordMinimumLength, containsLowerCaseLetterPattern, containsUpperCaseLetterPattern, containsDecimalPattern, containsSpecialCharacterPattern, usernameMaximumLength, usernameValidations, isValidPassword, containsOnlyValidCharactersPattern, allowedSpecialCharacters } from './AuthenticatorValidations';
+import { passwordMaximumLength, passwordMinimumLength, containsLowerCaseLetterPattern, containsUpperCaseLetterPattern, containsDecimalPattern, containsSpecialCharacterPattern, usernameMaximumLength, usernameValidations, isValidPassword, containsOnlyValidCharactersPattern, allowedSpecialCharacters, isValidEmailAddress } from './AuthenticatorValidations';
 import { bindMethods } from '../utils/Generics';
 
 
@@ -56,6 +56,7 @@ class SignUpForm extends Component {
         this.state = {
             repeatedPassword: '',
             repeatedPasswordError: '',
+            emailAddressError: '',
             error: '',
             usernameError: '',
             passwordError: '',
@@ -132,7 +133,10 @@ class SignUpForm extends Component {
         this.setState({repeatedPassword, repeatedPasswordError})
     }
     onChangeEmailAddress(event) {
-        this.props.setEmailAddress(event.target.value)
+        const emailAddress = event.target.value
+        const emailAddressError = emailAddress && !isValidEmailAddress(emailAddress) ? 'Dit emailadres is ongeldig' : ''
+        this.setState({emailAddressError})
+        this.props.setEmailAddress(emailAddress)
     }
     onChangeAcceptedTerms(event) {
         this.setState({acceptedTerms: event.target.checked})
@@ -165,7 +169,7 @@ class SignUpForm extends Component {
                     classes
         } = this.props
 
-        const {repeatedPassword, acceptedTerms, usernameError, passwordError, repeatedPasswordError, passwordFocus} = this.state
+        const {repeatedPassword, acceptedTerms, usernameError, passwordError, repeatedPasswordError, emailAddressError, passwordFocus} = this.state
         const isInCard = this.props.location.pathname.includes('workspace');
 
         const isReadyToSubmit = emailAddress && username && !usernameError && isValidPassword(password) && repeatedPassword === password && acceptedTerms
@@ -199,6 +203,7 @@ class SignUpForm extends Component {
                                     autoFocus
                                 />
                             </div>
+                            {emailAddress && emailAddressError && <p className={"error"}>{emailAddressError}</p>}
                             <div>
                                 <TextField
                                     type="text"
@@ -224,7 +229,7 @@ class SignUpForm extends Component {
                                     onFocus={() => this.onFocusChangePassword(true)}
                                     onBlur={() => this.onFocusChangePassword(false)}
                                     style={style.input}
-                                    autoComplete='off'
+                                    autoComplete="new-password"
                                 />
                             </div>
                             {passwordFocus &&
@@ -249,7 +254,7 @@ class SignUpForm extends Component {
                                     value={repeatedPassword}
                                     onChange={this.onChangeRepeatedPassword}
                                     style={style.input}
-                                    autoComplete='off'
+                                    autoComplete="new-password"
                                 />
                             </div>
                             {repeatedPasswordError && <p className={"error"}>{repeatedPasswordError}</p>}
@@ -290,14 +295,14 @@ class SignUpForm extends Component {
                               maxWidth="lg"
                             />
 
-                                <Button
-                                    style={style.loginButton}
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={ !isReadyToSubmit || waitingForServerResponse }
-                                    onClick={this.signUp}>
-                                    Maak het account
-                                </Button>
+                            <Button
+                                style={style.loginButton}
+                                variant="contained"
+                                color="primary"
+                                disabled={ !isReadyToSubmit || waitingForServerResponse }
+                                onClick={this.signUp}>
+                                Maak het account
+                            </Button>
                         </form>
                         {error && <p className={"error"}>{error}</p>}
                         <div style={style.links} className={"extra-info"}>

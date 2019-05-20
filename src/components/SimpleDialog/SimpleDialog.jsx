@@ -10,7 +10,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 // core components
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import { ERROR_DIALOG } from './SimpleDialogReducer';
+import { ERROR_DIALOG, INFORMATION_DIALOG } from './SimpleDialogReducer';
 
 /**
  * This dialog presents a message to the user and an OK button to confirm and close the dialog
@@ -58,7 +58,7 @@ class SimpleDialog extends React.Component {
             </DialogContentText>
           </DialogContent>
           {
-            type === ERROR_DIALOG ?
+            type === ERROR_DIALOG || type === INFORMATION_DIALOG ?
               <DialogActions>
                 <Button onClick={this.handleClose} color="primary">
                   {buttonMessage || 'OK'}

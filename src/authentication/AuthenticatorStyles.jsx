@@ -13,5 +13,5 @@ export const style = {
     alert: {fontSize: '0.8em'},
     media: {height: '300px', margin: '-25px', marginBottom: 30, backgroundPositionY: -130},
     secureAppContainer: {margin: '0 auto'},
-    createAccountTitle: {fontWeight: 'bold'},
+    createAccountTitle: {fontWeight: 'bold', marginTop: 20, marginBottom: 0},
 }
