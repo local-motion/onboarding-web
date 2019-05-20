@@ -11,7 +11,7 @@ import markerRed from "../../../../assets/img/markers/playground-red.png";
 import markerGreen from "../../../../assets/img/markers/playground-green.png";
 import markerWhite from "../../../../assets/img/markers/playground-white.png";
 import markerBlue from "../../../../assets/img/markers/playground-blue.png";
-import { ensurePlaygrounds } from "../../../../components/Playground/PlaygroundActions";
+import { ensurePlaygrounds, slugifyPlaygroundName } from "../../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
 import { getGoogleMapsKey } from "../../../../misc/ConfigReducer";
 import CreatePlaygroundBubble from "./CreatePlaygroundBubble";
@@ -19,7 +19,7 @@ import OpenPlaygroundBubble from "./OpenPlaygroundBubble";
 
 
 class PlaygroundMap extends React.Component {
-    gotoPlayground = id => this.props.history.push(`/workspace/${id}`);
+    gotoPlayground = playground => this.props.history.push(`/workspace/${slugifyPlaygroundName(playground)}`);
 
     onCreateSubmit = () => this.props.onCreateSubmit();
 
@@ -110,7 +110,7 @@ const PlaygroundMapImpl = compose(
                         {props.showBubbles && isPopupVisible &&  (
                           <InfoWindow onCloseClick={props.closePlaygroundPopup}>
                               <OpenPlaygroundBubble
-                                gotoPlayground={() => props.gotoPlayground(playground.id)}
+                                gotoPlayground={() => props.gotoPlayground(playground)}
                                 name={playground.name}
                               />
                           </InfoWindow>

@@ -37,9 +37,9 @@ class JForgotPassword extends Component {
             .catch(err => this.handleError(err));
     
         // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
-        const {initiativeId} = this.props.match.params
-        if (initiativeId)
-            setPasswordResetCookies(initiativeId)
+        const {initiativeName} = this.props.match.params
+        if (initiativeName)
+            setPasswordResetCookies(initiativeName)
     }
 
     sendSuccess(username, data) {

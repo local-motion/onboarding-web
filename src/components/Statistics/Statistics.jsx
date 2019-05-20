@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import SvgIcon from "@material-ui/core/SvgIcon";
 
+import { slugifyPlaygroundName } from "../Playground/PlaygroundActions";
+
 const styles = theme => ({
     statistics: {
         display: 'flex',
@@ -143,7 +145,7 @@ const Statistics = ({ playground, classes, view }) => {
         <div className={`${classes.statistics} ${getSmallClassFor('smallStatistics')}`}>
             <div className={`${classes.line} ${getSmallClassFor('smallLine')}`} />
             <Link
-              to={`/workspace/${playground.id}/add-team-member`}
+              to={`/workspace/${slugifyPlaygroundName(playground)}/add-team-member`}
               className={`${classes.statistic} ${getSmallClassFor('smallStatisticLeft')}`}
             >
                 <div className={`${classes.iconWrapper} ${getSmallClassFor('smallIconWrapper')}`}>
@@ -159,7 +161,7 @@ const Statistics = ({ playground, classes, view }) => {
                 </div>
             </Link>
             <Link
-              to={`/workspace/${playground.id}/pick-date`}
+              to={`/workspace/${slugifyPlaygroundName(playground)}/pick-date`}
               className={`${classes.statistic} ${getSmallClassFor('smallStatisticRight')}`}
             >
                 <div className={`${classes.iconWrapper} ${getSmallClassFor('smallIconWrapper')}`}>

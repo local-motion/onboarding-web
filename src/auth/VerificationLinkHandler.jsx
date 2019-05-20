@@ -23,12 +23,12 @@ const VERIFICATION_INITIATIVE_COOKIE = 'verificationInitiative'
 const VERIFICATION_TYPE_SIGNUP = 'signup'
 const VERIFICATION_TYPE_RESET_PASSWORD = 'reset_password'
 
-export const setSignupConfirmCookies = (initiativeId) => {
-    createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
+export const setSignupConfirmCookies = (initiativeName) => {
+    createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeName, 2)
 }
 
-export const setPasswordResetCookies = (initiativeId) => {
-    createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
+export const setPasswordResetCookies = (initiativeName) => {
+    createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeName, 2)
 }
 
 export const clearVerificationCookies = () => {
@@ -60,12 +60,12 @@ class VerificationLinkHandler extends Component {
     }
 
     componentDidUpdate() {
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = !!this.props.match.params.initiativeName;
         const params = queryString.parse(this.props.location.search)
         const verificationType = params.type
         const username = params.user
         const verificationCode = params.code
-        const initiativeId = readCookie(VERIFICATION_INITIATIVE_COOKIE)
+        const initiativeName = readCookie(VERIFICATION_INITIATIVE_COOKIE)
         const {authState, authData, authenticatedUser, openAlreadyLoggedInDialog} = this.props
 
 
@@ -84,10 +84,10 @@ class VerificationLinkHandler extends Component {
             openAlreadyLoggedInDialog();
         }
 
-        if (!isInCard && initiativeId) {
+        if (!isInCard && initiativeName) {
             // Let the VerificationLinkHandler within the particular workspace handle this
-            console.log('redirecting from verification link handler to workspace ' + initiativeId)
-            this.props.history.push(`/workspace/${initiativeId}/login?type=${verificationType}&user=${username}&code=${verificationCode}&target=/workspace/${initiativeId}/join`)
+            console.log('redirecting from verification link handler to workspace ' + initiativeName)
+            this.props.history.push(`/workspace/${initiativeName}/login?type=${verificationType}&user=${username}&code=${verificationCode}&target=/workspace/${initiativeName}/join`)
             return
         }
 
@@ -117,7 +117,7 @@ class VerificationLinkHandler extends Component {
     }
 
     render() {
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = !!this.props.match.params.initiativeName;
         const {authState} = this.props;
 
         const style = {

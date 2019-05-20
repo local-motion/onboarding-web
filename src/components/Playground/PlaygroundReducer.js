@@ -1,4 +1,4 @@
-import { GET_PLAYGROUNDS, GET_PLAYGROUND_DETAILS } from "./PlaygroundActions";
+import { GET_PLAYGROUNDS, GET_PLAYGROUND_DETAILS, findPlaygroundsByName } from "./PlaygroundActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 
@@ -33,9 +33,17 @@ const initialState = {
 
 // Selectors
 
-export const getAllPlaygrounds = (state) => state.playgrounds.playgrounds
-export const getPlaygroundDetails = (state, playgroundId) => playgroundId ? state.playgrounds.playgroundDetails[playgroundIdToKey(playgroundId)] : null
-export const isCurrentUserManagerOfPlayground = (state, playgroundId) => isUserManagerOfPlayground(getUser(state), getPlaygroundDetails(state, playgroundId))
+export const getAllPlaygrounds = (state) => state.playgrounds.playgrounds;
+export const getPlaygroundDetails = (state, initiativeName) => {
+    if (!initiativeName) return null;
+
+    const playground = findPlaygroundsByName({ playgrounds: state.playgrounds.playgrounds, initiativeName });
+
+    if (!playground) return null;
+
+    return state.playgrounds.playgroundDetails[playgroundIdToKey(playground.id)];
+};
+export const isCurrentUserManagerOfPlayground = (state, playgroundId) => isUserManagerOfPlayground(getUser(state), getPlaygroundDetails(state, playgroundId));
 
 // Public utilities
 export const isUserVolunteerOfPlayground = (user, playground) => playground && user && playground.volunteers.filter(volunteer => volunteer.userId === user.id).length > 0

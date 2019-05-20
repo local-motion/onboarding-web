@@ -8,6 +8,7 @@ import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle";
 import { getActivePhaseUrl, getStatus, getWorkspaceStartLink } from "../../../../misc/WorkspaceHelpers";
 import { playgroundIcons } from "../../../../components/PlaygroundIcons/playgroundIconsConstants";
 import Statistics from "../../../../components/Statistics/Statistics";
+import { slugifyPlaygroundName } from "../../../../components/Playground/PlaygroundActions";
 
 class WorkspaceWelcomeContent extends Component {
     constructor(props) {
@@ -54,7 +55,6 @@ class WorkspaceWelcomeContent extends Component {
         const { playground, user, history } = this.props;
 
         const startUrl = getWorkspaceStartLink(playground);
-        // const startUrl = `/workspace/${playground.id}`;
         const loginUrl = `/login?target=${startUrl}`;
 
         history.push(
@@ -65,7 +65,7 @@ class WorkspaceWelcomeContent extends Component {
     goToWorkspaceWelcomePage() {
         const { playground, history } = this.props;
 
-        history.push(`/workspace/${playground.id}`);
+        history.push(`/workspace/${slugifyPlaygroundName(playground)}`);
     }
 
     getPhaseIcon() {
