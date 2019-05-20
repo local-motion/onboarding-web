@@ -67,7 +67,7 @@ class JForgotPassword extends Component {
     }
 
     render() {
-        const isInCard = this.props.location.pathname.includes('workspace');
+        const isInCard = this.props.location.pathname.includes('actie');
         const {authState, authData} = this.props;
         if (authState !== 'forgotPassword') {
             return null;

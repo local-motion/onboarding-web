@@ -146,6 +146,7 @@ export const createInitiative = (name, lat, lng, onSuccessCallback) => {
         mutation CreateInitiative($input: CreateInitiativeInput!) {
             createInitiative(input: $input) {
               id
+              name
             }
         }
       `, 

@@ -4,7 +4,7 @@ export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
 
 export function getWorkspaceStartLink(playground) {
-    return playground ? `/workspace/${slugifyPlaygroundName(playground)}` : '/workspace';
+    return playground ? `/actie/${slugifyPlaygroundName(playground)}` : '/actie';
 }
 
 export function checkBox({ playground, user, name, setCheckbox }) {
@@ -231,7 +231,7 @@ export function getFirstStepLinkOfPhase(phase, phases, playground, user) {
         return !(step.visible && !step.visible({ playground, user }));
     });
 
-    return phaseObject ? `/workspace${playground ? `/${slugifyPlaygroundName(playground)}` : ''}${step ? step.link : ''}` : null;
+    return phaseObject ? `/actie${playground ? `/${slugifyPlaygroundName(playground)}` : ''}${step ? step.link : ''}` : null;
 }
 
 export function shouldWorkspaceUpdate(props, nextProps) {

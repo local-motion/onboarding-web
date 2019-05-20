@@ -79,8 +79,8 @@ class WorkspacePage extends PureComponent {
 
         this.selectActivePhase();
 
-        if (path === '/workspace/') {
-            history.push('/workspace/add-find-playground')
+        if (path === '/actie/') {
+            history.push('/actie/add-find-playground')
         } else {
             this.ensurePlaygroundDetails();
         }
@@ -263,44 +263,44 @@ class WorkspacePage extends PureComponent {
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
                               <Switch>
 
-                                  <Route exact path="/workspace/login" key="WorkspaceLogin"
+                                  <Route exact path="/actie/login" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
-                                  <Route exact path="/workspace/add-find-playground" key="AddFindPlayground"
+                                  <Route exact path="/actie/add-find-playground" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeName/login" key="WorkspaceLogin"
+                                  <Route exact path="/actie/:initiativeName/login" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
 
                                   {
                                       playground && (
                                         <React.Fragment>
-                                            <Route exact path="/workspace/:initiativeName" key="WorkspaceWelcome"
+                                            <Route exact path="/actie/:initiativeName" key="WorkspaceWelcome"
                                                    render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/add-team-member" key="RecruitVolunteers"
+                                            <Route exact path="/actie/:initiativeName/add-team-member" key="RecruitVolunteers"
                                                    render={(props) => <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/flyer" key="DistributeFlyers"
+                                            <Route exact path="/actie/:initiativeName/flyer" key="DistributeFlyers"
                                                    render={(props) => <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/meningen-inventariseren" key="CollectOpinions"
+                                            <Route exact path="/actie/:initiativeName/meningen-inventariseren" key="CollectOpinions"
                                                    render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/involve-administrator" key="ContactManagement"
+                                            <Route exact path="/actie/:initiativeName/involve-administrator" key="ContactManagement"
                                                    render={(props) => <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/commitment" key="WeWillBecomeSmokefree"
+                                            <Route exact path="/actie/:initiativeName/commitment" key="WeWillBecomeSmokefree"
                                                    render={(props) => <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                            <Route exact path="/workspace/:initiativeName/pick-date" key="ChooseProperIntroductionDate"
+                                            <Route exact path="/actie/:initiativeName/pick-date" key="ChooseProperIntroductionDate"
                                                    render={(props) => <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/shout" key="CommunicateAboutSmokefreeAgreement"
+                                            <Route exact path="/actie/:initiativeName/shout" key="CommunicateAboutSmokefreeAgreement"
                                                    render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/signonfence" key="ShowPlaygroundIsSmokefree"
+                                            <Route exact path="/actie/:initiativeName/signonfence" key="ShowPlaygroundIsSmokefree"
                                                    render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                            <Route exact path="/workspace/:initiativeName/celebrate" key="WeAreSmokefree"
+                                            <Route exact path="/actie/:initiativeName/celebrate" key="WeAreSmokefree"
                                                    render={(props) => <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/magnify" key="Evaluate"
+                                            <Route exact path="/actie/:initiativeName/magnify" key="Evaluate"
                                                    render={(props) => <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                            <Route exact path="/workspace/:initiativeName/team" key="WorkspaceTeam"
+                                            <Route exact path="/actie/:initiativeName/team" key="WorkspaceTeam"
                                                    render={(props) => <TeamCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeName/chat" key="WorkspaceChat"
+                                            <Route exact path="/actie/:initiativeName/chat" key="WorkspaceChat"
                                                    render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
                                         </React.Fragment>
                                       )

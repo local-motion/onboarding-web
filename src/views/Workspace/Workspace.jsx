@@ -8,7 +8,7 @@ import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getPhases, getWorkspaceStartLink, shouldWorkspaceUpdate } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
-import { createInitiative } from "../../components/Playground/PlaygroundActions";
+import { createInitiative, slugifyPlaygroundName } from "../../components/Playground/PlaygroundActions";
 
 const mapStateToProps = (state, ownProps) => ({
     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -58,7 +58,7 @@ class WorkspaceTemplate extends React.Component {
 
             createInitiative(name, lat, lng, (data) => {
                 localStorage.removeItem('playgroundToCreate');
-                history.push('/workspace/' + data.createInitiative.id);
+                history.push('/actie/' + slugifyPlaygroundName(data.createInitiative));
             });
         }
     };

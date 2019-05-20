@@ -19,7 +19,7 @@ import OpenPlaygroundBubble from "./OpenPlaygroundBubble";
 
 
 class PlaygroundMap extends React.Component {
-    gotoPlayground = playground => this.props.history.push(`/workspace/${slugifyPlaygroundName(playground)}`);
+    gotoPlayground = playground => this.props.history.push(`/actie/${slugifyPlaygroundName(playground)}`);
 
     onCreateSubmit = () => this.props.onCreateSubmit();
 

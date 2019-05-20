@@ -65,7 +65,7 @@ class WorkspaceWelcomeContent extends Component {
     goToWorkspaceWelcomePage() {
         const { playground, history } = this.props;
 
-        history.push(`/workspace/${slugifyPlaygroundName(playground)}`);
+        history.push(`/actie/${slugifyPlaygroundName(playground)}`);
     }
 
     getPhaseIcon() {
