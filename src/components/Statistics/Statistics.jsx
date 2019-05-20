@@ -145,7 +145,7 @@ const Statistics = ({ playground, classes, view }) => {
         <div className={`${classes.statistics} ${getSmallClassFor('smallStatistics')}`}>
             <div className={`${classes.line} ${getSmallClassFor('smallLine')}`} />
             <Link
-              to={`/workspace/${slugifyPlaygroundName(playground)}/add-team-member`}
+              to={`/actie/${slugifyPlaygroundName(playground)}/mensen-verzamelen`}
               className={`${classes.statistic} ${getSmallClassFor('smallStatisticLeft')}`}
             >
                 <div className={`${classes.iconWrapper} ${getSmallClassFor('smallIconWrapper')}`}>
@@ -161,7 +161,7 @@ const Statistics = ({ playground, classes, view }) => {
                 </div>
             </Link>
             <Link
-              to={`/workspace/${slugifyPlaygroundName(playground)}/pick-date`}
+              to={`/actie/${slugifyPlaygroundName(playground)}/kies-moment-van-invoering`}
               className={`${classes.statistic} ${getSmallClassFor('smallStatisticRight')}`}
             >
                 <div className={`${classes.iconWrapper} ${getSmallClassFor('smallIconWrapper')}`}>

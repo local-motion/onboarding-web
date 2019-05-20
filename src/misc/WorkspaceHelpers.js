@@ -73,12 +73,12 @@ export function getPhases() {
             steps: [
                 {
                     name: 'Mensen verzamelen',
-                    link: '/add-team-member',
+                    link: '/mensen-verzamelen',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Flyers verspreiden',
-                    link: '/flyer',
+                    link: '/flyers-verspreiden',
                     visible: ({ playground }) => !!playground,
                 },
                 {
@@ -88,12 +88,12 @@ export function getPhases() {
                 },
                 {
                     name: 'Contact leggen met bestuur',
-                    link: '/involve-administrator',
+                    link: '/contact-leggen-met-bestuur',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Wij worden rookvrij',
-                    link: '/commitment',
+                    link: '/wij-worden-rookvrij',
                     visible: ({ playground }) => !!playground,
                 },
             ],
@@ -106,17 +106,17 @@ export function getPhases() {
             steps: [
                 {
                     name: 'Kies moment van invoering',
-                    link: '/pick-date',
+                    link: '/kies-moment-van-invoering',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Communiceer over de rookvrije afspraak',
-                    link: '/shout',
+                    link: '/communiceer-over-de-rookvrije-afspraak',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Laat zien dat de speeltuin rookvrij is',
-                    link: '/signonfence',
+                    link: '/laat-zien-dat-de-speeltuin-rookvrij-is',
                     visible: ({ playground }) => !!playground,
                 },
             ],
@@ -129,12 +129,12 @@ export function getPhases() {
             steps: [
                 {
                     name: 'We zijn rookvrij',
-                    link: '/celebrate',
+                    link: '/we-zijn-rookvrij',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Evalueren',
-                    link: '/magnify',
+                    link: '/evalueren',
                     visible: ({ playground }) => !!playground,
                 },
             ],

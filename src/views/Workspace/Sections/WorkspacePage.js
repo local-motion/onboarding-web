@@ -275,27 +275,27 @@ class WorkspacePage extends PureComponent {
                                         <React.Fragment>
                                             <Route exact path="/actie/:initiativeName" key="WorkspaceWelcome"
                                                    render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/add-team-member" key="RecruitVolunteers"
+                                            <Route exact path="/actie/:initiativeName/mensen-verzamelen" key="RecruitVolunteers"
                                                    render={(props) => <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/flyer" key="DistributeFlyers"
+                                            <Route exact path="/actie/:initiativeName/flyers-verspreiden" key="DistributeFlyers"
                                                    render={(props) => <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
                                             <Route exact path="/actie/:initiativeName/meningen-inventariseren" key="CollectOpinions"
                                                    render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/involve-administrator" key="ContactManagement"
+                                            <Route exact path="/actie/:initiativeName/contact-leggen-met-bestuur" key="ContactManagement"
                                                    render={(props) => <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/commitment" key="WeWillBecomeSmokefree"
+                                            <Route exact path="/actie/:initiativeName/wij-worden-rookvrij" key="WeWillBecomeSmokefree"
                                                    render={(props) => <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                            <Route exact path="/actie/:initiativeName/pick-date" key="ChooseProperIntroductionDate"
+                                            <Route exact path="/actie/:initiativeName/kies-moment-van-invoering" key="ChooseProperIntroductionDate"
                                                    render={(props) => <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/shout" key="CommunicateAboutSmokefreeAgreement"
+                                            <Route exact path="/actie/:initiativeName/communiceer-over-de-rookvrije-afspraak" key="CommunicateAboutSmokefreeAgreement"
                                                    render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/signonfence" key="ShowPlaygroundIsSmokefree"
+                                            <Route exact path="/actie/:initiativeName/laat-zien-dat-de-speeltuin-rookvrij-is" key="ShowPlaygroundIsSmokefree"
                                                    render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                            <Route exact path="/actie/:initiativeName/celebrate" key="WeAreSmokefree"
+                                            <Route exact path="/actie/:initiativeName/we-zijn-rookvrij" key="WeAreSmokefree"
                                                    render={(props) => <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/magnify" key="Evaluate"
+                                            <Route exact path="/actie/:initiativeName/evalueren" key="Evaluate"
                                                    render={(props) => <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
                                             <Route exact path="/actie/:initiativeName/team" key="WorkspaceTeam"
