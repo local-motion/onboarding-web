@@ -33,7 +33,7 @@ const conatinerFluid = {
 };
 const mobileMedia = "@media (min-width: 576px)";
 const tabletPortraitMedia = "@media (min-width: 768px)";
-const tabletLandscapeMedia = "@media (min-width: 992px)";
+const tabletLandscapeMedia = "@media (min-width: 960px)";
 const desktopMedia = "@media (min-width: 1200px)";
 
 const container = {

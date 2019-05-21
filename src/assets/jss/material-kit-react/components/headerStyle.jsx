@@ -66,6 +66,9 @@ const headerStyle = {
   appResponsive: {
     margin: "20px 10px"
   },
+  menuButton: {
+    marginTop: 5,
+  },
   primary: {
     backgroundColor: primaryColor,
     color: "#FFFFFF",
