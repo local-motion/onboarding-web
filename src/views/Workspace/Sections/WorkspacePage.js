@@ -80,7 +80,7 @@ class WorkspacePage extends PureComponent {
         this.selectActivePhase();
 
         if (path === '/actie/') {
-            history.push('/actie/zoeken')
+            history.push('/actie/starten')
         } else {
             this.ensurePlaygroundDetails();
         }
@@ -265,7 +265,7 @@ class WorkspacePage extends PureComponent {
 
                                   <Route exact path="/actie/inloggen" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
-                                  <Route exact path="/actie/zoeken" key="AddFindPlayground"
+                                  <Route exact path="/actie/starten" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user} />}/>
                                   <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />

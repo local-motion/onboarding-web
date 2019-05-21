@@ -298,7 +298,7 @@ class AddFindPlayground extends Component {
           <React.Fragment>
               {
                   results.map((playground) => {
-                      const { name, distance = 0, volunteerCount, id } = playground;
+                      const { name, distance = 0, volunteerCount } = playground;
 
                       const convertedDistance = distance >= 1000
                         ? `< ${Math.round(distance / 1000)} km`
