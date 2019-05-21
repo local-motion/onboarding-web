@@ -31,11 +31,22 @@ const styles = theme => ({
     logo: {
         width: 300,
         padding: 25,
+        fontSize: 30,
+        color: 'rgb(8, 92, 166)',
+        fontFamily: 'dk_black_bamboo-webfont',
+        letterSpacing: '1px',
+        lineHeight: 1.2,
 
         [theme.breakpoints.down('sm')]: {
             width: 200,
             margin: 20,
             padding: 0,
+        },
+
+        '& > span': {
+            color: 'rgb(207, 26, 49)',
+            letterSpacing: '0px',
+            marginLeft: 5,
         },
     },
     menu: {
@@ -99,11 +110,7 @@ const OnboardingHeader = ({ classes, history, location, user }) => {
     return (
       <AppBar className={classes.landingAppBar}>
           <Link to={'/'}>
-              <img
-                src={require("../../../assets/img/landing/logo.png")}
-                alt={"Rookvrije generatie logo"}
-                className={classes.logo}
-              />
+              <div className={classes.logo}>Rookvrij<span>spelen</span></div>
           </Link>
 
           <HeaderLinks className={classes.menu} />
