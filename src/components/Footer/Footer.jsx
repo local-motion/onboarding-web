@@ -48,15 +48,15 @@ function Footer({ t, classes, whiteFont, onlyLogo, onlyLinks }) {
                     [classes.hide]: onlyLinks,
                 })}>
                     <List className={classes.list}>
-                        <ListItem className={classes.inlineBlock + " footer-logo"}>
-                            <a
-                                href="https://www.kwf.nl/"
-                                className={classes.block}
-                                target="_blank"
-                            >
-                                <img src={require("assets/img/logo-kwf.png")} alt="Logo KWF Kankerfonds" />
-                            </a>
-                        </ListItem>
+                        {/*<ListItem className={classes.inlineBlock + " footer-logo"}>*/}
+                            {/*<a*/}
+                                {/*href="https://www.kwf.nl/"*/}
+                                {/*className={classes.block}*/}
+                                {/*target="_blank"*/}
+                            {/*>*/}
+                                {/*<img src={require("assets/img/logo-kwf.png")} alt="Logo KWF Kankerfonds" />*/}
+                            {/*</a>*/}
+                        {/*</ListItem>*/}
                         <ListItem className={classes.inlineBlock + " footer-logo"}>
                             <a
                                 href="https://www.longfonds.nl/"
@@ -65,13 +65,13 @@ function Footer({ t, classes, whiteFont, onlyLogo, onlyLinks }) {
                             >
                                 <img src={require("assets/img/logo-longfonds.png")} alt="Logo Longfonds" />
                             </a>
-                            <a
-                              href="https://www.hartstichting.nl/"
-                              className={classes.logo}
-                              target="_blank"
-                            >
-                                <img src={require("assets/img/logo-hartstichting.png")} alt="Logo Hartstichting" />
-                            </a>
+                            {/*<a*/}
+                              {/*href="https://www.hartstichting.nl/"*/}
+                              {/*className={classes.logo}*/}
+                              {/*target="_blank"*/}
+                            {/*>*/}
+                                {/*<img src={require("assets/img/logo-hartstichting.png")} alt="Logo Hartstichting" />*/}
+                            {/*</a>*/}
                         </ListItem>
                     </List>
                 </div>
