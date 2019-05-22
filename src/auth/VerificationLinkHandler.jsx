@@ -87,7 +87,7 @@ class VerificationLinkHandler extends Component {
         if (!isInCard && initiativeName) {
             // Let the VerificationLinkHandler within the particular workspace handle this
             console.log('redirecting from verification link handler to workspace ' + initiativeName)
-            this.props.history.push(`/actie/${initiativeName}/inloggen?type=${verificationType}&user=${username}&code=${verificationCode}&target=/actie/${initiativeName}/join`)
+            this.props.history.push(`/actie/${initiativeName}/inloggen?type=${verificationType}&user=${username}&code=${verificationCode}&target=/actie/${initiativeName}/aansluiten`)
             return
         }
 

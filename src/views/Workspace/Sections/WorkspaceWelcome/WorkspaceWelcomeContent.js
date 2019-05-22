@@ -58,7 +58,7 @@ class WorkspaceWelcomeContent extends Component {
         const loginUrl = `/inloggen?target=${startUrl}`;
 
         history.push(
-          `${startUrl}${user ? '' : loginUrl}/join`
+          `${startUrl}${user ? '' : loginUrl}/aansluiten`
         );
     }
 
