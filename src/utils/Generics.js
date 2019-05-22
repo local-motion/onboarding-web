@@ -28,3 +28,16 @@ export const bindMethods = (methods, object) => {
         object[method] = object[method].bind(object)
     }
 }
+
+/**
+ * Shallow copies the selecties properties from one object to another
+ * @param {*} source the object to copy the properties from
+ * @param {*} destination the object to copy the properties to
+ * @param {*} properties the list of property identifiers to copy
+ * @returns the destination object
+ */
+export const copyProperties = (source, destination, properties) => {
+    for (let i = 0; i < properties.length; i++)
+        destination[properties[i]] = source[properties[i]]
+    return destination
+}

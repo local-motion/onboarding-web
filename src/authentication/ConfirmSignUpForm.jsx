@@ -1,32 +1,16 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
 import {Button, CardMedia} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
 
 import { getErrorMessage } from '../api/ErrorMessages';
-import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import TextField from "@material-ui/core/TextField/TextField";
-import { openInformationDialog } from '../components/SimpleDialog/SimpleDialogActions';
 import { style } from './AuthenticatorStyles';
 import { bindMethods } from '../utils/Generics';
 import { allVerificationCodeCharactersPattern, verificationCodeLength, isValidVerificationCode } from './AuthenticatorValidations';
 import { clearVerificationCookies } from '../auth/VerificationLinkHandler';
 
 
-const mapStateToProps = (state, ownProps) => ({
-    playground: ownProps.match.params.initiativeId
-      ? getPlaygroundDetails(state, ownProps.match.params.initiativeId)
-      : null,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-    triggerCodeSentNotification: () => dispatch(openInformationDialog(
-        'Code verstuurd', 
-        'De verification code is naar jouw emailadres verstuurd.', 
-        'OK', 
-      )),
-})
 
 /**
  * This form allows an existing user to authenticate himself and thereby create a user session
@@ -34,9 +18,7 @@ const mapDispatchToProps = (dispatch) => ({
 class ConfirmSignUpForm extends Component {
     constructor(props) {
         super(props);
-        this.signIn = this.signIn.bind(this);
         bindMethods(['onChangeUsername', 'onChangeVerificationCode'], this)
-        // this.checkContact = this.checkContact.bind(this);
     }
 
     componentDidMount() {
@@ -73,7 +55,7 @@ class ConfirmSignUpForm extends Component {
         console.log('resend code to ' + username);
         Auth.resendSignUp(username)
             .then(() => {
-                this.props.triggerCodeSentNotification()
+                this.props.openInformationDialog('Code verstuurd', 'De verification code is naar jouw emailadres verstuurd.')
             })
             .catch(error => this.handleError(error));
     }
@@ -89,70 +71,8 @@ class ConfirmSignUpForm extends Component {
     handleError(error) {
         console.log('confirm sign up error', error);
         clearVerificationCookies()
-        this.props.setError(getErrorMessage(error.code, error.message))
+        this.props.displayError(getErrorMessage(error.code, error.message))
     }
-
-
-    signIn() {
-        const {username, password} = this.props;
-        this.props.setWaitingForServerResponse()
-        Auth.signIn(username, password)
-            .then(user => {
-                console.log('sign in success', user);
-                this.props.setPassword('')                                    // clear password from memory
-                this.props.setError('')
-                this.props.clearWaitingForServerResponse()
-        
-                if (user.attributes.email_verified !== true) {
-                    this.props.triggerEmailNotVerifiedError()
-                    return
-                }
-                // There are other sign in challenges we don't cover here.
-                // SMS_MFA, SOFTWARE_TOKEN_MFA, NEW_PASSWORD_REQUIRED, MFA_SETUP ...
-                if (user.challengeName === 'SMS_MFA' || user.challengeName === 'SOFTWARE_TOKEN_MFA') {
-                    this.props.changeForm('confirmSignIn', user);
-                } else {
-                    this.props.onSignInSuccess(user);
-                }
-            })
-            .catch(error => {
-                console.log('sign in error', error);
-                this.props.setPassword('')                                    // clear password from memory
-
-                if (error.code === 'UserNotConfirmedException') {
-                    this.props.triggerUserNotConfirmedError(() => this.props.changeForm('SignUpConfirm'))
-                    return
-                }
-                this.props.setError(getErrorMessage(error.code, error.message))
-                this.props.clearWaitingForServerResponse()
-            })
-    }
-
-    signInSuccess(user) {
-        console.log('sign in success', user);
-        this.props.setPassword('')                                    // clear password from memory
-        this.props.setError('')
-        this.props.clearWaitingForServerResponse()
-
-        if (user.attributes.email_verified !== true) {
-            this.props.triggerEmailNotVerifiedError()
-            return
-        }
-        // There are other sign in challenges we don't cover here.
-        // SMS_MFA, SOFTWARE_TOKEN_MFA, NEW_PASSWORD_REQUIRED, MFA_SETUP ...
-        if (user.challengeName === 'SMS_MFA' || user.challengeName === 'SOFTWARE_TOKEN_MFA') {
-            this.props.changeForm('confirmSignIn', user);
-        } else {
-            this.props.onSignInSuccess(user);
-        }
-    }
-
-    signInError(err) {
-        this.props.setPassword('')                                    // clear password from memory
-        this.props.setError(getErrorMessage(err.code, err.message))
-        this.props.clearWaitingForServerResponse()
-    }
-
 
     onChangeUsername(event) {
         this.props.setUsername(event.target.value)
@@ -165,7 +85,7 @@ class ConfirmSignUpForm extends Component {
 
     catchEnterSubmit(e){
         if(e.keyCode === 13 && e.shiftKey === false) {
-            this.signIn();
+            this.confirmSignUp();
         }
     }
 
@@ -176,7 +96,7 @@ class ConfirmSignUpForm extends Component {
 
         const isInCard = this.props.location.pathname.includes('workspace');
 
-        const showSubmitButton = username && verificationCode && isValidVerificationCode(verificationCode)
+        const showSubmitButton = username && verificationCode && isValidVerificationCode(verificationCode) && !waitingForServerResponse
 
         return (
             <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
@@ -199,7 +119,6 @@ class ConfirmSignUpForm extends Component {
                             }
                         >
                             <TextField
-                                // id="signInFormUsername"
                                 type="text"
                                 fullWidth
                                 variant={"outlined"}
@@ -210,7 +129,6 @@ class ConfirmSignUpForm extends Component {
                                 autoFocus={!username}
                             />
                             <TextField
-                                // id="signInFormPassword"
                                 type="text"
                                 fullWidth
                                 variant={"outlined"}
@@ -226,7 +144,7 @@ class ConfirmSignUpForm extends Component {
                                 variant="contained"
                                 color="primary"
                                 className={"pagination-button-step"}
-                                disabled={!showSubmitButton || waitingForServerResponse}
+                                disabled={!showSubmitButton}
                             >
                                 Bevestig
                             </Button>
@@ -258,4 +176,4 @@ class ConfirmSignUpForm extends Component {
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfirmSignUpForm));
+export default withRouter(ConfirmSignUpForm)

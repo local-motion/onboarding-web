@@ -55,11 +55,11 @@ class SignUpForm extends Component {
 
         this.state = {
             repeatedPassword: '',
-            repeatedPasswordError: '',
-            emailAddressError: '',
-            error: '',
-            usernameError: '',
-            passwordError: '',
+            // repeatedPasswordError: '',
+            // emailAddressError: '',
+            // error: '',
+            // usernameError: '',
+            // passwordError: '',
             passwordFocus: false,
             acceptedTerms: false,
             filledPass: false,
@@ -73,6 +73,13 @@ class SignUpForm extends Component {
     }
 
     signUp() {
+        const errorMessage = this.validatePreSubmit()
+        console.log('presubmit error', errorMessage)
+        if (errorMessage) {
+            this.props.displayError(errorMessage)
+            return
+        }
+
         const {username, password, emailAddress} = this.props;
         this.props.setWaitingForServerResponse()
         this.props.checkEmailExists(emailAddress, 
@@ -84,22 +91,13 @@ class SignUpForm extends Component {
                     Auth.signUp(username, password, emailAddress, '')
                         .then(() => {
                             this.props.setPassword('')                                    // clear password from memory
-                            this.props.setError('')
                             this.props.clearWaitingForServerResponse()
                     
                             this.props.changeForm('confirmSignUp');
                     
                         })
-                        .catch(err => {
-                            this.props.setPassword('')                                    // clear password from memory
-                            let message = getErrorMessage(err.code, err.message)
-                            if (err.message && (err.message.includes("password") || err.message.includes("Password")))
-                                message = 'Je wachtwoord heeft minimaal 8 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.';
-                            else if (err.message && err.message.includes("email"))
-                                message = 'Ongeldig email adres';
-                            
-                            this.props.setError(message)
-                            this.props.clearWaitingForServerResponse()
+                        .catch(error => {
+                            this.signUpError(error)
                         })
             },
         )
@@ -110,32 +108,59 @@ class SignUpForm extends Component {
             setSignupConfirmCookies(initiativeId)
     }
 
+    signUpError(error) {
+        let message = getErrorMessage(error.code, error.message)
+        if (error.message && (error.message.includes("password") || error.message.includes("Password")))
+            message = 'Je wachtwoord heeft minimaal 8 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.'
+        else if (error.code === 'InvalidParameterException' && error.message === 'Username cannot be of email format, since user pool is configured for email alias.')
+            message = 'Gebruikersnaam kan geen emailadres zijn'
+        else if (error.message && error.message.includes("email"))
+            message = 'Ongeldig emailadres'
+        
+        this.props.clearWaitingForServerResponse()
+        this.props.displayError(message)
+    }
+
+    validatePreSubmit() {
+        const {username, password, emailAddress} = this.props
+        const {repeatedPassword, acceptedTerms} = this.state
+        if (!emailAddress || !username || !password || !repeatedPassword)   return 'Je moet alle velden invullen'
+        if (!acceptedTerms)                                                 return 'Je moet de voorwaarden accepteren'
+        if (!isValidEmailAddress(emailAddress))                             return 'Dit emailadres is ongeldig'
+        const usernameErrorMessage = validateToMessage(username, usernameValidations, 'submit')
+        if (usernameErrorMessage)                                           return usernameErrorMessage
+        if (!isValidPassword(password))                                     return 'Het wachtwoord is ongeldig'
+        if (repeatedPassword !== password)                                  return 'Beide wachtwoorden zijn niet aan elkaar gelijk'
+        return ''
+    }
+
     onChangeUsername(event) {
         const username = event.target.value.trim().substring(0, usernameMaximumLength)
-        const errorMessage = validateToMessage(username, usernameValidations, 'edit')
-        this.setState({usernameError: errorMessage})
+        // const errorMessage = validateToMessage(username, usernameValidations, 'edit')
+        // this.setState({usernameError: errorMessage})
 
         this.props.setUsername(username)
     }
     onChangePassword(event) {
         const password = event.target.value
         const repeatedPassword = this.state.repeatedPassword
-        const passwordError = validateToMessage(password, limitedPasswordValidations, 'edit')
-        const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
-        this.setState({passwordError, repeatedPasswordError})
+        // const passwordError = validateToMessage(password, limitedPasswordValidations, 'edit')
+        // const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
+        // this.setState({passwordError, repeatedPasswordError})
 
         this.props.setPassword(password)
     }
     onChangeRepeatedPassword(event) {
         const repeatedPassword = event.target.value
         const password = this.props.password
-        const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
-        this.setState({repeatedPassword, repeatedPasswordError})
+        // const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
+        // this.setState({repeatedPassword, repeatedPasswordError})
+        this.setState({repeatedPassword})
     }
     onChangeEmailAddress(event) {
         const emailAddress = event.target.value
-        const emailAddressError = emailAddress && !isValidEmailAddress(emailAddress) ? 'Dit emailadres is ongeldig' : ''
-        this.setState({emailAddressError})
+        // const emailAddressError = emailAddress && !isValidEmailAddress(emailAddress) ? 'Dit emailadres is ongeldig' : ''
+        // this.setState({emailAddressError})
         this.props.setEmailAddress(emailAddress)
     }
     onChangeAcceptedTerms(event) {
@@ -146,15 +171,6 @@ class SignUpForm extends Component {
         this.setState({passwordFocus: hasFocus})
     }
 
-
-
-
-    catchEnterSubmit(e) {
-        if (e.keyCode === 13 && e.shiftKey === false && this.state.filled) {
-            this.signUp();
-        }
-    }
-
     toggleTermsDialog() {
         this.setState(({ isTermsOpened }) => ({ isTermsOpened: !isTermsOpened }));
     }
@@ -163,16 +179,33 @@ class SignUpForm extends Component {
         this.setState(({ isPrivacyOpened }) => ({ isPrivacyOpened: !isPrivacyOpened }));
     }
 
+    catchEnterSubmit(e, isReadyToSubmit) {
+        if(e.keyCode === 13 && e.shiftKey === false && isReadyToSubmit)
+            this.signUp()
+    }
+
     render() {
         const   {   username, password, emailAddress, error, waitingForServerResponse, 
                     changeForm,
                     classes
         } = this.props
 
-        const {repeatedPassword, acceptedTerms, usernameError, passwordError, repeatedPasswordError, emailAddressError, passwordFocus} = this.state
+        // const {repeatedPassword, acceptedTerms, passwordError, repeatedPasswordError, emailAddressError, passwordFocus} = this.state
+        const {repeatedPassword, acceptedTerms, passwordFocus} = this.state
+
+        const emailAddressError = emailAddress && !isValidEmailAddress(emailAddress) ? 'Dit emailadres is ongeldig' : ''
+        const usernameError = validateToMessage(username, usernameValidations, 'edit')
+        const passwordErrorLimited = validateToMessage(password, limitedPasswordValidations, 'edit')
+        const passwordError = password && !isValidPassword(password) ? 'Het wachtwoord is ongeldig' : ''
+        const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
+
         const isInCard = this.props.location.pathname.includes('workspace');
 
-        const isReadyToSubmit = emailAddress && username && !usernameError && isValidPassword(password) && repeatedPassword === password && acceptedTerms
+        // const isReadyToSubmit = emailAddress && username && !usernameError && isValidPassword(password) && repeatedPassword === password && acceptedTerms && !waitingForServerResponse
+        const isReadyToSubmit = true
+        // const isReadyToSubmit = emailAddress && username && password && repeatedPassword && acceptedTerms && 
+        //                         !emailAddressError && !usernameError && !passwordError && !repeatedPasswordError &&
+        //                         !waitingForServerResponse
 
         const checkmark = <span className={classes.checkmark}>{String.fromCharCode(10004)}</span> 
 
@@ -186,9 +219,7 @@ class SignUpForm extends Component {
                         <p>Geef je emailadres op en kies een gebruikersnaam en wachtwoord</p>
                         <form
                             style={style}
-                            onKeyDown={
-                                event => this.catchEnterSubmit(event)
-                            }
+                            onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
                         >
                             <div>
                                 <TextField
@@ -199,7 +230,6 @@ class SignUpForm extends Component {
                                     style={style.input}
                                     value={emailAddress}
                                     onChange={this.onChangeEmailAddress}
-                                    autoComplete='off'
                                     autoFocus
                                 />
                             </div>
@@ -240,10 +270,11 @@ class SignUpForm extends Component {
                                     {containsDecimalPattern.test(password) ? checkmark : '-'} een cijfer bevatten<br />
                                     {containsSpecialCharacterPattern.test(password) ? checkmark : '-'} een van de volgende tekens bevatten: <span className={classes.specialCharacters}>{allowedSpecialCharacters}</span><br />
                                     {password.length >= passwordMinimumLength ? checkmark : '-'} tenminste {passwordMinimumLength} karakters lang zijn<br />
-                                    {passwordError && <span className={"error"}>{passwordError}</span>}
+                                    {passwordErrorLimited && <span className={"error"}>{passwordErrorLimited}</span>}
                                 </p>
                             }
-                            {!passwordFocus && password && !isValidPassword(password) && <p className={"error"}>Het wachtwoord is ongeldig</p>}
+                            {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
+                            {/* {!passwordFocus && password && !isValidPassword(password) && <p className={"error"}>Het wachtwoord is ongeldig</p>} */}
 
                             <div>
                                 <TextField
@@ -299,7 +330,7 @@ class SignUpForm extends Component {
                                 style={style.loginButton}
                                 variant="contained"
                                 color="primary"
-                                disabled={ !isReadyToSubmit || waitingForServerResponse }
+                                disabled={ !isReadyToSubmit }
                                 onClick={this.signUp}>
                                 Maak het account
                             </Button>

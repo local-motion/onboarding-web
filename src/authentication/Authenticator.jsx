@@ -7,8 +7,10 @@ import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import { getActivePhaseUrl } from '../misc/WorkspaceHelpers';
-import { bindMethods } from '../utils/Generics';
+import { bindMethods, copyProperties } from '../utils/Generics';
 import ConfirmSignUpForm from './ConfirmSignUpForm';
+import { openInformationDialog, openErrorDialog } from '../components/SimpleDialog/SimpleDialogActions';
+import ForgotPasswordForm from './ForgotPasswordForm';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -18,11 +20,12 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+    openInformationDialog:  (title, message, buttonMessage, onClose) => dispatch(openInformationDialog(title, message, buttonMessage, onClose && (dispatch => onClose(dispatch)))),
+    openErrorDialog:        (title, message, buttonMessage, onClose) => dispatch(openErrorDialog(title, message, buttonMessage, onClose && (dispatch => onClose(dispatch)))),
 })
 
 /**
- * 
- * 
+ * This component supports all actions relevant for user authentication through the invocation of relevant forms
  */
 class Authenticator extends Component {
     constructor(props) {
@@ -36,11 +39,10 @@ class Authenticator extends Component {
             emailAddress: '',
             verificationCode: '',
             error: '', 
-            signInPage: true, 
             waitingForServerResponse: false
         }
 
-        bindMethods(['changeForm', 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'onSignInSuccess', 'setError',
+        bindMethods(['changeForm', 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'onSignInSuccess', 'displayError',
                      'setWaitingForServerResponse', 'clearWaitingForServerResponse'], this)
     }
 
@@ -62,11 +64,15 @@ class Authenticator extends Component {
         this.setState({form: newForm})                          
     }
 
+    displayError(message) {
+        this.props.openErrorDialog('Er is iets fout gegaan', message, 'OK')
+    }
+
+
     setUsername(username)                   {   this.setState({username})                               }
     setPassword(password)                   {   this.setState({password})                               }
     setEmailAddress(emailAddress)           {   this.setState({emailAddress})                           }
     setVerificationCode(verificationCode)   {   this.setState({verificationCode})                       }
-    setError(error)                         {   this.setState({error})                                  }
     setWaitingForServerResponse()           {   this.setState({waitingForServerResponse: true})         }
     clearWaitingForServerResponse()         {   this.setState({waitingForServerResponse: false})        }
 
@@ -89,23 +95,10 @@ class Authenticator extends Component {
     render() {
         // const isInCard = this.props.location.pathname.includes('workspace');
 
-        const formProps = {
-            username: this.state.username, 
-            password: this.state.password, 
-            emailAddress: this.state.emailAddress, 
-            verificationCode: this.state.verificationCode, 
-            error: this.state.error, 
-            waitingForServerResponse: this.state.waitingForServerResponse,
-
-            setUsername: this.setUsername, 
-            setPassword: this.setPassword, 
-            setEmailAddress: this.setEmailAddress, 
-            setVerificationCode: this.setVerificationCode, 
-            setError: this.setError, 
-            setWaitingForServerResponse: this.setWaitingForServerResponse,
-            clearWaitingForServerResponse: this.clearWaitingForServerResponse,
-            changeForm: this.changeForm
-        }
+        let formProps = copyProperties(this.state, {},    [ 'username', 'password', 'emailAddress', 'verificationCode', 'error', 'waitingForServerResponse' ])
+        formProps = copyProperties(this, formProps,       [ 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'displayError', 
+                                                            'setWaitingForServerResponse', 'clearWaitingForServerResponse', 'changeForm'])
+        formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog'])
 
         switch(this.state.form) {
             case 'signIn':
@@ -114,6 +107,8 @@ class Authenticator extends Component {
                 return <SignUpForm {...formProps}/>
             case 'confirmSignUp':
                 return <ConfirmSignUpForm {...formProps}/>
+            case 'forgotPassword':
+                return <ForgotPasswordForm {...formProps}/>
             default:
                 return <div>Invalid form state: {this.state.form}</div> 
         }
