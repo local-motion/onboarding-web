@@ -55,17 +55,10 @@ class SignUpForm extends Component {
 
         this.state = {
             repeatedPassword: '',
-            // repeatedPasswordError: '',
-            // emailAddressError: '',
-            // error: '',
-            // usernameError: '',
-            // passwordError: '',
             passwordFocus: false,
             acceptedTerms: false,
-            filledPass: false,
             isTermsOpened: false,
             isPrivacyOpened: false,
-            waitingForServerResponse: false,
         }
 
         bindMethods(['signUp', 'togglePrivacyDialog', 'toggleTermsDialog', 'onChangeUsername', 'onChangePassword', 'onChangeRepeatedPassword', 'onChangeEmailAddress',
@@ -74,7 +67,6 @@ class SignUpForm extends Component {
 
     signUp() {
         const errorMessage = this.validatePreSubmit()
-        console.log('presubmit error', errorMessage)
         if (errorMessage) {
             this.props.displayError(errorMessage)
             return
@@ -122,6 +114,7 @@ class SignUpForm extends Component {
     }
 
     validatePreSubmit() {
+        // A safety check before submitting. With normal form behaviour these errors should not occur.
         const {username, password, emailAddress} = this.props
         const {repeatedPassword, acceptedTerms} = this.state
         if (!emailAddress || !username || !password || !repeatedPassword)   return 'Je moet alle velden invullen'
@@ -135,62 +128,36 @@ class SignUpForm extends Component {
     }
 
     onChangeUsername(event) {
-        const username = event.target.value.trim().substring(0, usernameMaximumLength)
-        // const errorMessage = validateToMessage(username, usernameValidations, 'edit')
-        // this.setState({usernameError: errorMessage})
-
-        this.props.setUsername(username)
+        this.props.setUsername(event.target.value.trim().substring(0, usernameMaximumLength))
     }
     onChangePassword(event) {
-        const password = event.target.value
-        const repeatedPassword = this.state.repeatedPassword
-        // const passwordError = validateToMessage(password, limitedPasswordValidations, 'edit')
-        // const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
-        // this.setState({passwordError, repeatedPasswordError})
-
-        this.props.setPassword(password)
+        this.props.setPassword(event.target.value)
     }
     onChangeRepeatedPassword(event) {
-        const repeatedPassword = event.target.value
-        const password = this.props.password
-        // const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
-        // this.setState({repeatedPassword, repeatedPasswordError})
-        this.setState({repeatedPassword})
+        this.setState({repeatedPassword: event.target.value})
     }
     onChangeEmailAddress(event) {
-        const emailAddress = event.target.value
-        // const emailAddressError = emailAddress && !isValidEmailAddress(emailAddress) ? 'Dit emailadres is ongeldig' : ''
-        // this.setState({emailAddressError})
-        this.props.setEmailAddress(emailAddress)
+        this.props.setEmailAddress(event.target.value)
     }
     onChangeAcceptedTerms(event) {
         this.setState({acceptedTerms: event.target.checked})
     }
-
     onFocusChangePassword(hasFocus) {
         this.setState({passwordFocus: hasFocus})
     }
-
     toggleTermsDialog() {
         this.setState(({ isTermsOpened }) => ({ isTermsOpened: !isTermsOpened }));
     }
-
     togglePrivacyDialog() {
         this.setState(({ isPrivacyOpened }) => ({ isPrivacyOpened: !isPrivacyOpened }));
     }
-
     catchEnterSubmit(e, isReadyToSubmit) {
         if(e.keyCode === 13 && e.shiftKey === false && isReadyToSubmit)
             this.signUp()
     }
 
     render() {
-        const   {   username, password, emailAddress, error, waitingForServerResponse, 
-                    changeForm,
-                    classes
-        } = this.props
-
-        // const {repeatedPassword, acceptedTerms, passwordError, repeatedPasswordError, emailAddressError, passwordFocus} = this.state
+        const { username, password, emailAddress, waitingForServerResponse, changeForm, classes } = this.props
         const {repeatedPassword, acceptedTerms, passwordFocus} = this.state
 
         const emailAddressError = emailAddress && !isValidEmailAddress(emailAddress) ? 'Dit emailadres is ongeldig' : ''
@@ -201,11 +168,9 @@ class SignUpForm extends Component {
 
         const isInCard = this.props.location.pathname.includes('workspace');
 
-        // const isReadyToSubmit = emailAddress && username && !usernameError && isValidPassword(password) && repeatedPassword === password && acceptedTerms && !waitingForServerResponse
-        const isReadyToSubmit = true
-        // const isReadyToSubmit = emailAddress && username && password && repeatedPassword && acceptedTerms && 
-        //                         !emailAddressError && !usernameError && !passwordError && !repeatedPasswordError &&
-        //                         !waitingForServerResponse
+        const isReadyToSubmit = emailAddress && username && password && repeatedPassword && acceptedTerms && 
+                                !emailAddressError && !usernameError && !passwordError && !repeatedPasswordError &&
+                                !waitingForServerResponse
 
         const checkmark = <span className={classes.checkmark}>{String.fromCharCode(10004)}</span> 
 
@@ -274,7 +239,6 @@ class SignUpForm extends Component {
                                 </p>
                             }
                             {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
-                            {/* {!passwordFocus && password && !isValidPassword(password) && <p className={"error"}>Het wachtwoord is ongeldig</p>} */}
 
                             <div>
                                 <TextField
@@ -335,7 +299,6 @@ class SignUpForm extends Component {
                                 Maak het account
                             </Button>
                         </form>
-                        {error && <p className={"error"}>{error}</p>}
                         <div style={style.links} className={"extra-info"}>
                             <div style={style.left}>
                                 <Button

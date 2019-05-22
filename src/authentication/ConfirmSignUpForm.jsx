@@ -35,7 +35,7 @@ class ConfirmSignUpForm extends Component {
 
     confirmSignUp() {
         const {username, verificationCode} = this.props
-        console.log('confirm sign up with ' + verificationCode);
+        console.log('submitting confirm sign up with ' + verificationCode);
 
         this.props.setWaitingForServerResponse()
 
@@ -90,9 +90,7 @@ class ConfirmSignUpForm extends Component {
     }
 
     render() {
-        const   {   username, verificationCode, error, waitingForServerResponse, 
-                    changeForm
-                } = this.props
+        const   { username, verificationCode, waitingForServerResponse, changeForm } = this.props
 
         const isInCard = this.props.location.pathname.includes('workspace');
 
@@ -137,10 +135,11 @@ class ConfirmSignUpForm extends Component {
                                 onChange={this.onChangeVerificationCode}
                                 style={style.input}
                                 autoFocus={!!username}
-                            />
+                                autoComplete='off'
+                                />
                             <Button
                                 style={style.loginButton}
-                                onClick={this.signIn}
+                                onClick={this.confirmSignUp}
                                 variant="contained"
                                 color="primary"
                                 className={"pagination-button-step"}
@@ -157,7 +156,6 @@ class ConfirmSignUpForm extends Component {
                                 Stuur code opnieuw
                             </Button>
                             </form>
-                        {error && <p className={"error"}>{error}</p>}
 
                         <div style={style.links} className={"extra-info"}>
                             <div style={style.left}>

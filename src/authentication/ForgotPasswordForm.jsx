@@ -23,7 +23,7 @@ class ForgotPasswordForm extends Component {
             .then(data => {
                 console.log('sent password reset code to ' + username);
                 this.props.clearWaitingForServerResponse()
-                this.changeForm('forgotPasswordReset')
+                this.props.changeForm('passwordReset')
             })
             .catch(error => {
                 console.log('forgot password send code error', error);
@@ -59,17 +59,6 @@ class ForgotPasswordForm extends Component {
         const {username, waitingForServerResponse, changeForm} = this.props
         const isInCard = this.props.location.pathname.includes('workspace');
 
-        // const style = {
-        //     width: '100%',
-        //     input: {borderRadius: '0', display: 'block'},
-        //     links: {fontSize: '0.9em', minHeight: "35px"},
-        //     button: {width: '100%'},
-        //     extraButton: {border: "0", marginBottom: "15px", marginRight: "15px", cursor: "pointer"},
-        //     left: {float: "left"},
-        //     right: {float: "right"},
-        //     alert: {fontSize: '0.8em'}
-        // };
-
         const isReadyToSubmit = username && !waitingForServerResponse
 
         return (
@@ -94,7 +83,6 @@ class ForgotPasswordForm extends Component {
                                   value={username}
                                   onChange={this.onChangeUsername}
                                   autoFocus
-                                //   autoComplete='off'
                                 />
                                 <Button
                                     style={style.loginButton}
@@ -108,27 +96,27 @@ class ForgotPasswordForm extends Component {
                                 </Button>
                         </form>
                         <div style={style.links}>
-                            {/* <div style={style.right}> */}
+                            <div style={style.left}>
                                 <Button
                                     style={style.extraButton}
                                     onClick={() => changeForm('signIn')}>
                                     Ga terug naar login
                                 </Button>
-                            {/* </div> */}
-                            {/* <div style={style.left}> */}
+                            </div>
+                            <div style={style.left}>
                                 <Button
                                     style={style.extraButton}
                                     onClick={() => changeForm('confirmSignUp')}>
                                     Bevestig je account
                                 </Button>
-                            {/* </div> */}
-                            {/* <div style={style.left}> */}
+                            </div>
+                            <div style={style.left}>
                                 <Button
                                     style={style.extraButton}
                                     onClick={() => changeForm('signUp')}>
                                     Nog geen account?
                                 </Button>
-                            {/* </div> */}
+                            </div>
                         </div>
                     </div>
                 </div>

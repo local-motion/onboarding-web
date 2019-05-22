@@ -120,9 +120,7 @@ class SignInForm extends Component {
     }
 
     render() {
-        const   {   username, password, error, waitingForServerResponse, 
-                    changeForm
-                } = this.props
+        const   {   username, password, waitingForServerResponse, changeForm } = this.props
 
         const isInCard = this.props.location.pathname.includes('workspace');
 
@@ -194,7 +192,6 @@ class SignInForm extends Component {
                             >
                                 Wachtwoord vergeten?
                             </Button>
-                            {error && <p className={"error"}>{error}</p>}
 
                             <p style={style.createAccountTitle}>Ben je hier voor de eerste keer?</p>
                             <p> Je hoeft je slechts éénmalig te registreren om deel te nemen aan een actie. Na het registeren kun je meteen starten om de speeltuin rookvrij te maken.</p>

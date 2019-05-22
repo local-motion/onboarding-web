@@ -11,6 +11,7 @@ import { bindMethods, copyProperties } from '../utils/Generics';
 import ConfirmSignUpForm from './ConfirmSignUpForm';
 import { openInformationDialog, openErrorDialog } from '../components/SimpleDialog/SimpleDialogActions';
 import ForgotPasswordForm from './ForgotPasswordForm';
+import PasswordResetForm from './PasswordResetForm';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -38,7 +39,6 @@ class Authenticator extends Component {
             confirmPassword: '',
             emailAddress: '',
             verificationCode: '',
-            error: '', 
             waitingForServerResponse: false
         }
 
@@ -59,8 +59,12 @@ class Authenticator extends Component {
     }
 
     changeForm(newForm) {   
-        if (newForm === 'signUp')
+        if (newForm === 'signUp' || newForm === 'forgotPassword')
             this.setPassword('')
+        if (newForm === 'signUp')
+            this.setUsername('')
+        if (newForm === 'signUp')
+            this.setEmailAddress('')
         this.setState({form: newForm})                          
     }
 
@@ -95,7 +99,7 @@ class Authenticator extends Component {
     render() {
         // const isInCard = this.props.location.pathname.includes('workspace');
 
-        let formProps = copyProperties(this.state, {},    [ 'username', 'password', 'emailAddress', 'verificationCode', 'error', 'waitingForServerResponse' ])
+        let formProps = copyProperties(this.state, {},    [ 'username', 'password', 'emailAddress', 'verificationCode', 'waitingForServerResponse' ])
         formProps = copyProperties(this, formProps,       [ 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'displayError', 
                                                             'setWaitingForServerResponse', 'clearWaitingForServerResponse', 'changeForm'])
         formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog'])
@@ -109,6 +113,8 @@ class Authenticator extends Component {
                 return <ConfirmSignUpForm {...formProps}/>
             case 'forgotPassword':
                 return <ForgotPasswordForm {...formProps}/>
+            case 'passwordReset':
+                return <PasswordResetForm {...formProps}/>
             default:
                 return <div>Invalid form state: {this.state.form}</div> 
         }
