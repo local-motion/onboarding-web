@@ -9,6 +9,8 @@ import { getErrorMessage } from '../api/ErrorMessages';
 import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import { getActivePhaseUrl } from "../misc/WorkspaceHelpers";
 import TextField from "@material-ui/core/TextField/TextField";
+import { signOutUser } from '../components/UserProfile/UserProfileActions';
+import { openErrorDialog } from '../components/SimpleDialog/SimpleDialogActions';
 
 const logger = new Logger('JSignIn');
 
@@ -17,6 +19,16 @@ const mapStateToProps = (state, ownProps) => ({
       ? getPlaygroundDetails(state, ownProps.match.params.initiativeId)
       : null,
 });
+
+const mapDispatchToProps = (dispatch) => ({
+    triggerEmailNotVerifiedError: () => dispatch(openErrorDialog(
+        'Emailadres niet gevalideerd', 
+        'Uw emailadres is niet langer gevalideerd. Neem contact op met de beheerder (zie contact link onderaan het scherm)', 
+        'OK', 
+        () => dispatch(signOutUser()))
+      )
+
+})
 
 /**
  * A mix between
@@ -30,7 +42,7 @@ class JSignIn extends Component {
         this.checkContact = this.checkContact.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: '', signInPage: true}
+        this.state = {error: '', signInPage: true, waitingForServerResponse: false}
     }
 
     componentDidMount() {
@@ -62,6 +74,7 @@ class JSignIn extends Component {
         const username = document.getElementById('SigninFormUserName').value
 
         logger.info('attempting sign in with ' + username);
+        this.setState({waitingForServerResponse: true})
         Auth.signIn(username, password)
             .then(user => this.signInSuccess(user))
             .catch(err => this.signInError(err));
@@ -69,8 +82,14 @@ class JSignIn extends Component {
 
     signInSuccess(user) {
         logger.info('sign in success', user);
-        this.setState({error: ''});
+        console.log('sign in success', user);
+        this.inputs.password = ''                                            // clear password from memory
+        this.setState({error: '', waitingForServerResponse: false});
 
+        if (user.attributes.email_verified !== true) {
+            this.props.triggerEmailNotVerifiedError()
+            return
+        }
         // There are other sign in challenges we don't cover here.
         // SMS_MFA, SOFTWARE_TOKEN_MFA, NEW_PASSWORD_REQUIRED, MFA_SETUP ...
         if (user.challengeName === 'SMS_MFA' || user.challengeName === 'SOFTWARE_TOKEN_MFA') {
@@ -82,12 +101,13 @@ class JSignIn extends Component {
 
     signInError(err) {
         logger.info('sign in error', err);
+        this.inputs.password = ''                                            // clear password from memory
         /*
           err can be in different structure:
             1) plain text message;
             2) object { code: ..., message: ..., name: ... }
         */
-        this.setState({error: getErrorMessage(err.code, err.message)})
+        this.setState({error: getErrorMessage(err.code, err.message), waitingForServerResponse: false})
     }
 
     goToTargetUrl = () => {
@@ -104,8 +124,10 @@ class JSignIn extends Component {
     };
 
     checkContact(user) {
+        this.setState({waitingForServerResponse: true})
         Auth.verifiedContact(user)
             .then(data => {
+                this.setState({waitingForServerResponse: false})
                 if (!JS.isEmpty(data.verified)) {
                     this.changeState('signedIn', user);
                     this.props.onSignIn(user);
@@ -125,7 +147,7 @@ class JSignIn extends Component {
 
 
     render() {
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = this.props.location.pathname.includes('workspace');
         const {authState, authData} = this.props;
         if (!['signIn', 'signedOut', 'signedUp'].includes(authState)) {
             return null;
@@ -179,7 +201,7 @@ class JSignIn extends Component {
                                 style={style.input}
                                 defaultValue={authData || ''}
                                 onChange={event => this.inputs.username = event.target.value}
-                                autoFocus
+                                autoFocus={!authData}
                             />
                             <TextField
                                 type="password"
@@ -188,12 +210,14 @@ class JSignIn extends Component {
                                 placeholder="Wachtwoord"
                                 onChange={event => this.inputs.password = event.target.value}
                                 style={style.input}
+                                autoFocus={!!authData}
                             />
                             <Button
                                 style={style.loginButton}
                                 onClick={this.signIn}
                                 variant="contained"
                                 className={"pagination-button-step"}
+                                disabled={this.state.waitingForServerResponse}
                             >
                                 Inloggen
                             </Button>
@@ -230,4 +254,4 @@ class JSignIn extends Component {
     }
 }
 
-export default withRouter(connect(mapStateToProps)(JSignIn));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(JSignIn));

@@ -20,7 +20,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './RootReducer';
 import { getJwtToken } from "./components/UserProfile/UserProfileReducer";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
-import { closeConfirmationDialog } from "./components/ConfirmationDialog/ConfirmationDialogActions";
+import { closeSimpleDialog } from "./components/SimpleDialog/SimpleDialogActions";
 
 // Components to route to
 import { ensurePlaygrounds } from "./components/Playground/PlaygroundActions";
@@ -31,6 +31,7 @@ import App from "./App";
 
 // Determine api base endpoints
 const hostName = window.location.hostname
+ // eslint-disable-next-line 
 const baseUrl = hostName === 'localhost' ? 'http://localhost:3000/' : 'https://' + hostName + '/'
 const apiBaseUrl = hostName === 'localhost' ? 'http://localhost:8086/api/' : 'https://' + hostName + '/api/'
 console.log("apiBaseUrl is: " + apiBaseUrl);
@@ -42,7 +43,7 @@ store.dispatch(publishApiBaseURL(apiBaseUrl))
 
 // Trigger a close of the confirmation dialog each time the history changes
 window.onpopstate = () => {
-    store.dispatch(closeConfirmationDialog())
+    store.dispatch(closeSimpleDialog())
 }
 
 // Fetch the configuration from the server, proceed after getting a successful result
@@ -57,22 +58,22 @@ store.dispatch(executeQuery({
         const cognitoConfig = configuration.cognitoSettings
 
         // Set up the Cognito client
-        const oauth = {
-            awsCognito: {
-                domain: cognitoConfig.domain,
-                scope: ['email', 'openid'],
-                redirectSignIn: baseUrl,
-                redirectSignOut: baseUrl,
-                responseType: 'token', // 'token' for Implicit grant, 'code' for Authorization code grant
-            }
-        }
+        // const oauth = {
+        //     awsCognito: {
+        //         domain: cognitoConfig.domain,
+        //         scope: ['email', 'openid'],
+        //         redirectSignIn: baseUrl,
+        //         redirectSignOut: baseUrl,
+        //         responseType: 'token', // 'token' for Implicit grant, 'code' for Authorization code grant
+        //     }
+        // }
         Amplify.configure({
             Auth: {
                 region: cognitoConfig.region,
                 userPoolId: cognitoConfig.userPoolId,
                 userPoolWebClientId: cognitoConfig.userPoolWebClientId,
                 mandatorySignIn: false,
-                oauth: oauth
+                // oauth: oauth
             }
         })
 
@@ -83,7 +84,7 @@ store.dispatch(executeQuery({
             return {
                 headers: {
                     ...headers,
-                    Authorization: jwtToken ? `Bearer ${jwtToken}` : ''
+                    AuthBearer: jwtToken ? `Bearer ${jwtToken}` : ''
                 }
             }
         })
@@ -120,7 +121,7 @@ store.dispatch(executeQuery({
 
 
         // Wrap the main app with providers
-        const Wrapped = [
+        const wrappedApplication = 
             <Provider store={store}>
                 <ApolloProvider client={client}>
                     <I18nextProvider i18n={i18n}>
@@ -128,7 +129,7 @@ store.dispatch(executeQuery({
                     </I18nextProvider>
                 </ApolloProvider>
             </Provider>
-        ]
+        
 
 
         // Before (re)loading this page/application, check whether there is a authenticated user (which includes the session)
@@ -145,7 +146,7 @@ store.dispatch(executeQuery({
             .finally(() => {
                 const rootElement = document.querySelector("#root")
                 ReactDOM.render(
-                    Wrapped,
+                    wrappedApplication,
                     rootElement
                 )
             })

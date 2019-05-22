@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
+import { setPasswordResetCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JForgotPassword');
 
@@ -17,7 +18,7 @@ class JForgotPassword extends Component {
         this.sendCode = this.sendCode.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: '', usernameFilled: false}
+        this.state = {error: '', usernameFilled: false, waitingForServerResponse: false}
     }
 
     changeState(state, data) {
@@ -30,25 +31,32 @@ class JForgotPassword extends Component {
     sendCode() {
         const username = this.props.authData || this.inputs.username;
         logger.info('resend code to ' + username);
+        this.setState({waitingForServerResponse: true})
         Auth.forgotPassword(username)
             .then(data => this.sendSuccess(username, data))
             .catch(err => this.handleError(err));
+    
+        // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
+        const {initiativeId} = this.props.match.params
+        if (initiativeId)
+            setPasswordResetCookies(initiativeId)
     }
 
     sendSuccess(username, data) {
         logger.info('sent code for ' + username, data);
+        this.setState({waitingForServerResponse: false})
         this.changeState('forgotPasswordReset', username);
     }
 
     handleError(err) {
         logger.info('forgot password send code error', err);
+        this.setState({waitingForServerResponse: false})
         // this.setState({error: err.message || err});
         this.setState({error: getErrorMessage(err.code, err.message)});
     }
 
     catchEnterSubmit(e){
         if(e.keyCode === 13 && e.shiftKey === false && this.state.usernameFilled) {
-            console.log('sendcode');
             this.sendCode();
         }
     }
@@ -59,7 +67,7 @@ class JForgotPassword extends Component {
     }
 
     render() {
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = this.props.location.pathname.includes('workspace');
         const {authState, authData} = this.props;
         if (authState !== 'forgotPassword') {
             return null;
@@ -96,22 +104,20 @@ class JForgotPassword extends Component {
                         >
                             <div>
                                 <Input
-                                    type="text"
-                                    style={style.input}
-                                    placeholder="Gebruikersnaam"
-                                    defaultValue={authData || ''}
-                                    onChange={
-                                        event => this.isDirty(event.target.value)
-                                    }
-                                    autoFocus
-                                    autoComplete='new-password'
+                                  type="text"
+                                  style={style.input}
+                                  placeholder="Gebruikersnaam"
+                                  defaultValue={authData || ''}
+                                  onChange={ event => this.isDirty(event.target.value) }
+                                  autoFocus
+                                  autoComplete='new-password'
                                 />
                             </div>
                             <div>
                                 <Button
                                     style={style.button}
                                     onClick={this.sendCode}
-                                    disabled={!this.state.usernameFilled}
+                                    disabled={!this.state.usernameFilled || this.state.waitingForServerResponse}
                                 >
                                     Verstuur wachtwoord reset code
                                 </Button>
@@ -122,7 +128,7 @@ class JForgotPassword extends Component {
                             <div style={style.right}>
                                 <button
                                     style={style.extraButton}
-                                    onClick={() => this.changeState('signIn')}>
+                                    onClick={() => this.changeState('signInBack')}>
                                     Terug naar het inlogscherm
                                 </button>
                             </div>

@@ -1,5 +1,6 @@
 // Thanks to: https://www.quirksmode.org/js/cookies.html
 
+// For placing a session cookie, do not provide the days parameter
 export function createCookie(name,value,days) {
     let expires
 	if (days) {

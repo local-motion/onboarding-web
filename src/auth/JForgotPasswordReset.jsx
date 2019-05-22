@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core'
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
+import { clearVerificationCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JForgotPasswordReset');
 
@@ -16,7 +17,7 @@ class JForgotPasswordReset extends Component {
         this.submit = this.submit.bind(this);
         this.changeState = this.changeState.bind(this);
         this.inputs = {};
-        this.state = {error: ''}
+        this.state = {error: '', waitingForServerResponse: false}
     }
 
     changeState(state, data) {
@@ -33,8 +34,10 @@ class JForgotPasswordReset extends Component {
             return;
         }
 
-        const {code, password} = this.inputs;
+        const {password} = this.inputs;
+        const code = this.inputs.code || this.props.authState.split(':')[1]
         logger.info('reset password for ' + username);
+        this.setState({waitingForServerResponse: true})
         Auth.forgotPasswordSubmit(username, code, password)
             .then(data => this.submitSuccess(username, data))
             .catch(err => this.handleError(err));
@@ -42,22 +45,33 @@ class JForgotPasswordReset extends Component {
 
     submitSuccess(username, data) {
         logger.info('forgot password reset success for ' + username, data);
-        this.changeState('signIn', username);
+        this.inputs.password = ''                                            // clear password from memory
+        this.setState({waitingForServerResponse: false})
+        clearVerificationCookies();
+        this.changeState('complete', username);
     }
 
     handleError(err) {
         logger.info('forgot password reset error', err);
+        this.inputs.password = ''                                            // clear password from memory
         // this.setState({error: err.message || err});
-        this.setState({error: getErrorMessage(err.code, err.message)});
+        this.setState({error: getErrorMessage(err.code, err.message), waitingForServerResponse: false});
+    }
+
+    catchEnterSubmit(e){
+        if(e.keyCode === 13 && e.shiftKey === false) {
+            this.submit();
+        }
     }
 
     render() {
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = this.props.location.pathname.includes('workspace');
         const {authState} = this.props;
-        if (authState !== 'forgotPasswordReset') {
+        if (!authState.startsWith('forgotPasswordReset')) {
             return null;
         }
 
+        const verificationCode = authState.split(':')[1]
         const style = {
             width: '100%',
             input: {borderRadius: '0', display: 'block'},
@@ -80,16 +94,22 @@ class JForgotPasswordReset extends Component {
                         <div>
                             <h2>Wachtwoord reset code</h2>
                         </div>
-                        <form name={"pass-reset-with-code"} autoComplete={"new-password"}>
+                        <form   name={"pass-reset-with-code"} 
+                                autoComplete={"new-password"}
+                                onKeyDown={
+                                    event => this.catchEnterSubmit(event)
+                                }
+                        >
                             <div>
                                 Code:
                                 <Input
                                     type="text"
                                     placeholder="Code"
                                     name={"code"}
+                                    defaultValue={verificationCode}
                                     style={style.input}
                                     onChange={event => this.inputs.code = event.target.value}
-                                    autoFocus
+                                    autoFocus={!verificationCode}
                                     autoComplete='new-password'
                                 />
                             </div>
@@ -99,13 +119,20 @@ class JForgotPasswordReset extends Component {
                                     type="password"
                                     placeholder="Wachtwoord"
                                     name={"password"}
+                                    autoFocus={!!verificationCode}
                                     style={style.input}
                                     onChange={event => this.inputs.password = event.target.value}
                                     autoComplete='new-password'
                                 />
                             </div>
                             <div>
-                                <Button style={style.button} onClick={this.submit}>Reset password</Button>
+                                <Button 
+                                    style={style.button} 
+                                    disabled={this.state.waitingForServerResponse}
+                                    onClick={this.submit}
+                                >
+                                    Reset wachtwoord
+                                </Button>
                             </div>
                             {error && <div style={style.alert}>{error}</div>}
                         </form>
@@ -114,7 +141,7 @@ class JForgotPasswordReset extends Component {
                                 <Button
                                     style={style.button}
                                     onClick={() => this.changeState('forgotPassword')}>
-                                    Back to forgot password
+                                    Terug naar nieuw wachtwoord aanvragen
                                 </Button>
                             </div>
                         </div>

@@ -6,12 +6,11 @@ import JForgotPasswordReset from "./JForgotPasswordReset";
 import JConfirmSignIn from "./JConfirmSignIn";
 import JConfirmSignUp from "./JConfirmSignUp";
 import { Authenticator } from 'aws-amplify-react';
+import VerificationLinkHandler from "./VerificationLinkHandler";
 
 
 const CustomAuthenticator = (props) => {
-    console.log("CustomAuthenticator props", props, props.changeMode);
     return (
-
         <Authenticator
             hideDefault >
             <JSignIn setCta={props.setCta} unsetCta={props.unsetCta} onSignIn={props.onSignIn} />
@@ -20,6 +19,7 @@ const CustomAuthenticator = (props) => {
             <JForgotPasswordReset />
             <JConfirmSignIn />
             <JConfirmSignUp />
+            <VerificationLinkHandler />
         </Authenticator>
     );
 }

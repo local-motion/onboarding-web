@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import {Button, Input} from '@material-ui/core';
 import {Auth, Logger} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
+import { clearVerificationCookies } from './VerificationLinkHandler';
 
 const logger = new Logger('JConfirmSignUp');
 
@@ -15,8 +16,11 @@ class JConfirmSignUp extends Component {
     constructor(props) {
         super(props);
         this.confirmSignUp = this.confirmSignUp.bind(this);
+        this.confirmSuccess = this.confirmSuccess.bind(this);
         this.resendCode = this.resendCode.bind(this);
         this.changeState = this.changeState.bind(this);
+        this.isValidInput = this.isValidInput.bind(this);
+        this.componentDidUpdate = this.componentDidUpdate.bind(this);
         this.inputs = {};
         this.state = {
             message: '',
@@ -24,7 +28,9 @@ class JConfirmSignUp extends Component {
             validatedCode: '',
             codeLength: 0,
             filledUsername: false,
-            filled: false
+            filled: false,
+            autoSubmitTriggered: false,
+            waitingForServerResponse: false,
         }
     }
 
@@ -61,11 +67,18 @@ class JConfirmSignUp extends Component {
 
     confirmSignUp() {
         const username = this.props.authData || this.inputs.username;
-        const {code} = this.inputs;
+        const code = this.inputs.code || this.props.authState.split(':')[1]
         logger.info('confirm sign up with ' + code);
+        this.setState({waitingForServerResponse: true})
         Auth.confirmSignUp(username, code)
             .then(() => this.confirmSuccess(username))
-            .catch(err => this.handleError(err));
+            .catch(err => {
+                console.log('error in confirm signup: ', err)
+                if (err.code === "NotAuthorizedException" && err.message === "User cannot be confirm. Current status is CONFIRMED")
+                    this.confirmSuccess(username)
+                else
+                    this.handleError(err)
+            })
     }
 
     resendCode() {
@@ -77,16 +90,17 @@ class JConfirmSignUp extends Component {
     }
 
     confirmSuccess(username) {
+        clearVerificationCookies();
         logger.info('confirm sign up success with ' + username);
-        this.setState({message: '', error: ''});
-        this.changeState('signIn', username);
+        this.setState({message: '', error: '', waitingForServerResponse: false});
+        this.changeState('complete', username);
         this.setState({codeLength: 0, error: '', validateCode: "unvalidated"});
     }
 
     handleError(err) {
         logger.info('confirm sign up error', err);
         // this.setState({message: '', error: err.message || err});
-        this.setState({message: '', error: getErrorMessage(err.code, err.message)});
+        this.setState({message: '', error: getErrorMessage(err.code, err.message), waitingForServerResponse: false});
     }
 
     isDirty(event) {
@@ -108,12 +122,31 @@ class JConfirmSignUp extends Component {
         }
     }
 
+    isValidInput(defaultUsername, defaultVerificationCode) {
+        const username = document.getElementById('confirmsignup_username') ? document.getElementById('confirmsignup_username').value : defaultUsername
+        const verificationCode = document.getElementById('confirmsignup_verificationcode') ? document.getElementById('confirmsignup_verificationcode').value : defaultVerificationCode
+        const RGEX = new RegExp(/([0-9])\d{5}/g);
+        const validatedResult = RGEX.test(verificationCode);
+        return username && username.length > 0 && validatedResult
+    }
+
+    componentDidUpdate() {
+        const {authState} = this.props;
+        const verificationCode = authState.split(':')[1]
+        if (authState.startsWith('confirmSignUp') && verificationCode && !this.state.autoSubmitTriggered) {
+            this.setState({autoSubmitTriggered: true})
+            this.confirmSignUp()
+        }
+    }
+
     render() {
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = this.props.location.pathname.includes('workspace');
         const {authState, authData} = this.props;
-        if (authState !== 'confirmSignUp') {
+        if (!authState.startsWith('confirmSignUp')) {
             return null;
         }
+        const verificationCode = authState.split(':')[1]
+        const validInput = this.isValidInput(authData, verificationCode)
 
         const style = {
             width: '20rem',
@@ -146,6 +179,7 @@ class JConfirmSignUp extends Component {
                         >
                             <div>
                                 <Input
+                                    id="confirmsignup_username"
                                     type="text"
                                     placeholder="Gebruikersnaam"
                                     defaultValue={authData || ''}
@@ -160,8 +194,10 @@ class JConfirmSignUp extends Component {
                             </div>
                             <div>
                                 <Input
+                                    id="confirmsignup_verificationcode"
                                     type="text"
                                     placeholder="Code"
+                                    defaultValue={verificationCode}
                                     style={style.input}
                                     className={
                                         "input-container last " + (validateCode === "validated" ? 'success' : 'error') + (codeLength === 0 ? " untouched" : " dirty")
@@ -185,7 +221,7 @@ class JConfirmSignUp extends Component {
                                     style={style.button}
                                     onClick={this.confirmSignUp}
                                     disabled={
-                                        !this.state.filled
+                                        !validInput
                                     }
                                 >
                                     Bevestig
@@ -203,7 +239,7 @@ class JConfirmSignUp extends Component {
                             <div>
                                 <button
                                     style={style.extraButton}
-                                    onClick={() => this.changeState('signIn')}>
+                                    onClick={() => this.changeState('signInBack')}>
                                     Terug naar het inlogscherm
                                 </button>
                             </div>

@@ -15,10 +15,7 @@ const initialState = {
 
 // Selectors
 
-// export const getUser = (state) => state.userprofile.user
-export const getUser = (state) => {
-  return state.userprofile.user
-}
+export const getUser = (state) => state.userprofile.user
 export const getJwtToken = (state) => state.userprofile.cognitoUser ? state.userprofile.cognitoUser.signInUserSession.idToken.jwtToken : ''
 
 
@@ -27,7 +24,6 @@ export const getJwtToken = (state) => state.userprofile.cognitoUser ? state.user
 const userProfileReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_USER_PROFILE + SUCCESS_POSTFIX:
-      console.log("reducer received user profile:", action.payload.profile)
       return {
           ...state,
           user: {
@@ -37,7 +33,6 @@ const userProfileReducer = (state = initialState, action) => {
         }
     
     case CREATE_USER_PROFILE + SUCCESS_POSTFIX:
-      console.log("reducer received created user profile:", action.payload.profile)
       return {
           ...state,
           user: {
@@ -47,18 +42,15 @@ const userProfileReducer = (state = initialState, action) => {
         }
     
     case DELETE_USER_PROFILE + SUCCESS_POSTFIX:
-      console.log("reducer received deleted user profile:")
       return initialState
     
     case USER_SIGNED_IN:
-      console.log("reducer received user signin:", action.cognitoUser)
       return {
         ...state,
         cognitoUser: action.cognitoUser
       }
 
     case USER_SIGNED_OUT:
-      console.log("reducer received user signout:")
       return initialState
 
     default:

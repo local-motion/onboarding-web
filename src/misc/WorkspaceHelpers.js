@@ -2,7 +2,7 @@ export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
 
 export function getWorkspaceStartLink(playground) {
-    return `/workspace/${playground.id}`;
+    return playground ? `/workspace/${playground.id}` : '/workspace';
 }
 
 export function checkBox({ playground, user, name, setCheckbox }) {
@@ -15,14 +15,6 @@ export function getActivePhaseUrl(playground) {
     const activePhase = getActivePhase(playground);
 
     return `${getWorkspaceStartLink(playground)}${activePhase.steps[0].link}`;
-}
-
-export function getOpenedPhase(phases, pathname) {
-    const openedStepTitle = getOpenedStepTitle(phases, pathname);
-
-    return openedStepTitle !== null
-      ? openedStepTitle
-      : 'none';
 }
 
 export function getActivePhase(playground) {
@@ -44,6 +36,34 @@ export function getStatus(playground) {
 
 export function getPhases() {
     return {
+        community: {
+            title: 'Community',
+            icon: require('assets/img/icon-community.svg'),
+            expandedIcon: require('assets/img/icon-community-active.svg'),
+            steps: [
+                {
+                    name: 'Inloggen',
+                    link: '/login',
+                    visible: ({ user }) => !user,
+                },
+                {
+                    name: 'Actie starten',
+                    link: '/add-find-playground',
+                    visible: ({ playground }) => !playground,
+                },
+                {
+                    name: 'Team',
+                    link: '/team',
+                    visible: ({ playground }) => !!playground,
+                },
+                {
+                    name: 'Chat',
+                    link: '/chat',
+                    visible: ({ playground }) => !!playground,
+                },
+            ],
+        },
+
         firstPhase: {
             title: playgroundLabels[0],
             icon: require('assets/img/icon-cooperate@2x.png'),
@@ -52,22 +72,27 @@ export function getPhases() {
                 {
                     name: 'Mensen verzamelen',
                     link: '/add-team-member',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Flyers verspreiden',
                     link: '/flyer',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Meningen inventariseren',
                     link: '/meningen-inventariseren',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Contact leggen met bestuur',
                     link: '/involve-administrator',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Wij worden rookvrij',
                     link: '/commitment',
+                    visible: ({ playground }) => !!playground,
                 },
             ],
         },
@@ -80,14 +105,17 @@ export function getPhases() {
                 {
                     name: 'Kies moment van invoering',
                     link: '/pick-date',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Communiceer over de rookvrije afspraak',
                     link: '/shout',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Laat zien dat de speeltuin rookvrij is',
                     link: '/signonfence',
+                    visible: ({ playground }) => !!playground,
                 },
             ],
         },
@@ -100,26 +128,12 @@ export function getPhases() {
                 {
                     name: 'We zijn rookvrij',
                     link: '/celebrate',
+                    visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Evalueren',
                     link: '/magnify',
-                },
-            ],
-        },
-
-        community: {
-            title: 'Community',
-            icon: require('assets/img/icon-community.svg'),
-            expandedIcon: require('assets/img/icon-community-active.svg'),
-            steps: [
-                {
-                    name: 'Team',
-                    link: '/team',
-                },
-                {
-                    name: 'Chat',
-                    link: '/chat',
+                    visible: ({ playground }) => !!playground,
                 },
             ],
         },
@@ -137,8 +151,9 @@ export function getCurrentPhaseByStep(phases, pathname) {
 
 export function getPrevStep(phases, pathname) {
     const prev = {
-        title: '',
-        stepLink: '',
+        title: null,
+        stepLink: null,
+        visible: null,
     };
 
     Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
@@ -146,16 +161,15 @@ export function getPrevStep(phases, pathname) {
             if (pathname.includes(step.link)) {
                 if (stepIndex > 0) {
                     prev.stepLink = phases[phaseName].steps[stepIndex - 1].link;
+                    prev.visible = phases[phaseName].steps[stepIndex - 1].visible;
                     prev.title = phases[phaseName].title;
                 } else {
                     if (phaseIndex > 0) {
                         const phase = phases[phasesKeys[phaseIndex - 1]];
 
                         prev.stepLink = phase.steps[phase.steps.length - 1].link;
+                        prev.visible = phase.steps[phase.steps.length - 1].visible;
                         prev.title = phase.title;
-                    } else {
-                        prev.stepLink = null;
-                        prev.title = null;
                     }
                 }
             }
@@ -167,8 +181,9 @@ export function getPrevStep(phases, pathname) {
 
 export function getNextStep(phases, pathname) {
     const next = {
-        title: '',
-        stepLink: '',
+        title: null,
+        stepLink: null,
+        visible: null,
     };
 
     Object.keys(phases).forEach((phaseName, phaseIndex, phasesKeys) => {
@@ -180,6 +195,7 @@ export function getNextStep(phases, pathname) {
             if (pathname.includes(step.link)) {
                 if (stepIndex < (stepsLength - 1)) {
                     next.stepLink = phases[phaseName].steps[stepIndex + 1].link;
+                    next.visible = phases[phaseName].steps[stepIndex + 1].visible;
                     next.title = phases[phaseName].title;
                 } else {
                     if (phaseIndex < (phasesLength - 1)) {
@@ -187,9 +203,7 @@ export function getNextStep(phases, pathname) {
 
                         next.stepLink = phase.steps[0].link;
                         next.title = phase.title;
-                    } else {
-                        next.stepLink = null;
-                        next.title = null;
+                        next.visible = phase.steps[0].visible;
                     }
                 }
             }
@@ -207,22 +221,28 @@ export function getOpenedStepTitle(phases, pathname) {
       : null;
 }
 
-export function getFirstStepLinkOfPhase(phase, phases, playgroundId) {
+export function getFirstStepLinkOfPhase(phase, phases, playground, user) {
     const phaseObjectName = Object.keys(phases).find((phaseName) => phases[phaseName].title === phase);
     const phaseObject = phases[phaseObjectName];
 
-    return phaseObject ? `/workspace/${playgroundId}${phaseObject.steps[0].link}` : null;
+    const step = phaseObject.steps.find((step) => {
+        return !(step.visible && !step.visible({ playground, user }));
+    });
+
+    return phaseObject ? `/workspace${playground ? `/${playground.id}` : ''}${step ? step.link : ''}` : null;
 }
 
 export function shouldWorkspaceUpdate(props, nextProps) {
     const { playground: currentPlayground, user: currentUser }= props;
     const { playground: nextPlayground, user: nextUser } = nextProps;
 
+    if (!currentUser && nextUser) return true;
+    if (currentUser && !nextUser) return true;
+
     if (!currentPlayground && !nextPlayground) return false;
 
+    if (currentPlayground && !nextPlayground) return true;
     if (!currentPlayground && nextPlayground) return true;
-
-    if (!currentUser && nextUser) return true;
 
     const {
         id,
