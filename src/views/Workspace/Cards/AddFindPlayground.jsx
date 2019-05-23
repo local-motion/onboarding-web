@@ -19,6 +19,8 @@ import GooglePlacesAutocomplete from "../../Onboarding/components/GooglePlacesAu
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import MiniMap from "../components/MiniMap";
+import { titlePrefix } from "../../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 const styles = theme => ({
     wrapper: {},
@@ -436,6 +438,10 @@ class AddFindPlayground extends Component {
 
         return (
           <div>
+              <Helmet>
+                  <title>{titlePrefix} | Actie starten</title>
+              </Helmet>
+
               <WorkspaceCard
                 title={"Actie starten"}
                 done={null}

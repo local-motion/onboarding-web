@@ -11,6 +11,8 @@ import FaceIcon from '@material-ui/icons/Face';
 import IconButton from '@material-ui/core/IconButton';
 import { getUser } from '../UserProfile/UserProfileReducer';
 import { connect } from 'react-redux'
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 const styles = theme => ({
     card: {
@@ -63,36 +65,44 @@ class WorkspaceCard extends React.Component {
         const {classes, title, image, customStyle, content, primaryCta, MoreInformation, expandContent, enableActions, managerOnly, userIsManager, user} = this.props;
 
         return (
-            <Card className={classes.card + " card"}>
-                <CardMedia
-                  className={customStyle ? classes.customMedia : classes.media}
-                  image={image}
-                  title={title}
-                  style={customStyle || {}}
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2" className={classes.cardTitle}>
-                        {title}
-                    </Typography>
-                    <Typography component="p">
-                        {content}
-                    </Typography>
-                </CardContent>
-                { enableActions &&
-                    <CardActions className={"card-actions"}>
-                        {primaryCta ? <Button disabled={!user} size="small" color="primary" href={primaryCta.action} onClick={primaryCta.click}>{primaryCta.text}</Button> : null}
-                        {MoreInformation ? <Button size="small" color="primary" onClick={this.handleExpandClick}>{MoreInformation}</Button> : null}
-                    </CardActions>
-                }
-                { managerOnly &&
-                    <IconButton disabled={true} >
-                        <FaceIcon  className={userIsManager ? classes.managerActiveIcon : classes.managerPassiveIcon}/>
-                    </IconButton>
-                }
-                <CardContent>
-                    {expandContent}
-                </CardContent>
-            </Card>
+          <React.Fragment>
+              <Helmet>
+                  <title>{titlePrefix} | {title}</title>
+              </Helmet>
+
+              <Card className={classes.card + " card"}>
+                  <CardMedia
+                    className={customStyle ? classes.customMedia : classes.media}
+                    image={image}
+                    title={title}
+                    style={customStyle || {}}
+                  />
+                  <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2" className={classes.cardTitle}>
+                          {title}
+                      </Typography>
+                      <Typography component="p">
+                          {content}
+                      </Typography>
+                  </CardContent>
+                  {enableActions &&
+                  <CardActions className={"card-actions"}>
+                      {primaryCta ? <Button disabled={!user} size="small" color="primary" href={primaryCta.action}
+                                            onClick={primaryCta.click}>{primaryCta.text}</Button> : null}
+                      {MoreInformation ? <Button size="small" color="primary"
+                                                 onClick={this.handleExpandClick}>{MoreInformation}</Button> : null}
+                  </CardActions>
+                  }
+                  {managerOnly &&
+                  <IconButton disabled={true}>
+                      <FaceIcon className={userIsManager ? classes.managerActiveIcon : classes.managerPassiveIcon}/>
+                  </IconButton>
+                  }
+                  <CardContent>
+                      {expandContent}
+                  </CardContent>
+              </Card>
+          </React.Fragment>
         );
     }
 }

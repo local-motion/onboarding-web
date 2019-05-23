@@ -16,6 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Link } from 'react-router-dom'
 import BackButton from "../../components/BackButton/BackButton";
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 class FAQ extends React.Component {
 
@@ -23,7 +25,9 @@ class FAQ extends React.Component {
         const {classes, ...rest} = this.props;
         return (
             <div className={classes.container}>
-
+                <Helmet>
+                    <title>{titlePrefix} | Veelgestelde vragen</title>
+                </Helmet>
                 <Header
                     brand={"Rookvrije generatie"}
                     rightLinks={<HeaderLinks/>}

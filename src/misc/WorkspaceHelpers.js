@@ -276,3 +276,5 @@ export function shouldWorkspaceUpdate(props, nextProps) {
           || playgroundObservations.length !== nextPlayground.playgroundObservations.length
     );
 }
+
+export const  titlePrefix = 'Rookvrij Spelen';

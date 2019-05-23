@@ -9,6 +9,8 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import PrivacyText from "./PrivacyText";
 import BackButton from "../../components/BackButton/BackButton";
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 
 class Privacy extends React.Component {
@@ -17,7 +19,9 @@ class Privacy extends React.Component {
     const { classes, ...rest } = this.props;
         return (
             <div className={classes.container}>
-
+                <Helmet>
+                    <title>{titlePrefix} | Privacyverklaring</title>
+                </Helmet>
                 <Header
                     brand={"Rookvrije generatie"}
                     rightLinks={<HeaderLinks/>}
