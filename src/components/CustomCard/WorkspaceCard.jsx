@@ -78,12 +78,6 @@ class WorkspaceCard extends React.Component {
                         {content}
                     </Typography>
                 </CardContent>
-                { enableActions &&
-                    <CardActions className={"card-actions"}>
-                        {primaryCta ? <Button disabled={!user} size="small" color="primary" href={primaryCta.action} onClick={primaryCta.click}>{primaryCta.text}</Button> : null}
-                        {MoreInformation ? <Button size="small" color="primary" onClick={this.handleExpandClick}>{MoreInformation}</Button> : null}
-                    </CardActions>
-                }
                 { managerOnly &&
                     <IconButton disabled={true} >
                         <FaceIcon  className={userIsManager ? classes.managerActiveIcon : classes.managerPassiveIcon}/>

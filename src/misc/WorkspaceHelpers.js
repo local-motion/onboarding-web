@@ -34,6 +34,28 @@ export function getStatus(playground) {
     return result ? playgroundLabels[playgroundStatuses.indexOf(result)] : null;
 }
 
+export function getHrefToSendMail(playground) {
+    const hrefArray = window.location.href.split('/');
+    const shareUrl = window.location.href.replace(hrefArray[hrefArray.length - 1], '');
+    const name = playground.name;
+    const phase = getStatus(playground);
+
+    const subject = `Help make ${name} smoke free.`;
+    const body = `Beste,%0A%0A
+        
+Wie wil z’n kinderen nou niet rookvrij laten opgroeien? Ik in ieder geval wel. Wij samen kunnen voorkomen dat spelende kinderen meeroken of sterker nog, dat ze later zelf gaan roken.%0A
+Een eerste stap is snel gezet. Te beginnen bij alle speelplekken in jouw plaats. Doe mee aan mijn actie om de speelplek ${name} rookvrij te maken. De actie bevindt zich in de fase ${phase}.%0A%0A
+
+Hoe meer mensen mee doen aan de actie, hoe makkelijker het wordt om de bestuurders te overtuigen van een helder rookvrij-beleid. En dat is nodig om kinderen gezond en ook écht rookvrij te laten spelen.%0A
+Klik op onderstaande link om mee te doen aan mijn actie om  ${name} rookvrij te maken.%0A%0A
+
+${shareUrl}%0A%0A
+
+Alvast bedankt!`;
+
+    return `mailto:?subject=${subject}&body=${body}`;
+}
+
 export function getPhases() {
     return {
         community: {
