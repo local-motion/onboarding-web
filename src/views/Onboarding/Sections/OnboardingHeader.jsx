@@ -37,6 +37,10 @@ const styles = theme => ({
             margin: 20,
             padding: 0,
         },
+
+        [theme.breakpoints.down('xs')]: {
+            width: 160,
+        },
     },
     menu: {
         padding: '10px 25px',

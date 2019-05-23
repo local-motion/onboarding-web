@@ -21,7 +21,7 @@ const styles = theme => ({
 
         [theme.breakpoints.down('xs')]: {
             backgroundImage: `url(${require('../../../assets/img/landing/firstscreen-bg-mobile.jpg')})`,
-            minHeight: 700,
+            minHeight: 520,
         },
     },
     cta: {
@@ -36,6 +36,12 @@ const styles = theme => ({
             margin: '100px auto 220px',
             padding: '0 30px',
             textAlign: 'center',
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            margin: '60px auto',
+            padding: 0,
+            textAlign: 'left',
         },
     },
     ctaTitle: {
@@ -55,7 +61,8 @@ const styles = theme => ({
         },
 
         [theme.breakpoints.down('xs')]: {
-            fontSize: 42,
+            fontSize: 37,
+            marginLeft: 5,
         },
     },
     ctaButtonWrapper: {
