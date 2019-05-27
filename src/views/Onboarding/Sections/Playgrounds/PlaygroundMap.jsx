@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from 'react-redux'
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import { compose, withStateHandlers, withProps } from "recompose";
-import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow } from "react-google-maps";
+import { compose, withStateHandlers, withProps, withHandlers } from "recompose";
+import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow, KmlLayer } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { withRouter } from "react-router-dom";
 
@@ -48,6 +48,7 @@ const PlaygroundMapImpl = compose(
         openedPlaygroundPopup: '',
         isCreateWindowOpen: true,
         isExistentPlaygroundWindowOpen: true,
+        shouldOutline: true,
     }),
     {
         onMapClick: () => (e) => ({
@@ -59,11 +60,28 @@ const PlaygroundMapImpl = compose(
             console.log(`Current clicked markers length: ${clickedMarkers.length}`);
             console.log(clickedMarkers);
         },
+        onZoomChange: () => (value) => ({
+            shouldOutline: value <= 8,
+        }),
         openPlaygroundPopup: () => (id) => ({ openedPlaygroundPopup: id }),
         closePlaygroundPopup: () => () => ({ openedPlaygroundPopup: null }),
         toggleCreateWindowOpen: ({ isCreateWindowOpen }) => () => ({ isCreateWindowOpen: !isCreateWindowOpen }),
     }
   ),
+  withHandlers(() => {
+      const refs = {
+          map: undefined,
+      };
+
+      return {
+          onMapMounted: () => ref => {
+              refs.map = ref
+          },
+          onZoomChanged: ({ onZoomChange }) => () => {
+              onZoomChange(refs.map.getZoom());
+          },
+      }
+  }),
   window.google ? null : withScriptjs,
   withGoogleMap
 )(props => {
@@ -75,6 +93,8 @@ const PlaygroundMapImpl = compose(
       <GoogleMap
         zoom={props.zoom}
         center={props.center}
+        ref={props.onMapMounted}
+        onZoomChanged={props.onZoomChanged}
         onClick={function(e) {
             if(!props.viewOnly) {
                 props.onPlaygroundCreated(e);
@@ -86,6 +106,13 @@ const PlaygroundMapImpl = compose(
             { elementType: "labels", featureType: "road.highway", stylers: [{ visibility: "off" }] }
         ]}}
       >
+          {props.shouldOutline && (
+            <KmlLayer
+              url="https://storage.googleapis.com/mapsgoogl/provincesnl.kml"
+              options={{ preserveViewport: true, clickable: false }}
+            />
+          )}
+
           <MarkerClusterer
             onClick={props.onMarkerClustererClick.bind(this)}
             averageCenter
