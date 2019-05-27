@@ -106,18 +106,15 @@ const OnboardingHeader = ({ classes, history, location, user }) => {
               />
           </Link>
 
-          <HeaderLinks className={classes.menu} />
-
           {
-              !user && (
-                <Button
-                  onClick={signInClick}
-                  className={classes.loginButton}
-                >
-                    <span className={classes.loginText}>Inloggen</span>
-                    <div className={classes.addUserIcon} />
-                </Button>
-              )
+              user
+                ? <HeaderLinks />
+                : (
+                  <Button onClick={signInClick} className={classes.loginButton}>
+                      <span className={classes.loginText}>Inloggen</span>
+                      <div className={classes.addUserIcon} />
+                  </Button>
+                )
           }
       </AppBar>
     );

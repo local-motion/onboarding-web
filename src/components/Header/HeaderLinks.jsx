@@ -1,102 +1,114 @@
-/*eslint-disable*/
 import React from "react";
-// react components for routing our app without refresh
-import {Link} from "react-router-dom";
+import { connect } from 'react-redux'
+import { withRouter } from "react-router-dom";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-
-// @material-ui/icons
-import {AccountCircle, Menu, ArrowLeftRounded, ArrowDownwardRounded, ArrowDropDownRounded} from "@material-ui/icons";
+import PermIdentity from "@material-ui/icons/PermIdentity";
+import NotificationsNone from "@material-ui/icons/NotificationsNone";
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
+import { Button, Typography } from "@material-ui/core";
+import Drawer from "@material-ui/core/Drawer/Drawer";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
-import Hidden from "@material-ui/core/Hidden";
 
 import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle.jsx";
-import { connect } from 'react-redux'
-import { Button, Typography } from "@material-ui/core";
 import { signOutUser, deleteUser } from "../UserProfile/UserProfileActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { isDeveloperMode, setDeveloperMode } from "../../utils/DeveloperMode";
 import { openConfirmationDialog } from "../SimpleDialog/SimpleDialogActions.js";
+import Activities from "../Activities/Activities";
+
+const StyledBadge = withStyles({
+    badge: {
+        top: "20%",
+        right: "20%",
+    },
+})(Badge);
 
 const mapStateToProps = state => ({
     user: getUser(state)
-})
+});
+
 const mapDispatchToProps = dispatch => ({
-    signOutUser:    () =>     dispatch(signOutUser()),
-    deleteUser:     () =>      dispatch(openConfirmationDialog( 'Bevestig uitschrijven', 
-                                                                'Weet je zeker dat je je wilt uitschrijven?',
-                                                                null, null, () => dispatch(deleteUser())
-                                                                ))
-})
+    signOutUser: () => dispatch(signOutUser()),
+    deleteUser: () => dispatch(
+      openConfirmationDialog(
+        "Bevestig uitschrijven",
+        "Weet je zeker dat je je wilt uitschrijven?",
+        null, null, () => dispatch(deleteUser())
+      )
+    )
+});
 
 class HeaderLinks extends React.Component {
+    state = {
+        notificationsOpen: false
+    };
+
+    gotoMyProfile = () => this.props.history.push('/my-profile');
+
+    toggleDrawer = () => this.setState(
+      ({ notificationsOpen }) => ({ notificationsOpen: !notificationsOpen })
+    );
 
     render() {
-        const {classes, user, className, deleteUser, signOutUser} = this.props;
+        const { classes, user, deleteUser, signOutUser } = this.props;
+        const { notificationsOpen } = this.state;
 
-        const profileButtonIcon = () => <span><AccountCircle /><ArrowDropDownRounded/></span>
+        const devModeIndicator = isDeveloperMode() ? 'on' : 'off';
 
-        const devModeIndicator = isDeveloperMode() ? 'on' : 'off'
+        if (!user) return null;
 
         return (
-            <List className={`${classes.list} ${className || ''}`}>
+              <div className={classes.list}>
+                  <StyledBadge color="secondary" badgeContent={12} onClick={this.toggleDrawer}>
+                      <IconButton size="small" color="primary" className={classes.navLink}>
+                          <NotificationsNone className={classes.navIcon} />
+                      </IconButton>
+                  </StyledBadge>
 
-                {/* For now do not include the menu as there are no items to display */}
+                  <CustomDropdown
+                    noLiPadding
+                    buttonText=""
+                    buttonProps={{
+                        color: "transparent"
+                    }}
+                    buttonIcon={() => (
+                      <IconButton color="primary" className={`${classes.navLink} ${classes.profileLink}`}>
+                          <PermIdentity className={`${classes.navIcon} ${classes.profileIcon}`} />
+                      </IconButton>
+                    )}
+                    dropdownList={[
+                        <Typography className={classes.name}>Ingelogd als {user.name}</Typography>,
+                        {divider: true},
+                        <Button onClick={this.gotoMyProfile}>Mijn profiel</Button>,
+                        <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,
+                        <Button onClick={deleteUser}>Uitschrijven</Button>,
+                        <Button onClick={signOutUser}>Uitloggen</Button>,
+                    ]}
+                  />
 
-                {/* <ListItem className={classes.listItem}>
-                    <Hidden smDown>
-                        <CustomDropdown
-                            noLiPadding
-                            buttonText=""
-                            buttonProps={{
-                                className: classes.navLink,
-                                color: "transparent"
-                            }}
-                            buttonIcon={Menu}
-                            dropdownList={[
-                                <Link to="/" className={classes.dropdownLink}>
-                                    Overzicht van speeltuinen
-                                </Link>,
-
-                            ]}
-                        />
-                    </Hidden>
-                    <Hidden mdUp implementation="css">
-                        <Link to="/" className={classes.dropdownLink}>
-                            Overzicht van speeltuinen
-                        </Link>
-                    </Hidden>
-                </ListItem> */}
-
-                { user &&
-                    <ListItem className={classes.listItem}>
-                        <CustomDropdown
-                            noLiPadding
-                            buttonText=""
-                            buttonProps={{
-                                className: classes.navLink,
-                                color: "transparent"
-                            }}
-                            buttonIcon={profileButtonIcon}
-                            dropdownList={[
-                                <Typography>Ingelogd als {user.name}</Typography>,
-                                {divider: true},
-                                <Button >Mijn profiel</Button>,
-                                <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,
-                                <Button onClick={deleteUser}>Uitschrijven</Button>,
-                                <Button onClick={signOutUser}>Uitloggen</Button>,
-                            ]}
-                        />
-                    </ListItem>
-                    }
-            </List>
+                  <Drawer
+                    classes={{ paper: classes.notifications }}
+                    anchor="right"
+                    open={notificationsOpen}
+                    onClose={this.toggleDrawer}
+                  >
+                      <div
+                        tabIndex={0}
+                        role="button"
+                        onClick={this.toggleDrawer}
+                        onKeyDown={this.toggleDrawer}
+                      >
+                          <Activities />
+                      </div>
+                  </Drawer>
+              </div>
         );
     }
 }
 
-export default withStyles(headerLinksStyle)(connect(mapStateToProps, mapDispatchToProps)(HeaderLinks))
+export default withRouter(withStyles(headerLinksStyle)(connect(mapStateToProps, mapDispatchToProps)(HeaderLinks)))
