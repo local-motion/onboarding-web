@@ -14,7 +14,7 @@ import Drawer from "@material-ui/core/Drawer";
 // @material-ui/icons
 import Menu from "@material-ui/icons/Menu";
 // core components
-import headerStyle from "assets/jss/material-kit-react/components/headerStyle.jsx";
+import headerStyle from "../../assets/jss/material-kit-react/components/headerStyle.jsx";
 import { connect } from 'react-redux'
 import { getUser } from "../UserProfile/UserProfileReducer";
 import { Button } from "@material-ui/core";
@@ -70,7 +70,7 @@ class Header extends React.Component {
     }
 
     signInClick = () => {
-        this.props.history.push(`/login?target=${this.props.location.pathname}`)
+        this.props.history.push(`/actie/inloggen?target=${this.props.location.pathname}`)
     }
     
     render() {
@@ -79,10 +79,10 @@ class Header extends React.Component {
             color,
             rightLinks,
             leftLinks,
-            brand,
             fixed,
             absolute,
             user,
+            toggleShowMobileMenu,
         } = this.props
 
         const appBarClasses = classNames({
@@ -90,38 +90,27 @@ class Header extends React.Component {
             [classes[color]]: color,
             [classes.absolute]: absolute,
             [classes.fixed]: fixed
-        })
-        const brandContent = <img src={require("assets/img/logo-horizontal.png")} alt={"Rookvrije generatie logo"} style={{width: "250px"}} />;
-        const brandComponent = brand ? <div align='center'><Link to={'/'}>{brandContent}</Link></div> : null;
+        });
 
         return (
             <AppBar className={appBarClasses + " lm-header"}>
                 <Toolbar className={classes.container}>
+                    <Link to={'/'}>
+                        <div className={classes.logo}>Rookvrij<span>spelen</span></div>
+                    </Link>
 
-                    {leftLinks !== undefined ? brandComponent : null}
-                    <div className={classes.flex}>
-                        {leftLinks !== undefined ? (
-                            <Hidden smDown implementation="css">
-                                {leftLinks}
-                            </Hidden>
-                        ) : (
-                            brandComponent
-                        )}
-                    </div>
-
-                    <Hidden smDown implementation="css">
-                        {rightLinks}
-                    </Hidden>
                     <Hidden mdUp>
                         <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={this.handleDrawerToggle}
+                          color="inherit"
+                          aria-label="open drawer"
+                          onClick={toggleShowMobileMenu || this.handleDrawerToggle}
+                          className={classes.menuButton}
                         >
-                            <Menu/>
+                            <Menu />
                         </IconButton>
                     </Hidden>
 
+                    {rightLinks}
 
                     { !user &&
                         <Button

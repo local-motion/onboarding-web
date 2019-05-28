@@ -4,24 +4,21 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle.jsx";
 
 import { connect } from 'react-redux'
-import { claimManagerRole, GET_PLAYGROUND_DETAILS, ensurePlaygroundDetails, stopPlaygroundDetailsStream }
+import { claimManagerRole, ensurePlaygroundDetails, findPlaygroundsByName, stopPlaygroundDetailsStream }
     from "../../../../components/Playground/PlaygroundActions";
 import { Redirect } from 'react-router-dom'
 
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
-import { getPlaygroundDetails } from "../../../../components/Playground/PlaygroundReducer";
-import { isLoading, getFetchError } from "../../../../api/FetchDetailsReducer";
+import { getAllPlaygrounds, getPlaygroundDetails } from "../../../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
 import { getActivePhaseUrl } from "../../../../misc/WorkspaceHelpers";
-import { history } from "../../../../setup";
 import WorkspaceWelcomeContent from "./WorkspaceWelcomeContent";
 
 const mapStateToProps = (state, ownProps) => ({
-    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),
-    playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, ownProps.match.params.initiativeId),
-    playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, ownProps.match.params.initiativeId),
+    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeName),
+    playgrounds: getAllPlaygrounds(state),
 
     user: getUser(state),
 })
@@ -33,26 +30,30 @@ const mapDispatchToProps = dispatch => ({
 })
 
 class WorkspaceWelcome extends React.Component {
-
-    onClickClaim() {
-        this.props.claimManagerRole(this.props.playground.id)
-    }
-
     componentDidMount() {
-        console.log("ensuring playground details of " + this.props.match.params.initiativeId)
-        this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId)
+        const { ensurePlaygroundDetails, match: { params: { initiativeName } }, playgrounds } = this.props;
+
+        const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
+
+        if (initiative && initiative.id) {
+            console.log("starting stream playground details of " + initiativeName, initiative.id);
+            ensurePlaygroundDetails(initiative.id);
+        }
     }
 
     componentWillUnmount() {
-        console.log('stopping stream: ', this.props.match.params.initiativeId)
-        this.props.stopPlaygroundDetailsStream(this.props.match.params.initiativeId)
+        const { stopPlaygroundDetailsStream, match: { params: { initiativeName } }, playgrounds } = this.props;
+
+        const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
+
+        if (initiative && initiative.id) {
+            console.log('stopping stream: ', initiativeName, initiative.id);
+            stopPlaygroundDetailsStream(initiative.id);
+        }
     }
 
     render() {
         const { playground, user, classes, ...rest } = this.props;
-
-        if (!playground || this.props.playgroundLoading)
-            return "loading.."
 
         const userIsVolunteer = user && playground.volunteers.filter(volunteer => volunteer.userId === user.id).length > 0
         if (userIsVolunteer)

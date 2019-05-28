@@ -10,6 +10,8 @@ import Footer from "components/Footer/Footer.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import BackButton from "../../components/BackButton/BackButton";
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 
 class About extends React.Component {
@@ -18,7 +20,9 @@ class About extends React.Component {
     const { classes, ...rest } = this.props;
         return (
             <div className={classes.container}>
-
+                <Helmet>
+                    <title>{titlePrefix} | Over ons</title>
+                </Helmet>
                 <Header
                     brand={"Rookvrije generatie"}
                     rightLinks={<HeaderLinks/>}

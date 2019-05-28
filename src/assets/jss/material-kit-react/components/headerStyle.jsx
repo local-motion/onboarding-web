@@ -12,59 +12,83 @@ import {
   drawerWidth
 } from "assets/jss/material-kit-react.jsx";
 
-const headerStyle = {
+const headerStyle = theme => ({
   appBar: {
-    display: "flex",
-    border: "0",
-    borderRadius: "3px",
-    padding: "0.625rem 0",
-    marginBottom: "20px",
-    color: "#555",
-    width: "100%",
-    backgroundColor: "#fff",
-    boxShadow:
-      "0 4px 18px 0px rgba(0, 0, 0, 0.12), 0 7px 10px -5px rgba(0, 0, 0, 0.15)",
-    transition: "all 150ms ease 0s",
-    alignItems: "center",
-    flexFlow: "row nowrap",
-    justifyContent: "flex-start",
-    position: "relative",
-    zIndex: "unset"
+      display: "flex",
+      border: "0",
+      borderRadius: "3px",
+      padding: "0.625rem 0",
+      marginBottom: "20px",
+      color: "#555",
+      width: "100%",
+      backgroundColor: "#fff",
+      boxShadow:
+        "0 4px 18px 0px rgba(0, 0, 0, 0.12), 0 7px 10px -5px rgba(0, 0, 0, 0.15)",
+      transition: "all 150ms ease 0s",
+      alignItems: "center",
+      flexFlow: "row nowrap",
+      justifyContent: "flex-start",
+      position: "relative",
+      zIndex: "unset"
   },
   absolute: {
-    position: "absolute",
-    zIndex: "1100"
+      position: "absolute",
+      zIndex: "1100"
   },
   fixed: {
-    position: "fixed",
-    zIndex: "1100"
+      position: "fixed",
+      zIndex: "1100"
   },
   container: {
-    ...container,
-    minHeight: "50px",
-    flex: "1",
-    alignItems: "center",
-    justifyContent: "space-between",
-    display: "flex",
-    flexWrap: "nowrap"
+      ...container,
+      minHeight: "50px",
+      flex: "1",
+      alignItems: "center",
+      justifyContent: "space-between",
+      display: "flex",
+      flexWrap: "nowrap"
   },
   flex: {
-    flex: 1
+      flex: 1
+  },
+  logo: {
+      width: 300,
+      padding: 0,
+      fontSize: 30,
+      color: 'rgb(8, 92, 166)',
+      fontFamily: 'dk_black_bamboo-webfont',
+      letterSpacing: '1px',
+      lineHeight: 1.2,
+
+      [theme.breakpoints.down('sm')]: {
+          width: 200,
+          margin: 20,
+          padding: 0,
+      },
+
+      '& > span': {
+          color: 'rgb(207, 26, 49)',
+          letterSpacing: '0px',
+          marginLeft: 5,
+      },
   },
   title: {
-    ...defaultFont,
-    lineHeight: "30px",
-    fontSize: "18px",
-    borderRadius: "3px",
-    textTransform: "none",
-    color: "inherit",
-    "&:hover,&:focus": {
+      ...defaultFont,
+      lineHeight: "30px",
+      fontSize: "18px",
+      borderRadius: "3px",
+      textTransform: "none",
       color: "inherit",
-      background: "transparent"
-    }
-  },
+      "&:hover,&:focus": {
+          color: "inherit",
+          background: "transparent"
+      }
+    },
   appResponsive: {
     margin: "20px 10px"
+  },
+  menuButton: {
+    marginTop: 5,
   },
   primary: {
     backgroundColor: primaryColor,
@@ -146,6 +170,6 @@ const headerStyle = {
     paddingLeft: "0",
     ...transition
   }
-};
+})
 
 export default headerStyle;

@@ -55,8 +55,8 @@ const styles = themes => ({
     },
 });
 
-const StepLink = ({ name, description, image, link, classes, location: { pathname }, startPathUrl }) => (
-  <Link to={(startPathUrl || '') + link} className={classes.link}>
+const StepLink = ({ name, description, image, link, classes, location: { pathname }, startPathUrl, onClick }) => (
+  <Link to={(startPathUrl || '') + link} className={classes.link} onClick={onClick}>
       <Card className={`${classes.card} ${pathname.includes(link) ? classes.cardActive : null}`}>
           <CardContent className={classes.cardContent}>
               <Typography gutterBottom className={classes.name}>

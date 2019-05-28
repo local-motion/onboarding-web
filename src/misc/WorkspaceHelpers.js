@@ -1,8 +1,10 @@
+import { slugifyPlaygroundName } from "../components/Playground/PlaygroundActions";
+
 export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
 
 export function getWorkspaceStartLink(playground) {
-    return playground ? `/workspace/${playground.id}` : '/workspace';
+    return playground ? `/actie/${slugifyPlaygroundName(playground)}` : '/actie';
 }
 
 export function checkBox({ playground, user, name, setCheckbox }) {
@@ -34,6 +36,29 @@ export function getStatus(playground) {
     return result ? playgroundLabels[playgroundStatuses.indexOf(result)] : null;
 }
 
+export function getHrefToSendMail(playground) {
+    const hrefArray = window.location.href.split('/');
+    const shareUrl = window.location.href.replace(hrefArray[hrefArray.length - 1], '');
+    const name = playground.name;
+    const phase = getStatus(playground);
+
+    const subject = `Help ${name} rookvrij te maken`;
+    const body = `
+Beste,%0A%0A
+
+Wie wil z’n kinderen nou niet rookvrij laten opgroeien%3F Ik in ieder geval wel. Wij samen kunnen voorkomen dat spelende kinderen meeroken of sterker nog, dat ze later zelf gaan roken.%0A
+Een eerste stap is snel gezet. Te beginnen bij alle speelplekken in jouw plaats. Doe mee aan mijn actie om de speelplek ${name} rookvrij te maken. De actie bevindt zich in de fase ${phase}.%0A%0A
+Hoe meer mensen mee doen aan de actie, hoe makkelijker het wordt om de bestuurders te overtuigen van een helder rookvrij-beleid. En dat is nodig om kinderen gezond en ook echt rookvrij te laten spelen.%0A
+Klik op onderstaande link om mee te doen aan mijn actie om  ${name} rookvrij te maken.%0A%0A
+
+${shareUrl}%0A%0A
+
+Alvast bedankt!
+`;
+
+    return `mailto:?subject=${subject}&body=${body}`;
+}
+
 export function getPhases() {
     return {
         community: {
@@ -43,12 +68,12 @@ export function getPhases() {
             steps: [
                 {
                     name: 'Inloggen',
-                    link: '/login',
+                    link: '/inloggen',
                     visible: ({ user }) => !user,
                 },
                 {
                     name: 'Actie starten',
-                    link: '/add-find-playground',
+                    link: '/starten',
                     visible: ({ playground }) => !playground,
                 },
                 {
@@ -71,12 +96,12 @@ export function getPhases() {
             steps: [
                 {
                     name: 'Mensen verzamelen',
-                    link: '/add-team-member',
+                    link: '/mensen-verzamelen',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Flyers verspreiden',
-                    link: '/flyer',
+                    link: '/flyers-verspreiden',
                     visible: ({ playground }) => !!playground,
                 },
                 {
@@ -86,12 +111,12 @@ export function getPhases() {
                 },
                 {
                     name: 'Contact leggen met bestuur',
-                    link: '/involve-administrator',
+                    link: '/contact-leggen-met-bestuur',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Wij worden rookvrij',
-                    link: '/commitment',
+                    link: '/wij-worden-rookvrij',
                     visible: ({ playground }) => !!playground,
                 },
             ],
@@ -104,17 +129,17 @@ export function getPhases() {
             steps: [
                 {
                     name: 'Kies moment van invoering',
-                    link: '/pick-date',
+                    link: '/kies-moment-van-invoering',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Communiceer over de rookvrije afspraak',
-                    link: '/shout',
+                    link: '/communiceer-over-de-rookvrije-afspraak',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Laat zien dat de speeltuin rookvrij is',
-                    link: '/signonfence',
+                    link: '/laat-zien-dat-de-speeltuin-rookvrij-is',
                     visible: ({ playground }) => !!playground,
                 },
             ],
@@ -127,12 +152,12 @@ export function getPhases() {
             steps: [
                 {
                     name: 'We zijn rookvrij',
-                    link: '/celebrate',
+                    link: '/we-zijn-rookvrij',
                     visible: ({ playground }) => !!playground,
                 },
                 {
                     name: 'Evalueren',
-                    link: '/magnify',
+                    link: '/evalueren',
                     visible: ({ playground }) => !!playground,
                 },
             ],
@@ -229,7 +254,7 @@ export function getFirstStepLinkOfPhase(phase, phases, playground, user) {
         return !(step.visible && !step.visible({ playground, user }));
     });
 
-    return phaseObject ? `/workspace${playground ? `/${playground.id}` : ''}${step ? step.link : ''}` : null;
+    return phaseObject ? `/actie${playground ? `/${slugifyPlaygroundName(playground)}` : ''}${step ? step.link : ''}` : null;
 }
 
 export function shouldWorkspaceUpdate(props, nextProps) {
@@ -276,3 +301,5 @@ export function shouldWorkspaceUpdate(props, nextProps) {
           || playgroundObservations.length !== nextPlayground.playgroundObservations.length
     );
 }
+
+export const  titlePrefix = 'Rookvrij Spelen';

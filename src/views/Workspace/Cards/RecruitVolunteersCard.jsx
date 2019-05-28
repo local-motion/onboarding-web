@@ -6,6 +6,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 import GridItem from "../../../components/Grid/GridItem";
 import GridContainer from "../../../components/Grid/GridContainer";
+import { getHrefToSendMail } from "../../../misc/WorkspaceHelpers";
 
 const styles = theme => ({
     usersList: {
@@ -39,7 +40,8 @@ class RecruitVolunteersCard extends React.Component {
 
     setCta() {
         const { setCta, playground, user } = this.props;
-        const inviteButtonHref = "mailto:?subject=Maak%20speeltuin%20rookvrij&body=Ik%20wil%20graag%20speeltuin%20rookvrij%20maken.%0AHelp%20jij%20met%20me%20mee%3F";
+
+        const inviteButtonHref = getHrefToSendMail(playground);
 
         setCta({
             ctaAction: () => { window.open(inviteButtonHref) },

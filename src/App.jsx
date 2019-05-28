@@ -21,6 +21,8 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
+import { titlePrefix } from "./misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
   
 const mapDispatchToProps = (dispatch) => ({
     onUserSignedIn: user => dispatch(userSignedIn(user))
@@ -37,30 +39,33 @@ class App extends React.Component {
     render() {
         return (
             <div>
+                <Helmet>
+                    <title>{titlePrefix} | Home</title>
+                </Helmet>
                 <Router history={history}>
                     <Switch>
-                        <Route exact path="/login" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
+                        <Route exact path="/inloggen" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
                         {/* <Route exact path="/verify?type=:verificationType&user=:username&code=:verificationCode" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
                         {/* <Route exact path="/verify" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
 
-                        <Route exact path="/about" key="Who are we" component={About}/>
+                        <Route exact path="/over-ons" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>
-                        <Route exact path="/privacy" key="Privacy Statement" component={Privacy}/>
-                        <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
-                        <Route exact path="/terms" key="Terms of Use" component={Terms}/>
+                        <Route exact path="/privacyverklaring" key="Privacy Statement" component={Privacy}/>
+                        <Route exact path="/veelgestelde-vragen" key="Frequently Asked Questions" component={FAQ}/>
+                        <Route exact path="/gebruiksvoorwaarden" key="Terms of Use" component={Terms}/>
 
-                        <Route exact path="/workspace/" key="Workspace" component={Workspace}/>
+                        <Route exact path="/actie/" key="Workspace" component={Workspace}/>
 
-                        {/* <Route exact path="/workspace/:initiativeId" key="WorkspacePage" component={Workspace}/>
-                        <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
+                        {/* <Route exact path="/actie/:initiativeName" key="WorkspacePage" component={Workspace}/>
+                        <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
                         
-                        <Route exact path="/workspace/login" key="WorkspaceLogin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
-                        <Route exact path="/workspace/add-find-playground" key="WorkspaceAddFindPlayground" component={Workspace}/>
+                        <Route exact path="/actie/inloggen" key="WorkspaceLogin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
+                        <Route exact path="/actie/starten" key="WorkspaceAddFindPlayground" component={Workspace}/>
 
-                        <Route exact path="/workspace/:initiativeId/join" key="WorkspaceJoin" component={WorkspaceJoin}/>
-                        <Route exact path="/workspace/:initiativeId/login" key="WorkspaceJoin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
+                        <Route exact path="/actie/:initiativeName/aansluiten" key="WorkspaceJoin" component={WorkspaceJoin}/>
+                        <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceJoin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
 
-                        <Route path="/workspace/:initiativeId/" component={Workspace}/>
+                        <Route path="/actie/:initiativeName/" component={Workspace}/>
 
                         <Route exact path="/" key="Onboarding" component={Onboarding}/>
 
