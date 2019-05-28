@@ -3,7 +3,6 @@ import { ListItem, Avatar, Typography, ListItemAvatar, Grid } from '@material-ui
 import withStyles from "@material-ui/core/styles/withStyles";
 import { deepPurple } from "@material-ui/core/colors";
 
-import EditPencil from "assets/img/edit-pencil.svg";
 import { getPrettyHybridMessageDatetime } from './DateTimeUtils';
 
 const styles = theme => ({
