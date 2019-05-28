@@ -6,7 +6,6 @@ import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import Button from "@material-ui/core/Button/Button";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Document, Page, pdfjs } from 'react-pdf';
 
 import flyer from "../../../assets/Flyer.Rookvrij.spelen.online.def.pdf";
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
@@ -14,8 +13,6 @@ import ConnectedCheckbox from "../../../components/ConnectedCheckbox/ConnectedCh
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 import { setCheckbox } from "../../../components/Playground/PlaygroundActions";
 import { checkBox } from "../../../misc/WorkspaceHelpers";
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const mapDispatchToProps = dispatch => ({
     setCheckbox: (initiativeId, checklistItem, isChecked, user) =>
@@ -25,7 +22,9 @@ const mapDispatchToProps = dispatch => ({
 const styles = theme => ({
     page: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        height: '80vh',
+        width: '100%',
     },
     buttons: {
         marginBottom: 10,
@@ -43,7 +42,6 @@ const styles = theme => ({
 class DistributeFlyersCard extends React.Component {
     state = {
         isOpen: false,
-        pageNumber: 1,
     };
 
     componentDidMount() {
@@ -131,8 +129,6 @@ class DistributeFlyersCard extends React.Component {
 
     toggleOpen = () => this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
 
-    onDocumentLoadSuccess = ({ numPages }) => this.setState({ numPages });
-
     checkFlyers = () => {
         this.checkBox("order_flyers");
         this.toggleOpen();
@@ -140,7 +136,7 @@ class DistributeFlyersCard extends React.Component {
 
     render() {
         const { playground, classes } = this.props;
-        const { isOpen, numPages } = this.state;
+        const { isOpen } = this.state;
 
         if (!playground) return "Loading...";
         
@@ -181,21 +177,14 @@ class DistributeFlyersCard extends React.Component {
                           aria-labelledby="form-dialog-title"
                         >
                             <DialogContent>
-                                <Document
-                                  file={`${window.location.origin}${flyer}`}
-                                  onLoadSuccess={this.onDocumentLoadSuccess}
-                                >
-                                    {Array.from(
-                                      new Array(numPages),
-                                      (el, index) => (
-                                        <Page
-                                          key={`page_${index + 1}`}
-                                          pageNumber={index + 1}
-                                          className={classes.page}
-                                        />
-                                      ),
-                                    )}
-                                </Document>
+                                <embed
+                                  src={`${window.location.origin}${flyer}`}
+                                  type="application/pdf"
+                                  className={classes.page}
+                                  view="Fit"
+                                  toolbar="1"
+                                  navpanes="1"
+                                />
                             </DialogContent>
                             <DialogActions className={"dialog-actions"}>
                                 <Button className={classes.button} variant="contained" href={flyer} target="_blank" onClick={this.checkFlyers} color="primary">
