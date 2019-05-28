@@ -85,8 +85,6 @@ const PlaygroundMapImpl = compose(
   window.google ? null : withScriptjs,
   withGoogleMap
 )(props => {
-    console.log('drawing map');
-
     const playgrounds = props.playgroundsToRender || props.playgrounds;
 
     return (
