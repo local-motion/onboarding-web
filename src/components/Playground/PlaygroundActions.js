@@ -158,8 +158,8 @@ export const createInitiative = (name, lat, lng, onSuccessCallback) => {
         }
       },
       onSuccess: (data, dispatch, getState) => {
-        dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
-        onSuccessCallback(data)
+        dispatch(triggerStream(PLAYGROUNDS_STREAM))
+        onSuccessCallback(data, dispatch, getState)
       }
     })
   }

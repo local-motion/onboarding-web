@@ -97,6 +97,10 @@ class WorkspacePage extends PureComponent {
         if (prevProps.playgrounds.length !== this.props.playgrounds.length) {
             this.ensurePlaygroundDetails();
         }
+
+        if (this.props.playground && (!prevProps.playground || (prevProps.playground.id === this.props.playground.id)) ) {
+            this.ensurePlaygroundDetails();
+        }
     }
 
     componentWillUnmount() {

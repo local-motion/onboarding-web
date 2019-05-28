@@ -12,7 +12,7 @@ import PlaygroundMap from "./PlaygroundMap";
 import {
     createInitiative,
     CREATE_INITIATIVE,
-    slugifyPlaygroundName
+    slugifyPlaygroundName,
 } from "../../../../components/Playground/PlaygroundActions";
 import { createLoadingSelector } from '../../../../api/Selectors';
 import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
@@ -104,12 +104,11 @@ class AddPlayground extends React.Component {
 
         if (!user) return this.saveInitiativeAndGotoLogin({ name, lat, lng });
 
-        createInitiative(name, lat, lng, (data) => {
+        createInitiative(name, lat, lng, (data, dispatch) => {
             const playground = {
                 id: data.createInitiative.id,
                 name,
             };
-
             history.push('/actie/' + slugifyPlaygroundName(playground))
         })
     };
@@ -280,8 +279,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        createInitiative:    (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
-      }
+        createInitiative:           (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
+    }
 }
 
 const connectedAddPlayground = connect(mapStateToProps, mapDispatchToProps)(AddPlayground);

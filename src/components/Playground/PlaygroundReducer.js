@@ -117,6 +117,8 @@ const playgroundReducer = (state = initialState, action, baseState) => {
         if (action.payload.status === 'not_modified')
           return state
 
+        console.log('composing new playground details into the state', action.payload.playground)
+
         return {
         ...state,
         playgroundDetails: updatePlaygroundDetails(state.playgroundDetails, action.payload.playground),
