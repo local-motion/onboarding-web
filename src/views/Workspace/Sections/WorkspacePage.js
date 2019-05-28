@@ -42,6 +42,7 @@ import {
     stopPlaygroundDetailsStream
 } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
+import Hidden from "@material-ui/core/Hidden/Hidden";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -72,6 +73,7 @@ class WorkspacePage extends PureComponent {
         ctaDisabled: true,
         ctaDone: false,
         CustomButton: null,
+        showMobileMenu: false,
     };
 
     componentDidMount() {
@@ -199,9 +201,11 @@ class WorkspacePage extends PureComponent {
         )
     }
 
+    toggleShowMobileMenu = () => this.setState(({ showMobileMenu }) => ({ showMobileMenu: !showMobileMenu }));
+
     render() {
         const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
-        const { expandedPhase } = this.state;
+        const { expandedPhase, showMobileMenu } = this.state;
 
         const prev = getPrevStep(phases, pathname);
         const next = getNextStep(phases, pathname);
@@ -218,6 +222,7 @@ class WorkspacePage extends PureComponent {
                     height: 50,
                     color: "white"
                 }}
+                toggleShowMobileMenu={this.toggleShowMobileMenu}
                 {...rest}
               />
 
@@ -232,35 +237,37 @@ class WorkspacePage extends PureComponent {
                       </GridItem>
 
                       <Paper className={classes.workspacePaper}>
-                          <GridItem xs={4} sm={4} md={3} className={"workspace-menu-column"}>
-                              <ExpansionPhase
-                                title={phases.community.title}
-                                icon={phases.community.icon}
-                                expandedIcon={phases.community.expandedIcon}
-                                expandedPhase={expandedPhase}
-                                onChange={this.clickPhase}
-                              >
-                                  {phases.community.steps.map(step => step.visible({ playground, user }) && <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
-                              </ExpansionPhase>
+                          <Hidden mdDown={showMobileMenu}>
+                              <GridItem xs={12} sm={12} md={3} className={"workspace-menu-column"}>
+                                  <ExpansionPhase
+                                    title={phases.community.title}
+                                    icon={phases.community.icon}
+                                    expandedIcon={phases.community.expandedIcon}
+                                    expandedPhase={expandedPhase}
+                                    onChange={this.clickPhase}
+                                  >
+                                      {phases.community.steps.map(step => step.visible({ playground, user }) && <StyledStepLink onClick={this.toggleShowMobileMenu} user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                  </ExpansionPhase>
 
-                              {
-                                  Object.keys(phases).filter(n => n !== 'community').map((phaseName) => (
-                                    <ExpansionPhase
-                                      title={phases[phaseName].title}
-                                      icon={phases[phaseName].icon}
-                                      expandedIcon={phases[phaseName].expandedIcon}
-                                      expandedPhase={expandedPhase}
-                                      onChange={this.clickPhase}
-                                      disabled={!playground}
-                                      key={phaseName}
-                                    >
-                                        {phases[phaseName].steps.map(step=> <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
-                                    </ExpansionPhase>
-                                  ))
-                              }
-                          </GridItem>
+                                  {
+                                      Object.keys(phases).filter(n => n !== 'community').map((phaseName) => (
+                                        <ExpansionPhase
+                                          title={phases[phaseName].title}
+                                          icon={phases[phaseName].icon}
+                                          expandedIcon={phases[phaseName].expandedIcon}
+                                          expandedPhase={expandedPhase}
+                                          onChange={this.clickPhase}
+                                          disabled={!playground}
+                                          key={phaseName}
+                                        >
+                                            {phases[phaseName].steps.map(step=> <StyledStepLink onClick={this.toggleShowMobileMenu} user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                        </ExpansionPhase>
+                                      ))
+                                  }
+                              </GridItem>
+                          </Hidden>
 
-                          <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
+                          <GridItem xs={12} sm={12} md={9} className={"workspace-content-column"}>
                               <Switch>
 
                                   <Route exact path="/actie/inloggen" key="WorkspaceLogin"

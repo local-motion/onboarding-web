@@ -82,6 +82,7 @@ class Header extends React.Component {
             fixed,
             absolute,
             user,
+            toggleShowMobileMenu,
         } = this.props
 
         const appBarClasses = classNames({
@@ -98,19 +99,18 @@ class Header extends React.Component {
                         <div className={classes.logo}>Rookvrij<span>spelen</span></div>
                     </Link>
 
-                    <Hidden smDown implementation="css">
-                        {rightLinks}
-                    </Hidden>
                     <Hidden mdUp>
                         <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={this.handleDrawerToggle}
+                          color="inherit"
+                          aria-label="open drawer"
+                          onClick={toggleShowMobileMenu || this.handleDrawerToggle}
+                          className={classes.menuButton}
                         >
-                            <Menu/>
+                            <Menu />
                         </IconButton>
                     </Hidden>
 
+                    {rightLinks}
 
                     { !user &&
                         <Button
