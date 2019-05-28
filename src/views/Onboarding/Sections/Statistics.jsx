@@ -72,11 +72,11 @@ const styles = theme => ({
 
 class Statistics extends Component {
     render() {
-        const { classes, onCtaClick } = this.props;
+        const { classes, onCtaClick, playgrounds } = this.props;
 
         return (
           <section className={`${classes.statisticsWrapper} ${classes.container}`}>
-              <StatisticsBanner />
+              <StatisticsBanner playgrounds={playgrounds} />
 
               <div className={classes.statisticInfo}>
                   <div className={classes.title}>Kinderen rookvrij laten opgroeien</div>
