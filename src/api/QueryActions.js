@@ -254,13 +254,27 @@ const noUserProfileErrorHandler = (error, dispatch, getState, queryOptions) => {
 }
 
 const nonUniqueUsernameOrEmailErrorHandler = (error, dispatch, getState, queryOptions) => {
-  console.log('checking error code: ', error)
-  if (error.code === 'DUPLICATE_USERNAME' || error.code === 'DUPLICATE_EMAIL_ADDRESS')
+  if (error.code === 'DUPLICATE_USERNAME' || error.code === 'DUPLICATE_EMAIL_ADDRESS') {
     dispatch(openErrorMessageAndLogoffDialog(error))
-  return true   // error handled
+    return true   // error handled
+  }
+  return false
 }
 
-const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorHandler]
+const userNotAuthenticatedErrorHandler = (error, dispatch, getState, queryOptions) => {
+  if (error.code === '9-812') {           // "niceMessage" : "User must be authenticated"
+    console.log('Server detected unauthenticated user')
+    dispatch(openErrorMessageDialog(error))
+
+   // TODO instead of displaying an error, trigger token refresh
+
+
+    return true   // error handled
+  }
+  return false
+}
+
+const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorHandler, userNotAuthenticatedErrorHandler]
 
 
 // default error handler

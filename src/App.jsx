@@ -21,6 +21,8 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
+import { titlePrefix } from "./misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
   
 const mapDispatchToProps = (dispatch) => ({
     onUserSignedIn: user => dispatch(userSignedIn(user))
@@ -37,6 +39,9 @@ class App extends React.Component {
     render() {
         return (
             <div>
+                <Helmet>
+                    <title>{titlePrefix} | Home</title>
+                </Helmet>
                 <Router history={history}>
                     <Switch>
                         <Route exact path="/inloggen" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />

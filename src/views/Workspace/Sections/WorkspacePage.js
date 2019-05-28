@@ -31,7 +31,7 @@ import {
     getFirstStepLinkOfPhase,
     getNextStep,
     getOpenedStepTitle,
-    getPrevStep
+    getPrevStep, titlePrefix
 } from "../../../misc/WorkspaceHelpers";
 import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
@@ -43,6 +43,7 @@ import {
 } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 import Hidden from "@material-ui/core/Hidden/Hidden";
+import { Helmet } from "react-helmet";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -214,6 +215,10 @@ class WorkspacePage extends PureComponent {
 
         return (
           <React.Fragment>
+              <Helmet>
+                  <title>{titlePrefix} | Actiepagina</title>
+              </Helmet>
+
               <Header
                 rightLinks={<HeaderLinks />}
                 fixed
