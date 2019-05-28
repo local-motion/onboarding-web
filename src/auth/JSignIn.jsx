@@ -117,7 +117,7 @@ class JSignIn extends Component {
           || (
             playground
               ? getActivePhaseUrl(playground)
-              : pathname.replace('/login', '')
+              : pathname.replace('/inloggen', '')
           );
 
         this.props.history.push(url);
@@ -147,7 +147,7 @@ class JSignIn extends Component {
 
 
     render() {
-        const isInCard = this.props.location.pathname.includes('workspace');
+        const isInCard = this.props.location.pathname.includes('actie');
         const {authState, authData} = this.props;
         if (!['signIn', 'signedOut', 'signedUp'].includes(authState)) {
             return null;

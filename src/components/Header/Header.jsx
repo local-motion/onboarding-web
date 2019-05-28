@@ -70,8 +70,8 @@ class Header extends React.Component {
     }
 
     signInClick = () => {
-        this.props.history.push(`/workspace/login?target=${this.props.location.pathname}`);
-    };
+        this.props.history.push(`/actie/inloggen?target=${this.props.location.pathname}`)
+    }
     
     render() {
         const {

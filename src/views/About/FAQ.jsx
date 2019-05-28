@@ -113,7 +113,7 @@ class FAQ extends React.Component {
                                         <Typography>
                                         Jouw privacy vinden we heel belangrijk. We gaan daarom zorgvuldig om met je (persoons)gegevens. 
                                         Gegevens zijn veilig opgeslagen en worden niet gedeeld met derden. 
-                                        Lees hier meer over in onze <Link to='/privacy'>privacyverklaring</Link>.
+                                        Lees hier meer over in onze <Link to='/privacyverklaring'>privacyverklaring</Link>.
                                         </Typography>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>

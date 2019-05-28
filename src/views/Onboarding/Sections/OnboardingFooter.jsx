@@ -118,10 +118,10 @@ const OnboardingFooter = ({ classes }) => {
       <footer className={classes.footer}>
           <div className={classes.contentWrapper}>
               <div className={classes.links}>
-                  <Link to="/about" className={classes.link}>Over rookvrij spelen</Link>
-                  <Link to="/terms" className={classes.link}>Gebruiksvoorwaarden</Link>
-                  <Link to="/privacy" className={classes.link}>Privacy</Link>
-                  <Link to="/faq" className={classes.link}>Veelgestelde vragen</Link>
+                  <Link to="/over-ons" className={classes.link}>Over rookvrij spelen</Link>
+                  <Link to="/gebruiksvoorwaarden" className={classes.link}>Gebruiksvoorwaarden</Link>
+                  <Link to="/privacyverklaring" className={classes.link}>Privacy</Link>
+                  <Link to="/veelgestelde-vragen" className={classes.link}>Veelgestelde vragen</Link>
                   <Link to="/contact" className={classes.link}>Contact</Link>
               </div>
               <div className={classes.logos}>

@@ -104,6 +104,25 @@ const getPlaygroundDetailsQuery = gql`
     }
 `
 
+export const findPlaygroundsByName = ({ initiativeName, playgrounds }) => {
+    if (!initiativeName || !playgrounds.length) return null;
+
+    const nameId = initiativeName.slice(-4);
+    const normalizedNameArray = initiativeName.replace(/-/g, ' ').split(' ');
+
+    const playground = playgrounds
+      .find(({ id, name }) => name.toLowerCase().includes(normalizedNameArray[0]) && id.includes(nameId));
+
+    return playground;
+};
+
+export const slugifyPlaygroundName = ({ id, name }) => {
+    const nameId = id.slice(9, 13);
+    const sluggedName = name.toLowerCase().replace(/ /g, '-');
+
+    return `${sluggedName}-${nameId}`;
+};
+
 export const ensurePlaygrounds = () => {
   return startGraphQLStream(PLAYGROUNDS_STREAM, GET_PLAYGROUNDS, getPlaygroundsQuery)
 }

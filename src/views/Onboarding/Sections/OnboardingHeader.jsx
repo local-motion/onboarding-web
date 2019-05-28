@@ -93,7 +93,7 @@ const styles = theme => ({
 
 const OnboardingHeader = ({ classes, history, location, user }) => {
     const signInClick = () => {
-        history.push(`/workspace/login?target=${location.pathname}`)
+        history.push(`/actie/inloggen?target=${location.pathname}`)
     };
 
     return (

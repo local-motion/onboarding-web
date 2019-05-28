@@ -36,7 +36,12 @@ import {
 import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
 import AddFindPlayground from "../Cards/AddFindPlayground";
-import { ensurePlaygroundDetails, stopPlaygroundDetailsStream } from "../../../components/Playground/PlaygroundActions";
+import {
+    ensurePlaygroundDetails,
+    findPlaygroundsByName,
+    stopPlaygroundDetailsStream
+} from "../../../components/Playground/PlaygroundActions";
+import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -70,17 +75,14 @@ class WorkspacePage extends PureComponent {
     };
 
     componentDidMount() {
-        const { ensurePlaygroundDetails, match: { path, params: { initiativeId } }, history } = this.props;
+        const { match: { path }, history } = this.props;
 
         this.selectActivePhase();
 
-        if (path === '/workspace/') {
-            history.push('/workspace/add-find-playground')
-        }
-
-        if (initiativeId) {
-            console.log("starting stream playground details of " + initiativeId);
-            ensurePlaygroundDetails(initiativeId);
+        if (path === '/actie/') {
+            history.push('/actie/starten')
+        } else {
+            this.ensurePlaygroundDetails();
         }
     }
 
@@ -88,14 +90,31 @@ class WorkspacePage extends PureComponent {
         if (prevProps.location.pathname !== this.props.location.pathname) {
             this.selectActivePhase();
         }
+
+        if (prevProps.playgrounds.length !== this.props.playgrounds.length) {
+            this.ensurePlaygroundDetails();
+        }
     }
 
     componentWillUnmount() {
-        const { stopPlaygroundDetailsStream, match: { params: { initiativeId } } } = this.props;
+        const { stopPlaygroundDetailsStream, match: { params: { initiativeName } }, playgrounds } = this.props;
 
-        if (initiativeId) {
-            console.log('stopping stream: ', initiativeId);
-            stopPlaygroundDetailsStream(initiativeId);
+        const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
+
+        if (initiative && initiative.id) {
+            console.log('stopping stream: ', initiativeName, initiative.id);
+            stopPlaygroundDetailsStream(initiative.id);
+        }
+    }
+
+    ensurePlaygroundDetails() {
+        const { ensurePlaygroundDetails, match: { params: { initiativeName } }, playgrounds } = this.props;
+
+        const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
+
+        if (initiative && initiative.id) {
+            console.log("starting stream playground details of " + initiativeName, initiative.id);
+            ensurePlaygroundDetails(initiative.id);
         }
     }
 
@@ -244,44 +263,44 @@ class WorkspacePage extends PureComponent {
                           <GridItem xs={8} sm={8} md={9} className={"workspace-content-column"}>
                               <Switch>
 
-                                  <Route exact path="/workspace/login" key="WorkspaceLogin"
+                                  <Route exact path="/actie/inloggen" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
-                                  <Route exact path="/workspace/add-find-playground" key="AddFindPlayground"
+                                  <Route exact path="/actie/starten" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user} />}/>
-                                  <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
+                                  <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin"
                                          render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
 
                                   {
                                       playground && (
                                         <React.Fragment>
-                                            <Route exact path="/workspace/:initiativeId" key="WorkspaceWelcome"
+                                            <Route exact path="/actie/:initiativeName" key="WorkspaceWelcome"
                                                    render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/add-team-member" key="RecruitVolunteers"
+                                            <Route exact path="/actie/:initiativeName/mensen-verzamelen" key="RecruitVolunteers"
                                                    render={(props) => <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/flyer" key="DistributeFlyers"
+                                            <Route exact path="/actie/:initiativeName/flyers-verspreiden" key="DistributeFlyers"
                                                    render={(props) => <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/meningen-inventariseren" key="CollectOpinions"
+                                            <Route exact path="/actie/:initiativeName/meningen-inventariseren" key="CollectOpinions"
                                                    render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/involve-administrator" key="ContactManagement"
+                                            <Route exact path="/actie/:initiativeName/contact-leggen-met-bestuur" key="ContactManagement"
                                                    render={(props) => <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/commitment" key="WeWillBecomeSmokefree"
+                                            <Route exact path="/actie/:initiativeName/wij-worden-rookvrij" key="WeWillBecomeSmokefree"
                                                    render={(props) => <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                            <Route exact path="/workspace/:initiativeId/pick-date" key="ChooseProperIntroductionDate"
+                                            <Route exact path="/actie/:initiativeName/kies-moment-van-invoering" key="ChooseProperIntroductionDate"
                                                    render={(props) => <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/shout" key="CommunicateAboutSmokefreeAgreement"
+                                            <Route exact path="/actie/:initiativeName/communiceer-over-de-rookvrije-afspraak" key="CommunicateAboutSmokefreeAgreement"
                                                    render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/signonfence" key="ShowPlaygroundIsSmokefree"
+                                            <Route exact path="/actie/:initiativeName/laat-zien-dat-de-speeltuin-rookvrij-is" key="ShowPlaygroundIsSmokefree"
                                                    render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                            <Route exact path="/workspace/:initiativeId/celebrate" key="WeAreSmokefree"
+                                            <Route exact path="/actie/:initiativeName/we-zijn-rookvrij" key="WeAreSmokefree"
                                                    render={(props) => <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/magnify" key="Evaluate"
+                                            <Route exact path="/actie/:initiativeName/evalueren" key="Evaluate"
                                                    render={(props) => <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
 
-                                            <Route exact path="/workspace/:initiativeId/team" key="WorkspaceTeam"
+                                            <Route exact path="/actie/:initiativeName/team" key="WorkspaceTeam"
                                                    render={(props) => <TeamCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/workspace/:initiativeId/chat" key="WorkspaceChat"
+                                            <Route exact path="/actie/:initiativeName/chat" key="WorkspaceChat"
                                                    render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
                                         </React.Fragment>
                                       )
@@ -316,10 +335,13 @@ class WorkspacePage extends PureComponent {
     }
 }
 
+const mapStateToProps = (state, ownProps) => ({
+    playgrounds: getAllPlaygrounds(state),
+});
 
 const mapDispatchToProps = dispatch => ({
     ensurePlaygroundDetails:        (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
     stopPlaygroundDetailsStream:    (initiativeId) =>     dispatch(stopPlaygroundDetailsStream(initiativeId)),
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(WorkspacePage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WorkspacePage));

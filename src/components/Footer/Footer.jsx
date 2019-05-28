@@ -27,16 +27,16 @@ function Footer({ t, classes, whiteFont, onlyLogo, onlyLinks }) {
                 })}>
                     <List className={classes.list}>
                         <ListItem className={classes.inlineBlock}>
-                            <Link to="/about" className={classes.block}>Over rookvrij spelen</Link>
+                            <Link to="/over-ons" className={classes.block}>Over ons</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <Link to="/terms" className={classes.block}>Gebruiksvoorwaarden</Link>
+                            <Link to="/gebruiksvoorwaarden" className={classes.block}>Gebruiksvoorwaarden</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <Link to="/privacy" className={classes.block}>Privacy</Link>
+                            <Link to="/privacyverklaring" className={classes.block}>Privacyverklaring</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <Link to="/faq" className={classes.block}>Veelgestelde vragen</Link>
+                            <Link to="/veelgestelde-vragen" className={classes.block}>Veelgestelde vragen</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
                             <Link to="/contact" className={classes.block}>Contact</Link>

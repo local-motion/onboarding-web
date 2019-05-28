@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
-import { isLoading, getFetchError } from "../../api/FetchDetailsReducer.js";
-import { GET_PLAYGROUND_DETAILS } from "../../components/Playground/PlaygroundActions.js";
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 import { getPhases, getWorkspaceStartLink, shouldWorkspaceUpdate } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
-import { createInitiative } from "../../components/Playground/PlaygroundActions";
+import { createInitiative, slugifyPlaygroundName } from "../../components/Playground/PlaygroundActions";
 
 const mapStateToProps = (state, ownProps) => ({
     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -25,9 +23,7 @@ const mapStateToProps = (state, ownProps) => ({
           default: false,
       })
     ),
-    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),
-    playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, ownProps.match.params.initiativeId),
-    playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, ownProps.match.params.initiativeId),
+    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeName),
 
     user: getUser(state),
 });
@@ -62,7 +58,13 @@ class WorkspaceTemplate extends React.Component {
 
             createInitiative(name, lat, lng, (data) => {
                 localStorage.removeItem('playgroundToCreate');
-                history.push('/workspace/' + data.createInitiative.id);
+
+                const playground = {
+                    id: data.createInitiative.id,
+                    name,
+                };
+
+                history.push('/actie/' + slugifyPlaygroundName(playground));
             });
         }
     };
