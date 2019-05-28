@@ -32,7 +32,7 @@ const styles = theme => ({
         marginBottom: 35,
 
         [theme.breakpoints.down('sm')]: {
-            fontSize: 40,
+            fontSize: 37,
             marginBottom: 25,
         },
     },

@@ -43,6 +43,10 @@ const styles = theme => ({
             padding: 0,
         },
 
+        [theme.breakpoints.down('xs')]: {
+            width: 160,
+        },
+
         '& > span': {
             color: 'rgb(207, 26, 49)',
             letterSpacing: '0px',
