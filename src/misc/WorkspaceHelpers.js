@@ -42,18 +42,19 @@ export function getHrefToSendMail(playground) {
     const name = playground.name;
     const phase = getStatus(playground);
 
-    const subject = `Help ${name} rookvrij te maken.`;
-    const body = `Beste,%0A%0A
-        
-Wie wil z’n kinderen nou niet rookvrij laten opgroeien? Ik in ieder geval wel. Wij samen kunnen voorkomen dat spelende kinderen meeroken of sterker nog, dat ze later zelf gaan roken.%0A
-Een eerste stap is snel gezet. Te beginnen bij alle speelplekken in jouw plaats. Doe mee aan mijn actie om de speelplek ${name} rookvrij te maken. De actie bevindt zich in de fase ${phase}.%0A%0A
+    const subject = `Help ${name} rookvrij te maken`;
+    const body = `
+Beste,%0A%0A
 
+Wie wil z’n kinderen nou niet rookvrij laten opgroeien%3F Ik in ieder geval wel. Wij samen kunnen voorkomen dat spelende kinderen meeroken of sterker nog, dat ze later zelf gaan roken.%0A
+Een eerste stap is snel gezet. Te beginnen bij alle speelplekken in jouw plaats. Doe mee aan mijn actie om de speelplek ${name} rookvrij te maken. De actie bevindt zich in de fase ${phase}.%0A%0A
 Hoe meer mensen mee doen aan de actie, hoe makkelijker het wordt om de bestuurders te overtuigen van een helder rookvrij-beleid. En dat is nodig om kinderen gezond en ook echt rookvrij te laten spelen.%0A
 Klik op onderstaande link om mee te doen aan mijn actie om  ${name} rookvrij te maken.%0A%0A
 
 ${shareUrl}%0A%0A
 
-Alvast bedankt!`;
+Alvast bedankt!
+`;
 
     return `mailto:?subject=${subject}&body=${body}`;
 }
