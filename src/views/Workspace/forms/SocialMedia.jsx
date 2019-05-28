@@ -14,12 +14,13 @@ import {
     WorkplaceShareButton,
     WorkplaceIcon
 } from 'react-share';
-// core components
-import { withTranslation } from "react-i18next";
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { connect } from 'react-redux'
+import { withTranslation } from "react-i18next";
+// core components
+import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+import { getStatus } from "../../../misc/WorkspaceHelpers";
 
 
 const mapStateToProps = state => ({
@@ -29,19 +30,24 @@ const mapStateToProps = state => ({
 
 class SocialMedia extends React.Component {
     render() {
-        const {user, playground} = this.props
-        const userIsVolunteer = isUserVolunteerOfPlayground(user, playground)
-        const shareUrl = window.location.href;
+        const {user, playground} = this.props;
+        const userIsVolunteer = isUserVolunteerOfPlayground(user, playground);
+        const hrefArray = window.location.href.split('/');
+        const shareUrl = window.location.href.replace(hrefArray[hrefArray.length - 1], '');
+        const name = playground.name;
+        const phase = getStatus(playground);
+
         var details = {
-            title: `Help make ${this.props.playground.name} smoke free.`,
-            description: `I've joined the campaign to help make ${this.props.playground.name} smoke free.`,
+            title: `Help make ${name} smoke free.`,
+            description: `Ik kom in actie om een speeltuin rookvrij te maken. De actie bevindt zich in de fase ${phase}. Help jij mij om ${name} rookvrij te maken? 
+            ${shareUrl}`,
             via: "Longfonds Rookvrij Generatie.",
             hashtags: ['smokefree', 'nosmoking']
         };
 
         return (
             <div>
-                <FacebookShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} quote={details.description} hashtag={details.hashtags[0]}>
+                <FacebookShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} quote={details.description} hashtag={`#${details.hashtags[0]}`}>
                     <FacebookIcon size={32} round />
                 </FacebookShareButton>
 
@@ -65,4 +71,4 @@ class SocialMedia extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)( withTranslation("translations")(connect(mapStateToProps)(SocialMedia)) )
+export default withStyles(componentsStyle)(withTranslation("translations")(connect(mapStateToProps)(SocialMedia)));
