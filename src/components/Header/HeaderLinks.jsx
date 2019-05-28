@@ -48,7 +48,7 @@ class HeaderLinks extends React.Component {
         notificationsOpen: false
     };
 
-    gotoMyProfile = () => this.props.history.push('/my-profile');
+    gotoMyProfile = () => this.props.history.push('/mijn-profiel');
 
     toggleDrawer = () => this.setState(
       ({ notificationsOpen }) => ({ notificationsOpen: !notificationsOpen })
