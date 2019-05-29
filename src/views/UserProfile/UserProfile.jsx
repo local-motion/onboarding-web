@@ -24,6 +24,7 @@ const styles = theme => ({
         flex: 1,
         margin: '-100px 0',
         padding: '0 !important',
+        zIndex: 99,
     },
     links: {},
     link: {
