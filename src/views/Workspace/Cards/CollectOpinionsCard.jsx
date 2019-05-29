@@ -42,7 +42,7 @@ class CollectOpinionsCard extends React.Component {
           <WorkspaceCard
             title={"Meningen inventariseren"}
             done={null}
-            image={require("../../../assets/img/backgrounds/workspace-welcome.jpg")}
+            image={require("assets/img/backgrounds/workspace-welcome-bg.jpg")}
             customStyle={{ backgroundPositionY: -300 }}
             content={null}
             expandContent={

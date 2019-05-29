@@ -19,6 +19,9 @@ import GooglePlacesAutocomplete from "../../Onboarding/components/GooglePlacesAu
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import MiniMap from "../components/MiniMap";
+import { slugifyPlaygroundName } from "../../../components/Playground/PlaygroundActions";
+import { titlePrefix } from "../../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 const styles = theme => ({
     wrapper: {},
@@ -297,7 +300,7 @@ class AddFindPlayground extends Component {
           <React.Fragment>
               {
                   results.map((playground) => {
-                      const { name, distance = 0, volunteerCount, id } = playground;
+                      const { name, distance = 0, volunteerCount } = playground;
 
                       const convertedDistance = distance >= 1000
                         ? `< ${Math.round(distance / 1000)} km`
@@ -330,7 +333,7 @@ class AddFindPlayground extends Component {
                               className={classes.resultButton}
                               color="primary"
                               component={Link}
-                              to={`/workspace/${id}`}
+                              to={`/actie/${slugifyPlaygroundName(playground)}`}
                               variant="contained"
                             >Sluit je aan</Button>
                         </div>
@@ -436,6 +439,10 @@ class AddFindPlayground extends Component {
 
         return (
           <div>
+              <Helmet>
+                  <title>{titlePrefix} | Actie starten</title>
+              </Helmet>
+
               <WorkspaceCard
                 title={"Actie starten"}
                 done={null}

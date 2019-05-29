@@ -1,5 +1,6 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
+import { playgroundStatuses } from "../../../misc/WorkspaceHelpers";
 
 const styles = theme => ({
     bannerWrapper: {
@@ -143,17 +144,20 @@ const styles = theme => ({
 });
 
 
-const StatisticsBanner = ({ classes }) => {
+const StatisticsBanner = ({ classes, playgrounds }) => {
+    const smokeFreePlaygrounds = playgrounds.filter(({ status }) => status === playgroundStatuses[2]).length;
+    const totalVolunteers = playgrounds.map(({ vol }) => vol || 0).reduce((acc, vol) => acc + vol, 0);
+
     return (
       <div className={classes.bannerWrapper}>
           <div className={classes.bannerDots} />
           <div className={classes.banner}>
-              <div className={classes.freePlaygroundNumber}>14 <div className={classes.playgroundPin} /></div>
+              <div className={classes.freePlaygroundNumber}>{smokeFreePlaygrounds} <div className={classes.playgroundPin} /></div>
               <div className={classes.freePlaygroundText}>Succesvolle acties voor rookvrije</div>
               <div className={classes.freePlaygroundTitle}>SPEELTUINEN IN NEDERLAND</div>
 
               <div className={classes.peopleIcon} />
-              <div className={classes.peopleNumber}>62,820</div>
+              <div className={classes.peopleNumber}>{totalVolunteers}</div>
               <div className={classes.peopleText}>Keer aangemeld voor een actie in heel Nederland.<br />We zijn hard op weg naar een Rookvrije Generatie!</div>
           </div>
       </div>

@@ -32,7 +32,7 @@ const styles = theme => ({
         marginBottom: 35,
 
         [theme.breakpoints.down('sm')]: {
-            fontSize: 40,
+            fontSize: 37,
             marginBottom: 25,
         },
     },
@@ -59,9 +59,9 @@ const styles = theme => ({
         width: 'auto',
         height: 80,
 
-        [theme.breakpoints.down('xs')]: {
-            height: 40,
-        },
+        // [theme.breakpoints.down('xs')]: {
+        //     height: 40,
+        // },
     },
     logos: {
         display: 'flex',
@@ -87,18 +87,18 @@ const AboutUs = ({ classes }) => {
           </div>
 
           <div className={classes.logos}>
-              <a
-                href="https://www.kwf.nl/"
-                className={classes.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                  <img
-                    className={classes.image}
-                    src={require("assets/img/logo-kwf.png")}
-                    alt="Logo KWF Kankerfonds"
-                  />
-              </a>
+              {/*<a*/}
+                {/*href="https://www.kwf.nl/"*/}
+                {/*className={classes.link}*/}
+                {/*target="_blank"*/}
+                {/*rel="noopener noreferrer"*/}
+              {/*>*/}
+                  {/*<img*/}
+                    {/*className={classes.image}*/}
+                    {/*src={require("assets/img/logo-kwf.png")}*/}
+                    {/*alt="Logo KWF Kankerfonds"*/}
+                  {/*/>*/}
+              {/*</a>*/}
               <a
                 href="https://www.longfonds.nl/"
                 className={classes.link}
@@ -111,18 +111,18 @@ const AboutUs = ({ classes }) => {
                     alt="Logo Longfonds"
                   />
               </a>
-              <a
-                href="https://www.hartstichting.nl/"
-                className={classes.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                  <img
-                    className={classes.image}
-                    src={require("assets/img/logo-hartstichting-horizontal.png")}
-                    alt="Logo Hartstichting"
-                  />
-              </a>
+              {/*<a*/}
+                {/*href="https://www.hartstichting.nl/"*/}
+                {/*className={classes.link}*/}
+                {/*target="_blank"*/}
+                {/*rel="noopener noreferrer"*/}
+              {/*>*/}
+                  {/*<img*/}
+                    {/*className={classes.image}*/}
+                    {/*src={require("assets/img/logo-hartstichting-horizontal.png")}*/}
+                    {/*alt="Logo Hartstichting"*/}
+                  {/*/>*/}
+              {/*</a>*/}
           </div>
       </div>
     );

@@ -24,6 +24,7 @@ const mapStateToProps = state => ({
             vol: playground.volunteerCount,
             votes: playground.votes,
             slug: playground.name + " Rookvrij",
+            status: playground.status,
             zoom: 18,
             default: false,
         })
@@ -81,7 +82,7 @@ class Onboarding extends React.Component {
     }
 
     toggleAddPlayground() {
-        this.props.history.push('/workspace/add-find-playground');
+        this.props.history.push('/actie/starten');
     }
 
     render() {
@@ -92,7 +93,7 @@ class Onboarding extends React.Component {
             <div className={"onboarding-wrapper"}>
                 <Startscreen onCtaClick={this.toggleAddPlayground} />
 
-                <Statistics onCtaClick={this.toggleAddPlayground} />
+                <Statistics onCtaClick={this.toggleAddPlayground} playgrounds={playgrounds} />
 
                 <Playgrounds
                   playgrounds={playgrounds}

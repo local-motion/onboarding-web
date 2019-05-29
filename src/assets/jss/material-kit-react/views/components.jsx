@@ -87,6 +87,7 @@ const componentsStyle = theme => ({
         borderRadius: '7px',
         overflow: 'hidden',
         width: '100%',
+        flexWrap: 'wrap',
     },
     playgroundTitle: {
         fontFamily: "'dk_black_bamboo-webfont'",

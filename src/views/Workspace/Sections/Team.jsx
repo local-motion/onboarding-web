@@ -25,9 +25,7 @@ import { Paper, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@ma
 import { deepPurple } from "@material-ui/core/colors";
 
 const mapStateToProps = (state, ownProps) => ({
-    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),
-    playgroundLoading: isLoading(state, GET_PLAYGROUND_DETAILS, ownProps.match.params.initiativeId),
-    playgroundError: getFetchError(state, GET_PLAYGROUND_DETAILS, ownProps.match.params.initiativeId),
+    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeName),
 
     user: getUser(state),
 })
@@ -77,8 +75,8 @@ class Team extends React.Component {
     }
 
     componentDidMount() {
-        console.log("ensuring playground details of " + this.props.match.params.initiativeId)
-        this.props.ensurePlaygroundDetails(this.props.match.params.initiativeId)
+        console.log("ensuring playground details of " + this.props.match.params.initiativeName)
+        this.props.ensurePlaygroundDetails(initiativeId)
     }
 
     render() {

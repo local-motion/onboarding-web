@@ -27,16 +27,16 @@ function Footer({ t, classes, whiteFont, onlyLogo, onlyLinks }) {
                 })}>
                     <List className={classes.list}>
                         <ListItem className={classes.inlineBlock}>
-                            <Link to="/about" className={classes.block}>Over rookvrij spelen</Link>
+                            <Link to="/over-ons" className={classes.block}>Over ons</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <Link to="/terms" className={classes.block}>Gebruiksvoorwaarden</Link>
+                            <Link to="/gebruiksvoorwaarden" className={classes.block}>Gebruiksvoorwaarden</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <Link to="/privacy" className={classes.block}>Privacy</Link>
+                            <Link to="/privacyverklaring" className={classes.block}>Privacyverklaring</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
-                            <Link to="/faq" className={classes.block}>Veelgestelde vragen</Link>
+                            <Link to="/veelgestelde-vragen" className={classes.block}>Veelgestelde vragen</Link>
                         </ListItem>
                         <ListItem className={classes.inlineBlock}>
                             <Link to="/contact" className={classes.block}>Contact</Link>
@@ -48,15 +48,15 @@ function Footer({ t, classes, whiteFont, onlyLogo, onlyLinks }) {
                     [classes.hide]: onlyLinks,
                 })}>
                     <List className={classes.list}>
-                        <ListItem className={classes.inlineBlock + " footer-logo"}>
-                            <a
-                                href="https://www.kwf.nl/"
-                                className={classes.block}
-                                target="_blank"
-                            >
-                                <img src={require("assets/img/logo-kwf.png")} alt="Logo KWF Kankerfonds" />
-                            </a>
-                        </ListItem>
+                        {/*<ListItem className={classes.inlineBlock + " footer-logo"}>*/}
+                            {/*<a*/}
+                                {/*href="https://www.kwf.nl/"*/}
+                                {/*className={classes.block}*/}
+                                {/*target="_blank"*/}
+                            {/*>*/}
+                                {/*<img src={require("assets/img/logo-kwf.png")} alt="Logo KWF Kankerfonds" />*/}
+                            {/*</a>*/}
+                        {/*</ListItem>*/}
                         <ListItem className={classes.inlineBlock + " footer-logo"}>
                             <a
                                 href="https://www.longfonds.nl/"
@@ -65,13 +65,13 @@ function Footer({ t, classes, whiteFont, onlyLogo, onlyLinks }) {
                             >
                                 <img src={require("assets/img/logo-longfonds.png")} alt="Logo Longfonds" />
                             </a>
-                            <a
-                              href="https://www.hartstichting.nl/"
-                              className={classes.logo}
-                              target="_blank"
-                            >
-                                <img src={require("assets/img/logo-hartstichting.png")} alt="Logo Hartstichting" />
-                            </a>
+                            {/*<a*/}
+                              {/*href="https://www.hartstichting.nl/"*/}
+                              {/*className={classes.logo}*/}
+                              {/*target="_blank"*/}
+                            {/*>*/}
+                                {/*<img src={require("assets/img/logo-hartstichting.png")} alt="Logo Hartstichting" />*/}
+                            {/*</a>*/}
                         </ListItem>
                     </List>
                 </div>

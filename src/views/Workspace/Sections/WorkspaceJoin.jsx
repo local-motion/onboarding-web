@@ -8,7 +8,7 @@ import { joinInitiative } from "../../../components/Playground/PlaygroundActions
 import { getActivePhaseUrl } from "../../../misc/WorkspaceHelpers";
 
 const mapStateToProps = (state, ownProps) => ({
-    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeId),
+    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeName),
     user: getUser(state),
 })
 

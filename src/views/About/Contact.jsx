@@ -11,6 +11,8 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Button from "@material-ui/core/Button/Button";
 import BackButton from "../../components/BackButton/BackButton";
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 
 class Contact extends React.Component {
@@ -19,7 +21,9 @@ class Contact extends React.Component {
     const { classes, ...rest } = this.props;
         return (
             <div className={classes.container}>
-
+                <Helmet>
+                    <title>{titlePrefix} | Contact</title>
+                </Helmet>
                 <Header
                     brand={"Rookvrije generatie"}
                     rightLinks={<HeaderLinks/>}

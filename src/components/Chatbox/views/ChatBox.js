@@ -4,6 +4,8 @@ import ChatMessageEntryBox from './ChatMessageEntryBox';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
 import debounce from 'lodash/debounce';
+import { titlePrefix } from "../../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 const styles = theme => ({
   chatTitleContainer: {
@@ -105,9 +107,12 @@ class ChatBox extends React.Component {
   }
 
   render() {
-    const {classes, chatMessages=[], messageText='', chatDisabled, userName} = this.props
+    const {classes, chatMessages=[], messageText='', chatDisabled, userName, playground} = this.props
     return (
       <Paper elevation={2} className={classes.chatBox}>
+          <Helmet>
+              <title>{titlePrefix} | Chat {playground.name}</title>
+          </Helmet>
         <Grid container direction="column" wrap="nowrap">
           <div className={classes.chatTitleContainer}>
             <div className={classes.chatTitle}>Chat</div>
