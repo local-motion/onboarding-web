@@ -9,7 +9,11 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {withTranslation} from "react-i18next";
 
 import PlaygroundMap from "./PlaygroundMap";
-import { createInitiative, CREATE_INITIATIVE } from '../../../../components/Playground/PlaygroundActions';
+import {
+    createInitiative,
+    CREATE_INITIATIVE,
+    slugifyPlaygroundName,
+} from "../../../../components/Playground/PlaygroundActions";
 import { createLoadingSelector } from '../../../../api/Selectors';
 import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
@@ -100,13 +104,19 @@ class AddPlayground extends React.Component {
 
         if (!user) return this.saveInitiativeAndGotoLogin({ name, lat, lng });
 
-        createInitiative(name, lat, lng, (data) => history.push('/workspace/' + data.createInitiative.id))
+        createInitiative(name, lat, lng, (data, dispatch) => {
+            const playground = {
+                id: data.createInitiative.id,
+                name,
+            };
+            history.push('/actie/' + slugifyPlaygroundName(playground))
+        })
     };
 
     saveInitiativeAndGotoLogin = ({ name, lat, lng }) => {
         localStorage.setItem('playgroundToCreate', JSON.stringify({ name, lat, lng }));
 
-        this.props.history.push('/workspace/login?target=/workspace/');
+        this.props.history.push('/actie/inloggen?target=/actie/');
     };
 
     handleClickOpen = () => {
@@ -269,8 +279,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        createInitiative:    (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
-      }
+        createInitiative:           (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
+    }
 }
 
 const connectedAddPlayground = connect(mapStateToProps, mapDispatchToProps)(AddPlayground);

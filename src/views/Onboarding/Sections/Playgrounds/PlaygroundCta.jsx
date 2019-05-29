@@ -30,6 +30,7 @@ const styles = theme => ({
         fontWeight: 'bold',
         lineHeight: 1.5,
         textAlign: 'center',
+        padding: '0 10px',
 
         [theme.breakpoints.down('xs')]: {
             marginTop: 20,

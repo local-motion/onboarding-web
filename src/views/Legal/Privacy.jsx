@@ -7,10 +7,16 @@ import Footer from "../../components/Footer/Footer.jsx";
 import PrivacyText from "./PrivacyText";
 import BackButton from "../../components/BackButton/BackButton";
 import WrappedHeader from "../../components/Header/WrappedHeader";
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
+import { Helmet } from "react-helmet";
 
 
 const Privacy = ({ classes }) => (
   <div className={classes.wrapper}>
+      <Helmet>
+          <title>{titlePrefix} | Privacyverklaring</title>
+      </Helmet>
+
       <WrappedHeader customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>

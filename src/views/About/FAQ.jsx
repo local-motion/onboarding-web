@@ -2,6 +2,7 @@ import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
 import { withTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
@@ -14,10 +15,15 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import BackButton from "../../components/BackButton/BackButton";
 import WrappedHeader from "../../components/Header/WrappedHeader";
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
 
 
 const FAQ = ({ classes }) => (
   <div className={classes.wrapper}>
+      <Helmet>
+          <title>{titlePrefix} | Veelgestelde vragen</title>
+      </Helmet>
+
       <WrappedHeader customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>

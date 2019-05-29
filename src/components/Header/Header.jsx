@@ -31,20 +31,34 @@ const styles = theme => ({
         },
     },
     logo: {
-        width: 300,
-        padding: 25,
+        color: 'rgb(8, 92, 166)',
+        fontSize: 30,
+        fontFamily: 'dk_black_bamboo-webfont',
+        letterSpacing: '1px',
+        lineHeight: 1.2,
+        margin: '20px 15px',
+        padding: 0,
 
         [theme.breakpoints.down('sm')]: {
-            width: 200,
-            margin: 20,
-            padding: 0,
+            margin: 10,
+            fontSize: 25,
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 20,
+        },
+
+        '& > span': {
+            color: 'rgb(207, 26, 49)',
+            letterSpacing: '0px',
+            marginLeft: 5,
         },
     },
     menu: {
         padding: '10px 25px',
 
         [theme.breakpoints.down('sm')]: {
-            padding: 0,
+            padding: '10px 10px',
         },
     },
     loginButton: {
@@ -101,11 +115,7 @@ const Header = ({ classes, history, location, user }) => {
     return (
       <AppBar className={classes.landingAppBar}>
           <Link to={'/'}>
-              <img
-                src={require("../../assets/img/landing/logo.png")}
-                alt={"Rookvrije generatie logo"}
-                className={classes.logo}
-              />
+              <div className={classes.logo}>Rookvrij<span>spelen</span></div>
           </Link>
 
           {

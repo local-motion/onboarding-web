@@ -1,6 +1,7 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { withTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
 
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import Footer from "components/Footer/Footer.jsx";
@@ -8,10 +9,15 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import BackButton from "../../components/BackButton/BackButton";
 import WrappedHeader from "../../components/Header/WrappedHeader";
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
 
 
 const About = ({ classes }) => (
   <div className={classes.wrapper}>
+      <Helmet>
+          <title>{titlePrefix} | Over ons</title>
+      </Helmet>
+
       <WrappedHeader customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>

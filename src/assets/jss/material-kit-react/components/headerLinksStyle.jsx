@@ -54,19 +54,40 @@ const headerLinksStyle = theme => ({
 
         "&:hover $navIcon, &:active $navIcon": {
             fill: "#FFF"
-        }
+        },
+
+        [theme.breakpoints.down("sm")]: {
+            width: 35,
+            height: 35,
+        },
+
+        [theme.breakpoints.down("xs")]: {
+            width: 25,
+            height: 25,
+            margin: '0 5px',
+        },
     },
     navIcon: {
-        fill: "#000"
+        fill: "#000",
+
+        [theme.breakpoints.down("xs")]: {
+            width: "16px !important",
+            height: "16px !important",
+        },
     },
     profileLink: {
         padding: 0,
     },
     profileIcon: {
         fill: "#3f51b5",
-        height: "26px !important",
-        width: "26px !important",
-        margin: "0 !important"
+        height: "20px !important",
+        width: "20px !important",
+        margin: "0 !important",
+
+        [theme.breakpoints.down("xs")]: {
+            width: "20px !important",
+            height: "20px !important",
+        },
     },
     profileName: {
         padding: 10,

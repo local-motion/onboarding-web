@@ -21,6 +21,13 @@ const styles = theme => ({
             alignItems: 'flex-start',
             padding: 0,
         },
+
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+            maxWidth: '100%',
+            alignItems: 'center',
+            padding: 0,
+        },
     },
     iconBgImage: {
         width: 180,
@@ -39,6 +46,10 @@ const styles = theme => ({
             minWidth: 140,
             height: 140,
         },
+
+        [theme.breakpoints.down('xs')]: {
+            width: 140,
+        },
     },
     iconImage: {
         width: 72,
@@ -50,6 +61,10 @@ const styles = theme => ({
     content: {
         [theme.breakpoints.down('sm')]: {
             marginLeft: 15,
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 0,
         },
     },
     iconTitle: {
@@ -68,6 +83,10 @@ const styles = theme => ({
             marginBottom: 5,
             textAlign: 'left',
         },
+
+        [theme.breakpoints.down('xs')]: {
+            textAlign: 'center',
+        },
     },
     iconText: {
         fontSize: 14,
@@ -82,6 +101,10 @@ const styles = theme => ({
 
         [theme.breakpoints.down('sm')]: {
             textAlign: 'left',
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            textAlign: 'center',
         },
     }
 });

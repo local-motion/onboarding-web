@@ -1,18 +1,24 @@
 import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
 import { withTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Button from "@material-ui/core/Button/Button";
 
+import { titlePrefix } from "../../misc/WorkspaceHelpers";
 import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import Button from "@material-ui/core/Button/Button";
 import BackButton from "../../components/BackButton/BackButton";
 import WrappedHeader from "../../components/Header/WrappedHeader";
 
 
 const Contact = ({ classes }) => (
   <div className={classes.wrapper}>
+      <Helmet>
+          <title>{titlePrefix} | Contact</title>
+      </Helmet>
+
       <WrappedHeader customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>

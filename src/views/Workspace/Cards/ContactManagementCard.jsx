@@ -4,7 +4,7 @@ import { Button, Typography, withStyles } from "@material-ui/core";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
 import ContentDialog from "../../../components/Dialogs/ContentDialog";
-import { claimManagerRole } from "../../../components/Playground/PlaygroundActions";
+import { claimManagerRole, slugifyPlaygroundName } from "../../../components/Playground/PlaygroundActions";
 import { isUserManagerOfPlayground, isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 
 const mapDispatchToProps = dispatch => ({
@@ -50,7 +50,7 @@ class ContactManagementCard extends React.Component {
           "body=Hallo,%0A%0A" +
           "Wij%20willen%20graag%20" + playground.name + "%20rookvrij%20maken.%20Hiervoor%20hebben%20we%20jouw%20hulp%20als%20beheerder%20hard%20nodig.%0A%0A" +
           "Sluit%20je%20bij%20ons%20aan%20op%20rookvrij.nl:%20" +
-          "techoverflow-p.aws.abnamro.org/workspace/" + playground.id + "%0A";
+          "rookvrijspelen.nl/actie/" + slugifyPlaygroundName(playground) + "%0A";
 
         if (!isUserManagerOfPlayground(user, playground)) {
             setCta({

@@ -7,6 +7,7 @@ import SocialMedia from "../forms/SocialMedia";
 import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 import GridItem from "../../../components/Grid/GridItem";
 import GridContainer from "../../../components/Grid/GridContainer";
+import { getHrefToSendMail } from "../../../misc/WorkspaceHelpers";
 
 const styles = theme => ({
     usersList: {
@@ -26,7 +27,7 @@ class TeamCard extends React.Component {
 
         if (!playground) return "Loading...";
 
-        const inviteButtonHref = "mailto:?subject=Maak%20speeltuin%20rookvrij&body=Ik%20wil%20graag%20speeltuin%20rookvrij%20maken.%0AHelp%20jij%20met%20me%20mee%3F";
+        const inviteButtonHref = getHrefToSendMail(playground);
         const inviteButtonLabel = "Deel link via email";
         const targetNrOfVolunteers = 2;
 
@@ -63,7 +64,7 @@ class TeamCard extends React.Component {
                         </GridItem>
 
                         <GridItem xs={12} sm={12} md={8}>
-                            <Button disabled={!isUserVolunteerOfPlayground(user, playground)} size="small" color="primary" href={inviteButtonHref}>{inviteButtonLabel}</Button>
+                            <Button disabled={!isUserVolunteerOfPlayground(user, playground)} size="small" color="primary" target="_blank" href={inviteButtonHref}>{inviteButtonLabel}</Button>
                             <br />
                             <br />
                             <Typography component="p" className={classes.contentParagraph}>Deel link door middel van social media</Typography>

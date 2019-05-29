@@ -21,12 +21,18 @@ import { isDeveloperMode, setDeveloperMode } from "../../utils/DeveloperMode";
 import { openConfirmationDialog } from "../SimpleDialog/SimpleDialogActions.js";
 import Activities from "../Activities/Activities";
 
-const StyledBadge = withStyles({
+const StyledBadge = withStyles(theme => ({
     badge: {
         top: "20%",
         right: "20%",
+
+        [theme.breakpoints.down("xs")]: {
+            minWidth: 16,
+            height: 16,
+            fontSize: 8,
+        },
     },
-})(Badge);
+}))(Badge);
 
 const mapStateToProps = state => ({
     user: getUser(state)

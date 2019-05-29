@@ -3,7 +3,6 @@ import { ListItem, Avatar, Typography, ListItemAvatar, Grid } from '@material-ui
 import withStyles from "@material-ui/core/styles/withStyles";
 import { deepPurple } from "@material-ui/core/colors";
 
-import EditPencil from "assets/img/edit-pencil.svg";
 import { getPrettyHybridMessageDatetime } from './DateTimeUtils';
 
 const styles = theme => ({
@@ -11,8 +10,11 @@ const styles = theme => ({
         marginRight: 10,
         alignSelf: 'flex-start',
     },
+    ownerItem: {
+        flexDirection: 'row-reverse',
+    },
     purpleAvatar: {
-        marginRight: 10,
+        marginLeft: 10,
         color: '#fff',
         backgroundColor: deepPurple[500],
         alignSelf: 'flex-start',
@@ -45,6 +47,13 @@ const styles = theme => ({
             left: '-20px',
         },
     },
+    ownerDateText: {
+        marginRight: '30px',
+        '&:before': {
+            left: 'unset',
+            right: '-20px',
+        },
+    },
     contentText: {
         align: 'left',
         color: '#fff',
@@ -58,73 +67,41 @@ const styles = theme => ({
         borderTopLeftRadius: '3px',
         width: 'fit-content',
     },
-    typingDot: {
-        display: 'inline-block',
-        width: '3px',
-        height: '3px',
-        borderRadius: '50%',
-        marginRight: '3px',
-        background: '#6f747e',
-        animation: 'wave 1.3s linear infinite',
+    ownerContentText: {
+        borderTopLeftRadius: '15px',
+        borderTopRightRadius: '3px',
     },
-    typingDotSecond: {
-        animationDelay: '-1.1s',
-    },
-    typingDotThird: {
-        animationDelay: '-0.9s',
-    },
-    typingText: {
-        marginLeft: '5px',
-        marginRight: '5px',
-        fontSize: '12px',
-        fontWeight: 'bold',
-        color: '#626262',
-    },
-    typingIcon: {
-        display: 'inline-block',
-        background: `url('${EditPencil}') no-repeat`,
-        width: '16px',
-        height: '14px',
-        verticalAlign: 'middle',
-    }
 });
 
-const getPrettyDate = messageDateString => getPrettyHybridMessageDatetime(messageDateString)
+const getPrettyDate = messageDateString => getPrettyHybridMessageDatetime(messageDateString);
 
-const ChatMessageItem = ({userName, author, creationTime, text, classes, isTyping}) => {
-    const iconText = (author || '??').substring(0, 2)
+const ChatMessageItem = ({userName, author, creationTime, text, classes}) => {
+    const iconText = (author || '??').substring(0, 2);
 
-    const TypingText = () => (
-      <React.Fragment>
-          <span className={classes.typingIcon} />
-          <span className={classes.typingText}>Typing</span>
-          <span className={classes.typingDot} />
-          <span className={`${classes.typingDot} ${classes.typingDotSecond}`} />
-          <span className={`${classes.typingDot} ${classes.typingDotThird}`} />
-      </React.Fragment>
-    );
+    const isMessageOwner = author === userName;
 
     return (
-        <ListItem>
+        <ListItem className={isMessageOwner ? classes.ownerItem : ''}>
             <ListItemAvatar>
-                <Avatar className={author === userName ? classes.purpleAvatar : classes.avatar}>
+                <Avatar className={isMessageOwner ? classes.purpleAvatar : classes.avatar}>
                     {iconText}
                 </Avatar>
             </ListItemAvatar>
             <Grid container direction="column">
                 <Grid item>
-                    <Grid container direction="row" className={classes.userInfo}>
+                    <Grid container direction={isMessageOwner ? 'row-reverse' : 'row'} className={classes.userInfo}>
                         <Grid item><Typography className={classes.authorText}>{author}</Typography></Grid>
-                        <Grid item><Typography
-                          className={classes.dateText}>{getPrettyDate(creationTime)}</Typography></Grid>
+                        <Grid item>
+                            <Typography className={`${classes.dateText} ${isMessageOwner ? classes.ownerDateText : ''}`}>
+                                {getPrettyDate(creationTime)}
+                            </Typography>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid item>
-                    {
-                        isTyping
-                          ? <TypingText />
-                          : <Typography className={classes.contentText}>{text}</Typography>
-                    }
+                    <Grid container direction={isMessageOwner ? 'row-reverse' : 'row'}>
+                        <Typography className={`${classes.contentText} ${isMessageOwner ? classes.ownerContentText : ''}`}>{text}</Typography>
+                    </Grid>
                 </Grid>
             </Grid>
         </ListItem>
