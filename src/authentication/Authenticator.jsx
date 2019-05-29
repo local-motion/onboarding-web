@@ -80,7 +80,6 @@ class Authenticator extends Component {
     setWaitingForServerResponse()           {   this.setState({waitingForServerResponse: true})         }
     clearWaitingForServerResponse()         {   this.setState({waitingForServerResponse: false})        }
 
-
     onSignInSuccess(user) {
         this.props.onSignIn(user)
         const { location: { search, pathname }, playground } = this.props;

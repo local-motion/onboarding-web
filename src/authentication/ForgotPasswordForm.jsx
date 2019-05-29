@@ -18,31 +18,33 @@ class ForgotPasswordForm extends Component {
 
     sendCode() {
         const {username} = this.props;
-        this.props.setWaitingForServerResponse()
-        Auth.forgotPassword(username)
-            .then(data => {
-                console.log('sent password reset code to ' + username);
-                this.props.clearWaitingForServerResponse()
-                this.props.changeForm('passwordReset')
-            })
-            .catch(error => {
-                console.log('forgot password send code error', error);
-                this.props.clearWaitingForServerResponse()
-                if (error.code === 'InvalidParameterException' && error.message === 'Cannot reset password for the user as there is no registered/verified email or phone_number')
-                    this.props.openErrorDialog(
-                        'Emailadres niet gevalideerd', 
-                        'Je emailadres is nog niet gevalideerd. Check je inbox of vraag een nieuwe code aan', 
-                        'OK', 
-                        () => this.props.changeForm('confirmSignUp')
-                    )
-                else
-                    this.props.displayError(getErrorMessage(error.code, error.message))
-            })
-    
-        // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
-        const {initiativeId} = this.props.match.params
-        if (initiativeId)
-            setPasswordResetCookies(initiativeId)
+            if (username) {
+            this.props.setWaitingForServerResponse()
+            Auth.forgotPassword(username)
+                .then(data => {
+                    console.log('sent password reset code to ' + username);
+                    this.props.clearWaitingForServerResponse()
+                    this.props.changeForm('passwordReset')
+                })
+                .catch(error => {
+                    console.log('forgot password send code error', error);
+                    this.props.clearWaitingForServerResponse()
+                    if (error.code === 'InvalidParameterException' && error.message === 'Cannot reset password for the user as there is no registered/verified email or phone_number')
+                        this.props.openErrorDialog(
+                            'Emailadres niet gevalideerd', 
+                            'Je emailadres is nog niet gevalideerd. Check je inbox of vraag een nieuwe code aan', 
+                            'OK', 
+                            () => this.props.changeForm('confirmSignUp')
+                        )
+                    else
+                        this.props.displayError(getErrorMessage(error.code, error.message))
+                })
+        
+            // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
+            const {initiativeId} = this.props.match.params
+            if (initiativeId)
+                setPasswordResetCookies(initiativeId)
+        }
     }
 
     onChangeUsername(event) {
@@ -75,7 +77,7 @@ class ForgotPasswordForm extends Component {
                             }
                         >
                                 <TextField
-                                  placeholder="Gebruikersnaam of e-mailadres"
+                                  placeholder="Gebruikersnaam of emailadres"
                                   type="text"
                                   style={style.input}
                                   fullWidth

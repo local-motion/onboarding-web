@@ -11,14 +11,13 @@ import { allVerificationCodeCharactersPattern, verificationCodeLength, isValidVe
 import { clearVerificationCookies } from '../auth/VerificationLinkHandler';
 
 
-
 /**
  * This form allows an existing user to authenticate himself and thereby create a user session
  */
 class ConfirmSignUpForm extends Component {
     constructor(props) {
         super(props);
-        bindMethods(['onChangeUsername', 'onChangeVerificationCode'], this)
+        bindMethods(['onChangeUsername', 'onChangeVerificationCode', 'confirmSignUp', 'resendCode'], this)
     }
 
     componentDidMount() {
@@ -35,29 +34,35 @@ class ConfirmSignUpForm extends Component {
 
     confirmSignUp() {
         const {username, verificationCode} = this.props
-        console.log('submitting confirm sign up with ' + verificationCode);
+        if (username && verificationCode) {
+            console.log('submitting confirm sign up with ' + verificationCode);
 
-        this.props.setWaitingForServerResponse()
+            this.props.setWaitingForServerResponse()
 
-        Auth.confirmSignUp(username, verificationCode)
-            .then(() => this.confirmSuccess(username))
-            .catch(error => {
-                console.log('error in confirm signup: ', error)
-                if (error.code === "NotAuthorizedException" && error.message === "User cannot be confirm. Current status is CONFIRMED")
-                    this.confirmSuccess(username)
-                else
-                    this.handleError(error)
-            })
+            Auth.confirmSignUp(username, verificationCode)
+                .then(() => this.confirmSuccess(username))
+                .catch(error => {
+                    console.log('error in confirm signup: ', error)
+                    if (error.code === "NotAuthorizedException" && error.message === "User cannot be confirm. Current status is CONFIRMED")
+                        this.confirmSuccess(username)
+                    else
+                        this.handleError(error)
+                })
+        }
     }
 
     resendCode() {
         const {username} = this.props
-        console.log('resend code to ' + username);
-        Auth.resendSignUp(username)
-            .then(() => {
-                this.props.openInformationDialog('Code verstuurd', 'De verification code is naar jouw emailadres verstuurd.')
-            })
-            .catch(error => this.handleError(error));
+        if (!username)
+            this.props.displayError('Vul je gebruikersnaam of emailadres in')
+        else {
+            console.log('resend code to ' + username);
+            Auth.resendSignUp(username)
+                .then(() => {
+                    this.props.openInformationDialog('Code verstuurd', 'De verification code is naar jouw emailadres verstuurd.')
+                })
+                .catch(error => this.handleError(error));
+        }
     }
 
     confirmSuccess(username) {
@@ -70,7 +75,7 @@ class ConfirmSignUpForm extends Component {
 
     handleError(error) {
         console.log('confirm sign up error', error);
-        clearVerificationCookies()
+        this.props.clearWaitingForServerResponse()
         this.props.displayError(getErrorMessage(error.code, error.message))
     }
 
@@ -78,13 +83,13 @@ class ConfirmSignUpForm extends Component {
         this.props.setUsername(event.target.value)
     }
     onChangeVerificationCode(event) {
-        const verificationCode = event.target.value
+        const verificationCode = event.target.value.trim()
         if (allVerificationCodeCharactersPattern.test(verificationCode) && verificationCode.length <= verificationCodeLength)
             this.props.setVerificationCode(verificationCode)
     }
 
-    catchEnterSubmit(e){
-        if(e.keyCode === 13 && e.shiftKey === false) {
+    catchEnterSubmit(event, isReadyToSubmit){
+        if(event.keyCode === 13 && event.shiftKey === false && isReadyToSubmit) {
             this.confirmSignUp();
         }
     }
@@ -94,7 +99,7 @@ class ConfirmSignUpForm extends Component {
 
         const isInCard = this.props.location.pathname.includes('workspace');
 
-        const showSubmitButton = username && verificationCode && isValidVerificationCode(verificationCode) && !waitingForServerResponse
+        const isReadyToSubmit = username && verificationCode && isValidVerificationCode(verificationCode) && !waitingForServerResponse
 
         return (
             <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
@@ -113,14 +118,14 @@ class ConfirmSignUpForm extends Component {
                         <form
                             style={style}
                             onKeyDown={
-                                event => this.catchEnterSubmit(event)
+                                event => this.catchEnterSubmit(event, isReadyToSubmit)
                             }
                         >
                             <TextField
                                 type="text"
                                 fullWidth
                                 variant={"outlined"}
-                                placeholder="Gebruikersnaam"
+                                placeholder="Gebruikersnaam of emailadres"
                                 style={style.input}
                                 value={username}
                                 onChange={this.onChangeUsername}
@@ -143,7 +148,7 @@ class ConfirmSignUpForm extends Component {
                                 variant="contained"
                                 color="primary"
                                 className={"pagination-button-step"}
-                                disabled={!showSubmitButton}
+                                disabled={!isReadyToSubmit}
                             >
                                 Bevestig
                             </Button>
@@ -151,7 +156,7 @@ class ConfirmSignUpForm extends Component {
                             <Button
                               variant="text"
                               style={{...style.loginButton, ...style.extraButton }}
-                              onClick={() => changeForm('forgotPassword')}
+                              onClick={this.resendCode}
                             >
                                 Stuur code opnieuw
                             </Button>

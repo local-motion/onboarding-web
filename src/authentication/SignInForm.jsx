@@ -113,8 +113,8 @@ class SignInForm extends Component {
         this.props.setPassword(event.target.value)
     }
 
-    catchEnterSubmit(e){
-        if(e.keyCode === 13 && e.shiftKey === false) {
+    catchEnterSubmit(event, isReadyToSubmit){
+        if (event.keyCode === 13 && event.shiftKey === false && isReadyToSubmit) {
             this.signIn();
         }
     }
@@ -124,9 +124,9 @@ class SignInForm extends Component {
 
         const isInCard = this.props.location.pathname.includes('workspace');
 
-        // To allow for the browser to auto-populate the username and password field, which we cannot detect the submit button is shown when both
+        // To allow for the browser to auto-populate the username and password field, which we cannot detect, the submit button is shown when both
         // fields are populated, but also when a field is not present yet.
-        const showSubmitButton =    !waitingForServerResponse &&
+        const isReadyToSubmit =    !waitingForServerResponse &&
                                     (
                                         !document.getElementById('signInFormUsername') || !document.getElementById('signInFormPassword') ||
                                         (document.getElementById('signInFormUsername').value && document.getElementById('signInFormPassword').value)
@@ -149,7 +149,7 @@ class SignInForm extends Component {
                         <form
                             style={style}
                             onKeyDown={
-                                event => this.catchEnterSubmit(event)
+                                event => this.catchEnterSubmit(event, isReadyToSubmit)
                             }
                         >
                             <TextField
@@ -162,7 +162,8 @@ class SignInForm extends Component {
                                 value={username}
                                 onChange={this.onChangeUsername}
                                 autoFocus={!username}
-                            />
+                                autoComplete="username"
+                                />
                             <TextField
                                 placeholder="Wachtwoord"
                                 id="signInFormPassword"
@@ -180,7 +181,7 @@ class SignInForm extends Component {
                                 variant="contained"
                                 color="primary"
                                 className={"pagination-button-step"}
-                                disabled={!showSubmitButton}
+                                disabled={!isReadyToSubmit}
                             >
                                 Inloggen
                             </Button>

@@ -42,7 +42,7 @@ class PasswordResetForm extends Component {
             passwordFocus: false,
         }
 
-        bindMethods(['resetPassword', 'onChangeVerificationCode', 'onChangePassword', 'onChangeRepeatedPassword', 'onFocusChangePassword'], this)
+        bindMethods(['resetPassword', 'onChangeVerificationCode', 'onChangeUsername', 'onChangePassword', 'onChangeRepeatedPassword', 'onFocusChangePassword'], this)
     }
 
 
@@ -86,9 +86,13 @@ class PasswordResetForm extends Component {
 
 
     onChangeVerificationCode(event) {
-        const verificationCode = event.target.value
+        const verificationCode = event.target.value.trim()
         if (allVerificationCodeCharactersPattern.test(verificationCode) && verificationCode.length <= verificationCodeLength)
             this.props.setVerificationCode(verificationCode)
+    }
+    onChangeUsername(event) {
+        const username = event.target.value.trim()
+        this.props.setUsername(username)
     }
     onChangePassword(event) {
         this.props.setPassword(event.target.value)
@@ -105,7 +109,7 @@ class PasswordResetForm extends Component {
     }
 
     render() {
-        const { verificationCode, password, waitingForServerResponse, changeForm, classes } = this.props
+        const { verificationCode, username, password, waitingForServerResponse, changeForm, classes } = this.props
         const {repeatedPassword, passwordFocus} = this.state
 
         const verificationCodeError = verificationCode &&!isValidVerificationCode(verificationCode) ? 'De code moet uit ' + verificationCodeLength + ' cijfers bestaan' : ''
@@ -115,7 +119,7 @@ class PasswordResetForm extends Component {
 
         const isInCard = this.props.location.pathname.includes('workspace');
 
-        const isReadyToSubmit = verificationCode && password && repeatedPassword &&
+        const isReadyToSubmit = verificationCode && username && password && repeatedPassword &&
                                 !verificationCodeError && !passwordError && !repeatedPasswordError &&
                                 !waitingForServerResponse
 
@@ -129,11 +133,8 @@ class PasswordResetForm extends Component {
                     <h1 className={"grunge-title"}>Wachtwoord reset</h1>
                     <div className={"signin-wrapper"}>
                         <p>Geef de code uit de wachtwoordresetmail en kies een nieuw wachtwoord</p>
-                        <form
-                            style={style}
-                            onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
-                        >
-                            <TextField
+                        {/* The verification code field is placed outside the form so the Chrome password manager does not misinterpret the verification code for the username */}
+                        <TextField
                                 type="text"
                                 fullWidth
                                 variant={"outlined"}
@@ -145,6 +146,21 @@ class PasswordResetForm extends Component {
                                 autoComplete='off'
                                 />
                             {verificationCodeError && <p className={"error"}>{verificationCodeError}</p>}
+                        <form
+                            style={style}
+                            onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                        >
+                            {/* The username field is here mainly to allow password manager to store the new username-password combination */}
+                            <TextField
+                                  placeholder="Gebruikersnaam of emailadres"
+                                  type="text"
+                                  style={style.input}
+                                  fullWidth
+                                  variant={"outlined"}
+                                  value={username}
+                                  onChange={this.onChangeUsername}
+                                  autoComplete="username"
+                                  />
                             <TextField
                                 type="password"
                                 placeholder="Kies een wachtwoord"
