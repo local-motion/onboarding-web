@@ -1,57 +1,95 @@
 import React from "react";
-// @material-ui/core components
+import { NavLink, Route, Switch } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
-import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
+import Button from "@material-ui/core/Button/Button";
 
-import Header from "../../components/Header/Header.jsx";
-import Footer from "../../components/Footer/Footer.jsx";
-import GridContainer from "../../components/Grid/GridContainer.jsx";
-import GridItem from "../../components/Grid/GridItem.jsx";
-import BackButton from "../../components/BackButton/BackButton";
+import { container } from "../../assets/jss/material-kit-react";
+import MyProfile from "./MyProfile";
+import MyActies from "./MyActies";
+import WrappedHeader from "../../components/Header/WrappedHeader";
+import Footer from "../../components/Footer/Footer";
 
+
+const styles = theme => ({
+    wrapper: {
+        background: '#FFF',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        minHeight: '100vh',
+        height: '100%',
+    },
+    main: {
+        ...container,
+        flex: 1,
+        margin: '-100px 0',
+        padding: '0 !important',
+    },
+    links: {},
+    link: {
+        color: '#085ca6',
+        border: '1px solid rgb(177, 222, 254)',
+        backgroundColor: '#FFF',
+        boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
+        borderRadius: 25,
+        fontSize: 14,
+        padding: '10px 45px',
+
+        '&:hover': {
+            backgroundColor: 'rgb(238, 106, 111)',
+            boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
+            border: '1px solid rgb(238, 106, 111)',
+            color: '#FFF',
+        },
+
+        '&:first-child': {
+            marginRight: 20,
+        },
+    },
+    activeLink: {
+        background: '#ec2e52',
+        border: '1px solid #ec2e52',
+        color: '#FFF',
+    },
+});
+
+const links = [
+    { name: 'Mijn Profiel', link: '/mijn-profiel' },
+    { name: 'Mijn Acties', link: '/mijn-acties' },
+];
 
 class UserProfile extends React.Component {
+    getNavButton = ({ link, name }) => {
+        const { classes } = this.props;
+
+        return (
+          <Button
+            className={classes.link}
+            color="primary"
+            activeClassName={classes.activeLink}
+            to={link}
+            component={NavLink}
+            key={link}
+          >{name}</Button>
+        );
+    };
 
     render() {
-        const { classes, ...rest } = this.props;
+        const { classes } = this.props;
+
         return (
-          <div className={classes.container}>
+          <div className={classes.wrapper}>
+              <WrappedHeader />
 
-              <Header
-                fixed
-                color="white"
-                changeColorOnScroll={{
-                    height: 50,
-                    color: "white"
-                }}
-                {...rest}
-              />
+              <div className={classes.main}>
+                  <div className={classes.links}>
+                      {links.map(this.getNavButton)}
+                  </div>
 
-              <BackButton className={classes.backButton} />
-
-              <div className={classes.mainDown}>
-                  <GridContainer className={"grid-container"}>
-                      <GridItem xs={12} sm={12} md={6} className={classes.container}>
-                          <h2>Over Rookvrij Spelen</h2>
-
-                          Dit platform is een initiatief van het Longfonds en ABN AMRO. Met Rookvrij Spelen willen we je helpen om een speeltuin bij jou in de buurt rookvrij te maken. Dat doen we door je handige tools & tips aan te bieden. Door je in contact te brengen met het bestuur van de speeltuin én met buurtgenoten die je willen helpen.<br />
-                          Hoe meer mensen een speeltuin rookvrij willen hebben, hoe groter de kans dat het bestuur van de speeltuinvereniging dit onderwerp op de agenda zet en hier mee aan de slag gaat.
-
-                          <h3>Op weg naar een Rookvrije Generatie</h3>
-                          Het rookvrij maken van speelplekken maakt deel uit van de beweging ‘op weg naar een Rookvrije Generatie’. Deze beweging is een gezamenlijk initiatief van het Longfonds, KWF Kankerbestrijding en de Hartstichting. In elke fase van het opgroeien willen we kinderen beschermen tegen tabaksrook en de verleiding om te gaan roken. Zodat ze opgroeien als een generatie die zélf kan en zal kiezen voor een gezonde, rookvrije toekomst.
-
-                          <h3>Waarom is het zo belangrijk dat kinderen rookvrij kunnen spelen?</h3>
-                          Iedereen wil dat kinderen spelen in een gezonde en veilige omgeving. Jonge longen zijn kwetsbaar. Zien roken, doet roken. Als kinderen anderen zien roken, lijkt dat normaal en misschien zelfs aantrekkelijk. Een rookvrije speeltuin geeft het goede voorbeeld aan kinderen.
-                          <ul>
-                              <li>Roken is de belangrijkste te voorkomen oorzaak van ziekte en sterfte in Nederland.</li>
-                              <li>Roken is erg verslavend. Kinderen zijn extra gevoelig voor verslaving: hoe jonger je begint met roken, hoe lastiger het is om te stoppen.</li>
-                              <li>Roken begint vaak op jonge leeftijd. Twee derde van rokers is begonnen voor zijn 18e.</li>
-                              <li>Iedere week raken honderden kinderen verslaafd aan roken.</li>
-                          </ul>
-                          <b>Wil je dat kinderen rookvrij kunnen spelen? Zet dan hier de eerste stap!</b>
-
-                      </GridItem>
-                  </GridContainer>
+                  <Switch>
+                      <Route exact path="/mijn-profiel" key="My Profile" component={MyProfile}/>
+                      <Route exact path="/mijn-acties" key="My Acties" component={MyActies}/>
+                  </Switch>
               </div>
 
               <Footer />
@@ -60,4 +98,4 @@ class UserProfile extends React.Component {
     }
 }
 
-export default withStyles(componentsStyle)(UserProfile);
+export default withStyles(styles)(UserProfile);

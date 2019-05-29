@@ -1,41 +1,30 @@
 import React from "react";
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
 import { withTranslation } from "react-i18next";
 
-import Header from "components/Header/Header.jsx";
-import HeaderLinks from "components/Header/HeaderLinks.jsx";
-import Footer from "components/Footer/Footer.jsx";
+import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import Footer from "../../components/Footer/Footer.jsx";
 import TermsText from "./TermsText";
 import BackButton from "../../components/BackButton/BackButton";
+import WrappedHeader from "../../components/Header/WrappedHeader";
 
-class Terms extends React.Component {
-  render() {
-    const { classes, ...rest } = this.props;
-    return (
+
+const Terms = ({ classes }) => (
+  <div className={classes.wrapper}>
+      <WrappedHeader customStyle={classes.customWrappedHeader}/>
+
       <div className={classes.container}>
-        <Header
-          brand={"Rookvrije generatie"}
-          rightLinks={<HeaderLinks />}
-          fixed
-          color="white"
-          changeColorOnScroll={{
-            height: 50,
-            color: "white"
-          }}
-          {...rest}
-        />
-        <BackButton className={classes.backButton} />
+          <BackButton className={classes.backButton}/>
 
-        <div className={classes.mainDown}>
-          <TermsText />
-        </div>
-        <Footer />
+          <div className={classes.mainDown}>
+              <TermsText/>
+          </div>
+
       </div>
-    );
-  }
-}
+
+      <Footer/>
+  </div>
+);
 
 export default withStyles(componentsStyle)(
   withTranslation("translations")(Terms)

@@ -21,6 +21,7 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
+import UserProfile from "./views/UserProfile/UserProfile";
   
 const mapDispatchToProps = (dispatch) => ({
     onUserSignedIn: user => dispatch(userSignedIn(user))
@@ -48,6 +49,8 @@ class App extends React.Component {
                         <Route exact path="/privacy" key="Privacy Statement" component={Privacy}/>
                         <Route exact path="/faq" key="Frequently Asked Questions" component={FAQ}/>
                         <Route exact path="/terms" key="Terms of Use" component={Terms}/>
+                        <Route exact path="/mijn-profiel" key="My Profile" component={UserProfile}/>
+                        <Route exact path="/mijn-acties" key="My Acties" component={UserProfile}/>
 
                         <Route exact path="/workspace/" key="Workspace" component={Workspace}/>
 

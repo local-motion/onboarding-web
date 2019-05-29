@@ -1,11 +1,13 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import connect from "react-redux/es/connect/connect";
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import HeaderLinks from "../../../components/Header/HeaderLinks";
 import { container } from "../../../assets/jss/material-kit-react";
+import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 
 const styles = theme => ({
     landingAppBar: {
@@ -120,4 +122,8 @@ const OnboardingHeader = ({ classes, history, location, user }) => {
     );
 };
 
-export default withStyles(styles)(withRouter(OnboardingHeader));
+const mapStateToProps = state => ({
+    user: getUser(state),
+});
+
+export default withStyles(styles)(withRouter(connect(mapStateToProps)(OnboardingHeader)));

@@ -20,8 +20,6 @@ import CommunicateAboutSmokefreeAgreementCard from "../Cards/CommunicateAboutSmo
 import ShowPlaygroundIsSmokefreeCard from "../Cards/ShowPlaygroundIsSmokefreeCard";
 import WeAreSmokefreeCard from "../Cards/WeAreSmokefreeCard";
 import EvaluateCard from "../Cards/EvaluateCard";
-import Header from "../../../components/Header/Header";
-import HeaderLinks from "../../../components/Header/HeaderLinks";
 import GridContainer from "../../../components/Grid/GridContainer";
 import GridItem from "../../../components/Grid/GridItem";
 import Footer from "../../../components/Footer/Footer";
@@ -37,6 +35,7 @@ import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
 import AddFindPlayground from "../Cards/AddFindPlayground";
 import { ensurePlaygroundDetails, stopPlaygroundDetailsStream } from "../../../components/Playground/PlaygroundActions";
+import WrappedHeader from "../../../components/Header/WrappedHeader";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -48,6 +47,7 @@ l275 313 0 53 c0 43 -5 60 -26 84 -22 26 -33 31 -70 31 -34 0 -50 -6 -73 -27z"></p
       </g>
   </SvgIcon>
 );
+
 
 class WorkspacePage extends PureComponent {
     constructor() {
@@ -181,7 +181,7 @@ class WorkspacePage extends PureComponent {
     }
 
     render() {
-        const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
+        const { phases, playground, user, location: { pathname }, startPathUrl, classes } = this.props;
         const { expandedPhase } = this.state;
 
         const prev = getPrevStep(phases, pathname);
@@ -191,22 +191,14 @@ class WorkspacePage extends PureComponent {
 
         return (
           <React.Fragment>
-              <Header
-                rightLinks={<HeaderLinks />}
-                fixed
-                color="white"
-                changeColorOnScroll={{
-                    height: 50,
-                    color: "white"
-                }}
-                {...rest}
-              />
+              <WrappedHeader customStyle={classes.customWrappedHeader}/>
 
               <div className={classNames(classes.container + " phase-explainer-container")}>
-                  <BackButton where="home" />
 
                   <GridContainer className={"grid-container"}>
                       <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
+                          <BackButton where="home" />
+
                           <div className={"title-wrapper"}>
                               <h2 className={classes.playgroundTitle}>{playground ? playground.name : 'Actiepagina'}</h2>
                           </div>

@@ -13,7 +13,7 @@ import Statistics from "./Sections/Statistics";
 import Playgrounds from "./Sections/Playgrounds/Playgrounds";
 import AboutUs from "./Sections/AboutUs";
 import SmokefreePhases from "./Sections/SmokefreePhases";
-import OnboardingFooter from "./Sections/OnboardingFooter";
+import Footer from "../../components/Footer/Footer";
 
 const mapStateToProps = state => ({
     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -107,7 +107,7 @@ class Onboarding extends React.Component {
 
                 <SmokefreePhases onCtaClick={this.toggleAddPlayground} />
 
-                <OnboardingFooter />
+                <Footer />
             </div>
         );
     }
