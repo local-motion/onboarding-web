@@ -5,19 +5,17 @@ import Close from "@material-ui/icons/Close";
 
 import PlaygroundIcon from "../../../../components/PlaygroundIcons/PlaygroundIcons";
 import workspaceWelcomeStyle from "./WorkspaceWelcomeStyle";
-import { getActivePhaseUrl, getStatus, getWorkspaceStartLink, titlePrefix } from "../../../../misc/WorkspaceHelpers";
-import { playgroundIcons } from "../../../../components/PlaygroundIcons/playgroundIconsConstants";
+import {
+    getActivePhaseUrl,
+    getPhaseIcon,
+    getWorkspaceStartLink,
+    titlePrefix
+} from "../../../../misc/WorkspaceHelpers";
 import Statistics from "../../../../components/Statistics/Statistics";
 import { slugifyPlaygroundName } from "../../../../components/Playground/PlaygroundActions";
 import { Helmet } from "react-helmet";
 
 class WorkspaceWelcomeContent extends Component {
-    constructor(props) {
-        super(props);
-
-        this.getPhaseIcon = this.getPhaseIcon.bind(this);
-    }
-
     componentDidMount() {
         this.goToActivePhaseIfJoined();
     }
@@ -69,12 +67,6 @@ class WorkspaceWelcomeContent extends Component {
         history.push(`/actie/${slugifyPlaygroundName(playground)}`);
     }
 
-    getPhaseIcon() {
-        const status = getStatus(this.props.playground);
-
-        return playgroundIcons.find(({ title }) => title === status);
-    }
-
     render() {
         const { classes, playground, user, view, onClosePopup } = this.props;
 
@@ -114,7 +106,7 @@ class WorkspaceWelcomeContent extends Component {
               <div className={`${classes.mainImage} ${getSmallClassFor('smallMainImage')}`} />
 
               <div className={`${classes.icons} ${getSmallClassFor('smallIcons')}`}>
-                  <PlaygroundIcon view={view} icon={this.getPhaseIcon()} />
+                  <PlaygroundIcon view={view} icon={getPhaseIcon(playground)} />
               </div>
 
               <Statistics playground={playground} view={view} />

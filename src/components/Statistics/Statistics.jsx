@@ -4,6 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import SvgIcon from "@material-ui/core/SvgIcon";
 
 import { slugifyPlaygroundName } from "../Playground/PlaygroundActions";
+import { getSmokeFreeDate } from "../../misc/WorkspaceHelpers";
 
 const styles = theme => ({
     statistics: {
@@ -131,11 +132,7 @@ const styles = theme => ({
     },
 });
 
-function getSmokeFreeDate(smokeFreeDate) {
-    return smokeFreeDate
-      ? new Date(smokeFreeDate).toLocaleDateString()
-      : 'Onbekend';
-}
+
 
 const Statistics = ({ playground, classes, view }) => {
     const isViewSmall = view === 'small';

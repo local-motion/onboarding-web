@@ -10,6 +10,7 @@ import WrappedHeader from "../../components/Header/WrappedHeader";
 import Footer from "../../components/Footer/Footer";
 import connect from "react-redux/es/connect/connect";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
+import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
 
 
 const styles = theme => ({
@@ -78,7 +79,7 @@ class UserProfile extends React.Component {
     };
 
     render() {
-        const { classes, user } = this.props;
+        const { classes, user, playgrounds } = this.props;
 
         if (!user) return <div>Loading...</div>;
 
@@ -93,7 +94,7 @@ class UserProfile extends React.Component {
 
                   <Switch>
                       <Route exact path="/mijn-profiel" key="My Profile" render={() => <MyProfile user={user}/>}/>
-                      <Route exact path="/mijn-acties" key="My Acties" render={() => <MyActies user={user}/>}/>
+                      <Route exact path="/mijn-acties" key="My Acties" render={() => <MyActies user={user} playgrounds={playgrounds}/>}/>
                   </Switch>
               </div>
 
@@ -104,6 +105,7 @@ class UserProfile extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+    playgrounds: getAllPlaygrounds(state),
     user: getUser(state),
 });
 
