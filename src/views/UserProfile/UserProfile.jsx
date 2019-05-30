@@ -8,6 +8,8 @@ import MyProfile from "./MyProfile";
 import MyActies from "./MyActies";
 import WrappedHeader from "../../components/Header/WrappedHeader";
 import Footer from "../../components/Footer/Footer";
+import connect from "react-redux/es/connect/connect";
+import { getUser } from "../../components/UserProfile/UserProfileReducer";
 
 
 const styles = theme => ({
@@ -76,7 +78,9 @@ class UserProfile extends React.Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, user } = this.props;
+
+        if (!user) return <div>Loading...</div>;
 
         return (
           <div className={classes.wrapper}>
@@ -88,8 +92,8 @@ class UserProfile extends React.Component {
                   </div>
 
                   <Switch>
-                      <Route exact path="/mijn-profiel" key="My Profile" component={MyProfile}/>
-                      <Route exact path="/mijn-acties" key="My Acties" component={MyActies}/>
+                      <Route exact path="/mijn-profiel" key="My Profile" render={() => <MyProfile user={user}/>}/>
+                      <Route exact path="/mijn-acties" key="My Acties" render={() => <MyActies user={user}/>}/>
                   </Switch>
               </div>
 
@@ -99,4 +103,8 @@ class UserProfile extends React.Component {
     }
 }
 
-export default withStyles(styles)(UserProfile);
+const mapStateToProps = (state) => ({
+    user: getUser(state),
+});
+
+export default withStyles(styles)(connect(mapStateToProps)(UserProfile));

@@ -80,8 +80,8 @@ const headerLinksStyle = theme => ({
     },
     profileIcon: {
         fill: "#3f51b5",
-        height: "20px !important",
-        width: "20px !important",
+        height: "25px !important",
+        width: "25px !important",
         margin: "0 !important",
 
         [theme.breakpoints.down("xs")]: {

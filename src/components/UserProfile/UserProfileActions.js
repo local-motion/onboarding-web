@@ -19,6 +19,7 @@ export const fetchUserProfile = () => executeQuery( {
           profile {
               id
               username
+              emailAddress
           }
       }
     `, 
