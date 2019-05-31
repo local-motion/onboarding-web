@@ -29,6 +29,10 @@ const styles = theme => ({
             width: '100%',
             padding: 0,
         },
+
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: '95%',
+        },
     },
     logo: {
         color: 'rgb(8, 92, 166)',
@@ -40,12 +44,13 @@ const styles = theme => ({
         padding: 0,
 
         [theme.breakpoints.down('sm')]: {
-            margin: 10,
+            margin: 15,
             fontSize: 25,
         },
 
         [theme.breakpoints.down('xs')]: {
             fontSize: 20,
+            margin: 10,
         },
 
         '& > span': {

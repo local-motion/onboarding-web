@@ -29,7 +29,16 @@ const styles = theme => ({
         padding: '0 !important',
         zIndex: 99,
     },
-    links: {},
+    links: {
+        [theme.breakpoints.down('xs')]: {
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            padding: '0 10px',
+        },
+    },
     link: {
         color: '#085ca6',
         border: '1px solid rgb(177, 222, 254)',
@@ -38,6 +47,8 @@ const styles = theme => ({
         borderRadius: 25,
         fontSize: 14,
         padding: '10px 45px',
+        margin: 10,
+        width: 190,
 
         '&:hover': {
             backgroundColor: 'rgb(238, 106, 111)',
@@ -46,8 +57,11 @@ const styles = theme => ({
             color: '#FFF',
         },
 
-        '&:first-child': {
-            marginRight: 20,
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 12,
+            width: 150,
+            padding: '7px 25px',
+            margin: 5,
         },
     },
     activeLink: {

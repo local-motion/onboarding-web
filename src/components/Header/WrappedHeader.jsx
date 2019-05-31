@@ -23,7 +23,7 @@ const styles = theme => ({
 });
 
 const WrappedHeader = ({ classes, customStyle }) => (
-  <div className={`${classes.headerWrapper} ${customStyle}`}>
+  <div className={`${classes.headerWrapper} ${customStyle || ''}`}>
       <Header />
   </div>
 );

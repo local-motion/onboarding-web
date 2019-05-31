@@ -28,7 +28,8 @@ const styles = theme => ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        width: "100%"
+        width: "100%",
+        marginBottom: 20,
     },
     avatarWrapper: {
         alignItems: "center",
@@ -83,6 +84,10 @@ const styles = theme => ({
         width: '100%',
         maxWidth: '60%',
         marginTop: 15,
+
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: '90%',
+        },
     },
     settingsTitle: {
         display: 'flex',
@@ -91,19 +96,41 @@ const styles = theme => ({
         fontFamily: 'dk_black_bamboo-webfont',
         marginBottom: 5,
         marginTop: 30,
+
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 22,
+            margin: '30px 5px 5px',
+        },
     },
     settingsIcon: {
         height: 27,
         marginRight: 10,
         width: 33,
     },
+    checkbox: {
+        marginRight: 0,
+        marginLeft: 0,
+    },
     actions: {
         margin: '20px 0 40px',
+
+        [theme.breakpoints.down('xs')]: {
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            margin: '20px 0 20px',
+        },
     },
     button: {
         padding: '15px 40px',
         color: '#FFF',
         boxShadow: 'none',
+
+        [theme.breakpoints.down('xs')]: {
+            margin: 5,
+            width: 150,
+            padding: '10px 30px',
+        },
     },
     cancelButton: {
         marginRight: 15,
@@ -112,6 +139,10 @@ const styles = theme => ({
         '&:hover': {
             background: '#a1a1a1',
             boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            marginRight: 5,
         },
     },
     saveButton: {
@@ -125,14 +156,10 @@ const styles = theme => ({
     disabled: {
         color: '#FFF !important',
     },
-    checkbox: {
-        marginRight: 0,
-    },
     removeButton: {
         color: '#FFF',
         background: '#eb621b',
         boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
-        marginTop: 25,
 
         '&:hover': {
             background: '#ef8149',
