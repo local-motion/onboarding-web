@@ -37,6 +37,7 @@ import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
 import AddFindPlayground from "../Cards/AddFindPlayground";
 import { ensurePlaygroundDetails, stopPlaygroundDetailsStream } from "../../../components/Playground/PlaygroundActions";
+import Authenticator from "../../../authentication/Authenticator";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -245,11 +246,11 @@ class WorkspacePage extends PureComponent {
                               <Switch>
 
                                   <Route exact path="/workspace/login" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/workspace/add-find-playground" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user} />}/>
                                   <Route exact path="/workspace/:initiativeId/login" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
 
                                   {
                                       playground && (
