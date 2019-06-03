@@ -24,7 +24,7 @@ const styles = theme => ({
         background: '#FFF',
         boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
         borderRadius: 5,
-        padding: 15,
+        padding: 5,
         margin: '0 auto',
 
         [theme.breakpoints.down('md')]: {

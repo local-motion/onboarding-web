@@ -11,7 +11,7 @@ import { slugifyPlaygroundName } from "../../components/Playground/PlaygroundAct
 
 const styles = theme => ({
     wrapper: {
-        margin: '40px 0'
+        margin: '40px 15px'
     },
     pageTitle: {
         color: 'rgb(8, 92, 166)',
@@ -25,31 +25,53 @@ const styles = theme => ({
         border: "1px dashed #b1defe",
         boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
         display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
+        flexWrap: 'nowrap',
+        justifyContent: 'center',
         marginBottom: 15,
+        alignItems: 'center',
+
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+        },
     },
     playgroundImage: {
         height: 100,
         width: 100,
+
+        [theme.breakpoints.down('sm')]: {
+            display: 'none'
+        },
     },
     info: {
         borderRight: "1px dashed #b1defe",
         display: 'flex',
-        flexWrap: 'wrap',
         flexDirection: 'column',
         flexGrow: 1,
         padding: 20,
+
+        [theme.breakpoints.down('sm')]: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRight: 'none',
+        },
     },
     details: {
         display: 'flex',
         flexWrap: 'wrap',
         marginTop: 7,
+
+        [theme.breakpoints.down('xs')]: {
+            justifyContent: 'center',
+        },
     },
     name: {
         color: 'rgb(39, 131, 190)',
-        fontSize: 23,
+        fontSize: 21,
         fontWeight: 600,
+
+        [theme.breakpoints.down('sm')]: {
+            textAlign: 'center',
+        },
     },
     detailWrapper: {
         display: 'flex',
@@ -57,8 +79,15 @@ const styles = theme => ({
         justifyContent: 'center',
         alignItems: 'center',
 
-        '&:first-child': {
-            marginRight: 20,
+        marginRight: 20,
+
+        [theme.breakpoints.down('sm')]: {
+            margin: '0 10px 10px',
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            minWidth: 130,
+            justifyContent: 'flex-start',
         },
     },
     infoWrapper: {
@@ -85,12 +114,37 @@ const styles = theme => ({
         alignItems: 'center',
         flexBasis: '45%',
         padding: 20,
+        flexShrink: 0,
+
+        [theme.breakpoints.down('sm')]: {
+            justifyContent: 'center',
+            flexDirection: 'column',
+            margin: 0,
+            padding: 10,
+            flexBasis: '35%',
+            borderLeft: '1px dashed #b1defe',
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            borderLeft: 'none',
+            borderTop: '1px dashed #b1defe',
+            flexDirection: 'row',
+            width: '100%',
+        },
     },
     phaseWrapper: {
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
         alignItems: 'center',
+
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: 10,
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            margin: '0 10px 10px',
+        },
     },
     phaseIconBg: {
         backgroundSize: "contain",
@@ -111,6 +165,16 @@ const styles = theme => ({
     },
     phaseInfo: {
         marginLeft: 10,
+
+        '@media (max-width: 768px)': {
+            marginLeft: 0,
+            textAlign: 'center',
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 10,
+            textAlign: 'left',
+        },
     },
     phase: {
         color: 'rgb(98, 98, 98)',
@@ -131,6 +195,12 @@ const styles = theme => ({
         '&:hover': {
             background: '#ef8149',
             color: '#FFF',
+        },
+
+        [theme.breakpoints.down('sm')]: {
+            padding: '0px 10px',
+            height: 35,
+            fontSize: 12,
         },
     },
 });
@@ -163,7 +233,7 @@ class MyActies extends Component {
               <div className={classes.pageTitle}>Mijn Acties</div>
 
               <div className={classes.list}>
-                  {playgrounds.map((playground) => {
+                  {playgrounds.slice(0, 3).map((playground) => {
                       const icon = getPhaseIcon(playground);
 
                       return (

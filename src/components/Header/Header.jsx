@@ -25,7 +25,7 @@ const styles = theme => ({
         backgroundColor: '#fff !important',
         position: 'relative',
 
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.up('xs')]: {
             width: '100%',
             padding: 0,
         },
