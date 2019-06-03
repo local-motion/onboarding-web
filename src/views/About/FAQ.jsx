@@ -24,7 +24,7 @@ const FAQ = ({ classes }) => (
           <title>{titlePrefix} | Veelgestelde vragen</title>
       </Helmet>
 
-      <WrappedHeader customStyle={classes.customWrappedHeader}/>
+      <WrappedHeader fullWidth customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>
           <BackButton className={classes.backButton}/>
@@ -143,7 +143,7 @@ const FAQ = ({ classes }) => (
               </GridContainer>
           </div>
       </div>
-      <Footer/>
+      <Footer fullWidth />
   </div>
 );
 

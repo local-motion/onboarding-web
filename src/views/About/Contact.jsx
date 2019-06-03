@@ -19,7 +19,7 @@ const Contact = ({ classes }) => (
           <title>{titlePrefix} | Contact</title>
       </Helmet>
 
-      <WrappedHeader customStyle={classes.customWrappedHeader}/>
+      <WrappedHeader fullWidth customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>
 
@@ -42,7 +42,7 @@ const Contact = ({ classes }) => (
               </GridContainer>
           </div>
       </div>
-      <Footer/>
+      <Footer fullWidth />
   </div>
 );
 

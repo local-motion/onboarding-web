@@ -112,7 +112,7 @@ class UserProfile extends React.Component {
                   </Switch>
               </div>
 
-              <Footer />
+              <Footer fullWidth />
           </div>
         );
     }

@@ -18,7 +18,7 @@ const About = ({ classes }) => (
           <title>{titlePrefix} | Over ons</title>
       </Helmet>
 
-      <WrappedHeader customStyle={classes.customWrappedHeader}/>
+      <WrappedHeader fullWidth customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>
           <BackButton className={classes.backButton}/>
@@ -61,7 +61,7 @@ const About = ({ classes }) => (
           </div>
       </div>
 
-      <Footer/>
+      <Footer fullWidth />
   </div>
 );
 

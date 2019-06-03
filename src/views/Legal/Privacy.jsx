@@ -17,7 +17,7 @@ const Privacy = ({ classes }) => (
           <title>{titlePrefix} | Privacyverklaring</title>
       </Helmet>
 
-      <WrappedHeader customStyle={classes.customWrappedHeader}/>
+      <WrappedHeader fullWidth customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>
           <BackButton className={classes.backButton}/>
@@ -27,7 +27,7 @@ const Privacy = ({ classes }) => (
           </div>
       </div>
 
-      <Footer/>
+      <Footer fullWidth />
   </div>
 );
 

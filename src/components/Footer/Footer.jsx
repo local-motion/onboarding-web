@@ -14,16 +14,18 @@ const styles = theme => ({
             padding: '70px 20px 30px',
         },
     },
+    fullWidthFooter: {
+        boxShadow: '0px -12px 19px 1px rgba(40, 40, 40, 0.12)',
+        marginTop: 40,
+    },
     contentWrapper: {
         ...container,
-        width: '80%',
+        width: '90%',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         flexWrap: 'wrap',
         background: '#FFF',
-        boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
-        borderRadius: 5,
         padding: 5,
         margin: '0 auto',
 
@@ -39,6 +41,10 @@ const styles = theme => ({
         [theme.breakpoints.down('xs')]: {
             flexDirection: 'column',
         },
+    },
+    shortContentWrapper: {
+        boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
+        borderRadius: 5,
     },
     links: {
         alignItems: 'center',
@@ -119,10 +125,10 @@ const styles = theme => ({
 });
 
 
-const Footer = ({ classes }) => {
+const Footer = ({ classes, fullWidth }) => {
     return (
-      <footer className={classes.footer}>
-          <div className={classes.contentWrapper}>
+      <footer className={fullWidth ? classes.fullWidthFooter : classes.footer}>
+          <div className={`${classes.contentWrapper} ${fullWidth ? '' : classes.shortContentWrapper}`}>
               <div className={classes.links}>
                   <Link to="/over-ons" className={classes.link}>Over ons</Link>
                   <Link to="/gebruiksvoorwaarden" className={classes.link}>Gebruiksvoorwaarden</Link>

@@ -17,7 +17,7 @@ const Terms = ({ classes }) => (
           <title>{titlePrefix} | Gebruiksvoorwaarden Platform RookvrijSpelen.nl</title>
       </Helmet>
 
-      <WrappedHeader customStyle={classes.customWrappedHeader}/>
+      <WrappedHeader fullWidth customStyle={classes.customWrappedHeader}/>
 
       <div className={classes.container}>
           <BackButton className={classes.backButton}/>
@@ -27,7 +27,7 @@ const Terms = ({ classes }) => (
           </div>
       </div>
 
-      <Footer/>
+      <Footer fullWidth />
   </div>
 );
 

@@ -6,24 +6,12 @@ import Header from "./Header";
 const styles = (theme) => ({
     headerWrapper: {
         position: 'relative',
-
-        '&:before': {
-            content: '""',
-            position: 'absolute',
-            background: `url(${require('../../assets/img/landing/footer-base.jpg')}) repeat-x top`,
-            backgroundSize: 'cover',
-            transform: 'rotate(180deg)',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            height: 170,
-        },
+        marginBottom: 10,
     },
 });
 
 const WrappedHeader = ({ classes, customStyle, fullWidth = false }) => (
-  <div className={`${fullWidth ? '' : classes.headerWrapper} ${customStyle || ''}`}>
+  <div className={`${classes.headerWrapper} ${customStyle || ''}`}>
       <Header fullWidth={fullWidth} />
   </div>
 );

@@ -403,7 +403,7 @@ class WorkspacePage extends PureComponent {
                   </GridContainer>
               </div>
 
-              <Footer/>
+              <Footer fullWidth />
           </React.Fragment>
         );
     }
