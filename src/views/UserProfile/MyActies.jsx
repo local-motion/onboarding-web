@@ -166,7 +166,7 @@ const styles = theme => ({
     phaseInfo: {
         marginLeft: 10,
 
-        '@media (max-width: 768px)': {
+        '@media (max-width: 767px)': {
             marginLeft: 0,
             textAlign: 'center',
         },
