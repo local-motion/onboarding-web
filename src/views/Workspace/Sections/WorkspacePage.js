@@ -9,7 +9,6 @@ import classNames from "classnames";
 
 import { StyledStepLink } from "../../../components/Step/Step";
 import ExpansionPhase from "../../../components/ExpansionPhase/ExpansionPhase";
-import CustomAuthenticator from "../../../auth/CustomAuthenticator";
 import RecruitVolunteersCard from "../Cards/RecruitVolunteersCard";
 import CollectOpinionsCard from "../Cards/CollectOpinionsCard";
 import DistributeFlyersCard from "../Cards/DistributeFlyersCard";
@@ -44,6 +43,7 @@ import {
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 import Hidden from "@material-ui/core/Hidden/Hidden";
 import { Helmet } from "react-helmet";
+import Authenticator from "../../../authentication/Authenticator";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -280,11 +280,12 @@ class WorkspacePage extends PureComponent {
                               <Switch>
 
                                   <Route exact path="/actie/inloggen" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/actie/starten" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user} />}/>
                                   <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin"
-                                         render={(props) => <CustomAuthenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+
 
                                   {
                                       playground && (
