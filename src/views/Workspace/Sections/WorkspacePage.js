@@ -9,7 +9,6 @@ import classNames from "classnames";
 
 import { StyledStepLink } from "../../../components/Step/Step";
 import ExpansionPhase from "../../../components/ExpansionPhase/ExpansionPhase";
-import CustomAuthenticator from "../../../auth/CustomAuthenticator";
 import RecruitVolunteersCard from "../Cards/RecruitVolunteersCard";
 import CollectOpinionsCard from "../Cards/CollectOpinionsCard";
 import DistributeFlyersCard from "../Cards/DistributeFlyersCard";

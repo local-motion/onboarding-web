@@ -7,7 +7,6 @@ import { validateToMessage } from '../components/validation/Validations';
 import { style } from './AuthenticatorStyles';
 import { passwordMaximumLength, passwordMinimumLength, containsLowerCaseLetterPattern, containsUpperCaseLetterPattern, containsDecimalPattern, containsSpecialCharacterPattern, isValidPassword, containsOnlyValidCharactersPattern, allowedSpecialCharacters, isValidVerificationCode, allVerificationCodeCharactersPattern, verificationCodeLength } from './AuthenticatorValidations';
 import { bindMethods } from '../utils/Generics';
-import { clearVerificationCookies } from './VerificationLinkHandler';
 
 
 const styles = theme => ({
@@ -62,7 +61,7 @@ class PasswordResetForm extends Component {
                 // Leave the password in memory so it is correctly prefilled for sign in
                 this.props.setVerificationCode('')
                 this.props.clearWaitingForServerResponse()
-                clearVerificationCookies()
+                this.props.clearVerificationCookies()
                 this.props.changeForm('signIn')
             })
             .catch(error => {
@@ -109,7 +108,7 @@ class PasswordResetForm extends Component {
     }
 
     render() {
-        const { verificationCode, username, password, waitingForServerResponse, changeForm, classes } = this.props
+        const { verificationCode, username, password, verificationLink, waitingForServerResponse, changeForm, classes } = this.props
         const {repeatedPassword, passwordFocus} = this.state
 
         const verificationCodeError = verificationCode &&!isValidVerificationCode(verificationCode) ? 'De code moet uit ' + verificationCodeLength + ' cijfers bestaan' : ''
@@ -132,20 +131,26 @@ class PasswordResetForm extends Component {
                 <div className={"secure-app-container"}>
                     <h1 className={"grunge-title"}>Wachtwoord reset</h1>
                     <div className={"signin-wrapper"}>
-                        <p>Geef de code uit de wachtwoordresetmail en kies een nieuw wachtwoord</p>
+                        {verificationLink ?
+                            <p>Kies een nieuw wachtwoord</p>
+                        :
+                            <p>Geef de code uit de wachtwoordresetmail en kies een nieuw wachtwoord</p>
+                        }
                         {/* The verification code field is placed outside the form so the Chrome password manager does not misinterpret the verification code for the username */}
+                        {!verificationLink &&
                         <TextField
-                                type="text"
-                                fullWidth
-                                variant={"outlined"}
-                                placeholder="Code"
-                                value={verificationCode}
-                                onChange={this.onChangeVerificationCode}
-                                style={style.input}
-                                autoFocus
-                                autoComplete='off'
-                                />
-                            {verificationCodeError && <p className={"error"}>{verificationCodeError}</p>}
+                            type="text"
+                            fullWidth
+                            variant={"outlined"}
+                            placeholder="Code"
+                            value={verificationCode}
+                            onChange={this.onChangeVerificationCode}
+                            style={style.input}
+                            autoFocus={!verificationCode}
+                            autoComplete='off'
+                            />
+                        }
+                        {verificationCodeError && <p className={"error"}>{verificationCodeError}</p>}
                         <form
                             style={style}
                             onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
@@ -159,6 +164,7 @@ class PasswordResetForm extends Component {
                                   variant={"outlined"}
                                   value={username}
                                   onChange={this.onChangeUsername}
+                                //   disabled={verificationLink}
                                   autoComplete="username"
                                   />
                             <TextField
@@ -171,6 +177,7 @@ class PasswordResetForm extends Component {
                                 onFocus={() => this.onFocusChangePassword(true)}
                                 onBlur={() => this.onFocusChangePassword(false)}
                                 style={style.input}
+                                autoFocus={!!verificationCode}
                                 autoComplete="new-password"
                             />
                             {passwordFocus &&
@@ -211,7 +218,11 @@ class PasswordResetForm extends Component {
                             <div style={style.left}>
                                 <Button
                                     style={style.extraButton}
-                                    onClick={() => changeForm('forgotPassword')}>
+                                    onClick={() => {
+                                        console.log('button pressed')
+                                        changeForm('forgotPassword')
+                                    }
+                                    }>
                                     Terug naar nieuw wachtwoord aanvragen
                                 </Button>
                             </div>

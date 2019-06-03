@@ -3,7 +3,6 @@ import { withRouter } from "react-router-dom";
 import {Button, TextField} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
-import { setPasswordResetCookies } from './VerificationLinkHandler';
 import { style } from './AuthenticatorStyles';
 import { bindMethods } from '../utils/Generics';
 
@@ -24,6 +23,13 @@ class ForgotPasswordForm extends Component {
                 .then(data => {
                     console.log('sent password reset code to ' + username);
                     this.props.clearWaitingForServerResponse()
+                    this.props.setVerificationCode('')
+
+                    // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
+                    const {initiativeId} = this.props.match.params
+                    if (initiativeId)
+                        this.props.storeInitiativeForVerification(initiativeId)
+
                     this.props.changeForm('passwordReset')
                 })
                 .catch(error => {
@@ -40,10 +46,6 @@ class ForgotPasswordForm extends Component {
                         this.props.displayError(getErrorMessage(error.code, error.message))
                 })
         
-            // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
-            const {initiativeId} = this.props.match.params
-            if (initiativeId)
-                setPasswordResetCookies(initiativeId)
         }
     }
 

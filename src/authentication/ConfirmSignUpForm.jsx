@@ -8,7 +8,6 @@ import TextField from "@material-ui/core/TextField/TextField";
 import { style } from './AuthenticatorStyles';
 import { bindMethods } from '../utils/Generics';
 import { allVerificationCodeCharactersPattern, verificationCodeLength, isValidVerificationCode } from './AuthenticatorValidations';
-import { clearVerificationCookies } from '../auth/VerificationLinkHandler';
 
 
 /**
@@ -17,8 +16,19 @@ import { clearVerificationCookies } from '../auth/VerificationLinkHandler';
 class ConfirmSignUpForm extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            autoSubmitTriggered: false,
+        }
         bindMethods(['onChangeUsername', 'onChangeVerificationCode', 'confirmSignUp', 'resendCode'], this)
     }
+    
+    // componentDidUpdate() {
+    //     console.log('update of componentDidMount, verificationLink, autoSubmitTriggered', this.props.verificationLink, this.state.autoSubmitTriggered)
+    //     if (this.props.verificationLink  && !this.state.autoSubmitTriggered) {
+    //         this.setState({autoSubmitTriggered: true})
+    //         this.confirmSignUp()
+    //     }
+    // }
 
     componentDidMount() {
         this.props.setCta && this.props.setCta({
@@ -26,6 +36,12 @@ class ConfirmSignUpForm extends Component {
             ctaText: 'Maak een account',
             ctaDisabled: false,
         });
+
+        console.log('update of componentDidMount, verificationLink, autoSubmitTriggered', this.props.verificationLink, this.state.autoSubmitTriggered)
+        if (this.props.verificationLink  && !this.state.autoSubmitTriggered) {
+            this.setState({autoSubmitTriggered: true})
+            this.confirmSignUp()
+        }
     }
 
     componentWillUnmount() {
@@ -67,10 +83,10 @@ class ConfirmSignUpForm extends Component {
 
     confirmSuccess(username) {
         console.log('confirm sign up success with ' + username);
-        clearVerificationCookies()
+        this.props.clearVerificationCookies()
         this.props.setVerificationCode('')
         this.props.clearWaitingForServerResponse()
-        this.props.changeForm('signIn')
+        this.props.changeForm(this.state.autoSubmitTriggered ? 'signUpSuccess' : 'signIn')
     }
 
     handleError(error) {

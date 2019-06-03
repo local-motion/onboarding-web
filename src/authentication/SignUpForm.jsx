@@ -10,7 +10,6 @@ import TermsText from "../views/Legal/TermsText";
 import PrivacyText from "../views/Legal/PrivacyText";
 import { checkEmailExists } from '../components/UserProfile/UserProfileActions';
 import { connect } from "react-redux";
-import { setSignupConfirmCookies } from '../auth/VerificationLinkHandler';
 import { validateToMessage } from '../components/validation/Validations';
 import { style } from './AuthenticatorStyles';
 import { passwordMaximumLength, passwordMinimumLength, containsLowerCaseLetterPattern, containsUpperCaseLetterPattern, containsDecimalPattern, containsSpecialCharacterPattern, usernameMaximumLength, usernameValidations, isValidPassword, containsOnlyValidCharactersPattern, allowedSpecialCharacters, isValidEmailAddress } from './AuthenticatorValidations';
@@ -64,7 +63,9 @@ class SignUpForm extends Component {
         bindMethods(['signUp', 'togglePrivacyDialog', 'toggleTermsDialog', 'onChangeUsername', 'onChangePassword', 'onChangeRepeatedPassword', 'onChangeEmailAddress',
                      'onFocusChangePassword', 'onChangeAcceptedTerms'], this)
     }
+    
 
+    
     signUp() {
         const errorMessage = this.validatePreSubmit()
         if (errorMessage) {
@@ -97,7 +98,7 @@ class SignUpForm extends Component {
         // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
         const {initiativeId} = this.props.match.params
         if (initiativeId)
-            setSignupConfirmCookies(initiativeId)
+            this.props.storeInitiativeForVerification(initiativeId)
     }
 
     signUpError(error) {
