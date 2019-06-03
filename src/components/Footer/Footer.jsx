@@ -15,14 +15,14 @@ const styles = theme => ({
         },
     },
     fullWidthBackground: {
-        background: `url(${require('../../assets/img/landing/footer-base.jpg')}) repeat-x top`,
-        padding: '50px 0 0',
+        // background: `url(${require('../../assets/img/landing/footer-base.jpg')}) repeat-x top`,
+        // padding: '50px 0 0',
     },
     fullWidthFooter: {
         marginTop: 30,
         background: '#FFF',
         position: 'relative',
-        boxShadow: '0px -12px 19px 1px rgba(40, 40, 40, 0.12)',
+        // boxShadow: '0px -12px 19px 1px rgba(40, 40, 40, 0.12)',
     },
     contentWrapper: {
         ...container,
