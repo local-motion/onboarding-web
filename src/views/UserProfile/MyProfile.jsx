@@ -156,15 +156,6 @@ const styles = theme => ({
     disabled: {
         color: '#FFF !important',
     },
-    removeButton: {
-        color: '#FFF',
-        background: '#eb621b',
-        boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
-
-        '&:hover': {
-            background: '#ef8149',
-        },
-    },
 });
 
 const UserIcon = ({ className }) => (
@@ -428,8 +419,6 @@ class MyProfile extends Component {
                   <GridItem xs={12} sm={12} md={6}>
                       <Button
                         fullWidth
-                        variant="contained"
-                        className={classes.removeButton}
                         onClick={this.removeProfile}
                       >Verwijder mijn profiel</Button>
                   </GridItem>
