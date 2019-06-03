@@ -18,7 +18,6 @@ const styles = theme => ({
     container: {
         ...container,
         marginTop: 100,
-        marginBottom: 70
     },
     paper: {
         alignItems: "center",

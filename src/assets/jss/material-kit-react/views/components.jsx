@@ -112,7 +112,7 @@ const componentsStyle = theme => ({
         marginBottom: 20,
     },
     customWrappedHeader: {
-        padding: '15px 0 60px',
+        paddingBottom: 30,
     },
     closeIconWrapper: {
         alignItems: 'center',

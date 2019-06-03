@@ -3,7 +3,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import Header from "./Header";
 
-const styles = theme => ({
+const styles = (theme) => ({
     headerWrapper: {
         position: 'relative',
 
@@ -17,14 +17,14 @@ const styles = theme => ({
             left: 0,
             bottom: 0,
             right: 0,
+            height: 170,
         },
-        padding: '15px 0 120px',
     },
 });
 
-const WrappedHeader = ({ classes, customStyle }) => (
-  <div className={`${classes.headerWrapper} ${customStyle || ''}`}>
-      <Header />
+const WrappedHeader = ({ classes, customStyle, fullWidth = false }) => (
+  <div className={`${fullWidth ? '' : classes.headerWrapper} ${customStyle || ''}`}>
+      <Header fullWidth={fullWidth} />
   </div>
 );
 

@@ -15,7 +15,7 @@ const CustomAuthenticator = (props) => {
     return (
       <React.Fragment>
           <Helmet>
-              <title>{titlePrefix} | Login</title>
+              <title>{titlePrefix} | Inloggen</title>
           </Helmet>
           <Authenticator
             hideDefault>

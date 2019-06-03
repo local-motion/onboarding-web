@@ -13,26 +13,31 @@ const styles = theme => ({
     landingAppBar: {
         ...container,
         color: '#626262',
-        width: '80%',
+        width: '90%',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         margin: '0 auto',
-        padding: 0,
-        borderRadius: 5,
-        boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
+        padding: '0 !important',
         backgroundColor: '#fff !important',
         position: 'relative',
-
-        [theme.breakpoints.up('xs')]: {
-            width: '100%',
-            padding: 0,
-        },
+        boxShadow: 'none',
 
         [theme.breakpoints.down('xs')]: {
             maxWidth: '95%',
+            width: '100%',
         },
+    },
+    shortAppBar: {
+        borderRadius: 5,
+        boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
+    },
+    fullWidth: {
+        width: '100%',
+        background: '#FFF',
+        position: 'relative',
+        boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
     },
     logo: {
         color: 'rgb(8, 92, 166)',
@@ -112,28 +117,30 @@ const styles = theme => ({
     },
 });
 
-const Header = ({ classes, history, location, user }) => {
+const Header = ({ classes, history, location, user, fullWidth }) => {
     const signInClick = () => {
-        history.push(`/login?target=${location.pathname}`)
+        history.push(`/actie/inloggen?target=${location.pathname}`)
     };
 
     return (
-      <AppBar className={classes.landingAppBar}>
-          <Link to={'/'}>
-              <div className={classes.logo}>Rookvrij<span>spelen</span></div>
-          </Link>
+      <div className={fullWidth ? classes.fullWidth : ''}>
+          <AppBar className={`${classes.landingAppBar} ${fullWidth ? '' : classes.shortAppBar}`}>
+              <Link to={'/'}>
+                  <div className={classes.logo}>Rookvrij<span>spelen</span></div>
+              </Link>
 
-          {
-              user
-                ? <HeaderLinks />
-                : (
-                  <Button onClick={signInClick} className={classes.loginButton}>
-                      <span className={classes.loginText}>Inloggen</span>
-                      <div className={classes.addUserIcon} />
-                  </Button>
-                )
-          }
-      </AppBar>
+              {
+                  user
+                    ? <HeaderLinks />
+                    : (
+                      <Button onClick={signInClick} className={classes.loginButton}>
+                          <span className={classes.loginText}>Inloggen</span>
+                          <div className={classes.addUserIcon} />
+                      </Button>
+                    )
+              }
+          </AppBar>
+      </div>
     );
 };
 

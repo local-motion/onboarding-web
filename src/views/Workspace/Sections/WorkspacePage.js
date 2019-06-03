@@ -219,7 +219,7 @@ class WorkspacePage extends PureComponent {
 
         return (
           <React.Fragment>
-              <WrappedHeader customStyle={classes.customWrappedHeader}/>
+              <WrappedHeader fullWidth customStyle={classes.customWrappedHeader}/>
 
               <Helmet>
                   <title>{titlePrefix} | Actiepagina</title>

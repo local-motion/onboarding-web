@@ -25,7 +25,7 @@ const styles = theme => ({
     main: {
         ...container,
         flex: 1,
-        margin: '-100px 0',
+        margin: '30px 0 0',
         padding: '0 !important',
         zIndex: 99,
     },
@@ -99,7 +99,7 @@ class UserProfile extends React.Component {
 
         return (
           <div className={classes.wrapper}>
-              <WrappedHeader />
+              <WrappedHeader fullWidth />
 
               <div className={classes.main}>
                   <div className={classes.links}>
