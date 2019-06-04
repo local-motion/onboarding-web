@@ -17,7 +17,7 @@ import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
 import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 import { signOutUser, deleteUser } from "../UserProfile/UserProfileActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
-import { isDeveloperMode } from "../../utils/DeveloperMode";
+// import { isDeveloperMode } from "../../utils/DeveloperMode";
 import { openConfirmationDialog } from "../SimpleDialog/SimpleDialogActions.js";
 import Activities from "../Activities/Activities";
 
@@ -74,10 +74,10 @@ class HeaderLinks extends React.Component {
     }
 
     render() {
-        const { classes, user, deleteUser, signOutUser } = this.props;
+        const { classes, user, signOutUser } = this.props;
         const { notificationsOpen } = this.state;
 
-        const devModeIndicator = isDeveloperMode() ? 'on' : 'off';
+        // const devModeIndicator = isDeveloperMode() ? 'on' : 'off';
 
         if (!user) return null;
 
