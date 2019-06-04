@@ -154,6 +154,9 @@ const Header = ({ classes, history, location, user, fullWidth, signOutUser }) =>
     const signInClick = () => history.push(`/actie/inloggen?target=${location.pathname}`);
     const gotoMyProfile = () => history.push('/mijn-profiel');
     const gotoMyActies = () => history.push('/mijn-acties');
+    const openDrawer = () => toggleDrawer(true);
+    const closeDrawer = () => toggleDrawer(false);
+    const isOpen = !!isDrawerOpen;
 
     return (
       <div className={fullWidth ? classes.fullWidth : ''}>
@@ -176,7 +179,7 @@ const Header = ({ classes, history, location, user, fullWidth, signOutUser }) =>
                                   <IconButton
                                     color="inherit"
                                     aria-label="toggle drawer"
-                                    onClick={toggleDrawer}
+                                    onClick={openDrawer}
                                     className={classes.hamburgerMenuButton}
                                   >
                                       <Menu/>
@@ -185,14 +188,14 @@ const Header = ({ classes, history, location, user, fullWidth, signOutUser }) =>
                                   <Drawer
                                     classes={{ paper: classes.drawerPaper }}
                                     anchor="right"
-                                    open={isDrawerOpen}
-                                    onClose={toggleDrawer}
+                                    open={isOpen}
+                                    onClose={closeDrawer}
                                   >
                                       <div
                                         tabIndex={0}
                                         role="button"
                                         onClick={toggleDrawer}
-                                        onKeyDown={toggleDrawer}
+                                        onKeyDown={closeDrawer}
                                         className={classes.drawerLinks}
                                       >
                                           <Button className={classes.drawerLink} onClick={gotoMyProfile}>Mijn profiel</Button>
