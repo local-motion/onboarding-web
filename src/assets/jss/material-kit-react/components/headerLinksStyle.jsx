@@ -36,7 +36,7 @@ const headerLinksStyle = theme => ({
         border: "1px solid #b1defe",
         width: 46,
         height: 46,
-        margin: "0 15px",
+        margin: "0 30px",
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

@@ -27,7 +27,7 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         margin: '100px auto 240px',
-        paddingLeft: 25,
+        paddingLeft: 50,
 
         [theme.breakpoints.down('md')]: {
             width: '100%',

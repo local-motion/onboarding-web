@@ -262,6 +262,8 @@ class MyProfile extends Component {
         const { classes } = this.props;
         const { username, email, notifications, oldPassword, newPassword, repeatNewPassword } = this.state;
 
+        const disabled = true;
+
         return (
           <div className={classes.container}>
               <Helmet>
@@ -286,6 +288,7 @@ class MyProfile extends Component {
                             name="username"
                             value={username}
                             onChange={this.onChange}
+                            disabled={disabled}
                             inputProps={{
                                 style: {
                                     textAlign: 'center',
@@ -301,6 +304,7 @@ class MyProfile extends Component {
                             name="email"
                             value={email}
                             onChange={this.onChange}
+                            disabled={disabled}
                             inputProps={{
                                 style: {
                                     textAlign: 'center',
@@ -330,7 +334,7 @@ class MyProfile extends Component {
                               <Button
                                 variant="contained"
                                 className={`${classes.button} ${classes.cancelButton}`}
-                                disabled={this.isUserInfoButtonDisabled()}
+                                disabled={disabled}
                                 classes={{ disabled: classes.disabled }}
                                 onClick={this.setDefaultUserInfo}
                               >Annuleer</Button>
@@ -338,7 +342,7 @@ class MyProfile extends Component {
                               <Button
                                 variant="contained"
                                 className={`${classes.button} ${classes.saveButton}`}
-                                disabled={this.isUserInfoButtonDisabled()}
+                                disabled={disabled}
                                 classes={{ disabled: classes.disabled }}
                                 onClick={this.saveUserInfo}
                               >Opslaan</Button>
@@ -361,6 +365,7 @@ class MyProfile extends Component {
                             name="oldPassword"
                             value={oldPassword}
                             onChange={this.onChange}
+                            disabled={disabled}
                             inputProps={{
                                 style: {
                                     textAlign: 'center',
@@ -376,6 +381,7 @@ class MyProfile extends Component {
                             name="newPassword"
                             value={newPassword}
                             onChange={this.onChange}
+                            disabled={disabled}
                             inputProps={{
                                 style: {
                                     textAlign: 'center',
@@ -391,6 +397,7 @@ class MyProfile extends Component {
                             name="repeatNewPassword"
                             value={repeatNewPassword}
                             onChange={this.onChange}
+                            disabled={disabled}
                             inputProps={{
                                 style: {
                                     textAlign: 'center',
@@ -402,7 +409,7 @@ class MyProfile extends Component {
                               <Button
                                 variant="contained"
                                 className={`${classes.button} ${classes.cancelButton}`}
-                                disabled={!this.isNewPasswordButtonDisabled()}
+                                disabled={disabled}
                                 classes={{ disabled: classes.disabled }}
                                 onClick={this.setDefaultPassword}
                               >Annuleer</Button>
@@ -410,7 +417,7 @@ class MyProfile extends Component {
                               <Button
                                 variant="contained"
                                 className={`${classes.button} ${classes.saveButton}`}
-                                disabled={!this.isNewPasswordValidToSave()}
+                                disabled={disabled}
                                 classes={{ disabled: classes.disabled }}
                                 onClick={this.saveNewPassword}
                               >Opslaan</Button>

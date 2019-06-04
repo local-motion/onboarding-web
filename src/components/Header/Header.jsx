@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Hidden from "@material-ui/core/Hidden";
 
 import HeaderLinks from "../../components/Header/HeaderLinks";
 import { container } from "../../assets/jss/material-kit-react";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
+import Drawer from "@material-ui/core/Drawer/Drawer";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/icons/Menu";
+import { signOutUser } from "../UserProfile/UserProfileActions";
 
 const styles = theme => ({
     landingAppBar: {
@@ -45,7 +50,7 @@ const styles = theme => ({
         fontFamily: 'dk_black_bamboo-webfont',
         letterSpacing: '1px',
         lineHeight: 1.2,
-        margin: '20px 15px',
+        margin: '20px 30px',
         padding: 0,
 
         [theme.breakpoints.down('sm')]: {
@@ -80,6 +85,22 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             padding: '10px 10px',
         },
+    },
+    hamburgerMenuButton: {},
+    drawerPaper: {
+        width: "80%",
+        maxWidth: 250,
+        paddingTop: 30,
+    },
+    drawerLinks: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
+    drawerLink: {
+        flexGrow: 1,
+        width: '100%',
     },
     loginButton: {
         color: '#FFF',
@@ -127,8 +148,11 @@ const styles = theme => ({
     },
 });
 
-const Header = ({ classes, history, location, user, fullWidth }) => {
+const Header = ({ classes, history, location, user, fullWidth, signOutUser }) => {
+    const [isDrawerOpen, toggleDrawer] = useState(false);
+
     const signInClick = () => history.push(`/actie/inloggen?target=${location.pathname}`);
+    const gotoMyProfile = () => history.push('/mijn-profiel');
     const gotoMyActies = () => history.push('/mijn-acties');
 
     return (
@@ -139,19 +163,52 @@ const Header = ({ classes, history, location, user, fullWidth }) => {
                       <div className={classes.logo}>Rookvrij<span>spelen</span></div>
                   </Link>
 
-                  {user && <Button className={classes.actiesButton} onClick={gotoMyActies}>Mijn acties</Button>}
+                  {user && <Hidden xsDown><Button className={classes.actiesButton} onClick={gotoMyActies}>Mijn acties</Button></Hidden>}
               </div>
 
-              {
-                  user
-                    ? <HeaderLinks />
-                    : (
-                      <Button onClick={signInClick} className={classes.loginButton}>
-                          <span className={classes.loginText}>Inloggen</span>
-                          <div className={classes.addUserIcon} />
-                      </Button>
-                    )
-              }
+                  {
+                      user
+                        ? (
+                          <React.Fragment>
+                              <Hidden xsDown><HeaderLinks /></Hidden>
+
+                              <Hidden smUp>
+                                  <IconButton
+                                    color="inherit"
+                                    aria-label="toggle drawer"
+                                    onClick={toggleDrawer}
+                                    className={classes.hamburgerMenuButton}
+                                  >
+                                      <Menu/>
+                                  </IconButton>
+
+                                  <Drawer
+                                    classes={{ paper: classes.drawerPaper }}
+                                    anchor="right"
+                                    open={isDrawerOpen}
+                                    onClose={toggleDrawer}
+                                  >
+                                      <div
+                                        tabIndex={0}
+                                        role="button"
+                                        onClick={toggleDrawer}
+                                        onKeyDown={toggleDrawer}
+                                        className={classes.drawerLinks}
+                                      >
+                                          <Button className={classes.drawerLink} onClick={gotoMyProfile}>Mijn profiel</Button>
+                                          <Button className={classes.drawerLink} onClick={gotoMyActies}>Mijn acties</Button>
+                                          <Button className={classes.drawerLink} onClick={signOutUser}>Uitloggen</Button>
+                                      </div>
+                                  </Drawer>
+                              </Hidden>
+                          </React.Fragment>
+                        ) : (
+                          <Button onClick={signInClick} className={classes.loginButton}>
+                              <span className={classes.loginText}>Inloggen</span>
+                              <div className={classes.addUserIcon} />
+                          </Button>
+                        )
+                  }
           </AppBar>
       </div>
     );
@@ -161,4 +218,8 @@ const mapStateToProps = state => ({
     user: getUser(state),
 });
 
-export default withStyles(styles)(withRouter(connect(mapStateToProps)(Header)));
+const mapDispatchToProps = dispatch => ({
+    signOutUser: () => dispatch(signOutUser()),
+});
+
+export default withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(Header)));
