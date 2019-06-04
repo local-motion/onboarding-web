@@ -17,7 +17,7 @@ import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
 import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 import { signOutUser, deleteUser } from "../UserProfile/UserProfileActions";
 import { getUser } from "../UserProfile/UserProfileReducer";
-import { isDeveloperMode, setDeveloperMode } from "../../utils/DeveloperMode";
+import { isDeveloperMode } from "../../utils/DeveloperMode";
 import { openConfirmationDialog } from "../SimpleDialog/SimpleDialogActions.js";
 import Activities from "../Activities/Activities";
 
@@ -55,10 +55,23 @@ class HeaderLinks extends React.Component {
     };
 
     gotoMyProfile = () => this.props.history.push('/mijn-profiel');
+    gotoMyActies = () => this.props.history.push('/mijn-acties');
 
     toggleDrawer = () => this.setState(
       ({ notificationsOpen }) => ({ notificationsOpen: !notificationsOpen })
     );
+
+    renderNotifications() {
+        const { classes } = this.props;
+
+        return (
+          <StyledBadge color="secondary" badgeContent={12} onClick={this.toggleDrawer}>
+              <IconButton size="small" color="primary" className={classes.navLink}>
+                  <NotificationsNone className={classes.navIcon} />
+              </IconButton>
+          </StyledBadge>
+        );
+    }
 
     render() {
         const { classes, user, deleteUser, signOutUser } = this.props;
@@ -70,12 +83,6 @@ class HeaderLinks extends React.Component {
 
         return (
               <div className={classes.list}>
-                  <StyledBadge color="secondary" badgeContent={12} onClick={this.toggleDrawer}>
-                      <IconButton size="small" color="primary" className={classes.navLink}>
-                          <NotificationsNone className={classes.navIcon} />
-                      </IconButton>
-                  </StyledBadge>
-
                   <CustomDropdown
                     noLiPadding
                     buttonText=""
@@ -91,11 +98,12 @@ class HeaderLinks extends React.Component {
                         <Typography className={classes.name}>Ingelogd als {user.name}</Typography>,
                         {divider: true},
                         <Button onClick={this.gotoMyProfile}>Mijn profiel</Button>,
-                        <Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,
-                        <Button onClick={deleteUser}>Uitschrijven</Button>,
+                        <Button onClick={this.gotoMyActies}>Mijn acties</Button>,
                         <Button onClick={signOutUser}>Uitloggen</Button>,
                     ]}
                   />
+                  {/*<Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,*/}
+                  {/*<Button onClick={deleteUser}>Uitschrijven</Button>,*/}
 
                   <Drawer
                     classes={{ paper: classes.notifications }}

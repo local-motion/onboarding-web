@@ -13,6 +13,9 @@ import { container } from "../../assets/jss/material-kit-react";
 import { titlePrefix } from "../../misc/WorkspaceHelpers";
 import GridContainer from "../../components/Grid/GridContainer";
 import GridItem from "../../components/Grid/GridItem";
+import { deleteUser } from "../../components/UserProfile/UserProfileActions";
+import { openConfirmationDialog } from "../../components/SimpleDialog/SimpleDialogActions";
+import connect from "react-redux/es/connect/connect";
 
 const styles = theme => ({
     container: {
@@ -232,7 +235,7 @@ class MyProfile extends Component {
     );
 
     removeProfile = () => {
-        console.log('remove profile');
+        this.props.deleteUser();
     };
 
     isUserInfoButtonDisabled = () => {
@@ -427,4 +430,14 @@ class MyProfile extends Component {
     }
 }
 
-export default withStyles(styles)(MyProfile);
+const mapDispatchToProps = dispatch => ({
+    deleteUser: () => dispatch(
+      openConfirmationDialog(
+        "Bevestig uitschrijven",
+        "Weet je zeker dat je je wilt uitschrijven?",
+        null, null, () => dispatch(deleteUser())
+      )
+    )
+});
+
+export default withStyles(styles)(connect(null, mapDispatchToProps)(MyProfile));
