@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
@@ -10,42 +9,15 @@ import {
     isUserManagerOfPlayground
 } from "../../../components/Playground/PlaygroundReducer";
 import { setSmokefreeDate } from "../../../components/Playground/PlaygroundActions";
-import Button from "@material-ui/core/Button/Button";
-import Check from "@material-ui/icons/Check";
+import PickIntroductionDateButton from "../components/PickIntroductionDateButton";
 
 const mapDispatchToProps = dispatch => ({
     setSmokefreeDate: (initiativeId, smokeFreeDate) => dispatch(setSmokefreeDate(initiativeId, smokeFreeDate))
 });
 
-const dateToString = date => {
-    let year = date.getFullYear();
-    let monthPadded = ("0" + (date.getMonth() + 1)).slice(-2);
-    let dayPadded = ("0" + date.getDate()).slice(-2);
-
-    return year + "-" + monthPadded + "-" + dayPadded;
-};
-
 const styles = ({
     contentItem: {
         marginBottom: '20px',
-    },
-    invisible: {
-        width: 0,
-        height: 0,
-        padding: 0,
-        border: 0,
-    },
-    datePickerWrapper: {
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        '& > div:first-child': {
-            width: 0,
-            height: 0,
-        },
-        '& > button': {
-            flexGrow: 1,
-        },
     },
     ctaDone: {
         marginLeft: 10,
@@ -59,10 +31,6 @@ class ChooseProperIntroductionDateCard extends React.Component {
 
         this.renderCustomButton = this.renderCustomButton.bind(this);
     }
-
-    state = {
-        isDatePickerOpened: false
-    };
 
     componentDidMount() {
         this.setCta();
@@ -88,42 +56,14 @@ class ChooseProperIntroductionDateCard extends React.Component {
     }
 
     renderCustomButton() {
-        const { classes, playground, user, setSmokefreeDate } = this.props;
-        const date = playground.smokeFreeDate || new Date();
-        const userIsManager = isUserManagerOfPlayground(user, playground);
-
-        const disabled = !userIsManager || playground.status === "NOT_STARTED";
+        const { playground, user, setSmokefreeDate } = this.props;
 
         return (
-          <div className={classes.datePickerWrapper}>
-              <DatePicker
-                ref={(ref) => {this.datePicker = ref}}
-                disabled={disabled}
-                className={classes.invisible}
-                dateFormat="dd-MM-YYYY"
-                selected={date}
-                onBlur={() => { console.log('hello!'); this.setState({ isDatePickerOpened: false }); }}
-                onChange={date => setSmokefreeDate(playground.id, dateToString(date))}
-              />
-
-              <Button
-                variant="contained"
-                className={`pagination-button-step${playground.smokeFreeDate ? '-done' : ''}`}
-                onClick={() => this.datePicker.setOpen(true)}
-                disabled={disabled}
-              >
-                  {
-                      playground.smokeFreeDate
-                        ? (
-                          <React.Fragment>
-                              {dateToString(playground.smokeFreeDate)}
-                              <Check className={this.props.classes.ctaDone} />
-                          </React.Fragment>
-                        )
-                        : "Kies een geschikt moment"
-                  }
-              </Button>
-          </div>
+          <PickIntroductionDateButton
+            playground={playground}
+            user={user}
+            setSmokefreeDate={setSmokefreeDate}
+          />
         );
     }
 

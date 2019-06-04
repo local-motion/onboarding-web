@@ -131,59 +131,57 @@ const styles = theme => ({
 });
 
 
-const Footer = ({ classes, fullWidth }) => {
+const Footer = ({ classes }) => {
     return (
-      <div className={fullWidth ? classes.fullWidthBackground : ''}>
-          <footer className={fullWidth ? classes.fullWidthFooter : classes.footer}>
-              <div className={`${classes.contentWrapper} ${fullWidth ? '' : classes.shortContentWrapper}`}>
-                  <div className={classes.links}>
-                      <Link to="/over-ons" className={classes.link}>Over ons</Link>
-                      <Link to="/gebruiksvoorwaarden" className={classes.link}>Gebruiksvoorwaarden</Link>
-                      <Link to="/privacyverklaring" className={classes.link}>Privacyverklaring</Link>
-                      <Link to="/veelgestelde-vragen" className={classes.link}>Veelgestelde vragen</Link>
-                      <Link to="/contact" className={classes.link}>Contact</Link>
-                  </div>
-                  <div className={classes.logos}>
-                      {/*<a*/}
-                        {/*href="https://www.kwf.nl/"*/}
-                        {/*className={classes.logoLink}*/}
-                        {/*target="_blank"*/}
-                        {/*rel="noopener noreferrer"*/}
-                      {/*>*/}
-                          {/*<img*/}
-                            {/*className={classes.image}*/}
-                            {/*src={require("assets/img/logo-kwf.png")}*/}
-                            {/*alt="Logo KWF Kankerfonds"*/}
-                          {/*/>*/}
-                      {/*</a>*/}
-                      <a
-                        href="https://www.longfonds.nl/"
-                        className={classes.logoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                          <img
-                            className={classes.image}
-                            src={require("assets/img/logo-longfonds.png")}
-                            alt="Logo Longfonds"
-                          />
-                      </a>
-                      {/*<a*/}
-                        {/*href="https://www.hartstichting.nl/"*/}
-                        {/*className={classes.logoLink}*/}
-                        {/*target="_blank"*/}
-                        {/*rel="noopener noreferrer"*/}
-                      {/*>*/}
-                          {/*<img*/}
-                            {/*className={classes.image}*/}
-                            {/*src={require("assets/img/logo-hartstichting-horizontal.png")}*/}
-                            {/*alt="Logo Hartstichting"*/}
-                          {/*/>*/}
-                      {/*</a>*/}
-                  </div>
-              </div>
-         </footer>
-      </div>
+        <footer className={classes.footer}>
+            <div className={`${classes.contentWrapper} ${classes.shortContentWrapper}`}>
+                <div className={classes.links}>
+                    <Link to="/over-ons" className={classes.link}>Over ons</Link>
+                    <Link to="/gebruiksvoorwaarden" className={classes.link}>Gebruiksvoorwaarden</Link>
+                    <Link to="/privacyverklaring" className={classes.link}>Privacyverklaring</Link>
+                    <Link to="/veelgestelde-vragen" className={classes.link}>Veelgestelde vragen</Link>
+                    <Link to="/contact" className={classes.link}>Contact</Link>
+                </div>
+                <div className={classes.logos}>
+                    {/*<a*/}
+                    {/*href="https://www.kwf.nl/"*/}
+                    {/*className={classes.logoLink}*/}
+                    {/*target="_blank"*/}
+                    {/*rel="noopener noreferrer"*/}
+                    {/*>*/}
+                    {/*<img*/}
+                    {/*className={classes.image}*/}
+                    {/*src={require("assets/img/logo-kwf.png")}*/}
+                    {/*alt="Logo KWF Kankerfonds"*/}
+                    {/*/>*/}
+                    {/*</a>*/}
+                    <a
+                      href="https://www.longfonds.nl/"
+                      className={classes.logoLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                        <img
+                          className={classes.image}
+                          src={require("assets/img/logo-longfonds.png")}
+                          alt="Logo Longfonds"
+                        />
+                    </a>
+                    {/*<a*/}
+                    {/*href="https://www.hartstichting.nl/"*/}
+                    {/*className={classes.logoLink}*/}
+                    {/*target="_blank"*/}
+                    {/*rel="noopener noreferrer"*/}
+                    {/*>*/}
+                    {/*<img*/}
+                    {/*className={classes.image}*/}
+                    {/*src={require("assets/img/logo-hartstichting-horizontal.png")}*/}
+                    {/*alt="Logo Hartstichting"*/}
+                    {/*/>*/}
+                    {/*</a>*/}
+                </div>
+            </div>
+        </footer>
     );
 };
 
