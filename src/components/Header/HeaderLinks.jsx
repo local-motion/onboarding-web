@@ -55,7 +55,6 @@ class HeaderLinks extends React.Component {
     };
 
     gotoMyProfile = () => this.props.history.push('/mijn-profiel');
-    gotoMyActies = () => this.props.history.push('/mijn-acties');
 
     toggleDrawer = () => this.setState(
       ({ notificationsOpen }) => ({ notificationsOpen: !notificationsOpen })
@@ -98,10 +97,10 @@ class HeaderLinks extends React.Component {
                         <Typography className={classes.name}>Ingelogd als {user.name}</Typography>,
                         {divider: true},
                         <Button onClick={this.gotoMyProfile}>Mijn profiel</Button>,
-                        <Button onClick={this.gotoMyActies}>Mijn acties</Button>,
                         <Button onClick={signOutUser}>Uitloggen</Button>,
                     ]}
                   />
+                  {/*<Button onClick={this.gotoMyActies}>Mijn acties</Button>,*/}
                   {/*<Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,*/}
                   {/*<Button onClick={deleteUser}>Uitschrijven</Button>,*/}
 

@@ -64,6 +64,16 @@ const styles = theme => ({
             marginLeft: 5,
         },
     },
+    left: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    actiesButton: {
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 12,
+        },
+    },
     menu: {
         padding: '10px 25px',
 
@@ -118,16 +128,19 @@ const styles = theme => ({
 });
 
 const Header = ({ classes, history, location, user, fullWidth }) => {
-    const signInClick = () => {
-        history.push(`/actie/inloggen?target=${location.pathname}`)
-    };
+    const signInClick = () => history.push(`/actie/inloggen?target=${location.pathname}`);
+    const gotoMyActies = () => history.push('/mijn-acties');
 
     return (
       <div className={fullWidth ? classes.fullWidth : ''}>
           <AppBar className={`${classes.landingAppBar} ${fullWidth ? '' : classes.shortAppBar}`}>
-              <Link to={'/'}>
-                  <div className={classes.logo}>Rookvrij<span>spelen</span></div>
-              </Link>
+              <div className={classes.left}>
+                  <Link to={'/'}>
+                      <div className={classes.logo}>Rookvrij<span>spelen</span></div>
+                  </Link>
+
+                  {user && <Button className={classes.actiesButton} onClick={gotoMyActies}>Mijn acties</Button>}
+              </div>
 
               {
                   user
