@@ -9,6 +9,8 @@ import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer
 import { getPhases, getWorkspaceStartLink, shouldWorkspaceUpdate } from "../../misc/WorkspaceHelpers";
 import WorkspacePage from "./Sections/WorkspacePage";
 import { createInitiative, slugifyPlaygroundName } from "../../components/Playground/PlaygroundActions";
+import { readFromBrowserStorage, deleteFromBrowserStorage } from "utils/Generics.js";
+import { STORAGE_KEY_CREATE_PLAYGROUND } from "views/Onboarding/Sections/Playgrounds/AddPlayground.jsx";
 
 const mapStateToProps = (state, ownProps) => ({
     playgrounds: getAllPlaygrounds(state).map(playground => ({
@@ -51,13 +53,15 @@ class WorkspaceTemplate extends React.Component {
     createLocalPlayground = () => {
         const { createInitiative, history, user } = this.props;
 
-        const playgroundToCreate = JSON.parse(localStorage.getItem('playgroundToCreate'));
+        // const playgroundToCreate = JSON.parse(localStorage.getItem('playgroundToCreate'));
+        const playgroundToCreate = readFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND);
 
         if (user && (playgroundToCreate !== null)) {
             const { name, lat, lng } = playgroundToCreate;
 
             createInitiative(name, lat, lng, (data, dispatch) => {
-                localStorage.removeItem('playgroundToCreate');
+                // localStorage.removeItem('playgroundToCreate');
+                deleteFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND);
 
                 const playground = {
                     id: data.createInitiative.id,

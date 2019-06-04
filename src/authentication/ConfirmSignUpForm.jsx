@@ -75,6 +75,7 @@ class ConfirmSignUpForm extends Component {
             console.log('resend code to ' + username);
             Auth.resendSignUp(username)
                 .then(() => {
+                    this.props.setVerificationCode('')
                     this.props.openInformationDialog('Code verstuurd', 'De verification code is naar jouw emailadres verstuurd.')
                 })
                 .catch(error => this.handleError(error));
@@ -83,7 +84,7 @@ class ConfirmSignUpForm extends Component {
 
     confirmSuccess(username) {
         console.log('confirm sign up success with ' + username);
-        this.props.clearVerificationCookies()
+        this.props.clearInitiativeForVerification()
         this.props.setVerificationCode('')
         this.props.clearWaitingForServerResponse()
         this.props.changeForm(this.state.autoSubmitTriggered ? 'signUpSuccess' : 'signIn')
@@ -112,8 +113,7 @@ class ConfirmSignUpForm extends Component {
 
     render() {
         const   { username, verificationCode, waitingForServerResponse, changeForm } = this.props
-
-        const isInCard = this.props.location.pathname.includes('workspace');
+        const isInCard = this.props.location.pathname.includes('actie');
 
         const isReadyToSubmit = username && verificationCode && isValidVerificationCode(verificationCode) && !waitingForServerResponse
 

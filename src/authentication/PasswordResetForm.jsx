@@ -61,7 +61,7 @@ class PasswordResetForm extends Component {
                 // Leave the password in memory so it is correctly prefilled for sign in
                 this.props.setVerificationCode('')
                 this.props.clearWaitingForServerResponse()
-                this.props.clearVerificationCookies()
+                this.props.clearInitiativeForVerification()
                 this.props.changeForm('signIn')
             })
             .catch(error => {
@@ -116,7 +116,7 @@ class PasswordResetForm extends Component {
         const passwordError = password && !isValidPassword(password) ? 'Het wachtwoord is ongeldig' : ''
         const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
 
-        const isInCard = this.props.location.pathname.includes('workspace');
+        const isInCard = this.props.location.pathname.includes('actie');
 
         const isReadyToSubmit = verificationCode && username && password && repeatedPassword &&
                                 !verificationCodeError && !passwordError && !repeatedPasswordError &&

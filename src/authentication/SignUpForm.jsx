@@ -85,7 +85,12 @@ class SignUpForm extends Component {
                         .then(() => {
                             this.props.setPassword('')                                    // clear password from memory
                             this.props.clearWaitingForServerResponse()
-                    
+
+                            // Save the initiative so it can be picked up when the user clicks the link in the verification mail
+                            const {initiativeName} = this.props.match.params
+                            if (initiativeName)
+                                this.props.storeInitiativeForVerification(initiativeName)
+                            
                             this.props.changeForm('confirmSignUp');
                     
                         })
@@ -94,11 +99,6 @@ class SignUpForm extends Component {
                         })
             },
         )
-
-        // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
-        const {initiativeId} = this.props.match.params
-        if (initiativeId)
-            this.props.storeInitiativeForVerification(initiativeId)
     }
 
     signUpError(error) {
@@ -167,7 +167,7 @@ class SignUpForm extends Component {
         const passwordError = password && !isValidPassword(password) ? 'Het wachtwoord is ongeldig' : ''
         const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
 
-        const isInCard = this.props.location.pathname.includes('workspace');
+        const isInCard = this.props.location.pathname.includes('actie');
 
         const isReadyToSubmit = emailAddress && username && password && repeatedPassword && acceptedTerms && 
                                 !emailAddressError && !usernameError && !passwordError && !repeatedPasswordError &&

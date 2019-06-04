@@ -7,19 +7,19 @@ import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import { getActivePhaseUrl } from '../misc/WorkspaceHelpers';
-import { bindMethods, copyProperties } from '../utils/Generics';
+import { bindMethods, copyProperties, readFromBrowserStorage, writeToBrowserStorage, deleteFromBrowserStorage } from '../utils/Generics';
 import ConfirmSignUpForm from './ConfirmSignUpForm';
 import { openInformationDialog, openErrorDialog } from '../components/SimpleDialog/SimpleDialogActions';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import PasswordResetForm from './PasswordResetForm';
-import { readCookie, eraseCookie, createCookie } from '../utils/CookieUtils';
 import queryString from 'query-string';
 import SignUpSuccessForm from './SignUpSuccessForm';
+import { STORAGE_KEY_CREATE_PLAYGROUND } from 'views/Onboarding/Sections/Playgrounds/AddPlayground';
 
 
 const mapStateToProps = (state, ownProps) => ({
-    playground: ownProps.match.params.initiativeId
-      ? getPlaygroundDetails(state, ownProps.match.params.initiativeId)
+    playground: ownProps.match.params.initiativeName
+      ? getPlaygroundDetails(state, ownProps.match.params.initiativeName)
       : null,
 });
 
@@ -28,17 +28,21 @@ const mapDispatchToProps = (dispatch) => ({
     openErrorDialog:        (title, message, buttonMessage, onClose) => dispatch(openErrorDialog(title, message, buttonMessage, onClose && (dispatch => onClose(dispatch)))),
 })
 
-// Cookies
-const VERIFICATION_INITIATIVE_COOKIE = 'verificationInitiative'
+// Constants
+const STORAGE_KEY_VERIFICATION_INITIATIVE = 'verificationInitiative'
+
+// const VERIFICATION_INITIATIVE_COOKIE = 'verificationInitiative'
 const VERIFICATION_TYPE_SIGNUP = 'signup'
 const VERIFICATION_TYPE_RESET_PASSWORD = 'reset_password'
 
-export const storeInitiativeForVerification = (initiativeId) => {
-    createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeId, 2)
+export const storeInitiativeForVerification = (initiativeName) => {
+    // createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeName, 2)
+    writeToBrowserStorage(STORAGE_KEY_VERIFICATION_INITIATIVE, initiativeName)
 }
 
-export const clearVerificationCookies = () => {
-    eraseCookie(VERIFICATION_INITIATIVE_COOKIE)
+export const clearInitiativeForVerification = () => {
+    // eraseCookie(VERIFICATION_INITIATIVE_COOKIE)
+    deleteFromBrowserStorage(STORAGE_KEY_VERIFICATION_INITIATIVE)
 }
 
 
@@ -63,13 +67,15 @@ class Authenticator extends Component {
         bindMethods(['changeForm', 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'onSignInSuccess', 'displayError',
                      'setWaitingForServerResponse', 'clearWaitingForServerResponse'], this)
 
-        const isInCard = !!this.props.match.params.initiativeId;
+        const isInCard = this.props.location.pathname.includes('actie');
         const params = queryString.parse(this.props.location.search)
         const verificationType = params.type
         const username = params.user
         const verificationCode = params.code
-        const initiativeId = readCookie(VERIFICATION_INITIATIVE_COOKIE)
         const {authenticatedUser, openAlreadyLoggedInDialog} = this.props                     
+        // const initiativeName = readCookie(VERIFICATION_INITIATIVE_COOKIE)
+        const initiativeName = readFromBrowserStorage(STORAGE_KEY_VERIFICATION_INITIATIVE)
+        const playgroundToCreate = readFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND)
 
         console.log('constructing authenticator: type, username, code:', verificationType, username, verificationCode)
 
@@ -78,10 +84,16 @@ class Authenticator extends Component {
                 this.props.history.push('/');
                 openAlreadyLoggedInDialog();
             }
-            else if (!isInCard && initiativeId) {
+            else if (!isInCard && initiativeName) {
                 // Let the VerificationLinkHandler within the particular workspace handle this
-                console.log('redirecting from verification link handler to workspace ' + initiativeId)
-                this.props.history.push(`/actie/${initiativeId}/inloggen"?type=${verificationType}&user=${username}&code=${verificationCode}&target=/actie/${initiativeId}/aansluiten`)
+                console.log('redirecting from verification link handler to workspace ' + initiativeName)
+                this.props.history.push(`/actie/${initiativeName}/inloggen?type=${verificationType}&user=${username}&code=${verificationCode}&target=/actie/${initiativeName}/aansluiten`)
+                return
+            }
+            else if (!isInCard && playgroundToCreate) {
+                // Let the VerificationLinkHandler within the generic workspace handle this
+                console.log('redirecting from verification link handler to workspace ' + initiativeName)
+                this.props.history.push(`/actie/inloggen?type=${verificationType}&user=${username}&code=${verificationCode}`)
                 return
             }
             else {
@@ -147,14 +159,14 @@ class Authenticator extends Component {
     }
 
     render() {
-        // const isInCard = this.props.location.pathname.includes('workspace');
+        // const isInCard = this.props.location.pathname.includes('actie');
 
         let formProps = copyProperties(this.state, {},    [ 'username', 'password', 'emailAddress', 'verificationCode', 'verificationLink', 'waitingForServerResponse' ])
         formProps = copyProperties(this, formProps,       [ 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'displayError', 
                                                             'setWaitingForServerResponse', 'clearWaitingForServerResponse', 'changeForm'])
         formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog'])
-        formProps.clearVerificationCookies = clearVerificationCookies
         formProps.storeInitiativeForVerification = storeInitiativeForVerification
+        formProps.clearInitiativeForVerification = clearInitiativeForVerification
 
         switch(this.state.form) {
             case 'signIn':

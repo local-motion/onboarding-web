@@ -25,10 +25,10 @@ class ForgotPasswordForm extends Component {
                     this.props.clearWaitingForServerResponse()
                     this.props.setVerificationCode('')
 
-                    // Save the initiative in a cookie so it can be picked up when the user clicks the link in the verification mail
-                    const {initiativeId} = this.props.match.params
-                    if (initiativeId)
-                        this.props.storeInitiativeForVerification(initiativeId)
+                    // Save the initiative so it can be picked up when the user clicks the link in the verification mail
+                    const {initiativeName} = this.props.match.params
+                    if (initiativeName)
+                        this.props.storeInitiativeForVerification(initiativeName)
 
                     this.props.changeForm('passwordReset')
                 })
@@ -61,7 +61,9 @@ class ForgotPasswordForm extends Component {
 
     render() {
         const {username, waitingForServerResponse, changeForm} = this.props
-        const isInCard = this.props.location.pathname.includes('workspace');
+        const isInCard = this.props.location.pathname.includes('actie');
+
+        console.log('initiativeid: ', this.props.match.params)
 
         const isReadyToSubmit = username && !waitingForServerResponse
 

@@ -41,3 +41,29 @@ export const copyProperties = (source, destination, properties) => {
         destination[properties[i]] = source[properties[i]]
     return destination
 }
+
+ /**
+  * Write an object to the browser's local storage. This function takes care of the marshalling
+  * @param {*} key label to be used for retrieving the object
+  * @param {*} value object to store
+  */
+export const writeToBrowserStorage = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+/**
+  * Read an object from the browser's local storage. This function takes care of the unmarshalling.
+  * @param {*} key label identifying the object
+  */
+export const readFromBrowserStorage = (key) => {
+    const item = localStorage.getItem(key)
+    return item && JSON.parse(item)
+}
+
+/**
+  * Delete an object from the browser's local storage.
+  * @param {*} key label to be used for retrieving the object
+  */
+export const deleteFromBrowserStorage = (key) => {
+    localStorage.removeItem(key)
+}

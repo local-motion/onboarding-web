@@ -29,6 +29,9 @@ class SignInForm extends Component {
         super(props);
         bindMethods(['signIn', 'onChangeUsername', 'onChangePassword'], this)
         // this.checkContact = this.checkContact.bind(this);
+        this.state = {
+            onChangeTriggered: false
+        }
     }
 
     componentDidMount() {
@@ -107,9 +110,13 @@ class SignInForm extends Component {
     // }
 
     onChangeUsername(event) {
+        console.log(' change:', event)
+        this.setState({onChangeTriggered:true})
         this.props.setUsername(event.target.value)
     }
     onChangePassword(event) {
+        console.log(' change:', event)
+        this.setState({onChangeTriggered:true})
         this.props.setPassword(event.target.value)
     }
 
@@ -122,12 +129,13 @@ class SignInForm extends Component {
     render() {
         const   {   username, password, waitingForServerResponse, changeForm } = this.props
 
-        const isInCard = this.props.location.pathname.includes('workspace');
+        const isInCard = this.props.location.pathname.includes('actie');
 
         // To allow for the browser to auto-populate the username and password field, which we cannot detect, the submit button is shown when both
-        // fields are populated, but also when a field is not present yet.
+        // fields are populated, but also when a field is not present yet and also when no onChange event has occurred yet.
         const isReadyToSubmit =    !waitingForServerResponse &&
-                                    (
+                                    (   
+                                        !this.state.onChangeTriggered ||
                                         !document.getElementById('signInFormUsername') || !document.getElementById('signInFormPassword') ||
                                         (document.getElementById('signInFormUsername').value && document.getElementById('signInFormPassword').value)
                                     )
