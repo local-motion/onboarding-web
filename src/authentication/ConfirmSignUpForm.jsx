@@ -78,7 +78,16 @@ class ConfirmSignUpForm extends Component {
                     this.props.setVerificationCode('')
                     this.props.openInformationDialog('Code verstuurd', 'De verification code is naar jouw emailadres verstuurd.')
                 })
-                .catch(error => this.handleError(error));
+                .catch(error => {
+                    console.log('error in resend code: ', error)
+                    if (error.message === "User is already confirmed.") {
+                        this.props.clearWaitingForServerResponse()
+                        this.props.setVerificationCode('')
+                        this.props.openInformationDialog('Gebruiker is al bevestigd', 'Ga verder met inloggen', 'OK', () => this.props.changeForm('signIn'))
+                    }
+                    else
+                        this.handleError(error)
+                })
         }
     }
 

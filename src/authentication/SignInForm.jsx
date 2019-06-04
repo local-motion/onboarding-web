@@ -110,12 +110,10 @@ class SignInForm extends Component {
     // }
 
     onChangeUsername(event) {
-        console.log(' change:', event)
         this.setState({onChangeTriggered:true})
         this.props.setUsername(event.target.value)
     }
     onChangePassword(event) {
-        console.log(' change:', event)
         this.setState({onChangeTriggered:true})
         this.props.setPassword(event.target.value)
     }

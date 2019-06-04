@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import querySearch from "stringquery";
+import {Redirect} from 'react-router-dom'
 
 import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import SignInForm from './SignInForm';
@@ -14,7 +15,6 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 import PasswordResetForm from './PasswordResetForm';
 import queryString from 'query-string';
 import SignUpSuccessForm from './SignUpSuccessForm';
-import { STORAGE_KEY_CREATE_PLAYGROUND } from 'views/Onboarding/Sections/Playgrounds/AddPlayground';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -31,17 +31,14 @@ const mapDispatchToProps = (dispatch) => ({
 // Constants
 const STORAGE_KEY_VERIFICATION_INITIATIVE = 'verificationInitiative'
 
-// const VERIFICATION_INITIATIVE_COOKIE = 'verificationInitiative'
 const VERIFICATION_TYPE_SIGNUP = 'signup'
 const VERIFICATION_TYPE_RESET_PASSWORD = 'reset_password'
 
 export const storeInitiativeForVerification = (initiativeName) => {
-    // createCookie(VERIFICATION_INITIATIVE_COOKIE, initiativeName, 2)
     writeToBrowserStorage(STORAGE_KEY_VERIFICATION_INITIATIVE, initiativeName)
 }
 
 export const clearInitiativeForVerification = () => {
-    // eraseCookie(VERIFICATION_INITIATIVE_COOKIE)
     deleteFromBrowserStorage(STORAGE_KEY_VERIFICATION_INITIATIVE)
 }
 
@@ -64,7 +61,7 @@ class Authenticator extends Component {
             waitingForServerResponse: false
         }
 
-        bindMethods(['changeForm', 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'onSignInSuccess', 'displayError',
+        bindMethods(['changeForm', 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'onSignInSuccess', 'displayError', 
                      'setWaitingForServerResponse', 'clearWaitingForServerResponse'], this)
 
         const isInCard = this.props.location.pathname.includes('actie');
@@ -73,9 +70,7 @@ class Authenticator extends Component {
         const username = params.user
         const verificationCode = params.code
         const {authenticatedUser, openAlreadyLoggedInDialog} = this.props                     
-        // const initiativeName = readCookie(VERIFICATION_INITIATIVE_COOKIE)
         const initiativeName = readFromBrowserStorage(STORAGE_KEY_VERIFICATION_INITIATIVE)
-        const playgroundToCreate = readFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND)
 
         console.log('constructing authenticator: type, username, code:', verificationType, username, verificationCode)
 
@@ -90,9 +85,9 @@ class Authenticator extends Component {
                 this.props.history.push(`/actie/${initiativeName}/inloggen?type=${verificationType}&user=${username}&code=${verificationCode}&target=/actie/${initiativeName}/aansluiten`)
                 return
             }
-            else if (!isInCard && playgroundToCreate) {
-                // Let the VerificationLinkHandler within the generic workspace handle this
-                console.log('redirecting from verification link handler to workspace ' + initiativeName)
+            else if (!isInCard) { 
+                // Go to the signin area in the generic workspace
+                console.log('redirecting from verification link handler to generic workspace')
                 this.props.history.push(`/actie/inloggen?type=${verificationType}&user=${username}&code=${verificationCode}`)
                 return
             }
@@ -162,7 +157,7 @@ class Authenticator extends Component {
         // const isInCard = this.props.location.pathname.includes('actie');
 
         let formProps = copyProperties(this.state, {},    [ 'username', 'password', 'emailAddress', 'verificationCode', 'verificationLink', 'waitingForServerResponse' ])
-        formProps = copyProperties(this, formProps,       [ 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'displayError', 
+        formProps = copyProperties(this, formProps,       [ 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'displayError',
                                                             'setWaitingForServerResponse', 'clearWaitingForServerResponse', 'changeForm'])
         formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog'])
         formProps.storeInitiativeForVerification = storeInitiativeForVerification
@@ -181,6 +176,8 @@ class Authenticator extends Component {
                 return <ForgotPasswordForm {...formProps}/>
             case 'passwordReset':
                 return <PasswordResetForm {...formProps}/>
+            case 'signedIn':
+                return <Redirect to='/actie/starten'/>
             default:
                 return <div>Invalid form state: {this.state.form}</div> 
         }
