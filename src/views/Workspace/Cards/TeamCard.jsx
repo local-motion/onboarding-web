@@ -67,7 +67,7 @@ class TeamCard extends React.Component {
                             <Button disabled={!isUserVolunteerOfPlayground(user, playground)} size="small" color="primary" target="_blank" href={inviteButtonHref}>{inviteButtonLabel}</Button>
                             <br />
                             <br />
-                            <Typography component="p" className={classes.contentParagraph}>Deel link door middel van social media</Typography>
+                            <Typography component="p">Deel link door middel van social media</Typography>
                             <SocialMedia playground={playground}/>
                         </GridItem>
                     </GridContainer>

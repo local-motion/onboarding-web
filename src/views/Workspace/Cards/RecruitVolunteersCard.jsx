@@ -1,11 +1,12 @@
 import React from "react";
-import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
-import SocialMedia from "../forms/SocialMedia";
 import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
+
+import WorkspaceCard from "../../../components/CustomCard/WorkspaceCard";
+import SocialMedia from "../forms/SocialMedia";
 import GridItem from "../../../components/Grid/GridItem";
 import GridContainer from "../../../components/Grid/GridContainer";
+import { isUserVolunteerOfPlayground } from "../../../components/Playground/PlaygroundReducer";
 import { getHrefToSendMail } from "../../../misc/WorkspaceHelpers";
 
 const styles = theme => ({
@@ -69,7 +70,7 @@ class RecruitVolunteersCard extends React.Component {
                         <GridContainer>
                             <GridItem xs={12} sm={12} md={8}>
                                 <Typography component="p" className={classes.contentParagraph}>Probeer om minimaal {targetNrOfVolunteers} mensen te verzamelen.</Typography>
-                                <Typography component="p" className={classes.contentParagraph}>Deel link door middel van social media</Typography>
+                                <Typography component="p">Deel link door middel van social media</Typography>
                                 <SocialMedia playground={playground}/>
                             </GridItem>
 
