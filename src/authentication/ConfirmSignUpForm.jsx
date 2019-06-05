@@ -76,7 +76,7 @@ class ConfirmSignUpForm extends Component {
             Auth.resendSignUp(username)
                 .then(() => {
                     this.props.setVerificationCode('')
-                    this.props.openInformationDialog('Code verstuurd', 'De verification code is naar jouw emailadres verstuurd.')
+                    this.props.openInformationDialog('Code verstuurd', 'De verificatiecode is naar jouw emailadres verstuurd.')
                 })
                 .catch(error => {
                     console.log('error in resend code: ', error)
