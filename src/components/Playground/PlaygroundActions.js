@@ -106,21 +106,16 @@ const getPlaygroundDetailsQuery = gql`
 
 export const findPlaygroundsByName = ({ initiativeName, playgrounds }) => {
     if (!initiativeName || !playgrounds.length) return null;
-
-    const nameId = initiativeName.slice(-4);
-    const normalizedNameArray = initiativeName.replace(/-/g, ' ').split(' ');
-
+    const decodedInitiativeName = initiativeName.replace(/_/g, ' ')
     const playground = playgrounds
-      .find(({ id, name }) => name.toLowerCase().includes(normalizedNameArray[0]) && id.includes(nameId));
+      .find(({ name }) => name.toLowerCase() === decodedInitiativeName)
 
     return playground;
 };
 
 export const slugifyPlaygroundName = ({ id, name }) => {
-    const nameId = id.slice(9, 13);
-    const sluggedName = name.toLowerCase().replace(/ /g, '-');
-
-    return `${sluggedName}-${nameId}`;
+    const sluggedName = name.toLowerCase().replace(/ /g, '_');
+    return sluggedName
 };
 
 export const ensurePlaygrounds = () => {

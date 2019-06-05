@@ -53,14 +53,12 @@ class WorkspaceTemplate extends React.Component {
     createLocalPlayground = () => {
         const { createInitiative, history, user } = this.props;
 
-        // const playgroundToCreate = JSON.parse(localStorage.getItem('playgroundToCreate'));
         const playgroundToCreate = readFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND);
 
         if (user && (playgroundToCreate !== null)) {
             const { name, lat, lng } = playgroundToCreate;
 
             createInitiative(name, lat, lng, (data, dispatch) => {
-                // localStorage.removeItem('playgroundToCreate');
                 deleteFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND);
 
                 const playground = {
@@ -76,7 +74,6 @@ class WorkspaceTemplate extends React.Component {
         const { playground, user, classes, signInHandler, ...rest } = this.props;
 
         const startPathUrl = getWorkspaceStartLink(playground);
-
         const phases = getPhases();
 
         return (

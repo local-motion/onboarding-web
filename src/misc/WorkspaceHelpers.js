@@ -16,6 +16,7 @@ export function checkBox({ playground, user, name, setCheckbox }) {
 export function getActivePhaseUrl(playground) {
     const activePhase = getActivePhase(playground);
 
+    console.log(`active phase: ${getWorkspaceStartLink(playground)}${activePhase.steps[0].link}`)
     return `${getWorkspaceStartLink(playground)}${activePhase.steps[0].link}`;
 }
 

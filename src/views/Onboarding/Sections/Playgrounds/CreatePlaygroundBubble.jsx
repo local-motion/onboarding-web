@@ -81,7 +81,7 @@ class CreatePlaygroundBubble extends Component {
                 fullWidth
                 variant="contained"
                 className={classes.button}
-                disabled={!name}
+                disabled={!name || !!error}
                 onClick={this.props.onSubmit}
               >Bevestig</Button>
           </div>
