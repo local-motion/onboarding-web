@@ -140,7 +140,8 @@ class AddPlayground extends React.Component {
         
     };
 
-    validateName = (name, stage) => {
+    validateName = (enteredName, stage) => {
+        const name = enteredName.trim();
         const nameRegex = /^[ a-zA-Z0-9&'!-]*$/
         const validations = [
             {
