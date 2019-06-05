@@ -1,7 +1,7 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import { playgroundIcons } from "../../../components/PlaygroundIcons/playgroundIconsConstants";
+import { playgroundIcons } from "../../../misc/WorkspaceHelpers";
 import SmokefreePhase from "./SmokefreePhase";
 import CtaButton from "../components/CtaButton";
 import { container } from "../../../assets/jss/material-kit-react";

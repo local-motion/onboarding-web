@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";

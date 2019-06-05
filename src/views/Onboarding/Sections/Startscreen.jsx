@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import OnboardingHeader from "./OnboardingHeader";
-import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 import { container } from "../../../assets/jss/material-kit-react.jsx";
 import CtaButton from "../components/CtaButton";
+import Header from "../../../components/Header/Header";
 
 const styles = theme => ({
     container: {
@@ -29,7 +27,7 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         margin: '100px auto 240px',
-        paddingLeft: 25,
+        paddingLeft: 50,
 
         [theme.breakpoints.down('md')]: {
             width: '100%',
@@ -79,17 +77,13 @@ const styles = theme => ({
     },
 });
 
-const mapStateToProps = state => ({
-    user: getUser(state),
-});
-
 
 class Startscreen extends Component {
     render() {
-        const { classes, user, onCtaClick } = this.props;
+        const { classes, onCtaClick } = this.props;
         return (
           <section className={classes.startscreen}>
-              <OnboardingHeader user={user} />
+              <Header />
 
               <div className={`${classes.cta} ${classes.container}`}>
                   <span className={classes.ctaTitle}>Maak een speeltuin bij jou in de buurt rookvrij</span>
@@ -103,4 +97,4 @@ class Startscreen extends Component {
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(Startscreen));
+export default withStyles(styles)(Startscreen);

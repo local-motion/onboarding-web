@@ -10,7 +10,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
 
-import { playgroundIcons } from 'components/PlaygroundIcons/playgroundIconsConstants';
+import { playgroundIcons } from '../../../misc/WorkspaceHelpers';
 
 
 const styles = theme => ({

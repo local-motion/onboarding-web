@@ -5,11 +5,12 @@ import {Route, Router, Switch} from "react-router-dom";
 import "assets/scss/material-kit-react.css?v=1.2.0";
 
 import CookieConsent from "react-cookie-consent";
+import { connect } from 'react-redux'
+import { Helmet } from "react-helmet";
 
 import { history } from "./setup";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
 import WrappedSimpleDialog from "./components/SimpleDialog/WrappedSimpleDialog";
-import { connect } from 'react-redux'
 
 // Components to route to
 import Workspace from "views/Workspace/Workspace.jsx";
@@ -20,8 +21,8 @@ import FAQ from "views/About/FAQ.jsx";
 import Terms from "views/Legal/Terms.jsx";
 import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
+import UserProfile from "./views/UserProfile/UserProfile";
 import { titlePrefix } from "./misc/WorkspaceHelpers";
-import { Helmet } from "react-helmet";
 import Authenticator from "./authentication/Authenticator";
   
 const mapDispatchToProps = (dispatch) => ({
@@ -51,6 +52,8 @@ class App extends React.Component {
 
                         <Route exact path="/over-ons" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>
+                        <Route exact path="/mijn-profiel" key="My Profile" component={UserProfile}/>
+                        <Route exact path="/mijn-acties" key="My Acties" component={UserProfile}/>
                         <Route exact path="/privacyverklaring" key="Privacy Statement" component={Privacy}/>
                         <Route exact path="/veelgestelde-vragen" key="Frequently Asked Questions" component={FAQ}/>
                         <Route exact path="/gebruiksvoorwaarden" key="Terms of Use" component={Terms}/>
@@ -88,7 +91,6 @@ class App extends React.Component {
                 </CookieConsent>
 
                 <WrappedSimpleDialog/>
-                
             </div>
         )
     }

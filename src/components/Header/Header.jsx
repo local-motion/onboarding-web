@@ -1,201 +1,227 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
-// nodejs library that concatenates classesnpm 
-import classNames from "classnames";
-// nodejs library to set properties for components
-import PropTypes from "prop-types";
-// @material-ui/core components
+import React, { useState } from "react";
+import { Link, withRouter } from "react-router-dom";
+import connect from "react-redux/es/connect/connect";
+import AppBar from "@material-ui/core/AppBar/AppBar";
+import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
-import Drawer from "@material-ui/core/Drawer";
-// @material-ui/icons
+import HeaderLinks from "../../components/Header/HeaderLinks";
+import { container } from "../../assets/jss/material-kit-react";
+import { getUser } from "../../components/UserProfile/UserProfileReducer";
+import Drawer from "@material-ui/core/Drawer/Drawer";
+import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/icons/Menu";
-// core components
-import headerStyle from "../../assets/jss/material-kit-react/components/headerStyle.jsx";
-import { connect } from 'react-redux'
-import { getUser } from "../UserProfile/UserProfileReducer";
-import { Button } from "@material-ui/core";
-import { Link } from 'react-router-dom'
+import { signOutUser } from "../UserProfile/UserProfileActions";
+
+const styles = theme => ({
+    landingAppBar: {
+        ...container,
+        color: '#626262',
+        width: '90%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        margin: '0 auto',
+        padding: '0 !important',
+        backgroundColor: '#fff !important',
+        position: 'relative',
+        boxShadow: 'none',
+
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: '95%',
+            width: '100%',
+        },
+    },
+    shortAppBar: {
+        borderRadius: 5,
+        boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
+    },
+    fullWidth: {
+        width: '100%',
+        background: '#FFF',
+        position: 'relative',
+        boxShadow: '0px 12px 19px 1px rgba(40, 40, 40, 0.12)',
+    },
+    logo: {
+        color: 'rgb(8, 92, 166)',
+        fontSize: 30,
+        fontFamily: 'dk_black_bamboo-webfont',
+        letterSpacing: '1px',
+        lineHeight: 1.2,
+        margin: '20px 30px',
+        padding: 0,
+
+        [theme.breakpoints.down('sm')]: {
+            margin: 15,
+            fontSize: 25,
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 20,
+            margin: 10,
+        },
+
+        '& > span': {
+            color: 'rgb(207, 26, 49)',
+            letterSpacing: '0px',
+            marginLeft: 5,
+        },
+    },
+    left: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    actiesButton: {
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 12,
+        },
+    },
+    menu: {
+        padding: '10px 25px',
+
+        [theme.breakpoints.down('sm')]: {
+            padding: '10px 10px',
+        },
+    },
+    hamburgerMenuButton: {},
+    drawerPaper: {
+        width: "80%",
+        maxWidth: 250,
+        paddingTop: 30,
+    },
+    drawerLinks: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
+    drawerLink: {
+        flexGrow: 1,
+        width: '100%',
+    },
+    loginButton: {
+        color: '#FFF',
+        backgroundColor: '#ec2e52',
+        boxShadow: '0px 5px 10px 0px rgba(40, 40, 40, 0.1)',
+        margin: '15px 25px',
+        padding: '10px 25px',
+        borderRadius: 22,
+        textTransform: 'uppercase',
+        fontSize: 15,
+        fontWeight: 'bold',
+        lineHeight: 1.2,
+
+        '&:hover': {
+            backgroundColor: '#ee6a6f',
+        },
+
+        [theme.breakpoints.down('sm')]: {
+            margin: 0,
+            borderRadius: '0 5px 5px 0',
+            padding: 20,
+            boxShadow: 'none',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+    },
+    loginText: {
+        display: 'block',
+
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
+    },
+    addUserIcon: {
+        background: `url(${require('../../assets/img/landing/add-user.png')}) no-repeat center`,
+        width: 22,
+        height: 22,
+        display: 'none',
+        backgroundSize: 'contain',
+
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
+        },
+    },
+});
+
+const Header = ({ classes, history, location, user, fullWidth, signOutUser }) => {
+    const [isDrawerOpen, toggleDrawer] = useState(false);
+
+    const signInClick = () => history.push(`/actie/inloggen?target=${location.pathname}`);
+    const gotoMyProfile = () => history.push('/mijn-profiel');
+    const gotoMyActies = () => history.push('/mijn-acties');
+    const openDrawer = () => toggleDrawer(true);
+    const closeDrawer = () => toggleDrawer(false);
+    const isOpen = !!isDrawerOpen;
+
+    return (
+      <div className={fullWidth ? classes.fullWidth : ''}>
+          <AppBar className={`${classes.landingAppBar} ${fullWidth ? '' : classes.shortAppBar}`}>
+              <div className={classes.left}>
+                  <Link to={'/'}>
+                      <div className={classes.logo}>Rookvrij<span>spelen</span></div>
+                  </Link>
+
+                  {user && <Hidden xsDown><Button className={classes.actiesButton} onClick={gotoMyActies}>Mijn acties</Button></Hidden>}
+              </div>
+
+                  {
+                      user
+                        ? (
+                          <React.Fragment>
+                              <Hidden xsDown><HeaderLinks /></Hidden>
+
+                              <Hidden smUp>
+                                  <IconButton
+                                    color="inherit"
+                                    aria-label="toggle drawer"
+                                    onClick={openDrawer}
+                                    className={classes.hamburgerMenuButton}
+                                  >
+                                      <Menu/>
+                                  </IconButton>
+
+                                  <Drawer
+                                    classes={{ paper: classes.drawerPaper }}
+                                    anchor="right"
+                                    open={isOpen}
+                                    onClose={closeDrawer}
+                                  >
+                                      <div
+                                        tabIndex={0}
+                                        role="button"
+                                        onClick={toggleDrawer}
+                                        onKeyDown={closeDrawer}
+                                        className={classes.drawerLinks}
+                                      >
+                                          <Button className={classes.drawerLink} onClick={gotoMyProfile}>Mijn profiel</Button>
+                                          <Button className={classes.drawerLink} onClick={gotoMyActies}>Mijn acties</Button>
+                                          <Button className={classes.drawerLink} onClick={signOutUser}>Uitloggen</Button>
+                                      </div>
+                                  </Drawer>
+                              </Hidden>
+                          </React.Fragment>
+                        ) : (
+                          <Button onClick={signInClick} className={classes.loginButton}>
+                              <span className={classes.loginText}>Inloggen</span>
+                              <div className={classes.addUserIcon} />
+                          </Button>
+                        )
+                  }
+          </AppBar>
+      </div>
+    );
+};
 
 const mapStateToProps = state => ({
-    user: getUser(state)
-})
+    user: getUser(state),
+});
 
-class Header extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            mobileOpen: false, 
-        };
-        this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
-        this.headerColorChange = this.headerColorChange.bind(this);
-    }
+const mapDispatchToProps = dispatch => ({
+    signOutUser: () => dispatch(signOutUser()),
+});
 
-    handleDrawerToggle() {
-        this.setState({mobileOpen: !this.state.mobileOpen});
-    }
-
-    componentDidMount() {
-        if (this.props.changeColorOnScroll) {
-            window.addEventListener("scroll", this.headerColorChange);
-        }
-    }
-
-    headerColorChange() {
-        const {classes, color, changeColorOnScroll} = this.props;
-        const windowsScrollTop = window.pageYOffset;
-        if (windowsScrollTop > changeColorOnScroll.height) {
-            document.body
-                .getElementsByTagName("header")[0]
-                .classList.remove(classes[color]);
-            document.body
-                .getElementsByTagName("header")[0]
-                .classList.add(classes[changeColorOnScroll.color]);
-        } else {
-            document.body
-                .getElementsByTagName("header")[0]
-                .classList.add(classes[color]);
-            document.body
-                .getElementsByTagName("header")[0]
-                .classList.remove(classes[changeColorOnScroll.color]);
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.props.changeColorOnScroll)
-            window.removeEventListener("scroll", this.headerColorChange);
-    }
-
-    signInClick = () => {
-        const { pathname } = this.props.location;
-
-        const target = pathname === '/'
-          ? '/actie'
-          : pathname;
-
-        this.props.history.push(`/actie/inloggen?target=${target}`);
-    };
-
-    render() {
-        const {
-            classes,
-            color,
-            rightLinks,
-            leftLinks,
-            fixed,
-            absolute,
-            user,
-            toggleShowMobileMenu,
-        } = this.props
-
-        const appBarClasses = classNames({
-            [classes.appBar]: true,
-            [classes[color]]: color,
-            [classes.absolute]: absolute,
-            [classes.fixed]: fixed
-        });
-
-        return (
-            <AppBar className={appBarClasses + " lm-header"}>
-                <Toolbar className={classes.container}>
-                    <Link to={'/'}>
-                        <div className={classes.logo}>Rookvrij<span>spelen</span></div>
-                    </Link>
-
-                    <Hidden mdUp>
-                        <IconButton
-                          color="inherit"
-                          aria-label="open drawer"
-                          onClick={toggleShowMobileMenu || this.handleDrawerToggle}
-                          className={classes.menuButton}
-                        >
-                            <Menu />
-                        </IconButton>
-                    </Hidden>
-
-                    {rightLinks}
-
-                    { !user &&
-                        <Button
-                            onClick={() => this.signInClick()}
-                            color="default"
-                        >
-                            <span>Inloggen</span>
-                        </Button>
-                    }
-
-                </Toolbar>
-                <Hidden mdUp implementation="css">
-                    <Drawer
-                        variant="temporary"
-                        anchor={"right"}
-                        open={this.state.mobileOpen}
-                        classes={{
-                            paper: classes.drawerPaper
-                        }}
-                        onClose={this.handleDrawerToggle}
-                    >
-                        <div className={classes.appResponsive}>
-                            {leftLinks}
-                            {rightLinks}
-                        </div>
-                    </Drawer>
-                </Hidden>
-            </AppBar>
-        );
-    }
-}
-
-Header.defaultProp = {
-    color: "white"
-};
-
-Header.propTypes = {
-    classes: PropTypes.object.isRequired,
-    color: PropTypes.oneOf([
-        "primary",
-        "info",
-        "success",
-        "warning",
-        "danger",
-        "transparent",
-        "white",
-        "rose",
-        "dark"
-    ]),
-    rightLinks: PropTypes.node,
-    leftLinks: PropTypes.node,
-    brand: PropTypes.string,
-    brandLink: PropTypes.string,
-    textBrand: PropTypes.bool,
-    showStats: PropTypes.bool,
-    fixed: PropTypes.bool,
-    absolute: PropTypes.bool,
-    // this will cause the sidebar to change the color from
-    // this.props.color (see above) to changeColorOnScroll.color
-    // when the window.pageYOffset is heigher or equal to
-    // changeColorOnScroll.height and then when it is smaller than
-    // changeColorOnScroll.height change it back to
-    // this.props.color (see above)
-    changeColorOnScroll: PropTypes.shape({
-        height: PropTypes.number.isRequired,
-        color: PropTypes.oneOf([
-            "primary",
-            "info",
-            "success",
-            "warning",
-            "danger",
-            "transparent",
-            "white",
-            "rose",
-            "dark"
-        ]).isRequired
-    })
-};
-
-
-
-export default withRouter(withStyles(headerStyle)(connect(mapStateToProps)(Header)))
+export default withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(Header)));
