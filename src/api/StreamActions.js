@@ -70,6 +70,7 @@ export const stopStream = (streamIdentifier) => (dispatch, getState) => {
 
 export const triggerStream = (streamIdentifier) => (dispatch, getState) => {
   const activeStream = getActiveStream(getState(), streamIdentifier)
+  console.log('triggering stream ' + streamIdentifier + ' which is ' + (activeStream ? "active" : "not active"), activeStream)
   if (activeStream)
     dispatch(startStream(activeStream.streamIdentifier, activeStream.queryOptions, activeStream.originalOptions, true))
   else

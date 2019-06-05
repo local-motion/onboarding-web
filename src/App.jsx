@@ -7,7 +7,6 @@ import "assets/scss/material-kit-react.css?v=1.2.0";
 import CookieConsent from "react-cookie-consent";
 
 import { history } from "./setup";
-import CustomAuthenticator from "./auth/CustomAuthenticator";
 import { userSignedIn } from "./components/UserProfile/UserProfileActions";
 import WrappedSimpleDialog from "./components/SimpleDialog/WrappedSimpleDialog";
 import { connect } from 'react-redux'
@@ -23,6 +22,7 @@ import Privacy from "views/Legal/Privacy.jsx";
 import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
 import { titlePrefix } from "./misc/WorkspaceHelpers";
 import { Helmet } from "react-helmet";
+import Authenticator from "./authentication/Authenticator";
   
 const mapDispatchToProps = (dispatch) => ({
     onUserSignedIn: user => dispatch(userSignedIn(user))
@@ -44,9 +44,10 @@ class App extends React.Component {
                 </Helmet>
                 <Router history={history}>
                     <Switch>
-                        <Route exact path="/inloggen" key="Login" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } />
-                        {/* <Route exact path="/verify?type=:verificationType&user=:username&code=:verificationCode" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
-                        {/* <Route exact path="/verify" key="Verify" render={ props => <CustomAuthenticator onSignIn={this.signInHandler}/> } /> */}
+                        <Route exact path="/inloggen" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}/> } />
+
+                        {/* This route is required for now to capture the links from the verification mails */}
+                        <Route exact path="/login" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}/> } />
 
                         <Route exact path="/over-ons" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>
@@ -56,8 +57,6 @@ class App extends React.Component {
 
                         <Route exact path="/actie/" key="Workspace" component={Workspace}/>
 
-                        {/* <Route exact path="/actie/:initiativeName" key="WorkspacePage" component={Workspace}/>
-                        <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin" render={ props => <Workspace {...props} signInHandler={this.signInHandler}/> } /> */}
                         
                         <Route exact path="/actie/inloggen" key="WorkspaceLogin" render={props => <Workspace {...props} signInHandler={this.signInHandler}/>}/>
                         <Route exact path="/actie/starten" key="WorkspaceAddFindPlayground" component={Workspace}/>

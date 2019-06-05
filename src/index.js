@@ -84,7 +84,7 @@ store.dispatch(executeQuery({
             return {
                 headers: {
                     ...headers,
-                    AuthBearer: jwtToken ? `Bearer ${jwtToken}` : ''
+                    AuthBearer: jwtToken ? `Bearer ${jwtToken}` : 'Bearer '
                 }
             }
         })
@@ -139,11 +139,14 @@ store.dispatch(executeQuery({
             .then(user => {
                 console.log('Found authenticated user: ', user)
                 store.dispatch(userSignedIn(user))
+                const rootElement = document.querySelector("#root")
+                ReactDOM.render(
+                    wrappedApplication,
+                    rootElement
+                )
             })
             .catch(error => {
                 console.log('No authenticated user', error)
-            })
-            .finally(() => {
                 const rootElement = document.querySelector("#root")
                 ReactDOM.render(
                     wrappedApplication,

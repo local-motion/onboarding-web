@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Auth } from 'aws-amplify';
 import { executeQuery } from '../../api/QueryActions';
-import { openErrorDialog } from '../SimpleDialog/SimpleDialogActions';
+import { openErrorDialog, openInformationDialog } from '../SimpleDialog/SimpleDialogActions';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
@@ -88,6 +88,13 @@ export const deleteUser = () => executeQuery( {
             dispatch(openErrorDialog('Uitschrijven mislukt',
             'Er heeft zich een probleem voorgedaan met het verwijderen van je gegevens. Log opnieuw in en probeer het opnieuw.', 
             'OK', () => dispatch(signOutUser()) ))
+          }
+          else {
+            console.log('delete user success', error)
+            dispatch(openInformationDialog('Uitgeschreven', 'Je bent uitgeschreven van rookvrijspelen.nl', 'OK', () => {
+              dispatch({ type: USER_SIGNED_OUT })
+              window.location.replace('/')
+            }))
           }
         })
       })

@@ -281,7 +281,7 @@ export const setCheckbox = (initiativeId, checklistItem, checked, user) => execu
         checked
         }
     },
-    onSuccess: triggerPlaygroundDetailsStream(initiativeId)
+    onSuccess: triggerPlaygroundDetailsStream(initiativeId) 
   })
 
   // utilities

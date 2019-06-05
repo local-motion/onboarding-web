@@ -18,6 +18,9 @@ import { createLoadingSelector } from '../../../../api/Selectors';
 import { getAllPlaygrounds } from "../../../../components/Playground/PlaygroundReducer";
 import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
 import GooglePlacesAutocomplete from "../../components/GooglePlacesAutocomplete";
+import { writeToBrowserStorage } from 'utils/Generics';
+
+export const STORAGE_KEY_CREATE_PLAYGROUND = 'playgroundToCreate'
 
 const styles = theme => ({
     autocomplete: {
@@ -114,7 +117,8 @@ class AddPlayground extends React.Component {
     };
 
     saveInitiativeAndGotoLogin = ({ name, lat, lng }) => {
-        localStorage.setItem('playgroundToCreate', JSON.stringify({ name, lat, lng }));
+        // localStorage.setItem('playgroundToCreate', JSON.stringify({ name, lat, lng }));
+        writeToBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND, { name, lat, lng });
 
         this.props.history.push('/actie/inloggen?target=/actie/');
     };
