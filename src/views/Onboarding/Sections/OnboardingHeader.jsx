@@ -108,7 +108,11 @@ const styles = theme => ({
 
 const OnboardingHeader = ({ classes, history, location, user }) => {
     const signInClick = () => {
-        history.push(`/actie/inloggen?target=${location.pathname}`)
+        const target = location.pathname === '/'
+          ? '/actie'
+          : location.pathname;
+
+        history.push(`/actie/inloggen?target=${target}`);
     };
 
     return (
