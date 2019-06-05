@@ -10,8 +10,8 @@ import { style } from './AuthenticatorStyles';
 class SignUpSuccessForm extends Component {
 
     render() {
-        const isInCard = this.props.location.pathname.includes('actie');
-        const {changeForm} = this.props;
+        // const isInCard = this.props.location.pathname.includes('actie');
+        const {changeForm, isInCard} = this.props;
 
         return (
             <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>

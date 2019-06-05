@@ -121,8 +121,8 @@ class ConfirmSignUpForm extends Component {
     }
 
     render() {
-        const   { username, verificationCode, waitingForServerResponse, changeForm } = this.props
-        const isInCard = this.props.location.pathname.includes('actie');
+        const   { username, verificationCode, waitingForServerResponse, changeForm, isInCard } = this.props
+        // const isInCard = this.props.location.pathname.includes('actie');
 
         const isReadyToSubmit = username && verificationCode && isValidVerificationCode(verificationCode) && !waitingForServerResponse
 
