@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
-import componentsStyle from "assets/jss/material-kit-react/views/components.jsx";
+import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
 import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
@@ -53,14 +53,12 @@ class WorkspaceTemplate extends React.Component {
     createLocalPlayground = () => {
         const { createInitiative, history, user } = this.props;
 
-        // const playgroundToCreate = JSON.parse(localStorage.getItem('playgroundToCreate'));
         const playgroundToCreate = readFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND);
 
         if (user && (playgroundToCreate !== null)) {
             const { name, lat, lng } = playgroundToCreate;
 
             createInitiative(name, lat, lng, (data, dispatch) => {
-                // localStorage.removeItem('playgroundToCreate');
                 deleteFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND);
 
                 const playground = {
@@ -76,7 +74,6 @@ class WorkspaceTemplate extends React.Component {
         const { playground, user, classes, signInHandler, ...rest } = this.props;
 
         const startPathUrl = getWorkspaceStartLink(playground);
-
         const phases = getPhases();
 
         return (

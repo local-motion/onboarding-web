@@ -1,11 +1,13 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import connect from "react-redux/es/connect/connect";
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import HeaderLinks from "../../../components/Header/HeaderLinks";
 import { container } from "../../../assets/jss/material-kit-react";
+import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 
 const styles = theme => ({
     landingAppBar: {
@@ -108,7 +110,11 @@ const styles = theme => ({
 
 const OnboardingHeader = ({ classes, history, location, user }) => {
     const signInClick = () => {
-        history.push(`/actie/inloggen?target=${location.pathname}`)
+        const target = location.pathname === '/'
+          ? '/actie'
+          : location.pathname;
+
+        history.push(`/actie/inloggen?target=${target}`);
     };
 
     return (
@@ -117,21 +123,22 @@ const OnboardingHeader = ({ classes, history, location, user }) => {
               <div className={classes.logo}>Rookvrij<span>spelen</span></div>
           </Link>
 
-          <HeaderLinks className={classes.menu} />
-
           {
-              !user && (
-                <Button
-                  onClick={signInClick}
-                  className={classes.loginButton}
-                >
-                    <span className={classes.loginText}>Inloggen</span>
-                    <div className={classes.addUserIcon} />
-                </Button>
-              )
+              user
+                ? <HeaderLinks />
+                : (
+                  <Button onClick={signInClick} className={classes.loginButton}>
+                      <span className={classes.loginText}>Inloggen</span>
+                      <div className={classes.addUserIcon} />
+                  </Button>
+                )
           }
       </AppBar>
     );
 };
 
-export default withStyles(styles)(withRouter(OnboardingHeader));
+const mapStateToProps = state => ({
+    user: getUser(state),
+});
+
+export default withStyles(styles)(withRouter(connect(mapStateToProps)(OnboardingHeader)));

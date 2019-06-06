@@ -107,7 +107,7 @@
 
     .phase-explainer-container{
         background: white;
-        margin: 70px auto 30px;
+        margin: 0 auto 30px;
         z-index: 30;
         position: relative;
         .explainer-actions{
@@ -119,7 +119,7 @@
             }
         }
         .title-wrapper{
-            padding: 20px 0;
+            padding-bottom: 20px;
             h2,h3{
                 text-align: center;
             }

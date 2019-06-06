@@ -36,7 +36,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const styles = theme => ({
-    paper: {
+    actie: {
         minHeight: '300px',
         width: '100%',
     },
@@ -136,7 +136,7 @@ class Team extends React.Component {
                     <GridContainer className={"information-container"}>
                         <GridItem xs={4} sm={4} md={4} className={classNames(classes.chatUsersContainer + " phase-information-container flex-divide")}>
 
-                            <Paper className={classNames(`${classes.paper} ${classes.chatUsers}`)} elevation={2}>
+                            <Paper className={classNames(`${classes.actie} ${classes.chatUsers}`)} elevation={2}>
                                 <List className={classes.usersList}>
                                     {playground.volunteers.map(function (volunteer, index) {
                                         const volunteerIsManager = playground.managers.filter(manager => manager.id === volunteer.userId).length > 0
@@ -153,7 +153,7 @@ class Team extends React.Component {
                             </Paper>
 
                         </GridItem>
-                        <GridItem xs={8} sm={8} md={8} className={classNames(`${classes.paper} ${classes.chatMessages}`)}>
+                        <GridItem xs={8} sm={8} md={8} className={classNames(`${classes.actie} ${classes.chatMessages}`)}>
                             <PlaygroundChatBox playground={playground}/>
                         </GridItem>
                     </GridContainer>

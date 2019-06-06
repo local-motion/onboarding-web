@@ -140,13 +140,13 @@ class Authenticator extends Component {
 
     onSignInSuccess(user) {
         this.props.onSignIn(user)
-        const { location: { search, pathname }, playground } = this.props;
+        const { location: { search }, playground } = this.props;
         const parsedSearch = querySearch(search);
         const url = parsedSearch["target"]
           || (
             playground
               ? getActivePhaseUrl(playground)
-              : pathname.replace('/login', '')
+              : '/actie'
           );
 
           this.changeForm('signedIn');
@@ -154,14 +154,13 @@ class Authenticator extends Component {
     }
 
     render() {
-        // const isInCard = this.props.location.pathname.includes('actie');
-
         let formProps = copyProperties(this.state, {},    [ 'username', 'password', 'emailAddress', 'verificationCode', 'verificationLink', 'waitingForServerResponse' ])
         formProps = copyProperties(this, formProps,       [ 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'displayError',
                                                             'setWaitingForServerResponse', 'clearWaitingForServerResponse', 'changeForm'])
         formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog'])
         formProps.storeInitiativeForVerification = storeInitiativeForVerification
         formProps.clearInitiativeForVerification = clearInitiativeForVerification
+        formProps.isInCard = this.props.location.pathname.includes('actie')
 
         switch(this.state.form) {
             case 'signIn':
@@ -177,7 +176,8 @@ class Authenticator extends Component {
             case 'passwordReset':
                 return <PasswordResetForm {...formProps}/>
             case 'signedIn':
-                return <Redirect to='/actie/starten'/>
+                console.log('redirecting to /actie')
+                return <Redirect to='/actie'/>
             default:
                 return <div>Invalid form state: {this.state.form}</div> 
         }

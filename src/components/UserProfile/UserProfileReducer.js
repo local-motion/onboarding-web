@@ -8,6 +8,7 @@ const initialState = {
   // user: {
   //   id:            id of the user, not for display
   //   name:          self-chosen name of the user
+  //   email:         email of user
   // }
   // cognitoUser:     object returned by the AWS cognito signin
 }
@@ -29,6 +30,7 @@ const userProfileReducer = (state = initialState, action) => {
           user: {
             id: action.payload.profile.id,
             name: action.payload.profile.username,
+            email: action.payload.profile.emailAddress,
           }
         }
     
@@ -38,6 +40,7 @@ const userProfileReducer = (state = initialState, action) => {
           user: {
             id: action.payload.createUser.id,
             name: action.payload.createUser.username,
+            email: action.payload.createUser.emailAddress,
           }
         }
     

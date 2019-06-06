@@ -117,7 +117,6 @@ class AddPlayground extends React.Component {
     };
 
     saveInitiativeAndGotoLogin = ({ name, lat, lng }) => {
-        // localStorage.setItem('playgroundToCreate', JSON.stringify({ name, lat, lng }));
         writeToBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND, { name, lat, lng });
 
         this.props.history.push('/actie/inloggen?target=/actie/');
@@ -134,11 +133,16 @@ class AddPlayground extends React.Component {
     updateName = (eEvent) => {
         const name = eEvent.target.value.replace('.', '').replace('  ', ' ');
 
-        this.setState({ name });
-        this.validateName(name, 'entry')
+        this.setState({ 
+            name,
+            error: this.validateName(name, 'entry')
+         });
+        
     };
 
-    validateName = (name, stage) => {
+    validateName = (enteredName, stage) => {
+        const name = enteredName.trim();
+        const nameRegex = /^[ a-zA-Z0-9&'!-]*$/
         const validations = [
             {
                 validateThat: name => name.length > 2,
@@ -153,6 +157,10 @@ class AddPlayground extends React.Component {
                 validateThat: name => this.props.playgrounds.filter(e => e.name.toLowerCase().trim() === name.toLowerCase()).length === 0,
                 message: 'Er bestaat al een speeltuin met deze naam.'
             },
+            {
+                validateThat: name => nameRegex.test(name),
+                message: 'De naam mag alleen letters, cijfers, spaties en de volgende tekens bevatten: & - ! \''
+            },
         ];
 
         let errorMessage = '';
@@ -165,9 +173,9 @@ class AddPlayground extends React.Component {
                 errorMessage = validation.message
         }
 
-        this.setState({
-            error: errorMessage
-        });
+        // this.setState({
+        //     error: errorMessage
+        // });
 
         return errorMessage;
     };

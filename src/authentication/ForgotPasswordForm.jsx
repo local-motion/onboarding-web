@@ -60,8 +60,8 @@ class ForgotPasswordForm extends Component {
     }
 
     render() {
-        const {username, waitingForServerResponse, changeForm} = this.props
-        const isInCard = this.props.location.pathname.includes('actie');
+        const {username, waitingForServerResponse, changeForm, isInCard} = this.props
+        // const isInCard = this.props.location.pathname.includes('actie');
 
         console.log('initiativeid: ', this.props.match.params)
 

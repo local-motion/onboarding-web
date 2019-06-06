@@ -2,6 +2,14 @@ import {container} from "assets/jss/material-kit-react.jsx";
 
 const componentsStyle = theme => ({
     container,
+    wrapper: {
+        background: '#FFF',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        minHeight: '100vh',
+        height: '100%',
+    },
     brand: {
         color: "#FFFFFF",
         textAlign: "left"
@@ -25,7 +33,7 @@ const componentsStyle = theme => ({
     mainDown: {
         background: "#FFFFFF",
         padding: "15px",
-        margin: "10px 30px 0px",
+        margin: "10px 0px 15px",
         borderRadius: "6px",
         boxShadow:
           "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)"
@@ -100,9 +108,11 @@ const componentsStyle = theme => ({
         marginLeft: 10,
     },
     backButton: {
-        marginTop: 70,
+        marginTop: -30,
         marginBottom: 20,
-        marginLeft: 30,
+    },
+    customWrappedHeader: {
+        paddingBottom: 30,
     },
     closeIconWrapper: {
         alignItems: 'center',

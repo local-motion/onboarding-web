@@ -108,7 +108,7 @@ class PasswordResetForm extends Component {
     }
 
     render() {
-        const { verificationCode, username, password, verificationLink, waitingForServerResponse, changeForm, classes } = this.props
+        const { verificationCode, username, password, verificationLink, waitingForServerResponse, changeForm, isInCard, classes } = this.props
         const {repeatedPassword, passwordFocus} = this.state
 
         const verificationCodeError = verificationCode &&!isValidVerificationCode(verificationCode) ? 'De code moet uit ' + verificationCodeLength + ' cijfers bestaan' : ''
@@ -116,7 +116,7 @@ class PasswordResetForm extends Component {
         const passwordError = password && !isValidPassword(password) ? 'Het wachtwoord is ongeldig' : ''
         const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
 
-        const isInCard = this.props.location.pathname.includes('actie');
+        // const isInCard = this.props.location.pathname.includes('actie');
 
         const isReadyToSubmit = verificationCode && username && password && repeatedPassword &&
                                 !verificationCodeError && !passwordError && !repeatedPasswordError &&

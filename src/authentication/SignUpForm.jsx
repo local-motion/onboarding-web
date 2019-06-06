@@ -158,7 +158,7 @@ class SignUpForm extends Component {
     }
 
     render() {
-        const { username, password, emailAddress, waitingForServerResponse, changeForm, classes } = this.props
+        const { username, password, emailAddress, waitingForServerResponse, changeForm, isInCard, classes } = this.props
         const {repeatedPassword, acceptedTerms, passwordFocus} = this.state
 
         const emailAddressError = emailAddress && !isValidEmailAddress(emailAddress) ? 'Dit emailadres is ongeldig' : ''
@@ -167,7 +167,7 @@ class SignUpForm extends Component {
         const passwordError = password && !isValidPassword(password) ? 'Het wachtwoord is ongeldig' : ''
         const repeatedPasswordError = repeatedPassword && (repeatedPassword !== password) ? 'Beide wachtwoorden zijn niet aan elkaar gelijk' : ''
 
-        const isInCard = this.props.location.pathname.includes('actie');
+        // const isInCard = this.props.location.pathname.includes('actie');
 
         const isReadyToSubmit = emailAddress && username && password && repeatedPassword && acceptedTerms && 
                                 !emailAddressError && !usernameError && !passwordError && !repeatedPasswordError &&

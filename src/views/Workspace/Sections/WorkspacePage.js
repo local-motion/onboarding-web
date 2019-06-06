@@ -1,10 +1,12 @@
 import React, { PureComponent } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
 import Paper from "@material-ui/core/Paper/Paper";
 import Button from "@material-ui/core/Button";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Check from "@material-ui/icons/Check";
+import Hidden from "@material-ui/core/Hidden/Hidden";
 import classNames from "classnames";
 
 import { StyledStepLink } from "../../../components/Step/Step";
@@ -19,8 +21,6 @@ import CommunicateAboutSmokefreeAgreementCard from "../Cards/CommunicateAboutSmo
 import ShowPlaygroundIsSmokefreeCard from "../Cards/ShowPlaygroundIsSmokefreeCard";
 import WeAreSmokefreeCard from "../Cards/WeAreSmokefreeCard";
 import EvaluateCard from "../Cards/EvaluateCard";
-import Header from "../../../components/Header/Header";
-import HeaderLinks from "../../../components/Header/HeaderLinks";
 import GridContainer from "../../../components/Grid/GridContainer";
 import GridItem from "../../../components/Grid/GridItem";
 import Footer from "../../../components/Footer/Footer";
@@ -35,14 +35,13 @@ import {
 import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
 import AddFindPlayground from "../Cards/AddFindPlayground";
+import WrappedHeader from "../../../components/Header/WrappedHeader";
 import {
     ensurePlaygroundDetails,
     findPlaygroundsByName,
     stopPlaygroundDetailsStream
 } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
-import Hidden from "@material-ui/core/Hidden/Hidden";
-import { Helmet } from "react-helmet";
 import Authenticator from "../../../authentication/Authenticator";
 
 const PaginationIcon = (props) => (
@@ -56,6 +55,7 @@ l275 313 0 53 c0 43 -5 60 -26 84 -22 26 -33 31 -70 31 -34 0 -50 -6 -73 -27z"></p
   </SvgIcon>
 );
 
+
 class WorkspacePage extends PureComponent {
     constructor() {
         super();
@@ -68,13 +68,13 @@ class WorkspacePage extends PureComponent {
     }
 
     state = {
-        expandedPhase: 'none',
-        ctaText: '',
+        expandedPhase: "none",
+        ctaText: "",
         ctaAction: () => null,
         ctaDisabled: true,
         ctaDone: false,
         CustomButton: null,
-        showMobileMenu: false,
+        showMobileMenu: false
     };
 
     componentDidMount() {
@@ -82,8 +82,8 @@ class WorkspacePage extends PureComponent {
 
         this.selectActivePhase();
 
-        if (path === '/actie/') {
-            history.push('/actie/starten')
+        if (path === "/actie/") {
+            history.push("/actie/starten");
         } else {
             this.ensurePlaygroundDetails();
         }
@@ -98,7 +98,7 @@ class WorkspacePage extends PureComponent {
             this.ensurePlaygroundDetails();
         }
 
-        if (this.props.playground && (!prevProps.playground || (prevProps.playground.id === this.props.playground.id)) ) {
+        if (this.props.playground && (!prevProps.playground || (prevProps.playground.id === this.props.playground.id))) {
             this.ensurePlaygroundDetails();
         }
     }
@@ -109,7 +109,7 @@ class WorkspacePage extends PureComponent {
         const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
 
         if (initiative && initiative.id) {
-            console.log('stopping stream: ', initiativeName, initiative.id);
+            console.log("stopping stream: ", initiativeName, initiative.id);
             stopPlaygroundDetailsStream(initiative.id);
         }
     }
@@ -150,17 +150,17 @@ class WorkspacePage extends PureComponent {
         if (firstStepLink) history.push(firstStepLink);
     }
 
-    setCta({ ctaText = '', ctaAction = () => null, ctaDisabled = true, ctaDone = false, CustomButton = null }) {
+    setCta({ ctaText = "", ctaAction = () => null, ctaDisabled = true, ctaDone = false, CustomButton = null }) {
         this.setState({ ctaText, ctaAction, ctaDisabled, ctaDone, CustomButton });
     }
 
     unsetCta() {
         this.setState({
-            ctaText: '',
+            ctaText: "",
             ctaAction: () => null,
             ctaDisabled: true,
             ctaDone: false,
-            CustomButton: null,
+            CustomButton: null
         });
     }
 
@@ -179,7 +179,7 @@ class WorkspacePage extends PureComponent {
         const { history, startPathUrl, playground, user, phases } = this.props;
         const url = startPathUrl + next.stepLink;
 
-        if (next.title !== 'Community' && !playground) return;
+        if (next.title !== "Community" && !playground) return;
 
         if (next.visible && !next.visible({ playground, user })) {
             return this.gotoNextStep(getNextStep(phases, url, playground));
@@ -192,7 +192,7 @@ class WorkspacePage extends PureComponent {
         const { ctaText, ctaAction, ctaDisabled, ctaDone, CustomButton } = this.state;
 
         if (CustomButton) {
-            return <CustomButton />;
+            return <CustomButton/>;
         }
 
         if (!ctaText) {
@@ -201,15 +201,15 @@ class WorkspacePage extends PureComponent {
 
         return (
           <Button onClick={ctaAction} variant="contained" className={"pagination-button-step"} disabled={ctaDisabled}>
-              {ctaText} {ctaDone && <Check className={this.props.classes.ctaDone} />}
+              {ctaText} {ctaDone && <Check className={this.props.classes.ctaDone}/>}
           </Button>
-        )
+        );
     }
 
     toggleShowMobileMenu = () => this.setState(({ showMobileMenu }) => ({ showMobileMenu: !showMobileMenu }));
 
     render() {
-        const { phases, playground, user, location: { pathname }, startPathUrl, classes, ...rest } = this.props;
+        const { phases, playground, user, location: { pathname }, startPathUrl, classes } = this.props;
         const { expandedPhase, showMobileMenu } = this.state;
 
         const prev = getPrevStep(phases, pathname);
@@ -219,29 +219,21 @@ class WorkspacePage extends PureComponent {
 
         return (
           <React.Fragment>
+              <WrappedHeader fullWidth customStyle={classes.customWrappedHeader}/>
+
               <Helmet>
                   <title>{titlePrefix} | Actiepagina</title>
               </Helmet>
 
-              <Header
-                rightLinks={<HeaderLinks />}
-                fixed
-                color="white"
-                changeColorOnScroll={{
-                    height: 50,
-                    color: "white"
-                }}
-                toggleShowMobileMenu={this.toggleShowMobileMenu}
-                {...rest}
-              />
-
               <div className={classNames(classes.container + " phase-explainer-container")}>
-                  <BackButton where="home" />
 
                   <GridContainer className={"grid-container"}>
                       <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
+                          <BackButton where="home"/>
+
                           <div className={"title-wrapper"}>
-                              <h2 className={classes.playgroundTitle}>{playground ? playground.name : 'Actiepagina'}</h2>
+                              <h2
+                                className={classes.playgroundTitle}>{playground ? playground.name : "Actiepagina"}</h2>
                           </div>
                       </GridItem>
 
@@ -255,11 +247,13 @@ class WorkspacePage extends PureComponent {
                                     expandedPhase={expandedPhase}
                                     onChange={this.clickPhase}
                                   >
-                                      {phases.community.steps.map(step => step.visible({ playground, user }) && <StyledStepLink onClick={this.toggleShowMobileMenu} user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                      {phases.community.steps.map(step => step.visible({ playground, user }) &&
+                                        <StyledStepLink onClick={this.toggleShowMobileMenu} user={user}
+                                                        startPathUrl={startPathUrl} key={step.name} {...step} />)}
                                   </ExpansionPhase>
 
                                   {
-                                      Object.keys(phases).filter(n => n !== 'community').map((phaseName) => (
+                                      Object.keys(phases).filter(n => n !== "community").map((phaseName) => (
                                         <ExpansionPhase
                                           title={phases[phaseName].title}
                                           icon={phases[phaseName].icon}
@@ -269,7 +263,9 @@ class WorkspacePage extends PureComponent {
                                           disabled={!playground}
                                           key={phaseName}
                                         >
-                                            {phases[phaseName].steps.map(step=> <StyledStepLink onClick={this.toggleShowMobileMenu} user={user} startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                            {phases[phaseName].steps.map(step => <StyledStepLink
+                                              onClick={this.toggleShowMobileMenu} user={user}
+                                              startPathUrl={startPathUrl} key={step.name} {...step} />)}
                                         </ExpansionPhase>
                                       ))
                                   }
@@ -282,7 +278,7 @@ class WorkspacePage extends PureComponent {
                                   <Route exact path="/actie/inloggen" key="WorkspaceLogin"
                                          render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/actie/starten" key="AddFindPlayground"
-                                         render={(props) => <AddFindPlayground {...props} user={user} />}/>
+                                         render={(props) => <AddFindPlayground {...props} user={user}/>}/>
                                   <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin"
                                          render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
 
@@ -291,34 +287,90 @@ class WorkspacePage extends PureComponent {
                                       playground && (
                                         <React.Fragment>
                                             <Route exact path="/actie/:initiativeName" key="WorkspaceWelcome"
-                                                   render={(props) => <WorkspaceWelcomeContent {...props} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/mensen-verzamelen" key="RecruitVolunteers"
-                                                   render={(props) => <RecruitVolunteersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/flyers-verspreiden" key="DistributeFlyers"
-                                                   render={(props) => <DistributeFlyersCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/meningen-inventariseren" key="CollectOpinions"
-                                                   render={(props) => <CollectOpinionsCard {...props} setCta={this.setCta}  unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/contact-leggen-met-bestuur" key="ContactManagement"
-                                                   render={(props) => <ContactManagementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/wij-worden-rookvrij" key="WeWillBecomeSmokefree"
-                                                   render={(props) => <WeWillBecomeSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                                   render={(props) => <WorkspaceWelcomeContent {...props}
+                                                                                               playground={playground}
+                                                                                               user={user}/>}/>
+                                            <Route exact path="/actie/:initiativeName/mensen-verzamelen"
+                                                   key="RecruitVolunteers"
+                                                   render={(props) => <RecruitVolunteersCard {...props}
+                                                                                             setCta={this.setCta}
+                                                                                             unsetCta={this.unsetCta}
+                                                                                             playground={playground}
+                                                                                             user={user}/>}/>
+                                            <Route exact path="/actie/:initiativeName/flyers-verspreiden"
+                                                   key="DistributeFlyers"
+                                                   render={(props) => <DistributeFlyersCard {...props}
+                                                                                            setCta={this.setCta}
+                                                                                            unsetCta={this.unsetCta}
+                                                                                            playground={playground}
+                                                                                            user={user}/>}/>
+                                            <Route exact path="/actie/:initiativeName/meningen-inventariseren"
+                                                   key="CollectOpinions"
+                                                   render={(props) => <CollectOpinionsCard {...props}
+                                                                                           setCta={this.setCta}
+                                                                                           unsetCta={this.unsetCta}
+                                                                                           playground={playground}
+                                                                                           user={user}/>}/>
+                                            <Route exact path="/actie/:initiativeName/contact-leggen-met-bestuur"
+                                                   key="ContactManagement"
+                                                   render={(props) => <ContactManagementCard {...props}
+                                                                                             setCta={this.setCta}
+                                                                                             unsetCta={this.unsetCta}
+                                                                                             playground={playground}
+                                                                                             user={user}/>}/>
+                                            <Route exact path="/actie/:initiativeName/wij-worden-rookvrij"
+                                                   key="WeWillBecomeSmokefree"
+                                                   render={(props) => <WeWillBecomeSmokefreeCard {...props}
+                                                                                                 setCta={this.setCta}
+                                                                                                 unsetCta={this.unsetCta}
+                                                                                                 playground={playground}
+                                                                                                 user={user}/>}/>
 
-                                            <Route exact path="/actie/:initiativeName/kies-moment-van-invoering" key="ChooseProperIntroductionDate"
-                                                   render={(props) => <ChooseProperIntroductionDateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/communiceer-over-de-rookvrije-afspraak" key="CommunicateAboutSmokefreeAgreement"
-                                                   render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
-                                            <Route exact path="/actie/:initiativeName/laat-zien-dat-de-speeltuin-rookvrij-is" key="ShowPlaygroundIsSmokefree"
-                                                   render={(props) => <ShowPlaygroundIsSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/actie/:initiativeName/kies-moment-van-invoering"
+                                                   key="ChooseProperIntroductionDate"
+                                                   render={(props) => <ChooseProperIntroductionDateCard {...props}
+                                                                                                        setCta={this.setCta}
+                                                                                                        unsetCta={this.unsetCta}
+                                                                                                        playground={playground}
+                                                                                                        user={user}/>}/>
+                                            <Route exact
+                                                   path="/actie/:initiativeName/communiceer-over-de-rookvrije-afspraak"
+                                                   key="CommunicateAboutSmokefreeAgreement"
+                                                   render={(props) => <CommunicateAboutSmokefreeAgreementCard {...props}
+                                                                                                              setCta={this.setCta}
+                                                                                                              unsetCta={this.unsetCta}
+                                                                                                              playground={playground}
+                                                                                                              user={user}/>}/>
+                                            <Route exact
+                                                   path="/actie/:initiativeName/laat-zien-dat-de-speeltuin-rookvrij-is"
+                                                   key="ShowPlaygroundIsSmokefree"
+                                                   render={(props) => <ShowPlaygroundIsSmokefreeCard {...props}
+                                                                                                     setCta={this.setCta}
+                                                                                                     unsetCta={this.unsetCta}
+                                                                                                     playground={playground}
+                                                                                                     user={user}/>}/>
 
-                                            <Route exact path="/actie/:initiativeName/we-zijn-rookvrij" key="WeAreSmokefree"
-                                                   render={(props) => <WeAreSmokefreeCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                            <Route exact path="/actie/:initiativeName/we-zijn-rookvrij"
+                                                   key="WeAreSmokefree"
+                                                   render={(props) => <WeAreSmokefreeCard {...props}
+                                                                                          setCta={this.setCta}
+                                                                                          unsetCta={this.unsetCta}
+                                                                                          playground={playground}
+                                                                                          user={user}/>}/>
                                             <Route exact path="/actie/:initiativeName/evalueren" key="Evaluate"
-                                                   render={(props) => <EvaluateCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                                   render={(props) => <EvaluateCard {...props} setCta={this.setCta}
+                                                                                    unsetCta={this.unsetCta}
+                                                                                    playground={playground}
+                                                                                    user={user}/>}/>
 
                                             <Route exact path="/actie/:initiativeName/team" key="WorkspaceTeam"
-                                                   render={(props) => <TeamCard {...props} setCta={this.setCta} unsetCta={this.unsetCta} playground={playground} user={user} />}/>
+                                                   render={(props) => <TeamCard {...props} setCta={this.setCta}
+                                                                                unsetCta={this.unsetCta}
+                                                                                playground={playground} user={user}/>}/>
                                             <Route exact path="/actie/:initiativeName/chat" key="WorkspaceChat"
-                                                   render={(props) => <PlaygroundChatBox {...props} playground={playground} user={user} />}/>
+                                                   render={(props) => <PlaygroundChatBox {...props}
+                                                                                         playground={playground}
+                                                                                         user={user}/>}/>
                                         </React.Fragment>
                                       )
                                   }
@@ -327,18 +379,20 @@ class WorkspacePage extends PureComponent {
                               {openedStepTitle && (
                                 <div className={"workspace-content-pagination"}>
                                     {prev.stepLink ? (
-                                      <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined" className={"pagination-button"}>
-                                          <PaginationIcon />
+                                      <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined"
+                                              className={"pagination-button"}>
+                                          <PaginationIcon/>
                                       </Button>
-                                    ) : <div className={classes.noButton} />}
+                                    ) : <div className={classes.noButton}/>}
 
                                     {this.renderCtaButton()}
 
                                     {next.stepLink ? (
-                                      <Button onClick={() => this.gotoNextStep(next)} variant="outlined" className={"pagination-button"}>
-                                          <PaginationIcon className={"pagination-button-icon-right"} />
+                                      <Button onClick={() => this.gotoNextStep(next)} variant="outlined"
+                                              className={"pagination-button"}>
+                                          <PaginationIcon className={"pagination-button-icon-right"}/>
                                       </Button>
-                                    ) : <div className={classes.noButton} />}
+                                    ) : <div className={classes.noButton}/>}
                                 </div>
                               )}
                           </GridItem>
@@ -346,19 +400,19 @@ class WorkspacePage extends PureComponent {
                   </GridContainer>
               </div>
 
-              <Footer />
+              <Footer fullWidth />
           </React.Fragment>
         );
     }
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    playgrounds: getAllPlaygrounds(state),
+    playgrounds: getAllPlaygrounds(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-    ensurePlaygroundDetails:        (initiativeId) =>     dispatch(ensurePlaygroundDetails(initiativeId)),
-    stopPlaygroundDetailsStream:    (initiativeId) =>     dispatch(stopPlaygroundDetailsStream(initiativeId)),
+    ensurePlaygroundDetails: (initiativeId) => dispatch(ensurePlaygroundDetails(initiativeId)),
+    stopPlaygroundDetailsStream: (initiativeId) => dispatch(stopPlaygroundDetailsStream(initiativeId))
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WorkspacePage));

@@ -15,9 +15,6 @@ import Divider from "@material-ui/core/Divider";
 import Icon from "@material-ui/core/Icon";
 import Popper from "@material-ui/core/Popper";
 
-// core components
-import Button from "components/CustomButtons/Button.jsx";
-
 import customDropdownStyle from "assets/jss/material-kit-react/components/customDropdownStyle.jsx";
 
 class CustomDropdown extends React.Component {
@@ -79,12 +76,12 @@ class CustomDropdown extends React.Component {
       return (
       <div>
         <div>
-          <Button
+          <div
             aria-label="Notifications"
             aria-owns={open ? "menu-list" : null}
             aria-haspopup="true"
             {...buttonProps}
-            buttonRef={node => {
+            ref={node => {
               this.anchorEl = node;
             }}
             onClick={this.handleClick}
@@ -92,7 +89,7 @@ class CustomDropdown extends React.Component {
             {icon}
             {buttonText !== undefined ? buttonText : null}
             {caret ? <b className={caretClasses} /> : null}
-          </Button>
+          </div>
         </div>
         <Popper
           open={open}

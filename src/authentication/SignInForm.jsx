@@ -125,9 +125,9 @@ class SignInForm extends Component {
     }
 
     render() {
-        const   {   username, password, waitingForServerResponse, changeForm } = this.props
+        const   {   username, password, waitingForServerResponse, changeForm, isInCard } = this.props
 
-        const isInCard = this.props.location.pathname.includes('actie');
+        // const isInCard = this.props.location.pathname.includes('actie');
 
         // To allow for the browser to auto-populate the username and password field, which we cannot detect, the submit button is shown when both
         // fields are populated, but also when a field is not present yet and also when no onChange event has occurred yet.
