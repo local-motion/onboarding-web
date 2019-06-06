@@ -16,6 +16,7 @@ import GridItem from "../../components/Grid/GridItem";
 import { deleteUser } from "../../components/UserProfile/UserProfileActions";
 import { openConfirmationDialog } from "../../components/SimpleDialog/SimpleDialogActions";
 import connect from "react-redux/es/connect/connect";
+import { withRouter } from "react-router-dom";
 
 const styles = theme => ({
     container: {
@@ -437,14 +438,17 @@ class MyProfile extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
     deleteUser: () => dispatch(
       openConfirmationDialog(
         "Bevestig uitschrijven",
         "Weet je zeker dat je je wilt uitschrijven?",
-        null, null, () => dispatch(deleteUser())
+        null, null, () => {
+            ownProps.history.push('/')                      // After offboarding there will no longer be a 'my profile', so direct the user to the homepage
+            dispatch(deleteUser())
+        }
       )
     )
 });
 
-export default withStyles(styles)(connect(null, mapDispatchToProps)(MyProfile));
+export default withStyles(styles)(withRouter(connect(null, mapDispatchToProps)(MyProfile)));
