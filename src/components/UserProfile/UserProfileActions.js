@@ -1,15 +1,58 @@
 import gql from 'graphql-tag';
 import { Auth } from 'aws-amplify';
-import { executeQuery } from '../../api/QueryActions';
+import { executeQuery, GRAPHQL_QUERY } from '../../api/QueryActions';
 import { openErrorDialog, openInformationDialog } from '../SimpleDialog/SimpleDialogActions';
+import { stopStream, triggerStream, startStream } from 'api/StreamActions';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
 export const CREATE_USER_PROFILE = 'CREATE_USER_PROFILE'
 export const DELETE_USER_PROFILE = 'DELETE_USER_PROFILE'
+export const SET_NOTIFICATION_LEVEL = 'SET_NOTIFICATION_LEVEL'
 export const USER_SIGNED_IN = 'USER_SIGNED_IN'
 export const USER_SIGNED_OUT = 'USER_SIGNED_OUT'
 
+export const USER_PROFILE_STREAM = 'USERPROFILE'
+
+
+
+const startUserProfileStream = () => {
+  return startStream(
+    USER_PROFILE_STREAM, 
+    {
+      type: GRAPHQL_QUERY,
+      baseActionIdentifier: GET_USER_PROFILE,
+      query: gql`
+      {
+          profile {
+              id
+              username
+              emailAddress
+              notificationLevel
+          }
+      }
+    `, 
+      onSuccessPrepublish: (result, dispatch) => {
+
+        console.log('result from profile stream:', result)
+
+        if (!result.profile && result.status !== 'not_modified') {
+          dispatch(openErrorDialog(
+            'Gebruikersprofiel niet aanwezig2', 
+            'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
+            'OK', 
+            () => dispatch(signOutUser()))
+          )
+          return true   // terminate event execution
+        }
+      }
+    }
+    ,
+    {
+      pollingInterval: 10000,
+    }
+  )
+}
 
 export const fetchUserProfile = () => executeQuery( {
     type: 'GRAPHQL_QUERY',
@@ -20,6 +63,7 @@ export const fetchUserProfile = () => executeQuery( {
               id
               username
               emailAddress
+              notificationLevel
           }
       }
     `, 
@@ -108,12 +152,34 @@ export const deleteUser = () => executeQuery( {
     }
   })
 
-export const userSignedIn = cognitoUser => (dispatch, getState) =>{
+export const setNotificationLevel = (user, level) => executeQuery( {
+  type: 'GRAPHQL_MUTATION',
+  baseActionIdentifier: SET_NOTIFICATION_LEVEL, 
+  fetchId: user.id,
+  query: gql`
+    mutation setNotificationPreferences($input: SetNotificationPreferencesCommand!) {
+      setNotificationPreferences(input: $input) {
+          id
+        }
+    }
+  `, 
+  variables: {
+    input: {
+      userId: user.id,
+      notificationLevel: level
+    }
+  },
+  onSuccess: (result, dispatch) => dispatch(triggerStream(USER_PROFILE_STREAM))
+})
+ 
+
+  export const userSignedIn = cognitoUser => (dispatch, getState) =>{
     dispatch({ type: USER_SIGNED_IN, cognitoUser })
-    dispatch(fetchUserProfile())
+    dispatch(startUserProfileStream())
 }
 
 export const signOutUser = () => (dispatch) => {
+    dispatch(stopStream(USER_PROFILE_STREAM))
     Auth.signOut({global: true})
         .then(() => {
             console.log('sign out success')
@@ -122,8 +188,8 @@ export const signOutUser = () => (dispatch) => {
         })
         .catch(error => {
             console.log('sign out error', error)
-            dispatch(openErrorDialog('Er heeft zich een probleem voorgedaan met het uitloggen, de pagina wordt opnieuw geladen', 
-                                            'Sign out error: ' + error, 
+            dispatch(openErrorDialog('Er heeft zich een probleem voorgedaan met het uitloggen', 
+                                            'de pagina wordt opnieuw geladen',
                                             'Sluiten', () => {window.location.reload()}))
         })
 }

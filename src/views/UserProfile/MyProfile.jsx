@@ -13,10 +13,11 @@ import { container } from "../../assets/jss/material-kit-react";
 import { titlePrefix } from "../../misc/WorkspaceHelpers";
 import GridContainer from "../../components/Grid/GridContainer";
 import GridItem from "../../components/Grid/GridItem";
-import { deleteUser } from "../../components/UserProfile/UserProfileActions";
+import { deleteUser, setNotificationLevel } from "../../components/UserProfile/UserProfileActions";
 import { openConfirmationDialog } from "../../components/SimpleDialog/SimpleDialogActions";
 import connect from "react-redux/es/connect/connect";
 import { withRouter } from "react-router-dom";
+import { NOTIFICATION_LEVEL_NONE, NOTIFICATION_LEVEL_FULL } from "../../components/UserProfile/UserProfileReducer";
 
 const styles = theme => ({
     container: {
@@ -231,9 +232,12 @@ class MyProfile extends Component {
         [target.name]: target.value
     });
 
-    toggleCheck = () => this.setState(
-      ({ notifications }) => ({ notifications: !notifications })
-    );
+    toggleCheck = () => {
+        const {user} = this.props
+        console.log('hallo', user)
+        this.props.setNotificationLevel(user, user.notificationLevel === NOTIFICATION_LEVEL_NONE ? NOTIFICATION_LEVEL_FULL : NOTIFICATION_LEVEL_NONE)
+    }
+
 
     removeProfile = () => {
         this.props.deleteUser();
@@ -260,7 +264,7 @@ class MyProfile extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { user, classes } = this.props;
         const { username, email, notifications, oldPassword, newPassword, repeatNewPassword } = this.state;
 
         const disabled = true;
@@ -327,7 +331,8 @@ class MyProfile extends Component {
                                 />
                             }
                             label={<span>Stuur e-mail notificaties over team activiteit</span>}
-                            checked={notifications}
+                            // checked={notifications}
+                            checked={user.notificationLevel === NOTIFICATION_LEVEL_FULL}
                             onChange={this.toggleCheck}
                           />
 
@@ -438,7 +443,13 @@ class MyProfile extends Component {
     }
 }
 
+// const mapStateToProps = state => {
+
+// }
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
+    setNotificationLevel: (user, level) => dispatch(setNotificationLevel(user, level)),
+
     deleteUser: () => dispatch(
       openConfirmationDialog(
         "Bevestig uitschrijven",
