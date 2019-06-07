@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button/Button";
 
 import { container } from "../../assets/jss/material-kit-react";
 import MyProfile from "./MyProfile";
-import MyActies from "./MyInitiatives";
+import MyInitiatives from "./MyInitiatives";
 import WrappedHeader from "../../components/Header/WrappedHeader";
 import Footer from "../../components/Footer/Footer";
 import connect from "react-redux/es/connect/connect";
@@ -109,7 +109,7 @@ class UserProfile extends React.Component {
 
                   <Switch>
                       <Route exact path="/mijn-profiel" key="My Profile" render={() => <MyProfile user={user}/>}/>
-                      <Route exact path="/mijn-acties" key="My Acties" render={() => <MyActies user={user} playgrounds={playgrounds}/>}/>
+                      <Route exact path="/mijn-acties" key="My Acties" render={() => <MyInitiatives user={user} playgrounds={playgrounds}/>}/>
                   </Switch>
               </div>
 

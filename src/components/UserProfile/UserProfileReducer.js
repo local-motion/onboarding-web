@@ -6,10 +6,11 @@ import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 
 const initialState = {
   // user: {
-  //   id:                id of the user, not for display
-  //   name:              self-chosen name of the user
-  //   emailAddress:      email address of user
-  //   notificationLevel: NONE | FULL, whether the user wants to be notified of updates in his initiatives
+  //   id:                    id of the user, not for display
+  //   name:                  self-chosen name of the user
+  //   emailAddress:          email address of user
+  //   notificationLevel:     NONE | FULL, whether the user wants to be notified of updates in his initiatives
+  //   initiativeMemberships: array of initiativeIds where the user is a member of
   // }
   // cognitoUser:     object returned by the AWS cognito signin
 }
@@ -41,7 +42,8 @@ const userProfileReducer = (state = initialState, action) => {
             id: action.payload.profile.id,
             name: action.payload.profile.username,
             emailAddress: action.payload.profile.emailAddress,
-            notificationLevel: action.payload.profile.notificationLevel
+            notificationLevel: action.payload.profile.notificationLevel,
+            initiativeMemberships: action.payload.profile.initiativeMemberships
           }
         }
     

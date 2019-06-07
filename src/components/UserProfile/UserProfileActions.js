@@ -29,6 +29,7 @@ const startUserProfileStream = () => {
               username
               emailAddress
               notificationLevel
+              initiativeMemberships
           }
       }
     `, 
@@ -53,34 +54,6 @@ const startUserProfileStream = () => {
     }
   )
 }
-
-export const fetchUserProfile = () => executeQuery( {
-    type: GRAPHQL_QUERY,
-    baseActionIdentifier: GET_USER_PROFILE, 
-    query: gql`
-      {
-          profile {
-              id
-              username
-              emailAddress
-              notificationLevel
-          }
-      }
-    `, 
-    onSuccessPrepublish: (result, dispatch) => {
-      if (!result.profile) {
-        dispatch(openErrorDialog(
-          'Gebruikersprofiel niet aanwezig', 
-          'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
-          'OK', 
-          () => dispatch(signOutUser()))
-        )
-        return true   // terminate event execution
-      }
-    }
-  })
-
-
 
 export const checkEmailExists = (emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback) => executeQuery( {
     type: GRAPHQL_QUERY,

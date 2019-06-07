@@ -2,14 +2,35 @@ import React, { Component } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import { getPhaseIcon, getSmokeFreeDate, titlePrefix } from "../../misc/WorkspaceHelpers";
 import Paper from "@material-ui/core/Paper/Paper";
 import Button from "@material-ui/core/Button/Button";
 import SvgIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import { slugifyPlaygroundName } from "../../components/Playground/PlaygroundActions";
+import CtaButton from "../Onboarding/components/CtaButton";
+import { Typography } from "@material-ui/core";
+
+
 
 const styles = theme => ({
+
+    ctaButton: {
+        [theme.breakpoints.down('xs')]: {
+            margin: '45px auto 0',
+            width: '100%',
+            maxWidth: '100%',
+            fontSize: 16,
+        },
+    },
+    ctaButtonWrapper: {
+        [theme.breakpoints.down('xs')]: {
+            padding: '0 30px',
+        },
+    },
+
+
     wrapper: {
         margin: '40px 15px'
     },
@@ -222,7 +243,8 @@ const DateIcon = ({ className }) => (
 
 class MyInitiatives extends Component {
     render() {
-        const { classes, playgrounds } = this.props;
+        const { classes, playgrounds, user } = this.props;
+        const usersPlaygrounds = playgrounds.filter(playground => user.initiativeMemberships.includes(playground.id))
 
         return (
           <div className={classes.wrapper}>
@@ -233,7 +255,7 @@ class MyInitiatives extends Component {
               <div className={classes.pageTitle}>Mijn Acties</div>
 
               <div className={classes.list}>
-                  {playgrounds.slice(0, 3).map((playground) => {
+                  {usersPlaygrounds.map((playground) => {
                       const icon = getPhaseIcon(playground);
 
                       return (
@@ -281,9 +303,22 @@ class MyInitiatives extends Component {
                       );
                   })}
               </div>
+
+            { !usersPlaygrounds.length &&
+                <Typography>Je bent nog niet betrokken bij een actie. Start er één!</Typography>
+            }
+            <div className={classes.ctaButtonWrapper}>
+                <CtaButton
+                customStyle={classes.ctaButton}
+                text={"Start een actie"}
+                onClick={() => this.props.history.push('/actie/starten')}
+                type={"outlined"}
+                />
+            </div>
+
           </div>
         );
     }
 }
 
-export default withStyles(styles)(MyInitiatives);
+export default withStyles(styles)(withRouter(MyInitiatives));
