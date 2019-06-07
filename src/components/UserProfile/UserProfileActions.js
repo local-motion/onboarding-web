@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Auth } from 'aws-amplify';
-import { executeQuery, GRAPHQL_QUERY } from '../../api/QueryActions';
+import { executeQuery, GRAPHQL_QUERY, GRAPHQL_MUTATION } from '../../api/QueryActions';
 import { openErrorDialog, openInformationDialog } from '../SimpleDialog/SimpleDialogActions';
 import { stopStream, triggerStream, startStream } from 'api/StreamActions';
 
@@ -49,13 +49,13 @@ const startUserProfileStream = () => {
     }
     ,
     {
-      pollingInterval: 10000,
+      pollingInterval: 60000,
     }
   )
 }
 
 export const fetchUserProfile = () => executeQuery( {
-    type: 'GRAPHQL_QUERY',
+    type: GRAPHQL_QUERY,
     baseActionIdentifier: GET_USER_PROFILE, 
     query: gql`
       {
@@ -83,7 +83,7 @@ export const fetchUserProfile = () => executeQuery( {
 
 
 export const checkEmailExists = (emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback) => executeQuery( {
-    type: 'GRAPHQL_QUERY',
+    type: GRAPHQL_QUERY,
     baseActionIdentifier: CHECK_EMAIL_EXISTS, 
     query: gql`
     query Query($emailAddress: String!) {
@@ -99,7 +99,7 @@ export const checkEmailExists = (emailAddress, onSuccessCallback, onFailCallback
   })
 
 export const createUser = (onSuccessCallback) => executeQuery( {
-    type: 'GRAPHQL_MUTATION',
+    type: GRAPHQL_MUTATION,
     baseActionIdentifier: CREATE_USER_PROFILE, 
 
 // Passing in 'irrelevant' to the input parameter as GraphQL apparantly does not support mutations without input parameters
@@ -114,7 +114,7 @@ export const createUser = (onSuccessCallback) => executeQuery( {
   })
 
 export const deleteUser = () => executeQuery( {
-    type: 'GRAPHQL_MUTATION',
+    type: GRAPHQL_MUTATION,
     baseActionIdentifier: DELETE_USER_PROFILE, 
 
 // Passing in 'irrelevant' to the input parameter as GraphQL apparantly does not support mutations without input parameters
@@ -153,7 +153,7 @@ export const deleteUser = () => executeQuery( {
   })
 
 export const setNotificationLevel = (user, level) => executeQuery( {
-  type: 'GRAPHQL_MUTATION',
+  type: GRAPHQL_MUTATION,
   baseActionIdentifier: SET_NOTIFICATION_LEVEL, 
   fetchId: user.id,
   query: gql`
@@ -188,8 +188,14 @@ export const signOutUser = () => (dispatch) => {
         })
         .catch(error => {
             console.log('sign out error', error)
+
+            // Global signout failed (possibly the user was already signed out or expired), remove the cognito related items from local storage for a local signout
+            for(let i in localStorage)
+              if (i.startsWith('amplify') || i.startsWith('CognitoIdentityServiceProvider'))
+                localStorage.removeItem(i)
+
             dispatch(openErrorDialog('Er heeft zich een probleem voorgedaan met het uitloggen', 
-                                            'de pagina wordt opnieuw geladen',
-                                            'Sluiten', () => {window.location.reload()}))
+                                            'De startpagina wordt opnieuw geladen',
+                                            'Sluiten', () => {window.location.replace('/')}))
         })
 }

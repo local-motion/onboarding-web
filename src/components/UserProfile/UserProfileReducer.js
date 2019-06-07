@@ -1,4 +1,4 @@
-import { GET_USER_PROFILE, USER_SIGNED_IN, USER_SIGNED_OUT, CREATE_USER_PROFILE, DELETE_USER_PROFILE } from "./UserProfileActions";
+import { GET_USER_PROFILE, USER_SIGNED_IN, USER_SIGNED_OUT, DELETE_USER_PROFILE } from "./UserProfileActions";
 import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 
 
@@ -8,7 +8,7 @@ const initialState = {
   // user: {
   //   id:                id of the user, not for display
   //   name:              self-chosen name of the user
-  //   email:             email address of user
+  //   emailAddress:      email address of user
   //   notificationLevel: NONE | FULL, whether the user wants to be notified of updates in his initiatives
   // }
   // cognitoUser:     object returned by the AWS cognito signin
@@ -40,20 +40,8 @@ const userProfileReducer = (state = initialState, action) => {
           user: {
             id: action.payload.profile.id,
             name: action.payload.profile.username,
-            email: action.payload.profile.emailAddress,
+            emailAddress: action.payload.profile.emailAddress,
             notificationLevel: action.payload.profile.notificationLevel
-          }
-        }
-    
-    case CREATE_USER_PROFILE + SUCCESS_POSTFIX:
-        console.log("reducer received created user profile:", action.payload)
-      return {
-          ...state,
-          user: {
-            id: action.payload.createUser.id,
-            name: action.payload.createUser.username,
-            email: action.payload.createUser.emailAddress,
-            notificationLevel: NOTIFICATION_LEVEL_NONE
           }
         }
     

@@ -185,87 +185,15 @@ const PasswordIcon = ({ className }) => (
 
 
 class MyProfile extends Component {
-    state = {
-        username: "",
-        email: "",
-        notifications: false,
-        oldPassword: "",
-        newPassword: "",
-        repeatNewPassword: ""
-    };
 
-    componentDidMount() {
-        this.setDefaultUserInfo();
-    }
-
-    setDefaultUserInfo = () => {
-        const { user } = this.props;
-
-        if (user) {
-            const { name, email } = user;
-
-            this.setState({ username: name, email, notifications: false });
-        }
-    };
-
-    saveUserInfo = () => {
-        const { username, email, notifications } = this.state;
-
-        console.log('Save username, email, notifications',
-          username, email, notifications);
-    };
-
-    setDefaultPassword = () => this.setState({
-        oldPassword: "",
-        newPassword: "",
-        repeatNewPassword: "",
-    });
-
-    saveNewPassword = () => {
-        const { oldPassword, newPassword, repeatNewPassword } = this.state;
-
-        console.log('Save oldPassword, newPassword, repeatNewPassword',
-          oldPassword, newPassword, repeatNewPassword);
-    };
-
-    onChange = ({ target }) => this.setState({
-        [target.name]: target.value
-    });
-
-    toggleCheck = () => {
+    toggleNotificationsCheckbox = () => {
         const {user} = this.props
-        console.log('hallo', user)
         this.props.setNotificationLevel(user, user.notificationLevel === NOTIFICATION_LEVEL_NONE ? NOTIFICATION_LEVEL_FULL : NOTIFICATION_LEVEL_NONE)
     }
 
 
-    removeProfile = () => {
-        this.props.deleteUser();
-    };
-
-    isUserInfoButtonDisabled = () => {
-        const { user } = this.props;
-        const { username, email } = this.state;
-
-        // need notifications
-        return !!(user.name === username && user.email === email);
-    };
-
-    isNewPasswordButtonDisabled = () => {
-        const { oldPassword, newPassword, repeatNewPassword } = this.state;
-
-        return !!(oldPassword.length || newPassword.length || repeatNewPassword.length);
-    };
-
-    isNewPasswordValidToSave = () => {
-        const { oldPassword, newPassword, repeatNewPassword } = this.state;
-
-        return !!(oldPassword.length && newPassword.length && (newPassword === repeatNewPassword));
-    };
-
     render() {
         const { user, classes } = this.props;
-        const { username, email, notifications, oldPassword, newPassword, repeatNewPassword } = this.state;
 
         const disabled = true;
 
@@ -291,8 +219,8 @@ class MyProfile extends Component {
                             label="Gebruikersnaam"
                             type="text"
                             name="username"
-                            value={username}
-                            onChange={this.onChange}
+                            value={user.name}
+                            // onChange={this.onChange}
                             disabled={disabled}
                             inputProps={{
                                 style: {
@@ -307,8 +235,8 @@ class MyProfile extends Component {
                             label="Emailadres"
                             type="email"
                             name="email"
-                            value={email}
-                            onChange={this.onChange}
+                            value={user.emailAddress}
+                            // onChange={this.onChange}
                             disabled={disabled}
                             inputProps={{
                                 style: {
@@ -330,10 +258,9 @@ class MyProfile extends Component {
                                   value="accepted"
                                 />
                             }
-                            label={<span>Stuur e-mail notificaties over team activiteit</span>}
-                            // checked={notifications}
+                            label={<span>Stuur e-mail notificaties over teamactiviteit</span>}
                             checked={user.notificationLevel === NOTIFICATION_LEVEL_FULL}
-                            onChange={this.toggleCheck}
+                            onChange={this.toggleNotificationsCheckbox}
                           />
 
                           <div className={classes.actions}>
@@ -369,8 +296,8 @@ class MyProfile extends Component {
                             label="Huidig wachtwoord"
                             type="password"
                             name="oldPassword"
-                            value={oldPassword}
-                            onChange={this.onChange}
+                            // value={oldPassword}
+                            // onChange={this.onChange}
                             disabled={disabled}
                             inputProps={{
                                 style: {
@@ -385,8 +312,8 @@ class MyProfile extends Component {
                             label="Wachtwoord"
                             type="password"
                             name="newPassword"
-                            value={newPassword}
-                            onChange={this.onChange}
+                            // value={newPassword}
+                            // onChange={this.onChange}
                             disabled={disabled}
                             inputProps={{
                                 style: {
@@ -401,8 +328,8 @@ class MyProfile extends Component {
                             label="Wachtwoord nogmaals"
                             type="password"
                             name="repeatNewPassword"
-                            value={repeatNewPassword}
-                            onChange={this.onChange}
+                            // value={repeatNewPassword}
+                            // onChange={this.onChange}
                             disabled={disabled}
                             inputProps={{
                                 style: {
@@ -434,7 +361,7 @@ class MyProfile extends Component {
                   <GridItem xs={12} sm={12} md={6}>
                       <Button
                         fullWidth
-                        onClick={this.removeProfile}
+                        onClick={this.props.deleteUser}
                       >Verwijder mijn profiel</Button>
                   </GridItem>
               </GridContainer>

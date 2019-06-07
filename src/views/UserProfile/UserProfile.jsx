@@ -11,6 +11,7 @@ import Footer from "../../components/Footer/Footer";
 import connect from "react-redux/es/connect/connect";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
+import { withRouter } from "react-router-dom";
 
 
 const styles = theme => ({
@@ -95,7 +96,7 @@ class UserProfile extends React.Component {
     render() {
         const { classes, user, playgrounds } = this.props;
 
-        if (!user) return <div>Loading...</div>;
+        if (!user) return <div>De pagina wordt geladen. Klik <a href='/'>hier</a> om terug naar de startpagina te gaan.</div>;
 
         return (
           <div className={classes.wrapper}>
@@ -123,4 +124,4 @@ const mapStateToProps = (state) => ({
     user: getUser(state),
 });
 
-export default withStyles(styles)(connect(mapStateToProps)(UserProfile));
+export default withStyles(styles)(withRouter(connect(mapStateToProps)(UserProfile)));
