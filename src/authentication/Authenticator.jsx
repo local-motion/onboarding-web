@@ -15,6 +15,7 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 import PasswordResetForm from './PasswordResetForm';
 import queryString from 'query-string';
 import SignUpSuccessForm from './SignUpSuccessForm';
+import ChangePasswordForm from './ChangePasswordForm';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -51,7 +52,7 @@ class Authenticator extends Component {
         super(props);
 
         this.state = {
-            form: 'signIn',
+            form: this.props.form || 'signIn',
             username: '',
             password: '',
             confirmPassword: '',
@@ -64,7 +65,8 @@ class Authenticator extends Component {
         bindMethods(['changeForm', 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'onSignInSuccess', 'displayError', 
                      'setWaitingForServerResponse', 'clearWaitingForServerResponse'], this)
 
-        const isInCard = this.props.location.pathname.includes('actie');
+        // const isInCard = this.props.location.pathname.includes('actie');
+        const {isInCard} = this.props
         const params = queryString.parse(this.props.location.search)
         const verificationType = params.type
         const username = params.user
@@ -157,10 +159,10 @@ class Authenticator extends Component {
         let formProps = copyProperties(this.state, {},    [ 'username', 'password', 'emailAddress', 'verificationCode', 'verificationLink', 'waitingForServerResponse' ])
         formProps = copyProperties(this, formProps,       [ 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'displayError',
                                                             'setWaitingForServerResponse', 'clearWaitingForServerResponse', 'changeForm'])
-        formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog'])
+        formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog', 'isInCard'])
         formProps.storeInitiativeForVerification = storeInitiativeForVerification
         formProps.clearInitiativeForVerification = clearInitiativeForVerification
-        formProps.isInCard = this.props.location.pathname.includes('actie')
+        // formProps.isInCard = this.props.location.pathname.includes('actie')
 
         switch(this.state.form) {
             case 'signIn':
@@ -175,6 +177,8 @@ class Authenticator extends Component {
                 return <ForgotPasswordForm {...formProps}/>
             case 'passwordReset':
                 return <PasswordResetForm {...formProps}/>
+            case 'changePassword':
+                return <ChangePasswordForm {...formProps}/>
             case 'signedIn':
                 console.log('redirecting to /actie')
                 return <Redirect to='/actie'/>

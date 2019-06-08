@@ -45,10 +45,10 @@ class App extends React.Component {
                 </Helmet>
                 <Router history={history}>
                     <Switch>
-                        <Route exact path="/inloggen" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}/> } />
+                        <Route exact path="/inloggen" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler} isInCard={false}/> } />
 
                         {/* This route is required for now to capture the links from the verification mails */}
-                        <Route exact path="/login" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}/> } />
+                        <Route exact path="/login" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}  isInCard={false}/> } />
 
                         <Route exact path="/over-ons" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>

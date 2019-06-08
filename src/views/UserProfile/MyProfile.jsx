@@ -18,6 +18,7 @@ import { openConfirmationDialog } from "../../components/SimpleDialog/SimpleDial
 import connect from "react-redux/es/connect/connect";
 import { withRouter } from "react-router-dom";
 import { NOTIFICATION_LEVEL_NONE, NOTIFICATION_LEVEL_FULL } from "../../components/UserProfile/UserProfileReducer";
+import Authenticator from "authentication/Authenticator";
 
 const styles = theme => ({
     container: {
@@ -284,6 +285,7 @@ class MyProfile extends Component {
                   </GridItem>
 
                   <GridItem xs={12} sm={12} md={6}>
+                      <Authenticator form="changePassword" isInCard={true}/>
                       <Paper className={classes.paper}>
                           <div className={classes.settingsTitle}>
                               <PasswordIcon className={classes.settingsIcon}/>
