@@ -3,19 +3,15 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {Button, CardMedia, withStyles} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
-import Paper from "@material-ui/core/Paper/Paper";
 import { Link } from "react-router-dom";
-import Typography from '@material-ui/core/Typography';
 
 import { getErrorMessage } from '../api/ErrorMessages';
 import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import TextField from "@material-ui/core/TextField/TextField";
 import { signOutUser } from '../components/UserProfile/UserProfileActions';
-import { style } from './AuthenticatorStyles';
 import { bindMethods } from '../utils/Generics';
 import { styles } from './AuthenticatorStyles';
 import { PadlockIcon } from './AuthenticatorStyles';
-import typographyStyle from 'assets/jss/material-kit-react/components/typographyStyle';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -145,185 +141,85 @@ class SignInForm extends Component {
 
         return (
             <div>
-            {/* <div className={"secure-app-container"} > */}
-
-                 {/* <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
-                 {isInCard || <div className={"secure-app-background"}></div>}
-                  <div className={"secure-app-container"} style={isInCard ? style.secureAppContainer : {}}> */}
-                {/* //  <div className={"paper"} > */}
-
+                {isInCard || <div className={"secure-app-background"}></div>}
                 {isInCard && (
                       <CardMedia
-                        style={style.media}
+                        className={classes.media}
                         image={require("../assets/img/backgrounds/login-bg.jpg")}
                         title={"Inloggen"}
                       />
                     )}
-             {/* <Paper className={classes.paper}> */}
-             <div className={classes.secureAppContainer}>
-             {/* <div className={"secure-app-container"} > */}
+                <div className={classes.secureAppContainer}>
 
-                <div className={classes.settingsTitle}>
-                    <PadlockIcon className={classes.settingsIcon}/>
-                    Inloggen
-                </div>
-                <p>Geef je gebruikersnaam en wachtwoord op</p>
-
-                <TextField
-                    variant="outlined"
-                    className={classes.input}
-                    label="Gebruikersnaam"
-                    type="text"
-                    name="username"          // Setting the name property triggers the autocomplete in Chrome
-                    value={username}
-                    onChange={this.onChangeUsername}
-                    autoFocus={!username}
-                    autoComplete="username"
-                    onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
-                />
-
-                <TextField
-                    variant="outlined"
-                    className={classes.input}
-                    name="password"          // Setting the name property triggers the autocomplete in Chrome
-                    label="Wachtwoord"
-                    type="password"
-                    value={password}
-                    onChange={this.onChangePassword}
-                    onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
-                    autoFocus={!!username}
-                />
-
-                <div className={classes.actions}>
-                    <Button
-                    variant="contained"
-                    className={`${classes.button} ${classes.saveButton}`}
-                    classes={{ disabled: classes.disabled }}
-                    disabled={ !isReadyToSubmit }
-                    onClick={this.signIn}
-                    >
+                    <div className={classes.settingsTitle}>
+                        <PadlockIcon className={classes.settingsIcon}/>
                         Inloggen
-                    </Button>
-                </div>
-                {/* <div className={classes.actions}>
-                    <Button
-                    variant="contained"
-                    className={`${classes.button} ${classes.saveButton}`}
-                    classes={{ disabled: classes.disabled }}
-                    onClick={() => changeForm('forgotPassword')}
-                    >
-                        Wachtwoord vergeten?
-                    </Button>
-                </div> */}
+                    </div>
+                    <p>Geef je gebruikersnaam en wachtwoord op</p>
 
-                <div className={classes.links}>
-                    {/* <Link to="/over-ons" className={classes.link}>Over ons</Link> */}
-                    <Link 
-                        className={classes.link}
-                        onClick={() => changeForm('forgotPassword')}
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Gebruikersnaam"
+                        type="text"
+                        name="username"          // Setting the name property triggers the autocomplete in Chrome
+                        value={username}
+                        onChange={this.onChangeUsername}
+                        autoFocus={!username}
+                        autoComplete="username"
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    />
+
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        name="password"          // Setting the name property triggers the autocomplete in Chrome
+                        label="Wachtwoord"
+                        type="password"
+                        value={password}
+                        onChange={this.onChangePassword}
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                        autoFocus={!!username}
+                    />
+
+                    <div className={classes.actions}>
+                        <Button
+                        variant="contained"
+                        className={`${classes.button} ${classes.saveButton}`}
+                        classes={{ disabled: classes.disabled }}
+                        disabled={ !isReadyToSubmit }
+                        onClick={this.signIn}
                         >
-                        Wachtwoord vergeten?
-                    </Link>
+                            Inloggen
+                        </Button>
+                    </div>
+
+                    <div className={classes.links}>
+                        <Link 
+                            className={classes.link}
+                            onClick={() => changeForm('forgotPassword')}
+                            >
+                            Wachtwoord vergeten?
+                        </Link>
+                    </div>
+
+
+                    <p className={classes.title}>Ben je hier voor de eerste keer?</p>
+                    <p className={classes.text}> Je hoeft je slechts éénmalig te registreren om deel te nemen aan een actie. Na het registeren kun je meteen starten om de speeltuin rookvrij te maken.</p>
+
+                    <div className={classes.actions}>
+                        <Button
+                        variant="contained"
+                        className={`${classes.button} ${classes.saveButton}`}
+                        classes={{ disabled: classes.disabled }}
+                        disabled={ !isReadyToSubmit }
+                        onClick={() => changeForm('signUp')}
+                        >
+                            Maak een account
+                        </Button>
+                    </div>
                 </div>
-
-
-                <p className={classes.title}>Ben je hier voor de eerste keer?</p>
-                <p className={classes.text}> Je hoeft je slechts éénmalig te registreren om deel te nemen aan een actie. Na het registeren kun je meteen starten om de speeltuin rookvrij te maken.</p>
-
-                <div className={classes.actions}>
-                    <Button
-                    variant="contained"
-                    className={`${classes.button} ${classes.saveButton}`}
-                    classes={{ disabled: classes.disabled }}
-                    disabled={ !isReadyToSubmit }
-                    onClick={() => changeForm('signUp')}
-                    >
-                        Maak een account
-                    </Button>
-                </div>
-                {/* </Paper> */}
-                </div>
-                </div>
-
-
-
-            // <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
-            //     {isInCard || <div className={"secure-app-background"}></div>}
-            //     <div className={"secure-app-container"} style={isInCard ? style.secureAppContainer : {}}>
-            //         {isInCard && (
-            //           <CardMedia
-            //             style={style.media}
-            //             image={require("../assets/img/backgrounds/login-bg.jpg")}
-            //             title={"Inloggen"}
-            //           />
-            //         )}
-            //         <h1 className={"grunge-title"}>Inloggen</h1>
-            //         <p>Geef je gebruikersnaam en wachtwoord op</p>
-            //         <div className={"signin-wrapper"}>
-            //             <form
-            //                 style={style}
-            //                 onKeyDown={
-            //                     event => this.catchEnterSubmit(event, isReadyToSubmit)
-            //                 }
-            //             >
-            //                 <TextField
-            //                     placeholder="Gebruikersnaam"
-            //                     id="signInFormUsername"
-            //                     type="text"
-            //                     fullWidth
-            //                     variant={"outlined"}
-            //                     style={style.input}
-            //                     value={username}
-            //                     onChange={this.onChangeUsername}
-            //                     autoFocus={!username}
-            //                     autoComplete="username"
-            //                     />
-            //                 <TextField
-            //                     placeholder="Wachtwoord"
-            //                     id="signInFormPassword"
-            //                     type="password"
-            //                     fullWidth
-            //                     variant={"outlined"}
-            //                     value={password}
-            //                     onChange={this.onChangePassword}
-            //                     style={style.input}
-            //                     autoFocus={!!username}
-            //                 />
-            //                 <Button
-            //                     style={style.loginButton}
-            //                     onClick={this.signIn}
-            //                     variant="contained"
-            //                     color="primary"
-            //                     className={"pagination-button-step"}
-            //                     disabled={!isReadyToSubmit}
-            //                 >
-            //                     Inloggen
-            //                 </Button>
-
-            //                 <Button
-            //                   variant="text"
-            //                   style={{...style.loginButton, ...style.extraButton }}
-            //                   onClick={() => changeForm('forgotPassword')}
-            //                 >
-            //                     Wachtwoord vergeten?
-            //                 </Button>
-
-            //                 <p style={style.createAccountTitle}>Ben je hier voor de eerste keer?</p>
-            //                 <p> Je hoeft je slechts éénmalig te registreren om deel te nemen aan een actie. Na het registeren kun je meteen starten om de speeltuin rookvrij te maken.</p>
-
-            //                 <Button
-            //                     style={style.signUpButton}
-            //                     onClick={() => changeForm('signUp')}
-            //                     variant="contained"
-            //                     className={"pagination-button-step"}
-            //                 >
-            //                     Maak een account
-            //                 </Button>
-            //             </form>
-
-            //         </div>
-            //     </div>
-            // </div>
+            </div>
         )
     }
 }

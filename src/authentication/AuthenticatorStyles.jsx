@@ -36,6 +36,12 @@ export const PadlockIcon = ({ className }) => (
 // Styles
 
 export const styles = theme => ({
+    media: {
+        height: '300px', 
+        margin: '-25px', 
+        marginBottom: 30, 
+        backgroundPositionY: -130
+    },
     title: {
         fontWeight: 'bold', 
         marginTop: 20, 
@@ -94,6 +100,7 @@ export const styles = theme => ({
         alignItems: "center",
         display: "flex",
         flexDirection: "column",
+        width: '100%',
     },
     checkmark: {
         color: 'green'

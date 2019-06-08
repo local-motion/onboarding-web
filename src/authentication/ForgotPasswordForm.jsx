@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
-import {Button, TextField} from '@material-ui/core'
+import {Button, TextField, withStyles} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
-import { style } from './AuthenticatorStyles';
+import { styles } from './AuthenticatorStyles';
 import { bindMethods } from '../utils/Generics';
+import { PadlockIcon } from './AuthenticatorStyles';
+import { Link } from "react-router-dom";
 
 /**
  * This form allows the user to specify his username or email address and get sent an email containing a code to reset his password
@@ -60,75 +62,73 @@ class ForgotPasswordForm extends Component {
     }
 
     render() {
-        const {username, waitingForServerResponse, changeForm, isInCard} = this.props
-        // const isInCard = this.props.location.pathname.includes('actie');
+        const {username, waitingForServerResponse, changeForm, isInCard, classes} = this.props
 
         console.log('initiativeid: ', this.props.match.params)
 
         const isReadyToSubmit = username && !waitingForServerResponse
 
         return (
-            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+
+
+            <div>
                 {isInCard || <div className={"secure-app-background"}></div>}
-                <div className={"secure-app-container"}>
-                    <h1 className={"grunge-title"}>Wachtwoord vergeten</h1>
-                    <div style={style.container}>
-                        <form
-                            style={style}
-                            onSubmit={e => { e.preventDefault(); }}
-                            onKeyDown={
-                                event => this.catchEnterSubmit(event, isReadyToSubmit)
-                            }
-                        >
-                                <TextField
-                                  placeholder="Gebruikersnaam of emailadres"
-                                  type="text"
-                                  style={style.input}
-                                  fullWidth
-                                  variant={"outlined"}
-                                  value={username}
-                                  onChange={this.onChangeUsername}
-                                  autoFocus
-                                />
-                                <Button
-                                    style={style.loginButton}
-                                    onClick={this.sendCode}
-                                    variant="contained"
-                                    color="primary"
-                                    className={"pagination-button-step"}
-                                    disabled={!isReadyToSubmit}
-                                >
-                                    Verstuur wachtwoord reset code
-                                </Button>
-                        </form>
-                        <div style={style.links}>
-                            <div style={style.left}>
-                                <Button
-                                    style={style.extraButton}
-                                    onClick={() => changeForm('signIn')}>
-                                    Ga terug naar login
-                                </Button>
-                            </div>
-                            <div style={style.left}>
-                                <Button
-                                    style={style.extraButton}
-                                    onClick={() => changeForm('confirmSignUp')}>
-                                    Bevestig je account
-                                </Button>
-                            </div>
-                            <div style={style.left}>
-                                <Button
-                                    style={style.extraButton}
-                                    onClick={() => changeForm('signUp')}>
-                                    Nog geen account?
-                                </Button>
-                            </div>
-                        </div>
+                <div className={classes.secureAppContainer}>
+
+                    <div className={classes.settingsTitle}>
+                        <PadlockIcon className={classes.settingsIcon}/>
+                        Wachtwoord vergeten
                     </div>
+
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Gebruikersnaam of emailadres"
+                        type="text"
+                        name="username"          // Setting the name property triggers the autocomplete in Chrome
+                        value={username}
+                        onChange={this.onChangeUsername}
+                        autoFocus
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    />
+
+                    <div className={classes.actions}>
+                        <Button
+                        variant="contained"
+                        className={`${classes.button} ${classes.saveButton}`}
+                        classes={{ disabled: classes.disabled }}
+                        disabled={ !isReadyToSubmit }
+                        onClick={this.sendCode}
+                        >
+                            Verstuur wachtwoord reset code
+                        </Button>
+                    </div>
+
+                    <div className={classes.links}>
+                        <Link 
+                            className={classes.link}
+                            onClick={() => changeForm('signIn')}
+                            >
+                            Ga terug naar login
+                        </Link>
+                        <Link 
+                            className={classes.link}
+                            onClick={() => changeForm('confirmSignUp')}
+                            >
+                            Bevestig je account
+                        </Link>
+                        <Link 
+                            className={classes.link}
+                            onClick={() => changeForm('signUp')}
+                            >
+                            Nog geen account?
+                        </Link>
+                    </div>
+
                 </div>
             </div>
         )
     }
 }
 
-export default withRouter(ForgotPasswordForm);
+export default withStyles(styles)(withRouter(ForgotPasswordForm));

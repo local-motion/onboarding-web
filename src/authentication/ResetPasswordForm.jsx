@@ -1,22 +1,14 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
-import {Button, TextField, withStyles} from '@material-ui/core'
+import {Button, TextField, CardMedia, withStyles} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
 import { validateToMessage } from '../components/validation/Validations';
-import { style } from './AuthenticatorStyles';
 import { passwordMaximumLength, passwordMinimumLength, containsLowerCaseLetterPattern, containsUpperCaseLetterPattern, containsDecimalPattern, containsSpecialCharacterPattern, isValidPassword, containsOnlyValidCharactersPattern, allowedSpecialCharacters, isValidVerificationCode, allVerificationCodeCharactersPattern, verificationCodeLength } from './AuthenticatorValidations';
 import { bindMethods } from '../utils/Generics';
-
-
-const styles = theme => ({
-    checkmark: {
-        color: 'green'
-    },
-    specialCharacters: {
-        fontWeight: 'bold',
-    }
-})
+import { styles } from './AuthenticatorStyles';
+import { PadlockIcon } from './AuthenticatorStyles';
+import { Link } from "react-router-dom";
 
 const limitedPasswordValidations = [
     {
@@ -126,108 +118,119 @@ class ResetPasswordForm extends Component {
 
 
         return (
-            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+
+            <div>
                 {isInCard || <div className={"secure-app-background"}></div>}
-                <div className={"secure-app-container"}>
-                    <h1 className={"grunge-title"}>Wachtwoord reset</h1>
-                    <div className={"signin-wrapper"}>
-                        {verificationLink ?
+                {isInCard && (
+                      <CardMedia
+                        className={classes.media}
+                        image={require("../assets/img/backgrounds/login-bg.jpg")}
+                        title={"Inloggen"}
+                      />
+                    )}
+                <div className={classes.secureAppContainer}>
+
+                    <div className={classes.settingsTitle}>
+                        <PadlockIcon className={classes.settingsIcon}/>
+                        Wachtwoord reset
+                    </div>
+                    {verificationLink ?
                             <p>Kies een nieuw wachtwoord</p>
                         :
                             <p>Geef de code uit de wachtwoordresetmail en kies een nieuw wachtwoord</p>
-                        }
-                        {/* The verification code field is placed outside the form so the Chrome password manager does not misinterpret the verification code for the username */}
-                        {!verificationLink &&
-                        <TextField
-                            type="text"
-                            fullWidth
-                            variant={"outlined"}
-                            placeholder="Code"
-                            value={verificationCode}
-                            onChange={this.onChangeVerificationCode}
-                            style={style.input}
-                            autoFocus={!verificationCode}
-                            autoComplete='off'
-                            />
-                        }
-                        {verificationCodeError && <p className={"error"}>{verificationCodeError}</p>}
-                        <form
-                            style={style}
-                            onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    }
+
+                    {/* The verification code field is placed outside the form so the Chrome password manager does not misinterpret the verification code for the username */}
+                    {!verificationLink &&
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Code"
+                        type="text"
+                        value={verificationCode}
+                        onChange={this.onChangeVerificationCode}
+                        autoComplete="off"
+                        autoFocus={!verificationCode}
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    />
+                    }
+                    {verificationCodeError && <p className={"error"}>{verificationCodeError}</p>}
+
+                    <form className={classes.secureAppContainer}>
+
+                    {/* The username field is here mainly to allow password manager to store the new username-password combination */}
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Gebruikersnaam"
+                        type="text"
+                        // name="username"          // Setting the name property triggers the autocomplete in Chrome
+                        value={username}
+                        onChange={this.onChangeUsername}
+                        autoComplete="username"
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    />
+
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Wachtwoord"
+                        type="password"
+                        value={password}
+                        onChange={this.onChangePassword}
+                        onFocus={() => this.onFocusChangePassword(true)}
+                        onBlur={() => this.onFocusChangePassword(false)}
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                        autoFocus={!!verificationCode}
+                        autoComplete="new-password"
+                    />
+                    {passwordFocus &&
+                        <p>
+                            Het wachtwoord moet:<br />
+                            {containsLowerCaseLetterPattern.test(password) ? checkmark : '-'} een kleine letter bevatten<br />
+                            {containsUpperCaseLetterPattern.test(password) ? checkmark : '-'} een hoofdletter bevatten<br />
+                            {containsDecimalPattern.test(password) ? checkmark : '-'} een cijfer bevatten<br />
+                            {containsSpecialCharacterPattern.test(password) ? checkmark : '-'} een van de volgende tekens bevatten: <span className={classes.specialCharacters}>{allowedSpecialCharacters}</span><br />
+                            {password.length >= passwordMinimumLength ? checkmark : '-'} tenminste {passwordMinimumLength} karakters lang zijn<br />
+                            {passwordErrorLimited && <span className={"error"}>{passwordErrorLimited}</span>}
+                        </p>
+                    }
+                    {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
+
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Wachtwoord nogmaals"
+                        type="password"
+                        value={repeatedPassword}
+                        onChange={this.onChangeRepeatedPassword}
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                        autoComplete="new-password"
+                    />
+                    {repeatedPasswordError && <p className={"error"}>{repeatedPasswordError}</p>}
+
+                    <div className={classes.actions}>
+                        <Button
+                        variant="contained"
+                        className={`${classes.button} ${classes.saveButton}`}
+                        classes={{ disabled: classes.disabled }}
+                        disabled={ !isReadyToSubmit }
+                        onClick={this.resetPassword}
                         >
-                            {/* The username field is here mainly to allow password manager to store the new username-password combination */}
-                            <TextField
-                                  placeholder="Gebruikersnaam of emailadres"
-                                  type="text"
-                                  style={style.input}
-                                  fullWidth
-                                  variant={"outlined"}
-                                  value={username}
-                                  onChange={this.onChangeUsername}
-                                //   disabled={verificationLink}
-                                  autoComplete="username"
-                                  />
-                            <TextField
-                                type="password"
-                                placeholder="Kies een wachtwoord"
-                                fullWidth
-                                variant={"outlined"}
-                                value={password}
-                                onChange={this.onChangePassword}
-                                onFocus={() => this.onFocusChangePassword(true)}
-                                onBlur={() => this.onFocusChangePassword(false)}
-                                style={style.input}
-                                autoFocus={!!verificationCode}
-                                autoComplete="new-password"
-                            />
-                            {passwordFocus &&
-                                <p>
-                                    Het wachtwoord moet:<br />
-                                    {containsLowerCaseLetterPattern.test(password) ? checkmark : '-'} een kleine letter bevatten<br />
-                                    {containsUpperCaseLetterPattern.test(password) ? checkmark : '-'} een hoofdletter bevatten<br />
-                                    {containsDecimalPattern.test(password) ? checkmark : '-'} een cijfer bevatten<br />
-                                    {containsSpecialCharacterPattern.test(password) ? checkmark : '-'} een van de volgende tekens bevatten: <span className={classes.specialCharacters}>{allowedSpecialCharacters}</span><br />
-                                    {password.length >= passwordMinimumLength ? checkmark : '-'} tenminste {passwordMinimumLength} karakters lang zijn<br />
-                                    {passwordErrorLimited && <span className={"error"}>{passwordErrorLimited}</span>}
-                                </p>
-                            }
-                            {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
-
-                            <TextField
-                                type="password"
-                                placeholder="Herhaal het wachtwoord"
-                                fullWidth
-                                variant={"outlined"}
-                                value={repeatedPassword}
-                                onChange={this.onChangeRepeatedPassword}
-                                style={style.input}
-                                autoComplete="new-password"
-                            />
-                            {repeatedPasswordError && <p className={"error"}>{repeatedPasswordError}</p>}
-
-                            <Button
-                                style={style.loginButton}
-                                variant="contained"
-                                color="primary"
-                                disabled={ !isReadyToSubmit }
-                                onClick={this.resetPassword}>
-                                Reset wachtwoord
-                            </Button>
-                        </form>
-                        <div style={style.links} className={"extra-info"}>
-                            <div style={style.left}>
-                                <Button
-                                    style={style.extraButton}
-                                    onClick={() => {
-                                        console.log('button pressed')
-                                        changeForm('forgotPassword')
-                                    }
-                                    }>
-                                    Terug naar nieuw wachtwoord aanvragen
-                                </Button>
-                            </div>
-                        </div>
+                            Reset wachtwoord
+                        </Button>
                     </div>
+                    </form>
+
+                    <div className={classes.links}>
+                        <Link 
+                            className={classes.link}
+                            onClick={() => changeForm('forgotPassword')}
+                            >
+                                Terug naar nieuw wachtwoord aanvragen
+                        </Link>
+                    </div>
+
                 </div>
             </div>
         )
