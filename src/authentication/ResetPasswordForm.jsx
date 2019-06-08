@@ -32,7 +32,7 @@ const limitedPasswordValidations = [
 /**
  * This form allows the user to set a new password using a reset code that was sent to him
  */
-class PasswordResetForm extends Component {
+class ResetPasswordForm extends Component {
     constructor(props) {
         super(props);
 
@@ -234,4 +234,4 @@ class PasswordResetForm extends Component {
     }
 }
 
-export default withStyles(styles)(withRouter(PasswordResetForm))
+export default withStyles(styles)(withRouter(ResetPasswordForm))

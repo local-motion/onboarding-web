@@ -12,7 +12,7 @@ import { bindMethods, copyProperties, readFromBrowserStorage, writeToBrowserStor
 import ConfirmSignUpForm from './ConfirmSignUpForm';
 import { openInformationDialog, openErrorDialog } from '../components/SimpleDialog/SimpleDialogActions';
 import ForgotPasswordForm from './ForgotPasswordForm';
-import PasswordResetForm from './PasswordResetForm';
+import ResetPasswordForm from './ResetPasswordForm';
 import queryString from 'query-string';
 import SignUpSuccessForm from './SignUpSuccessForm';
 import ChangePasswordForm from './ChangePasswordForm';
@@ -176,7 +176,7 @@ class Authenticator extends Component {
             case 'forgotPassword':
                 return <ForgotPasswordForm {...formProps}/>
             case 'passwordReset':
-                return <PasswordResetForm {...formProps}/>
+                return <ResetPasswordForm {...formProps}/>
             case 'changePassword':
                 return <ChangePasswordForm {...formProps}/>
             case 'signedIn':
