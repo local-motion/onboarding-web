@@ -133,7 +133,6 @@ class ChangePasswordForm extends Component {
                     value={password}
                     onChange={this.onChangePassword}
                     onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
-                    autoFocus
                 />
 
                 <TextField

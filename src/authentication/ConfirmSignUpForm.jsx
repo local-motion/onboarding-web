@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
-import {Button, CardMedia} from '@material-ui/core'
+import {Button, CardMedia, withStyles} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
+import { Link } from "react-router-dom";
+import { styles } from './AuthenticatorStyles';
+import { PadlockIcon } from './AuthenticatorStyles';
 
 import { getErrorMessage } from '../api/ErrorMessages';
 import TextField from "@material-ui/core/TextField/TextField";
-import { style } from './AuthenticatorStyles';
 import { bindMethods } from '../utils/Generics';
 import { allVerificationCodeCharactersPattern, verificationCodeLength, isValidVerificationCode } from './AuthenticatorValidations';
 
@@ -22,14 +24,6 @@ class ConfirmSignUpForm extends Component {
         bindMethods(['onChangeUsername', 'onChangeVerificationCode', 'confirmSignUp', 'resendCode'], this)
     }
     
-    // componentDidUpdate() {
-    //     console.log('update of componentDidMount, verificationLink, autoSubmitTriggered', this.props.verificationLink, this.state.autoSubmitTriggered)
-    //     if (this.props.verificationLink  && !this.state.autoSubmitTriggered) {
-    //         this.setState({autoSubmitTriggered: true})
-    //         this.confirmSignUp()
-    //     }
-    // }
-
     componentDidMount() {
         this.props.setCta && this.props.setCta({
             ctaAction: () => this.props.changeForm('signUp'),
@@ -121,87 +115,89 @@ class ConfirmSignUpForm extends Component {
     }
 
     render() {
-        const   { username, verificationCode, waitingForServerResponse, changeForm, isInCard } = this.props
-        // const isInCard = this.props.location.pathname.includes('actie');
+        const   { username, verificationCode, waitingForServerResponse, changeForm, isInCard, classes } = this.props
 
         const isReadyToSubmit = username && verificationCode && isValidVerificationCode(verificationCode) && !waitingForServerResponse
 
         return (
-            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+
+            <div>
                 {isInCard || <div className={"secure-app-background"}></div>}
-                <div className={"secure-app-container"} style={isInCard ? style.secureAppContainer : {}}>
-                    {isInCard && (
+                {isInCard && (
                       <CardMedia
-                        style={style.media}
+                        className={classes.media}
                         image={require("../assets/img/backgrounds/login-bg.jpg")}
-                        title={"Inloggen"}
+                        title={"Account bevestigen"}
                       />
                     )}
-                    <h1 className={"grunge-title"}>Bevestig je account</h1>
-                    <p>Geef de code uit de bevestigingsmail op</p>
-                    <div className={"signin-wrapper"}>
-                        <form
-                            style={style}
-                            onKeyDown={
-                                event => this.catchEnterSubmit(event, isReadyToSubmit)
-                            }
-                        >
-                            <TextField
-                                type="text"
-                                fullWidth
-                                variant={"outlined"}
-                                placeholder="Gebruikersnaam of emailadres"
-                                style={style.input}
-                                value={username}
-                                onChange={this.onChangeUsername}
-                                autoFocus={!username}
-                            />
-                            <TextField
-                                type="text"
-                                fullWidth
-                                variant={"outlined"}
-                                placeholder="Code"
-                                value={verificationCode}
-                                onChange={this.onChangeVerificationCode}
-                                style={style.input}
-                                autoFocus={!!username}
-                                autoComplete='off'
-                                />
-                            <Button
-                                style={style.loginButton}
-                                onClick={this.confirmSignUp}
-                                variant="contained"
-                                color="primary"
-                                className={"pagination-button-step"}
-                                disabled={!isReadyToSubmit}
-                            >
-                                Bevestig
-                            </Button>
+                <div className={classes.secureAppContainer}>
 
-                            <Button
-                              variant="text"
-                              style={{...style.loginButton, ...style.extraButton }}
-                              onClick={this.resendCode}
-                            >
-                                Stuur code opnieuw
-                            </Button>
-                            </form>
-
-                        <div style={style.links} className={"extra-info"}>
-                            <div style={style.left}>
-                                <Button
-                                    style={style.extraButton}
-                                    onClick={() => changeForm('signIn')}>
-                                    Ga terug naar login
-                                </Button>
-                            </div>
-                        </div>
-
+                    <div className={classes.settingsTitle}>
+                        <PadlockIcon className={classes.settingsIcon}/>
+                        Bevestig je account
                     </div>
+                    <p>Geef de code uit de bevestigingsmail op</p>
+
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Gebruikersnaam of emailadres"
+                        type="text"
+                        name="username"          // Setting the name property triggers the autocomplete in Chrome
+                        value={username}
+                        onChange={this.onChangeUsername}
+                        autoFocus={!username}
+                        autoComplete="username"
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    />
+
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Code"
+                        type="text"
+                        value={verificationCode}
+                        onChange={this.onChangeVerificationCode}
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                        autoFocus={!!username}
+                        autoComplete='off'
+                    />
+
+                    <div className={classes.actions}>
+                        <Button
+                        variant="contained"
+                        className={`${classes.button} ${classes.saveButton}`}
+                        classes={{ disabled: classes.disabled }}
+                        disabled={ !isReadyToSubmit }
+                        onClick={this.confirmSignUp}
+                        >
+                            Bevestig
+                        </Button>
+                    </div>
+
+
+                    <div className={classes.links}>
+                        <Link 
+                            className={classes.link}
+                            onClick={this.resendCode}
+                            >
+                            Stuur code opnieuw
+                        </Link>
+                    </div>
+
+                    <div className={classes.links}>
+                        <Link 
+                            className={classes.link}
+                            onClick={() => changeForm('signIn')}
+                            >
+                            Ga terug naar login
+                        </Link>
+                    </div>
+
                 </div>
             </div>
         )
     }
 }
 
-export default withRouter(ConfirmSignUpForm)
+export default withStyles(styles)(withRouter(ConfirmSignUpForm))

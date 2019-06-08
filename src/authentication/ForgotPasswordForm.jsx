@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
-import {Button, TextField, withStyles} from '@material-ui/core'
+import {Button, TextField, withStyles, CardMedia} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
 import { getErrorMessage } from '../api/ErrorMessages';
 import { styles } from './AuthenticatorStyles';
@@ -73,6 +73,13 @@ class ForgotPasswordForm extends Component {
 
             <div>
                 {isInCard || <div className={"secure-app-background"}></div>}
+                {isInCard && (
+                      <CardMedia
+                        className={classes.media}
+                        image={require("../assets/img/backgrounds/login-bg.jpg")}
+                        title={"Wachtwoord vergeten"}
+                      />
+                    )}
                 <div className={classes.secureAppContainer}>
 
                     <div className={classes.settingsTitle}>

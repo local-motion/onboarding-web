@@ -125,7 +125,7 @@ class ResetPasswordForm extends Component {
                       <CardMedia
                         className={classes.media}
                         image={require("../assets/img/backgrounds/login-bg.jpg")}
-                        title={"Inloggen"}
+                        title={"Reset wachtwoord"}
                       />
                     )}
                 <div className={classes.secureAppContainer}>

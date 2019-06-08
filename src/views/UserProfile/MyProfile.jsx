@@ -285,7 +285,7 @@ class MyProfile extends Component {
                       <Button
                         fullWidth
                         onClick={this.props.deleteUser}
-                      >Verwijder mijn profiel</Button>
+                      >Afmelden van Rookvrij spelen</Button>
                   </GridItem>
               </GridContainer>
           </div>
