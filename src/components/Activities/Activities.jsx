@@ -1,13 +1,15 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { withStyles } from "@material-ui/core";
 import AccessTime from "@material-ui/icons/AccessTime";
 import { connect } from "react-redux";
 import { getIntegralAuditTrail } from "components/AuditTrail/AuditTrailReducer";
+import { getPrettyHybridMessageDatetime } from "utils/DateTimeUtils";
+import { getAllPlaygrounds } from "components/Playground/PlaygroundReducer";
 
 
 const mapStateToProps = (state, ownProps) => ({
     // user: getUser(state),
-    // auditTrail: getIntegralAuditTrail(state, 20),
+    playgrounds: getAllPlaygrounds(state),
     auditTrail: getIntegralAuditTrail(state, 20),
 });
 
@@ -61,6 +63,22 @@ const styles = theme => ({
 });
 
 class Activities extends Component {
+
+    getMessageForEventType = record => {
+        const {classes} = this.props
+        switch (record.eventType) {
+            case 'INITIATIVE_JOINED':
+                return record.actorName + ' doet lekker mee'
+            case 'CHECKBOX_UPDATE':
+                const playground = this.props.playgrounds.find(playground => playground.id === record.initiativeId)
+                return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft een checkbox aangevinkt in <span className={classes.highlighted}>{playground.name}</span></Fragment>
+                // return record.actorName + ' heeft een checkbox aangevinkt'
+            default:
+                return 'Niet te melden'
+        }
+    }
+    
+
     render() {
         const { auditTrail, classes } = this.props;
 
@@ -71,29 +89,19 @@ class Activities extends Component {
                   <div className={classes.title}>Activiteit</div>
               </div>
 
-              { auditTrail.map(record =>
-                <div className={classes.activity}>
-                        <div className={classes.time}>{record.instant}</div>
-                        <div className={classes.message}><span className={classes.highlighted}>{record.actorName}</span> {record.eventType} <span className={classes.highlighted}>{record.details}</span> smokefree</div>
+              { auditTrail.map((record, idx) =>
+                <div className={classes.activity} key={idx} >
+                        <div className={classes.time}>{getPrettyHybridMessageDatetime(record.instant)}</div>
+                        <div className={classes.message}>{this.getMessageForEventType(record)}</div>
                 </div>
             
                 )}
 
-              <div className={classes.activity}>
-                  <div className={classes.time}>1 day ago</div>
-                  <div className={classes.message}><span className={classes.highlighted}>John</span> declared Spelen in <span className={classes.highlighted}>Hardewijk</span> smokefree</div>
-              </div>
-              <div className={classes.activity}>
-                  <div className={classes.time}>2 day ago</div>
-                  <div className={classes.message}><span className={classes.highlighted}>Tim</span> declared Spelen in <span className={classes.highlighted}>Hardewijk</span> smokefree</div>
-              </div>
-              <div className={classes.activity}>
-                  <div className={classes.time}>3 day ago</div>
-                  <div className={classes.message}><span className={classes.highlighted}>Sarah</span> declared Spelen in <span className={classes.highlighted}>Hardewijk</span> smokefree</div>
-              </div>
           </div>
         );
     }
 }
+
+
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Activities));

@@ -1,7 +1,7 @@
 import { AUDITTRAIL_STREAM, GET_AUDITTRAIL } from "./AuditTrailActions";
 import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 import { STOP_STREAM } from "api/StreamActions";
-import { guidToObjectKey } from "utils/Generics";
+import { guidToObjectKey, copyProperties } from "utils/Generics";
 
 
 // State definition
@@ -32,7 +32,7 @@ const initialState = {
 // Selectors
 
 export const getAuditTrail = (state, auditTrailId) => state.audittrail.auditTrails[guidToObjectKey(auditTrailId)]
-export const getIntegralAuditTrail = (state, maxEntries) => constructIntegralAuditTrail(state, maxEntries || 1000)
+export const getIntegralAuditTrail = (state, maxEntries) => constructIntegralAuditTrail(state.audittrail, maxEntries || 1000)
 
 
 
@@ -44,7 +44,7 @@ const constructIntegralAuditTrail = (state, maxEntries) => {
     indexes.push(0)
   }
 
-  console.log('recordsList:', recordsList)
+  // console.log('recordsList:', recordsList)
 
   let sortedRecords = []
 
@@ -63,7 +63,7 @@ const constructIntegralAuditTrail = (state, maxEntries) => {
       }
     }
     if (nextRecordListIdx > -1) {
-      sortedRecords.push(recordsList[nextRecordListIdx].records[indexes[nextRecordListIdx]])
+      sortedRecords.push(recordsList[nextRecordListIdx][indexes[nextRecordListIdx]])
       indexes[nextRecordListIdx] = indexes[nextRecordListIdx] + 1
     }
   }
@@ -82,7 +82,11 @@ const auditTrailReducer = (state = initialState, action, baseState) => {
 
         console.log('composing new audittrail into the state', action)
         const newAuditTrails = {...state.auditTrails}
-        newAuditTrails[guidToObjectKey(action.fetchId)] = action.payload.auditTrail
+        const auditTrail = { 
+          records: processRecords(action.payload.auditTrail.records), 
+          totalRecords: action.payload.auditTrail.totalRecords 
+        }
+        newAuditTrails[guidToObjectKey(action.fetchId)] = auditTrail
         return {
           ...state,
           auditTrails: newAuditTrails
@@ -104,5 +108,12 @@ const auditTrailReducer = (state = initialState, action, baseState) => {
         return state
   }
 }
+
+const processRecords = records => records.map(record => {
+  const result = JSON.parse(record.details)
+  copyProperties(record, result, ['actorName', 'instant', 'eventType'])
+  return result
+})
+
 
 export default auditTrailReducer

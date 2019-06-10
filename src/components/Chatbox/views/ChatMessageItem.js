@@ -3,7 +3,7 @@ import { ListItem, Avatar, Typography, ListItemAvatar, Grid } from '@material-ui
 import withStyles from "@material-ui/core/styles/withStyles";
 import { deepPurple } from "@material-ui/core/colors";
 
-import { getPrettyHybridMessageDatetime } from './DateTimeUtils';
+import { getPrettyHybridMessageDatetime } from '../../../utils/DateTimeUtils';
 
 const styles = theme => ({
     avatar: {
