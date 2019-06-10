@@ -7,6 +7,7 @@ import userProfileReducer from "./components/UserProfile/UserProfileReducer";
 import simpleDialogReducer from "./components/SimpleDialog/SimpleDialogReducer";
 import { streamReducer } from "./api/StreamReducer";
 import configReducer from "./misc/ConfigReducer";
+import auditTrailReducer from "components/AuditTrail/AuditTrailReducer";
 
 const rootReducer = (state = {}, action) => ({
     ...state,
@@ -14,6 +15,7 @@ const rootReducer = (state = {}, action) => ({
     userprofile:        userProfileReducer(state.userprofile, action),
     chat:               chatReducer(state.chat, action),
     playgrounds:        playgroundReducer(state.playgrounds, action, state),
+    audittrail:         auditTrailReducer(state.audittrail, action, state),
     stream:             streamReducer(state.stream, action, state),
     loading:            loadingReducer(state.loading, action),
     error:              errorReducer(state.error, action),

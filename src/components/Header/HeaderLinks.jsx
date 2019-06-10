@@ -82,6 +82,9 @@ class HeaderLinks extends React.Component {
 
         return (
               <div className={classes.list}>
+
+                    {this.renderNotifications()}
+
                   <CustomDropdown
                     noLiPadding
                     buttonText=""

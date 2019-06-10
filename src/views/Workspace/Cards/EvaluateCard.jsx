@@ -87,7 +87,7 @@ class EvaluateCard extends React.Component {
 
     renderCustomButton({ todaysObserver, todayWasSmokefree }) {
         const { classes, playground, user } = this.props;
-        const disabled = !isUserVolunteerOfPlayground(user, playground) || todaysObserver;
+        const disabled = !isUserVolunteerOfPlayground(user, playground) || !!todaysObserver;
 
         return (
           <div className={classes.ctaWrapper}>

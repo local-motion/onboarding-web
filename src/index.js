@@ -28,6 +28,7 @@ import { publishGraphQLClient, publishApiBaseURL, PUBLISH_ENVIRONMENT } from "./
 import { executeQuery, REST_GET } from "./api/QueryActions";
 import { CONFIGURATION_PATH, GRAPHQL_PATH } from "./misc/Paths";
 import App from "./App";
+import AuditTrailListener from "components/AuditTrail/AuditTrailListener";
 
 // Determine api base endpoints
 const hostName = window.location.hostname
@@ -45,6 +46,9 @@ store.dispatch(publishApiBaseURL(apiBaseUrl))
 window.onpopstate = () => {
     store.dispatch(closeSimpleDialog())
 }
+
+// Register store listeners
+store.subscribe(() =>AuditTrailListener(store))
 
 // Fetch the configuration from the server, proceed after getting a successful result
 

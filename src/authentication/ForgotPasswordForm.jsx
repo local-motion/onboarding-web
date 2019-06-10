@@ -113,20 +113,32 @@ class ForgotPasswordForm extends Component {
 
                     <div className={classes.links}>
                         <Link 
+                            to=""
                             className={classes.link}
-                            onClick={() => changeForm('signIn')}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('signIn')
+                            }}
                             >
                             Ga terug naar login
                         </Link>
                         <Link 
+                            to=""
                             className={classes.link}
-                            onClick={() => changeForm('confirmSignUp')}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('confirmSignUp')
+                            }}
                             >
                             Bevestig je account
                         </Link>
                         <Link 
+                            to=""
                             className={classes.link}
-                            onClick={() => changeForm('signUp')}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('signUp')
+                            }}
                             >
                             Nog geen account?
                         </Link>

@@ -16,6 +16,13 @@ const initialState = {
 
 // Selectors
 export const getActiveStream = (state, streamIdentifier) => state.stream.activeStreams[streamIdentifier]
+export const getActiveStreamsStartingWith = (state, streamIdentifierPrefix) => {
+  const result = []
+  for (let i in state.stream.activeStreams)
+    if (i.startsWith(streamIdentifierPrefix))
+      result.push(state.stream.activeStreams[i])
+  return result
+}
 
 
 // Reducer

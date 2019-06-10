@@ -303,14 +303,22 @@ class SignUpForm extends Component {
 
                 <div className={classes.links}>
                     <Link 
-                        className={classes.link}
-                        onClick={() => changeForm('signIn')}
+                            to=""
+                            className={classes.link}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('signIn')
+                            }}
                     >
                         Ga terug naar login
                     </Link>
                     <Link 
-                        className={classes.link}
-                        onClick={() => changeForm('confirmSignUp')}
+                            to=""
+                            className={classes.link}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('confirmSignUp')
+                            }}
                     >
                         Bevestig je account
                     </Link>

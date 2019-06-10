@@ -67,3 +67,24 @@ export const readFromBrowserStorage = (key) => {
 export const deleteFromBrowserStorage = (key) => {
     localStorage.removeItem(key)
 }
+
+/**
+ * Encodes a GUID to a string that is suitable to be used as a property on an javascript object
+ * @param {*} guid to encode
+ * @returns the key string
+ */
+export const guidToObjectKey = guid => 'P' + guid.replace('-', '_')
+
+/**
+ * Decodes an encoded GUID (=object key) back to het guid
+ * @param {*} key to decode
+ * @returns the guid
+ */
+export const objectKeyToGuid = key => key.replace('_', '-').substring(1)
+
+/**
+ * Logger to be used for debugging. Just logs to console, but makes it easy to distinguish for the structural logging statements.
+ */
+export const dlog = (...args) => {
+    console.log(...args)
+}

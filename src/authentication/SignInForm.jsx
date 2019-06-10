@@ -196,8 +196,12 @@ class SignInForm extends Component {
 
                     <div className={classes.links}>
                         <Link 
+                            to=""
                             className={classes.link}
-                            onClick={() => changeForm('forgotPassword')}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('forgotPassword')
+                            }}
                             >
                             Wachtwoord vergeten?
                         </Link>

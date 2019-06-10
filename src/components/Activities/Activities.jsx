@@ -1,6 +1,20 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core";
 import AccessTime from "@material-ui/icons/AccessTime";
+import { connect } from "react-redux";
+import { getIntegralAuditTrail } from "components/AuditTrail/AuditTrailReducer";
+
+
+const mapStateToProps = (state, ownProps) => ({
+    // user: getUser(state),
+    // auditTrail: getIntegralAuditTrail(state, 20),
+    auditTrail: getIntegralAuditTrail(state, 20),
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+});
+
+
 
 const styles = theme => ({
     wrapper: {
@@ -48,7 +62,7 @@ const styles = theme => ({
 
 class Activities extends Component {
     render() {
-        const { classes } = this.props;
+        const { auditTrail, classes } = this.props;
 
         return (
           <div className={classes.wrapper}>
@@ -56,6 +70,14 @@ class Activities extends Component {
                   <AccessTime className={classes.icon} />
                   <div className={classes.title}>Activiteit</div>
               </div>
+
+              { auditTrail.map(record =>
+                <div className={classes.activity}>
+                        <div className={classes.time}>{record.instant}</div>
+                        <div className={classes.message}><span className={classes.highlighted}>{record.actorName}</span> {record.eventType} <span className={classes.highlighted}>{record.details}</span> smokefree</div>
+                </div>
+            
+                )}
 
               <div className={classes.activity}>
                   <div className={classes.time}>1 day ago</div>
@@ -74,4 +96,4 @@ class Activities extends Component {
     }
 }
 
-export default withStyles(styles)(Activities);
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Activities));

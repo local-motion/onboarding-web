@@ -224,8 +224,12 @@ class ResetPasswordForm extends Component {
 
                     <div className={classes.links}>
                         <Link 
+                            to=""
                             className={classes.link}
-                            onClick={() => changeForm('forgotPassword')}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('forgotPassword')
+                            }}
                             >
                                 Terug naar nieuw wachtwoord aanvragen
                         </Link>

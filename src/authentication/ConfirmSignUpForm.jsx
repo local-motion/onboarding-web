@@ -178,8 +178,12 @@ class ConfirmSignUpForm extends Component {
 
                     <div className={classes.links}>
                         <Link 
+                            to=""
                             className={classes.link}
-                            onClick={this.resendCode}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('resendCode')
+                            }}
                             >
                             Stuur code opnieuw
                         </Link>
@@ -187,9 +191,13 @@ class ConfirmSignUpForm extends Component {
 
                     <div className={classes.links}>
                         <Link 
+                            to=""
                             className={classes.link}
-                            onClick={() => changeForm('signIn')}
-                            >
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('signIn')
+                            }}
+                        >
                             Ga terug naar login
                         </Link>
                     </div>
