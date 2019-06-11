@@ -34,6 +34,7 @@ const initialState = {
 // Selectors
 
 export const getAllPlaygrounds = (state) => state.playgrounds.playgrounds;
+export const getPlayground = (state, initiativeId) => state.playgrounds.playgrounds.find(playground => playground.id === initiativeId)
 export const getPlaygroundDetails = (state, initiativeName) => {
     if (!initiativeName) return null;
 
