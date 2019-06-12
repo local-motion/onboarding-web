@@ -95,7 +95,7 @@ export const dlog = (...args) => {
  * @param {*} compareFunction accepts two records and should return true when the first record should be ordered before the second record
  * @returns one sort array containing all input records
  */
-export const balanceLineSort = (recordsList, compareFunction) => {
+export const balancedLineSort = (recordsList, compareFunction) => {
     let indexes = new Array(recordsList.length).fill(0)
     let sortedRecords = []
 

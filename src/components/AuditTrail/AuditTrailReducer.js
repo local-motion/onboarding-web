@@ -1,7 +1,7 @@
 import { AUDITTRAIL_STREAM, GET_AUDITTRAIL } from "./AuditTrailActions";
 import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 import { STOP_STREAM } from "api/StreamActions";
-import { guidToObjectKey, copyProperties, balanceLineSort } from "utils/Generics";
+import { guidToObjectKey, copyProperties, balancedLineSort } from "utils/Generics";
 
 
 // State definition
@@ -16,7 +16,6 @@ const initialState = {
   }
 }
 
-// The audittrail object has this structure:
 /*
     {
         records: [
@@ -97,7 +96,7 @@ const constructIntegralAuditTrail = (auditTrails) => {
     grantTotalRecords += auditTrails[i].totalRecords
   }
 
-  const sortedRecords = balanceLineSort(recordsList, (record1, record2) => record1.instant < record2.instant)
+  const sortedRecords = balancedLineSort(recordsList, (record1, record2) => record1.instant < record2.instant)
 
   return {
     records: sortedRecords,

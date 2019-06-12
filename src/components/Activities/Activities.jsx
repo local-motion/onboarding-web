@@ -5,10 +5,10 @@ import { connect } from "react-redux";
 import { getIntegralAuditTrailRecords } from "components/AuditTrail/AuditTrailReducer";
 import { getPrettyHybridMessageDatetime } from "utils/DateTimeUtils";
 import { getAllPlaygrounds, getPlayground } from "components/Playground/PlaygroundReducer";
+import { dlog } from "utils/Generics";
 
 
 const mapStateToProps = (state, ownProps) => ({
-    // user: getUser(state),
     playgrounds: getAllPlaygrounds(state),
     getPlayground: initiativeId => getPlayground(state, initiativeId),
     auditTrail: getIntegralAuditTrailRecords(state, 20, true),
@@ -67,7 +67,7 @@ const dateDisplayOptions = { weekday: 'long', month: 'long', day: 'numeric' };
 
 export const formatDate = date => {
     // convert the graphQL date object to the format: "2019-04-03T18:28:20.437Z"
-    const dateTimeString = date.year  + '-' + (date.month < 10 ? '0' : 0) + date.month + '-' + (date.day < 10 ? '0' : 0) + date.day + "T00:00:00.000Z"
+    const dateTimeString = date.year  + '-' + (date.month < 10 ? '0' : '') + date.month + '-' + (date.day < 10 ? '0' : '') + date.day + "T00:00:00.000Z"
     return new Date(dateTimeString).toLocaleDateString('nl-NL', dateDisplayOptions)
 }
 
@@ -123,8 +123,9 @@ class Activities extends Component {
                 playground = this.props.getPlayground(record.initiativeId)
                 return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft besloten dat <span className={classes.highlighted}>{playground.name}</span>{record.willBecomeSmokefree ? '' : ' niet'} rookvrij wordt</Fragment>
             case 'SMOKEFREE_DATE_COMMITTED':
+                dlog('record smokefree date', record.smokeFreeDate)
                 playground = this.props.getPlayground(record.initiativeId)
-                return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft aangegeven dat <span className={classes.highlighted}>{playground.name}</span> op {record.smokeFreeDate} rookvrij wordt</Fragment>
+                return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft aangegeven dat <span className={classes.highlighted}>{playground.name}</span> op {formatDate(record.smokeFreeDate)} rookvrij wordt</Fragment>
             case 'MANAGER_JOINED_INITIATIVE':
                 playground = this.props.getPlayground(record.initiativeId)
                 return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft zich aangemeld als beheerder van <span className={classes.highlighted}>{playground.name}</span></Fragment>

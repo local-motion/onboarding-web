@@ -48,7 +48,7 @@ window.onpopstate = () => {
 }
 
 // Register store listeners
-store.subscribe(() =>AuditTrailListener(store))
+store.subscribe(() => AuditTrailListener(store))
 
 // Fetch the configuration from the server, proceed after getting a successful result
 
