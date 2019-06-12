@@ -89,4 +89,38 @@ export const dlog = (...args) => {
     console.log(...args)
 }
 
+/**
+ * Merge-sorts the records of a list of arrays into one array. The records within each of the input array need already be sorted.
+ * @param {*} recordsList list of arrays containing the input records
+ * @param {*} compareFunction accepts two records and should return true when the first record should be ordered before the second record
+ * @returns one sort array containing all input records
+ */
+export const balanceLineSort = (recordsList, compareFunction) => {
+    let indexes = new Array(recordsList.length).fill(0)
+    let sortedRecords = []
+
+    let nextRecordListIdx = 0
+    var compareRecord = null
+    while (nextRecordListIdx > -1) {
+        nextRecordListIdx = -1
+        compareRecord = null
+        for (let i = 0; i < indexes.length; i++) {
+        const idx = indexes[i]
+        const records = recordsList[i]
+        if (idx < records.length) {
+            if (nextRecordListIdx === -1 || compareFunction(records[idx], compareRecord)) {
+            nextRecordListIdx = i
+            compareRecord = records[idx]
+            }
+        }
+        }
+
+        if (nextRecordListIdx > -1) {
+        sortedRecords.push(recordsList[nextRecordListIdx][indexes[nextRecordListIdx]])
+        indexes[nextRecordListIdx] = indexes[nextRecordListIdx] + 1
+        }
+    }
+    return sortedRecords
+}
+  
 
