@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withStyles } from "@material-ui/core";
 import AccessTime from "@material-ui/icons/AccessTime";
 import { connect } from "react-redux";
-import { getIntegralAuditTrail } from "components/AuditTrail/AuditTrailReducer";
+import { getIntegralAuditTrailRecords } from "components/AuditTrail/AuditTrailReducer";
 import { getPrettyHybridMessageDatetime } from "utils/DateTimeUtils";
 import { getAllPlaygrounds, getPlayground } from "components/Playground/PlaygroundReducer";
 
@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => ({
     // user: getUser(state),
     playgrounds: getAllPlaygrounds(state),
     getPlayground: initiativeId => getPlayground(state, initiativeId),
-    auditTrail: getIntegralAuditTrail(state, 20),
+    auditTrail: getIntegralAuditTrailRecords(state, 20, true),
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

@@ -1,7 +1,7 @@
 import { AUDITTRAIL_STREAM, GET_AUDITTRAIL } from "./AuditTrailActions";
 import { SUCCESS_POSTFIX } from "../../api/QueryActions";
 import { STOP_STREAM } from "api/StreamActions";
-import { guidToObjectKey, copyProperties } from "utils/Generics";
+import { guidToObjectKey, copyProperties, dlog } from "utils/Generics";
 
 
 // State definition
@@ -10,6 +10,8 @@ const initialState = {
   auditTrails: {
     // key = initiativeId|actorId|GENERIC, value = audittrail
   },
+  integralAuditTrail: null,   // One audittrail constructed from all audit trails with the records sorted on date (past to future) and the totalRecords being the sum of all totalRecords
+                              // Can be set to null at any time
 }
 
 // The audittrail object has this structure:
@@ -32,44 +34,11 @@ const initialState = {
 // Selectors
 
 export const getAuditTrail = (state, auditTrailId) => state.audittrail.auditTrails[guidToObjectKey(auditTrailId)]
-export const getIntegralAuditTrail = (state, maxEntries) => constructIntegralAuditTrail(state.audittrail, maxEntries || 1000)
-
-
-
-const constructIntegralAuditTrail = (state, maxEntries) => {
-  const recordsList = []
-  let indexes = []
-  for (let i in state.auditTrails) {
-    recordsList.push(state.auditTrails[i].records)
-    indexes.push(0)
-  }
-
-  // console.log('recordsList:', recordsList)
-
-  let sortedRecords = []
-
-  let nextRecordListIdx = 0
-  while (nextRecordListIdx > -1) {
-    nextRecordListIdx = -1
-    let compareDate = null
-    for (let i = 0; i < indexes.length; i++) {
-      const idx = indexes[i]
-      const records = recordsList[i]
-      if (idx < records.length) {
-        if (nextRecordListIdx === -1 || records[idx].instant < compareDate) {
-          nextRecordListIdx = i
-          compareDate = records[idx].instant
-        }
-      }
-    }
-    if (nextRecordListIdx > -1) {
-      sortedRecords.push(recordsList[nextRecordListIdx][indexes[nextRecordListIdx]])
-      indexes[nextRecordListIdx] = indexes[nextRecordListIdx] + 1
-    }
-  }
-  return sortedRecords.slice(0 - maxEntries)
+export const getIntegralAuditTrailRecords = (state, maxEntries=1000, reverseOrder=false) => {
+  const records = state.audittrail.integralAuditTrail.records
+  const recordsSlice = reverseOrder ? records.slice(records.length-maxEntries) : records.slice(0, maxEntries)
+  return reverseOrder ? recordsSlice.reverse() : recordsSlice
 }
-
 
 
 // Reducer
@@ -89,7 +58,8 @@ const auditTrailReducer = (state = initialState, action, baseState) => {
         newAuditTrails[guidToObjectKey(action.fetchId)] = auditTrail
         return {
           ...state,
-          auditTrails: newAuditTrails
+          auditTrails: newAuditTrails,
+          integralAuditTrail: constructIntegralAuditTrail(newAuditTrails),
         }
     case STOP_STREAM:
       // To save space remove the audittrail from memory when the stream stops
@@ -99,7 +69,8 @@ const auditTrailReducer = (state = initialState, action, baseState) => {
           delete newAuditTrails[key]
           return {
             ...state,
-            auditTrails: newAuditTrails
+            auditTrails: newAuditTrails,
+            integralAuditTrail: constructIntegralAuditTrail(newAuditTrails),
           }
         }
         else
@@ -114,6 +85,45 @@ const processRecords = records => records.map(record => {
   copyProperties(record, result, ['actorName', 'instant', 'eventType'])
   return result
 })
+
+const constructIntegralAuditTrail = (auditTrails) => {
+  const recordsList = []
+  let indexes = []
+  let grantTotalRecords = 0
+  for (let i in auditTrails) {
+    recordsList.push(auditTrails[i].records)
+    grantTotalRecords += auditTrails[i].totalRecords
+    indexes.push(0)
+  }
+
+  let sortedRecords = []
+
+  let nextRecordListIdx = 0
+  var compareDate = null
+  while (nextRecordListIdx > -1) {
+    nextRecordListIdx = -1
+    compareDate = null
+    for (let i = 0; i < indexes.length; i++) {
+      const idx = indexes[i]
+      const records = recordsList[i]
+      if (idx < records.length) {
+        if (nextRecordListIdx === -1 || records[idx].instant < compareDate) {
+          nextRecordListIdx = i
+          compareDate = records[idx].instant
+        }
+      }
+    }
+
+    if (nextRecordListIdx > -1) {
+      sortedRecords.push(recordsList[nextRecordListIdx][indexes[nextRecordListIdx]])
+      indexes[nextRecordListIdx] = indexes[nextRecordListIdx] + 1
+    }
+  }
+  return {
+    records: sortedRecords,
+    totalRecords: grantTotalRecords
+  }
+}
 
 
 export default auditTrailReducer
