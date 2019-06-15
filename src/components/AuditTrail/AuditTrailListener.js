@@ -1,6 +1,6 @@
 import { getUser } from 'components/UserProfile/UserProfileReducer';
 import { getActiveStreamsStartingWith } from 'api/StreamReducer';
-import { dlog, objectKeyToGuid, guidToObjectKey } from 'utils/Generics';
+import { objectKeyToGuid, guidToObjectKey } from 'utils/Generics';
 import { AUDITTRAIL_STREAM, startAuditTrailStreamForInitiative } from './AuditTrailActions';
 import { stopStream } from 'api/StreamActions';
 
@@ -18,15 +18,12 @@ const AuditTrailListener = store => {
 
   currentStreamInitiativeIds.forEach(i => {
     if (requiredStreamInitiativeIds.indexOf(i) === -1) {
-      dlog('test:', requiredStreamInitiativeIds, i, requiredStreamInitiativeIds.includes(i))
-      dlog('audittrail listener stopping: ', i)
       store.dispatch(stopStream(AUDITTRAIL_STREAM + guidToObjectKey(i)))
     }
   })
       
   requiredStreamInitiativeIds.forEach(i => {
     if (currentStreamInitiativeIds.indexOf(i) === -1) {
-      dlog('audittrail listener starting: ', i)
       store.dispatch(startAuditTrailStreamForInitiative(i))
     }
   })

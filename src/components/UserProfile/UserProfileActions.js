@@ -3,6 +3,7 @@ import { Auth } from 'aws-amplify';
 import { executeQuery, GRAPHQL_QUERY, GRAPHQL_MUTATION } from '../../api/QueryActions';
 import { openErrorDialog, openInformationDialog } from '../SimpleDialog/SimpleDialogActions';
 import { stopStream, triggerStream, startStream } from 'api/StreamActions';
+import { startUserDataStream, USER_DATA_STREAM } from 'components/UserData/UserDataActions';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
@@ -39,7 +40,7 @@ const startUserProfileStream = () => {
 
         if (!result.profile && result.status !== 'not_modified') {
           dispatch(openErrorDialog(
-            'Gebruikersprofiel niet aanwezig2', 
+            'Gebruikersprofiel niet aanwezig', 
             'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
             'OK', 
             () => dispatch(signOutUser()))
@@ -149,10 +150,12 @@ export const setNotificationLevel = (user, level) => executeQuery( {
   export const userSignedIn = cognitoUser => (dispatch, getState) =>{
     dispatch({ type: USER_SIGNED_IN, cognitoUser })
     dispatch(startUserProfileStream())
+    dispatch(startUserDataStream())
 }
 
 export const signOutUser = () => (dispatch) => {
     dispatch(stopStream(USER_PROFILE_STREAM))
+    dispatch(stopStream(USER_DATA_STREAM))
     Auth.signOut({global: true})
         .then(() => {
             console.log('sign out success')

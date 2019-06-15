@@ -267,7 +267,19 @@ const userNotAuthenticatedErrorHandler = (error, dispatch, getState, queryOption
     dispatch(openErrorMessageDialog(error))
 
    // TODO instead of displaying an error, trigger token refresh
+  //  try {
+  //   const cognitoUser = await Auth.currentAuthenticatedUser();
+  //   const currentSession = await Auth.currentSession();
+  //   cognitoUser.refreshSession(currentSession.refreshToken, (err, session) => {
+  //     console.log('session', err, session);
+  //     const { idToken, refreshToken, accessToken } = session;
+  //     // do whatever you want to do now :)
+  //   });
+  // } catch (e) {
+  //   console.log('Unable to refresh Token', e);
+  // }
 
+  // TODO also create such an handler for REST calls
 
     return true   // error handled
   }
