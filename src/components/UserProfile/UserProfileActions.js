@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Auth } from 'aws-amplify';
 import { executeQuery, GRAPHQL_QUERY, GRAPHQL_MUTATION } from '../../api/QueryActions';
 import { openErrorDialog, openInformationDialog } from '../SimpleDialog/SimpleDialogActions';
-import { stopStream, triggerStream, startStream } from 'api/StreamActions';
+import { stopStream, triggerStream, startStream, pollingIntervalSetterFactory } from 'api/StreamActions';
 import { startUserDataStream, USER_DATA_STREAM } from 'components/UserData/UserDataActions';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
@@ -51,7 +51,7 @@ const startUserProfileStream = () => {
     }
     ,
     {
-      pollingInterval: 60000,
+      pollingIntervalSetter: pollingIntervalSetterFactory(60, 120, 10)
     }
   )
 }

@@ -25,13 +25,6 @@ export const getAuditTrailQuery = gql`
     }
 `
 
-
-// export const startAuditTrailStream = (initiativeId, variables) => {
-//   const streamId = AUDITTRAIL_STREAM + (initiativeId || variables.initiativeId || variables.actorId || GENERIC_AUDITTRAIL_POSTFIX)
-//   return startGraphQLStream(streamId, GET_AUDITTRAIL, getAuditTrailQuery, {...variables, initiativeId})
-// }
-
-
 export const startAuditTrailStreamForInitiative = initiativeId => startStream(
     AUDITTRAIL_STREAM + guidToObjectKey(initiativeId), 
     {

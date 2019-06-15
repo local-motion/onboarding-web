@@ -8,15 +8,22 @@ export const START_STREAM = 'START_STREAM'
 export const STOP_STREAM = 'STOP_STREAM'
 export const TRIGGER_STREAM = 'TRIGGER_STREAM'
 export const POLL_RESULT = 'POLL_RESULT'
+export const POLL_TICK = 'POLL_TICK'
 
 
 export const clearError = baseActionIdentifier => (
     {type: CLEAR_ERROR, baseActionIdentifier}
   )
 
+export const pollingIntervalSetterFactory = (minimumPollingInterval, maximumPollingInterval, intervalIncrement) => {
+  const increment = intervalIncrement || Math.ceil((maximumPollingInterval - minimumPollingInterval) / 10)
+  return unmodifiedCount => {
+    return minimumPollingInterval + Math.min(unmodifiedCount * increment, maximumPollingInterval)
+  }
+}
 
 const defaultStreamProperties = {
-  pollingInterval: 10000,
+  pollingIntervalSetter: pollingIntervalSetterFactory(5, 60, 5)   // function that returns the interval length in seconds based on the number of consecutive "unmodified" poll results: unmodifiedCount => Integer
 }
 
 let streamCount = 0
@@ -45,8 +52,9 @@ export const startGraphQLStream = (streamIdentifier, baseActionIdentifier, graph
 export const startStream = (streamIdentifier, queryOptions, streamOptions, restart=false) => (dispatch, getState) => {
   const stream = {...defaultStreamProperties, ...streamOptions, streamIdentifier, queryOptions, originalOptions: streamOptions}
 
-  if (!stream.streamIdentifier)              throw new Error('No streamIdentifier set')
-  if (!stream.queryOptions)                  throw new Error('No query set')
+  if (!stream.streamIdentifier)                                       throw new Error('No streamIdentifier set')
+  if (!stream.queryOptions)                                           throw new Error('No query set')
+  if (stream.maximumPollingInterval < stream.minimumPollingInterval)  throw new Error('Maximum polling interval cannot be lower than minimum interval')
 
   if (!restart && getActiveStream(getState(), stream.streamIdentifier))
     return  // stream already exists
@@ -54,7 +62,7 @@ export const startStream = (streamIdentifier, queryOptions, streamOptions, resta
   stream.instanceId = streamCount++
 
   dispatch( {type: START_STREAM, stream} )
-  stream.interval = setInterval( () => poll(stream, dispatch, getState), stream.pollingInterval)
+  stream.interval = setInterval( () => poll(stream, dispatch, getState), 1000)
 
   // As setInterval first waits for the interval and then triggers the function, we trigger the function here for the first time for a swift response
   poll(stream, dispatch, getState)
@@ -82,6 +90,14 @@ const poll = (stream, dispatch, getState) => {
   const activeStream = getActiveStream(getState(), stream.streamIdentifier)
 
   if (activeStream) {
+
+    // Increase the second counter of this stream and check whether it is time to actually do another poll
+    // dlog('activeStream', activeStream)
+    // dlog('activeStream.secondsCount >= activeStream.pollingInterval', activeStream.secondsCount, activeStream.pollingInterval)
+    if (!(activeStream.secondsCount === undefined || activeStream.secondsCount >= activeStream.pollingInterval-1)) {
+      dispatch( {type: POLL_TICK, streamIdentifier: stream.streamIdentifier} )
+      return
+    }
 
     // Determine the query object for this poll. The stream.query property can contain this (static) object,
     // or a function that will return the query object for each poll
@@ -119,9 +135,13 @@ const poll = (stream, dispatch, getState) => {
     }
 
     const onCompletion = (data, dispatch, getState, queryOptions, response) => {
-      if (data && data.digest)  
-        dispatch( {type: POLL_RESULT, streamIdentifier: stream.streamIdentifier, digest: data.digest} )
+      if (data) {
+        const modifiedResult = data.status !== 'not_modified'
+        const unmodifiedCount = modifiedResult ? 0 : activeStream.unmodifiedCount + 1
+        const newPollingInterval = activeStream.pollingIntervalSetter(unmodifiedCount)
+        dispatch( {type: POLL_RESULT, streamIdentifier: stream.streamIdentifier, digest: data.digest, modified: modifiedResult, pollingInterval: newPollingInterval} )
         baseQueryOptions.onCompletion && baseQueryOptions.onCompletion(data, dispatch, getState, queryOptions, response)
+      }
     }
 
 
