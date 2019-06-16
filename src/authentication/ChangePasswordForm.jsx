@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import { withRouter } from "react-router-dom";
 import {Button, TextField, withStyles} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
@@ -118,72 +118,73 @@ class ChangePasswordForm extends Component {
         return (
 
             <Paper className={classes.paper}>
-                {isInCard || <div className={"secure-app-background"}></div>}
-                <div className={classes.settingsTitle}>
-                    <PadlockIcon className={classes.settingsIcon}/>
-                    Wachtwoord instellen
-                </div>
+                <Fragment>
+                    {isInCard || <div className={"secure-app-background"}></div>}
+                    <div className={classes.settingsTitle}>
+                        <PadlockIcon className={classes.settingsIcon}/>
+                        Wachtwoord instellen
+                    </div>
 
-                <TextField
-                    variant="outlined"
-                    className={classes.input}
-                    label="Huidig wachtwoord"
-                    type="password"
-                    name="oldPassword"          // Setting the name property triggers the autocomplete in Chrome
-                    value={password}
-                    onChange={this.onChangePassword}
-                    onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
-                />
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Huidig wachtwoord"
+                        type="password"
+                        name="oldPassword"          // Setting the name property triggers the autocomplete in Chrome
+                        value={password}
+                        onChange={this.onChangePassword}
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    />
 
-                <TextField
-                    variant="outlined"
-                    className={classes.input}
-                    label="Nieuw wachtwoord"
-                    type="password"
-                    value={newPassword}
-                    onChange={this.onChangeNewPassword}
-                    onFocus={() => this.onFocusChangeNewPassword(true)}
-                    onBlur={() => this.onFocusChangeNewPassword(false)}
-                    onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
-                    autoComplete="new-password"
-                />
-                {passwordFocus &&
-                    <p>
-                        Het wachtwoord moet:<br />
-                        {containsLowerCaseLetterPattern.test(newPassword) ? checkmark : '-'} een kleine letter bevatten<br />
-                        {containsUpperCaseLetterPattern.test(newPassword) ? checkmark : '-'} een hoofdletter bevatten<br />
-                        {containsDecimalPattern.test(newPassword) ? checkmark : '-'} een cijfer bevatten<br />
-                        {containsSpecialCharacterPattern.test(newPassword) ? checkmark : '-'} een van de volgende tekens bevatten: <span className={classes.specialCharacters}>{allowedSpecialCharacters}</span><br />
-                        {newPassword.length >= passwordMinimumLength ? checkmark : '-'} tenminste {passwordMinimumLength} karakters lang zijn<br />
-                        {passwordErrorLimited && <span className={"error"}>{passwordErrorLimited}</span>}
-                    </p>
-                }
-                {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Nieuw wachtwoord"
+                        type="password"
+                        value={newPassword}
+                        onChange={this.onChangeNewPassword}
+                        onFocus={() => this.onFocusChangeNewPassword(true)}
+                        onBlur={() => this.onFocusChangeNewPassword(false)}
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                        autoComplete="new-password"
+                    />
+                    {passwordFocus &&
+                        <p>
+                            Het wachtwoord moet:<br />
+                            {containsLowerCaseLetterPattern.test(newPassword) ? checkmark : '-'} een kleine letter bevatten<br />
+                            {containsUpperCaseLetterPattern.test(newPassword) ? checkmark : '-'} een hoofdletter bevatten<br />
+                            {containsDecimalPattern.test(newPassword) ? checkmark : '-'} een cijfer bevatten<br />
+                            {containsSpecialCharacterPattern.test(newPassword) ? checkmark : '-'} een van de volgende tekens bevatten: <span className={classes.specialCharacters}>{allowedSpecialCharacters}</span><br />
+                            {newPassword.length >= passwordMinimumLength ? checkmark : '-'} tenminste {passwordMinimumLength} karakters lang zijn<br />
+                            {passwordErrorLimited && <span className={"error"}>{passwordErrorLimited}</span>}
+                        </p>
+                    }
+                    {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
 
-                <TextField
-                    variant="outlined"
-                    className={classes.input}
-                    label="Nieuw wachtwoord nogmaals"
-                    type="password"
-                    value={repeatedPassword}
-                    onChange={this.onChangeRepeatedNewPassword}
-                    onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
-                    autoComplete="new-password"
-                />
-                {repeatedPasswordError && <p className={"error"}>{repeatedPasswordError}</p>}
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Nieuw wachtwoord nogmaals"
+                        type="password"
+                        value={repeatedPassword}
+                        onChange={this.onChangeRepeatedNewPassword}
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                        autoComplete="new-password"
+                    />
+                    {repeatedPasswordError && <p className={"error"}>{repeatedPasswordError}</p>}
 
-                <div className={classes.actions}>
-                    <Button
-                    variant="contained"
-                    className={`${classes.button} ${classes.saveButton}`}
-                    classes={{ disabled: classes.disabled }}
-                    disabled={ !isReadyToSubmit }
-                    onClick={this.changePassword}
-                    >
-                        Wachtwoord wijzigen
-                    </Button>
-                </div>
-
+                    <div className={classes.actions}>
+                        <Button
+                        variant="contained"
+                        className={`${classes.button} ${classes.saveButton}`}
+                        classes={{ disabled: classes.disabled }}
+                        disabled={ !isReadyToSubmit }
+                        onClick={this.changePassword}
+                        >
+                            Wachtwoord wijzigen
+                        </Button>
+                    </div>
+                </Fragment>
             </Paper>
         )
     }

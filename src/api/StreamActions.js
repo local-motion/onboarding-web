@@ -92,8 +92,6 @@ const poll = (stream, dispatch, getState) => {
   if (activeStream) {
 
     // Increase the second counter of this stream and check whether it is time to actually do another poll
-    // dlog('activeStream', activeStream)
-    // dlog('activeStream.secondsCount >= activeStream.pollingInterval', activeStream.secondsCount, activeStream.pollingInterval)
     if (!(activeStream.secondsCount === undefined || activeStream.secondsCount >= activeStream.pollingInterval-1)) {
       dispatch( {type: POLL_TICK, streamIdentifier: stream.streamIdentifier} )
       return
@@ -136,7 +134,7 @@ const poll = (stream, dispatch, getState) => {
 
     const onCompletion = (data, dispatch, getState, queryOptions, response) => {
       if (data) {
-        const modifiedResult = data.status !== 'not_modified'
+        const modifiedResult = data.status !== 'not_modified' && data.code !== 'NETWORK'    // Also count network errors as an unmodified result
         const unmodifiedCount = modifiedResult ? 0 : activeStream.unmodifiedCount + 1
         const newPollingInterval = activeStream.pollingIntervalSetter(unmodifiedCount)
         dispatch( {type: POLL_RESULT, streamIdentifier: stream.streamIdentifier, digest: data.digest, modified: modifiedResult, pollingInterval: newPollingInterval} )

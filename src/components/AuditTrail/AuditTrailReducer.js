@@ -77,7 +77,6 @@ const auditTrailReducer = (state = initialState, action, baseState) => {
         if (action.payload.status === 'not_modified')
           return state
 
-        console.log('composing new audittrail into the state', action)
         const newAuditTrails = {...state.auditTrails}
         const auditTrail = { 
           records: processRecords(action.payload.auditTrail.records), 

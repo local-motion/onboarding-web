@@ -24,7 +24,9 @@ import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
 import UserProfile from "./views/UserProfile/UserProfile";
 import { titlePrefix } from "./misc/WorkspaceHelpers";
 import Authenticator from "./authentication/Authenticator";
+import WrappedWarningSnackbar from "components/StatusNotification/WrappedWarningSnackbar";
   
+
 const mapDispatchToProps = (dispatch) => ({
     onUserSignedIn: user => dispatch(userSignedIn(user))
 });
@@ -91,6 +93,7 @@ class App extends React.Component {
                 </CookieConsent>
 
                 <WrappedSimpleDialog/>
+                <WrappedWarningSnackbar/>
             </div>
         )
     }

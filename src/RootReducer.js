@@ -9,6 +9,7 @@ import { streamReducer } from "./api/StreamReducer";
 import configReducer from "./misc/ConfigReducer";
 import auditTrailReducer from "components/AuditTrail/AuditTrailReducer";
 import userDataReducer from "components/UserData/UserDataReducer";
+import statusNotificationReducer from "components/StatusNotification/StatusNotificationReducer";
 
 const rootReducer = (state = {}, action) => ({
     ...state,
@@ -22,6 +23,7 @@ const rootReducer = (state = {}, action) => ({
     loading:            loadingReducer(state.loading, action),
     error:              errorReducer(state.error, action),
     simpleDialog:       simpleDialogReducer(state.simpleDialog, action),
+    statusNotification: statusNotificationReducer(state.statusNotification, action),
     fetchDetails:       fetchDetailsReducer(state.fetchDetails, action)
   })
 
