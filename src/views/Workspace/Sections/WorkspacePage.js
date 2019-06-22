@@ -36,6 +36,7 @@ import TeamCard from "../Cards/TeamCard";
 import BackButton from "../../../components/BackButton/BackButton";
 import AddFindPlayground from "../Cards/AddFindPlayground";
 import WrappedHeader from "../../../components/Header/WrappedHeader";
+import DonateCard from "../Cards/DonateCard";
 import {
     ensurePlaygroundDetails,
     findPlaygroundsByName,
@@ -371,6 +372,10 @@ class WorkspacePage extends PureComponent {
                                                    render={(props) => <PlaygroundChatBox {...props}
                                                                                          playground={playground}
                                                                                          user={user}/>}/>
+                                            <Route exact path="/actie/:initiativeName/doneer" key="Doneer"
+                                                   render={(props) => <DonateCard {...props}
+                                                                                  playground={playground}
+                                                                                  user={user}/>}/>
                                         </React.Fragment>
                                       )
                                   }

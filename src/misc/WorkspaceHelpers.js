@@ -87,6 +87,11 @@ export function getPhases() {
                     link: '/chat',
                     visible: ({ playground }) => !!playground,
                 },
+                {
+                    name: 'Doneer',
+                    link: '/doneer',
+                    visible: ({ playground }) => !!playground,
+                },
             ],
         },
 
