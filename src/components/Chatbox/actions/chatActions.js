@@ -48,7 +48,9 @@ export const activateChatbox = chatboxId => (dispatch, getState) => {
     return query
   }
 
-  dispatch(startStream(CHAT_STREAM, queryFunction, {pollingInterval: 3000}))
+  dispatch(startStream(CHAT_STREAM, queryFunction, {
+    pollingIntervalSetter: cnt => cnt < 60 ? 3 : cnt < 60 ? 10 : cnt < 180 ? 20 : 120
+    }))
 }
 
 export const deactivateChatbox = chatboxId => dispatch => {

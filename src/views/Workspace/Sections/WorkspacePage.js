@@ -276,11 +276,11 @@ class WorkspacePage extends PureComponent {
                               <Switch>
 
                                   <Route exact path="/actie/inloggen" key="WorkspaceLogin"
-                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta}  isInCard={true} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/actie/starten" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user}/>}/>
                                   <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin"
-                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta}  isInCard={true} onSignIn={this.props.signInHandler}/>} />
 
 
                                   {

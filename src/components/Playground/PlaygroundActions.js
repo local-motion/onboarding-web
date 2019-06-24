@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import { startGraphQLStream, stopStream, triggerStream } from '../../api/StreamActions';
 import { executeQuery } from '../../api/QueryActions';
 import { generateUuid } from '../../utils/Generics';
+import { USER_PROFILE_STREAM } from 'components/UserProfile/UserProfileActions';
 
 
 export const GET_PLAYGROUNDS = 'GET_PLAYGROUNDS'
@@ -153,6 +154,7 @@ export const createInitiative = (name, lat, lng, onSuccessCallback) => {
         }
       },
       onSuccess: (data, dispatch, getState) => {
+        dispatch(triggerStream(USER_PROFILE_STREAM))
         dispatch(triggerStream(PLAYGROUNDS_STREAM))
         onSuccessCallback(data, dispatch, getState)
       }
@@ -175,7 +177,10 @@ export const joinInitiative = initiativeId => executeQuery( {
         initiativeId,
       }
     },
-    onSuccess: triggerPlaygroundDetailsStream(initiativeId)
+    onSuccess: (result, dispatch) => {
+      dispatch(triggerStream(USER_PROFILE_STREAM))
+      dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+    }
   })
     
 export const claimManagerRole = initiativeId => executeQuery( {

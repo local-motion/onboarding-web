@@ -1,8 +1,10 @@
 import { openErrorDialog } from "../components/SimpleDialog/SimpleDialogActions";
 import { createUser, signOutUser } from "../components/UserProfile/UserProfileActions";
-import { ErrorCode, getErrorMessage } from "./ErrorMessages";
+import { getErrorMessage } from "./ErrorMessages";
 import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 import { getGraphQLClient } from "../misc/ConfigReducer";
+import { openWarningNotification, closeStatusNotification } from "components/StatusNotification/StatusNotificationActions";
+import { getStatusNotification } from "components/StatusNotification/StatusNotificationReducer";
 
 export const REQUEST_POSTFIX = '_REQUEST'
 export const SUCCESS_POSTFIX = '_SUCCESS'
@@ -97,6 +99,10 @@ const executeGraphQLQuery = (queryOptions) => {
 
       promise.then(response => {
 
+          // Reset connect problem notification if applicable
+          if (getStatusNotification(getState()))
+            dispatch(closeStatusNotification())
+
           const error = extractErrorsFromGraphQLResponse(response, queryOptions)
 
           if (error) {
@@ -131,7 +137,7 @@ const executeGraphQLQuery = (queryOptions) => {
         })
         .catch(errorResponse => {
           // Network errors end up here
-          console.log('graphQL query (network) error: ', errorResponse)
+          console.log('graphQL query (network) error: ', errorResponse.message)
 
           const error = {
             code: errorResponse.message && errorResponse.message.startsWith('Network error') ? 'NETWORK' : 'GENERIC',
@@ -139,7 +145,9 @@ const executeGraphQLQuery = (queryOptions) => {
             response: errorResponse,
             queryOptions,
           }
-          handleError(error, dispatch, getState, queryOptions, errorResponse)
+          if (error.code === 'NETWORK')
+            networkErrorHandler(error, dispatch, getState, queryOptions, errorResponse)
+          handleError(error, dispatch, getState, queryOptions, error, false)
         })
     }
   }
@@ -150,7 +158,6 @@ const executeRestQuery = (queryOptions) => {
           onCompletion, onSuccess } = queryOptions 
 
   return (dispatch, getState) => {
-      // const graphQLClient = getState().graphQLClient;
       dispatch({type: baseActionIdentifier + REQUEST_POSTFIX, fetchId, timestamp: Date.now()})
 
       const promise = type === REST_GET ?
@@ -169,6 +176,10 @@ const executeRestQuery = (queryOptions) => {
       promise.then(
 
         response => {
+          // Reset connect problem notification if applicable
+          if (getStatusNotification(getState()))
+            dispatch(closeStatusNotification())
+                    
           if (response.ok) {
             response.json().then(
               json => {
@@ -188,7 +199,7 @@ const executeRestQuery = (queryOptions) => {
               jsonError => {
                 console.warn('Error parsing json response: ', jsonError)
                 const error = {
-                  code: ErrorCode.JSON_PARSE,
+                  code: 'JSON_PARSE',
                   response,
                   queryOptions,
                 }
@@ -197,7 +208,7 @@ const executeRestQuery = (queryOptions) => {
             ).catch(exception => {
               console.warn('Exception while handling REST call: ', exception)
               const error = {
-                code: ErrorCode.GENERIC,
+                code: 'GENERIC',
                 exception,
                 response,
                 queryOptions,
@@ -208,7 +219,7 @@ const executeRestQuery = (queryOptions) => {
           else {
             console.warn('Error result from REST call: ', response)
             const error = {
-              code: response.status >= 500 ? ErrorCode.INTERNAL_SERVER_ERROR : response.status >= 400 ? ErrorCode.NOT_AUTHORISED : ErrorCode.GENERIC,
+              code: response.status >= 500 ? 'INTERNAL_SERVER_ERROR' : response.status >= 400 ? 'NOT_AUTHORISED' : 'GENERIC',
               httpResultCode: response.status,
               response,
               queryOptions,
@@ -221,11 +232,12 @@ const executeRestQuery = (queryOptions) => {
           // Network errors end up here
           console.warn('Network error from REST call: ', errorResponse)
           const error = {
-            code: ErrorCode.NETWORK,
+            code: 'NETWORK',
             response: errorResponse,
             queryOptions,
           }
-          handleError(error, dispatch, getState, queryOptions, errorResponse)
+          networkErrorHandler(error, dispatch, getState, queryOptions, errorResponse)
+          handleError(error, dispatch, getState, queryOptions, errorResponse, false)
         }
       )
     }
@@ -262,24 +274,34 @@ const nonUniqueUsernameOrEmailErrorHandler = (error, dispatch, getState, queryOp
 }
 
 const userNotAuthenticatedErrorHandler = (error, dispatch, getState, queryOptions) => {
-  if (error.code === '9-812') {           // "niceMessage" : "User must be authenticated"
+  if (error.code === '9-812' || error.code === 'UNAUTHENTICATED' || error.code === 'NOT_AUTHORISED') {           // "niceMessage" : "User must be authenticated"
     console.log('Server detected unauthenticated user')
-    dispatch(openErrorMessageDialog(error))
 
-   // TODO instead of displaying an error, trigger token refresh
-
-
+    dispatch(signOutUser( dispatch =>
+      dispatch(openErrorDialog('Sessie verlopen', 'Je sessie is verlopen. Log opnieuw in.', 'Sluiten'))
+    ))
     return true   // error handled
   }
   return false
 }
 
-const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorHandler, userNotAuthenticatedErrorHandler]
+const networkErrorHandler = (error, dispatch, getState, queryOptions) => {
+  if (error.code === 'NETWORK') {
+    console.log('Server detected network error')
+
+    dispatch(openWarningNotification('Er is een probleem met de verbinding'))
+    return true   // error handled
+  }
+  return false
+}
+
+const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorHandler, userNotAuthenticatedErrorHandler, networkErrorHandler]
 
 
 // default error handler
 
-const handleError = (error, dispatch, getState, queryOptions, message) => {
+const handleError = (error, dispatch, getState, queryOptions, message, displayErrorMessage) => {
+
   const {baseActionIdentifier, onFailPrepublish, onCompletionPrepublish, onFail, onCompletion} = queryOptions
   let cancel = false
 
@@ -294,7 +316,7 @@ const handleError = (error, dispatch, getState, queryOptions, message) => {
     onFail && onFail(error, dispatch, getState, queryOptions, message)
     onCompletion && onCompletion(error, dispatch, getState, queryOptions, message)
 
-    dispatch(openErrorMessageDialog(error))
+    displayErrorMessage && dispatch(openErrorMessageDialog(error))
   }
 }
 
