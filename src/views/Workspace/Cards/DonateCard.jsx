@@ -272,12 +272,12 @@ class DonateCard extends Component {
                                     <li className={classes.listItem}>Borden</li>
                                 </ul>
 
-                                <Typography component="p" className={classes.text}>Vrijwilligers kunnen het geld ultgeven aan bovenstaande producten. Indien het geld niet wordt uitgegeven kan het gestort worden aan de aaliantle Nederland rookvrij. Deze keuze maak je wanneer je doneert</Typography>
+                                <Typography component="p" className={classes.text}>Vrijwilligers kunnen het geld uitgeven aan bovenstaande producten. Indien het geld niet wordt uitgegeven kan het gestort worden aan de Alliantie Nederland Rookvrij. Deze keuze maak je wanneer je doneert.</Typography>
                             </div>
                         </div>
 
                         <div className={classes.donationsTop}>
-                            <div className={classes.donationsTitle}>Transacties in uit beide</div>
+                            <div className={classes.donationsTitle}>Transacties</div>
 
                             <div className={classes.donationsButtons}>
                                 <Button
@@ -394,7 +394,7 @@ class DonateCard extends Component {
                                       classes={{
                                           label: `${classes.checkbox} ${isMoneyToAnotherActie ? classes.checked : ''}`
                                       }}
-                                      label="Als het geld niet wordt gebruikt voor deze actie, mag het geld voor een andere actie worden gebruikt. (als u dit niet aanvinkt wordt het geld naar uw rekening teruggerstort als het fonds afloopt)"
+                                      label="Als het geld niet wordt gebruikt voor deze actie, mag het geld voor een andere actie worden gebruikt. (als u dit niet aanvinkt wordt het geld naar uw rekening teruggestort als het fonds afloopt)"
                                     />
                                 </div>
 
