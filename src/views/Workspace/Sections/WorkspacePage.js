@@ -263,9 +263,18 @@ class WorkspacePage extends PureComponent {
                                           disabled={!playground}
                                           key={phaseName}
                                         >
-                                            {phases[phaseName].steps.map(step => <StyledStepLink
-                                              onClick={this.toggleShowMobileMenu} user={user}
-                                              startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                            {phases[phaseName].steps.map(step => {
+                                                return (
+                                                  <StyledStepLink
+                                                    onClick={this.toggleShowMobileMenu}
+                                                    user={user}
+                                                    startPathUrl={startPathUrl}
+                                                    key={step.name}
+                                                    {...step}
+                                                    isDone={!!(step.done && playground && step.done({ playground }))}
+                                                  />
+                                                );
+                                            })}
                                         </ExpansionPhase>
                                       ))
                                   }
