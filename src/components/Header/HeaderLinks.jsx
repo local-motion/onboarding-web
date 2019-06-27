@@ -40,16 +40,15 @@ const StyledBadge = withStyles(theme => ({
 }))(Badge);
 
 const mapStateToProps = state => {
-  // var date = new Date();
-  // date.setDate(date.getDate() - 10);
+    // var date = new Date();
+    // date.setDate(date.getDate() - 10);
 
-  return ({
-    user: getUser(state),
-    unreadNotificationCount: getRecordCountSinceExcludingActor(state, getLastAuditTrailView(state), getUser(state).name, TOTAL_RECORDS_TO_DISPLAY, isRecordIncluded),
-    userData: getUserData(state)
-})
-
-}
+    return ({
+        user: getUser(state),
+        unreadNotificationCount: getRecordCountSinceExcludingActor(state, getLastAuditTrailView(state), getUser(state).name, TOTAL_RECORDS_TO_DISPLAY, isRecordIncluded),
+        userData: getUserData(state)
+    });
+};
 
 const mapDispatchToProps = dispatch => ({
     storeUserData: (userData) => dispatch(storeUserData(userData)),
@@ -100,7 +99,7 @@ class HeaderLinks extends React.Component {
         return (
               <div className={classes.list}>
 
-                    {this.renderNotifications()}
+                  {this.renderNotifications()}
 
                   <CustomDropdown
                     noLiPadding

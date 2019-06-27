@@ -10,9 +10,15 @@ const styles = (theme) => ({
     },
 });
 
-const WrappedHeader = ({ classes, customStyle, fullWidth = false }) => (
+const WrappedHeader = ({ classes, customStyle, fullWidth = false, actieItems, playground, phases, startPathUrl }) => (
   <div className={`${classes.headerWrapper} ${customStyle || ''}`}>
-      <Header fullWidth={fullWidth} />
+      <Header
+        fullWidth={fullWidth}
+        actieItems={actieItems}
+        playground={playground}
+        phases={phases}
+        startPathUrl={startPathUrl}
+      />
   </div>
 );
 

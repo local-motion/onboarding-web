@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, NavLink, withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import Button from "@material-ui/core/Button/Button";
@@ -97,9 +97,22 @@ const styles = theme => ({
         justifyContent: 'center',
         flexDirection: 'column',
     },
+    drawerPhaseName: {
+        fontSize: 18,
+        flexGrow: 1,
+        width: '100%',
+        textAlign: 'center',
+        margin: '15px 0',
+    },
     drawerLink: {
         flexGrow: 1,
         width: '100%',
+        textAlign: 'center',
+    },
+    activeDrawerLink: {
+        background: '#258ecc',
+        color: '#FFF',
+        borderRadius: 0,
     },
     loginButton: {
         color: '#FFF',
@@ -147,7 +160,49 @@ const styles = theme => ({
     },
 });
 
-const Header = ({ classes, history, location, user, fullWidth, signOutUser }) => {
+const ActieItems = ({ phases, startPathUrl, playground, user, classes }) => {
+    return Object.keys(phases).map((phaseName) => {
+        const phase = phases[phaseName];
+
+        return (
+          <div key={phaseName} className={classes.drawerLink}>
+              <div className={classes.drawerPhaseName}>{phase.title}</div>
+
+              {
+                  phase.steps.map(step => {
+                        if (step.visible && !step.visible({ playground, user })) return null;
+
+                        return (
+                          <Button
+                            component={NavLink}
+                            activeClassName={classes.activeDrawerLink}
+                            className={classes.drawerLink}
+                            to={(startPathUrl || '') + step.link}
+                            key={step.link}
+                          >{step.name}</Button>
+                        );
+                    }
+                  )
+              }
+          </div>
+        )
+    });
+};
+
+const Header = (props) => {
+    const {
+        classes,
+        history,
+        location,
+        user,
+        fullWidth,
+        signOutUser,
+        actieItems,
+        playground,
+        phases,
+        startPathUrl,
+    } = props;
+
     const [isDrawerOpen, toggleDrawer] = useState(false);
 
     const signInClick = () => history.push(`/actie/inloggen?target=${location.pathname}`);
@@ -172,9 +227,9 @@ const Header = ({ classes, history, location, user, fullWidth, signOutUser }) =>
                       user
                         ? (
                           <React.Fragment>
-                              <Hidden xsDown><HeaderLinks /></Hidden>
+                              <Hidden smDown><HeaderLinks /></Hidden>
 
-                              <Hidden smUp>
+                              <Hidden mdUp>
                                   <IconButton
                                     color="inherit"
                                     aria-label="toggle drawer"
@@ -193,13 +248,23 @@ const Header = ({ classes, history, location, user, fullWidth, signOutUser }) =>
                                       <div
                                         tabIndex={0}
                                         role="button"
-                                        onClick={toggleDrawer}
                                         onKeyDown={closeDrawer}
+                                        onClick={closeDrawer}
                                         className={classes.drawerLinks}
                                       >
                                           <Button className={classes.drawerLink} onClick={gotoMyProfile}>Mijn profiel</Button>
                                           <Button className={classes.drawerLink} onClick={gotoMyActies}>Mijn acties</Button>
                                           <Button className={classes.drawerLink} onClick={signOutUser}>Uitloggen</Button>
+
+                                          {actieItems && (
+                                            <ActieItems
+                                              playground={playground}
+                                              phases={phases}
+                                              startPathUrl={startPathUrl}
+                                              user={user}
+                                              classes={classes}
+                                            />
+                                          )}
                                       </div>
                                   </Drawer>
                               </Hidden>

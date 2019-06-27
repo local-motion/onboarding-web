@@ -139,6 +139,31 @@ const componentsStyle = theme => ({
         width: 15,
         height: 15,
     },
+    mobileNavLinks: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: -40,
+        zIndex: 99,
+        position: 'relative',
+    },
+    phase: {
+        background: '#f9f9f9',
+        padding: '10px 15px',
+        borderBottom: '1px solid #e5e5e5',
+        flex: 1,
+        textAlign: 'center',
+        marginBottom: 15,
+
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 10,
+        },
+    },
+    activePhase: {
+        background: '#FFF',
+        border: '1px solid #e5e5e5',
+        borderBottom: 'none',
+    },
 });
 
 export default componentsStyle;
