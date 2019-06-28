@@ -26,11 +26,13 @@ const styles = theme => ({
         },
     },
     beta: {
+        color: '#FFF',
         padding: '10px 20px',
         background: '#148fe6',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        fontWeight: 600,
 
         [theme.breakpoints.down("xs")]: {
             fontSize: 14,
