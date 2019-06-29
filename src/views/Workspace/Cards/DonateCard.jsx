@@ -16,6 +16,8 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const styles = theme => ({
     content: {
@@ -188,6 +190,15 @@ const styles = theme => ({
             border: 'none',
         },
     },
+    submitLoading: {
+        color: '#FFF',
+    },
+    submitText: {
+        color: '#FFF',
+    },
+    submitTextError: {
+        color: 'red',
+    },
 });
 
 const DonateIcon = ({ className }) => (
@@ -202,12 +213,14 @@ const mocks = {
     banks: ['ABN-AMRO', 'ABN-AMRO 2'],
     totalSum: '327,68',
     donations: [
-        { sum: '14,50', inOut: 'Bij', name: 'Janette', notice: 'Success allemaal!', time: '15:44, 7 April' },
-        { sum: '12,50', inOut: 'Af', name: 'Feda', notice: 'Longfonds: Flyers', time: '15:44, 8 April' },
-        { sum: '14,50', inOut: 'Bij', name: 'Janette', notice: 'Success allemaal!', time: '15:44, 9 April' },
-        { sum: '12,50', inOut: 'Af', name: 'Feda', notice: 'Longfonds: Flyers', time: '15:44, 10 April' },
+        { amount: '14,50', inOut: 'Bij', name: 'Janette', notice: 'Success allemaal!', time: '15:44, 7 April' },
+        { amount: '12,50', inOut: 'Af', name: 'Feda', notice: 'Longfonds: Flyers', time: '15:44, 8 April' },
+        { amount: '14,50', inOut: 'Bij', name: 'Janette', notice: 'Success allemaal!', time: '15:44, 9 April' },
+        { amount: '12,50', inOut: 'Af', name: 'Feda', notice: 'Longfonds: Flyers', time: '15:44, 10 April' },
     ],
 };
+
+const apiUrl = 'https://dev.api.forus.io/api/v1';
 
 const filterDonations = (view) => ({ inOut }) => {
     if (view === 'beide') return true;
@@ -221,29 +234,100 @@ const filterDonations = (view) => ({ inOut }) => {
 class DonateCard extends Component {
     state = {
         dialogOpen: false,
-        bank: 'ABN-AMRO',
-        sum: 25,
+        bank: '',
+        banks: [],
+        bankFetched: false,
+        amount: 25,
         comment: '',
         isAnonymousDonation: true,
         isMoneyToAnotherActie: true,
         view: 'beide',
+        submitLoading: null,
+        redirectUrl: null,
+    };
+
+    componentDidMount() {
+        const getIssuersUrl = `${apiUrl}/platform/funds/11/ideal/issuers?`;
+
+        fetch(getIssuersUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        })
+          .then(r => r.json())
+          .then(({ data }) => {
+              this.setState({ banks: data, banksFetched: true, bank: data[0] && data[0].bic });
+          })
+          .catch(error => { console.error(error); });
+    }
+
+    requestPayment = () => {
+        const { amount, comment: description, bank: issuer } = this.state;
+
+        this.setState({ submitLoading: true });
+
+        const requestUrl = `${apiUrl}/platform/funds/11/ideal/requests?`;
+        const body = JSON.stringify({
+            amount,
+            issuer,
+            description,
+        });
+
+        fetch(requestUrl, {
+            method: 'POST',
+            body,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        })
+          .then(r => r.json())
+          .then(({ data }) => {
+              let redirectUrl = data.issuer_authentication_url || data.share_url || null;
+
+              if (redirectUrl === null) {
+                  this.setState({ submitLoading: false });
+                  return null;
+              }
+
+              this.setState({ redirectUrl, submitLoading: false });
+
+              window.open(redirectUrl);
+          })
+          .catch(error => { console.error(error); });
     };
 
     toggleDialog = () => this.setState(({ dialogOpen }) => ({ dialogOpen: !dialogOpen }));
 
     changeText = ({ target: { name, value } }) => this.setState({ [name]: value });
-    changeSum = ({ target: { name, value } }) => this.setState({ [name]: value.replace(/(-|\+)/, '') });
+    changeAmount = ({ target: { name, value } }) => this.setState({ [name]: value.replace(/(-|\+)/, '') });
     handleCheck = (name) => () => this.setState({ [name]: !this.state[name] });
 
     changeView = (view) => () => this.setState({ view });
 
-    submit = () => {
+    getSubmitContent = () => {
+        const { submitLoading, redirectUrl } = this.state;
+        const { classes } = this.props;
 
+        switch(submitLoading) {
+            case null: return <div className={classes.submitText}>Submit</div>;
+            case true: return <CircularProgress size={24} className={classes.submitLoading}/>;
+            case false: {
+                if (redirectUrl) {
+                    return <div className={classes.submitText}>Success</div>;
+                }
+
+                return <div className={classes.submitTextError}>Error</div>;
+            }
+            default: return <div className={classes.submitText}>Submit</div>;
+        }
     };
 
     render() {
         const { classes } = this.props;
-        const { bank, comment, isAnonymousDonation, isMoneyToAnotherActie, sum, dialogOpen, view } = this.state;
+        const { bank, banks, comment, isAnonymousDonation, isMoneyToAnotherActie, amount, dialogOpen, view } = this.state;
 
         return (
           <div>
@@ -335,19 +419,20 @@ class DonateCard extends Component {
                                           <OutlinedInput
                                             name="bank"
                                             id="outlined-age-simple"
+                                            labelWidth={0}
                                           />
                                       }
                                     >
-                                        {mocks.banks.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)}
+                                        {banks.map(({ id, name, bic }) => <MenuItem key={id} value={bic}>{name}</MenuItem>)}
                                     </Select>
                                 </FormControl>
 
                                 <div className={classes.fieldName}>Kies bedrag</div>
                                 <TextField
-                                  name="sum"
+                                  name="amount"
                                   type="number"
-                                  value={sum}
-                                  onChange={this.changeSum}
+                                  value={amount}
+                                  onChange={this.changeAmount}
                                   fullWidth
                                   inputProps={{
                                       min: '0',
@@ -398,8 +483,11 @@ class DonateCard extends Component {
                                     />
                                 </div>
 
-                                <Button fullWidth variant="outlined" onClick={this.submit} color="primary" className={classes.submit}>
-                                    Submit
+                                <Button disabled={!!this.state.submitLoading || !!this.state.redirectUrl}
+                                        variant="outlined" onClick={this.requestPayment}
+                                        color="primary" className={classes.submit} fullWidth
+                                >
+                                    {this.getSubmitContent()}
                                 </Button>
                             </DialogContent>
                         </Dialog>
