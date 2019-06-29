@@ -160,7 +160,7 @@ const componentsStyle = theme => ({
             fontSize: 10,
         },
 
-        '&:hover': {
+        '&:hover, &:visited, &:active': {
             color: '#2783BE',
         },
     },
