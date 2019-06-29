@@ -8,7 +8,7 @@ const styles = theme => ({
         width: '100%',
         height: 30,
         overflow: 'hidden',
-        background: 'linear-gradient(90deg, #148fe6 50%, #fed911 50%)',
+        background: 'linear-gradient(90deg, #148fe6 10%, #fed911 10%)',
         cursor: 'pointer',
     },
     closed: {
@@ -16,26 +16,22 @@ const styles = theme => ({
     },
     badge: {
         height: 30,
-        width: 390,
+        width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
-        margin: '0 auto',
-
-        [theme.breakpoints.down("xs")]: {
-            width: 300,
-        },
     },
     beta: {
         color: '#FFF',
-        padding: '10px 20px',
         background: '#148fe6',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 600,
+        width: '10%',
 
         [theme.breakpoints.down("xs")]: {
             fontSize: 14,
+            width: '20%',
         },
     },
     message: {
@@ -46,6 +42,7 @@ const styles = theme => ({
         alignItems: 'center',
         justifyContent: 'center',
         paddingRight: 15,
+        width: '90%',
 
         [theme.breakpoints.down("xs")]: {
             fontSize: 12,
@@ -55,7 +52,7 @@ const styles = theme => ({
         position: 'absolute',
         top: '50%',
         transform: 'translateY(-50%)',
-        right: 10,
+        right: 20,
         fontWeight: 'bold',
     },
     sticky: {
