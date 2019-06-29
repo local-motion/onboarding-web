@@ -154,15 +154,21 @@ const componentsStyle = theme => ({
         flex: 1,
         textAlign: 'center',
         marginBottom: 15,
+        color: '#2783BE',
 
         [theme.breakpoints.down('xs')]: {
             fontSize: 10,
+        },
+
+        '&:hover': {
+            color: '#2783BE',
         },
     },
     activePhase: {
         background: '#FFF',
         border: '1px solid #e5e5e5',
         borderBottom: 'none',
+        color: '#2783BE',
     },
 });
 
