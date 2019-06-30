@@ -40,7 +40,7 @@ const styles = theme => ({
         borderRight: '1px solid #e7e7e7',
         paddingBottom: 20,
     },
-    totalSum: {
+    totalBudget: {
         color: '#085ca6',
         fontSize: 44,
         lineHeight: 1.2,
@@ -208,26 +208,11 @@ const DonateIcon = ({ className }) => (
   </SvgIcon>
 );
 
-
-const mocks = {
-    banks: ['ABN-AMRO', 'ABN-AMRO 2'],
-    totalSum: '327,68',
-    donations: [
-        { amount: '14,50', inOut: 'Bij', name: 'Janette', notice: 'Success allemaal!', time: '15:44, 7 April' },
-        { amount: '12,50', inOut: 'Af', name: 'Feda', notice: 'Longfonds: Flyers', time: '15:44, 8 April' },
-        { amount: '14,50', inOut: 'Bij', name: 'Janette', notice: 'Success allemaal!', time: '15:44, 9 April' },
-        { amount: '12,50', inOut: 'Af', name: 'Feda', notice: 'Longfonds: Flyers', time: '15:44, 10 April' },
-    ],
-};
-
 const apiUrl = 'https://dev.api.forus.io/api/v1';
 
-const filterDonations = (view) => ({ inOut }) => {
-    if (view === 'beide') return true;
-
-    const viewName = view === 'in' ? 'Bij' : 'Af';
-
-    return viewName === inOut;
+const mocks = {
+    names: ['Chloe', 'Maximillian', 'Den', 'Bill', 'James', 'Peter'],
+    notes: ['Longfonds: flyers', 'Success allemaal'],
 };
 
 // step:  "Doneer"
@@ -244,10 +229,42 @@ class DonateCard extends Component {
         view: 'beide',
         submitLoading: null,
         redirectUrl: null,
+        totalBudget: null,
+        transactionsIn: [],
+        transactionsOut: [],
     };
 
     componentDidMount() {
-        const getIssuersUrl = `${apiUrl}/platform/funds/11/ideal/issuers?`;
+        this.getTransactions();
+        this.getBanks();
+        this.getTotalBudget();
+    }
+
+    fetchTransactionsRequest = (fetchUrl, direction) => {
+        return fetch(fetchUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        })
+          .then(r => r.json())
+          .then(({ data }) => {
+              this.setState({ [direction]: data[0] && data.map(this.prepareTransaction) });
+          })
+          .catch(error => { console.error(error); });
+    };
+
+    getTransactions = () => {
+        const getInTransactionsUrl = `${apiUrl}/platform/organizations/41/funds/11/bunq-transactions`;
+        const getOutTransactionsUrl = `${apiUrl}/platform/organizations/41/funds/11/transactions`;
+
+        this.fetchTransactionsRequest(getInTransactionsUrl, 'transactionsIn');
+        this.fetchTransactionsRequest(getOutTransactionsUrl, 'transactionsOut');
+    };
+
+    getBanks = () => {
+        const getIssuersUrl = `${apiUrl}/platform/funds/11/ideal/issuers`;
 
         fetch(getIssuersUrl, {
             method: 'GET',
@@ -261,14 +278,31 @@ class DonateCard extends Component {
               this.setState({ banks: data, banksFetched: true, bank: data[0] && data[0].bic });
           })
           .catch(error => { console.error(error); });
-    }
+    };
+
+    getTotalBudget = () => {
+        const fundInfoUrl = `${apiUrl}/platform/organizations/41/funds/11`;
+
+        fetch(fundInfoUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        })
+          .then(r => r.json())
+          .then(({ data }) => {
+              this.setState({ totalBudget: data.budget && data.budget.left });
+          })
+          .catch(error => { console.error(error); });
+    };
 
     requestPayment = () => {
         const { amount, comment: description, bank: issuer } = this.state;
 
         this.setState({ submitLoading: true });
 
-        const requestUrl = `${apiUrl}/platform/funds/11/ideal/requests?`;
+        const requestUrl = `${apiUrl}/platform/funds/11/ideal/requests`;
         const body = JSON.stringify({
             amount,
             issuer,
@@ -325,9 +359,70 @@ class DonateCard extends Component {
         }
     };
 
+    prepareTransaction = ({ id, amount, created_at, payment_id }) => {
+        const createdAt = new Date(created_at);
+        const hours = ('0' + createdAt.getHours()).slice(-2);
+        const minutes = ('0' + createdAt.getMinutes()).slice(-2);
+        const day = createdAt.getDate();
+        const month = createdAt.toLocaleString('nl', { month: "long" });
+        const year = createdAt.getFullYear();
+
+        // change later when backend will implement related fields
+        const randomNameNum = Math.floor(Math.random() * mocks.names.length);
+        const randomNotesNum = Math.floor(Math.random() * mocks.notes.length);
+
+        return {
+            id,
+            amount,
+            time: `${hours}:${minutes} - ${day} ${month}, ${year}`,
+            created_at,
+            inOut: payment_id ? 'Uit' : 'In',
+            name: mocks.names[randomNameNum],
+            note: mocks.notes[randomNotesNum],
+        };
+    };
+
+    sortTransactions = (a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf();
+
+    renderTransactions = () => {
+        const { classes } = this.props;
+        const { view, transactionsIn, transactionsOut } = this.state;
+        let transactions = [];
+
+        switch(view) {
+            case 'in': {
+                transactions = transactionsIn;
+                break;
+            }
+
+            case 'uit': {
+                transactions = transactionsOut;
+                break;
+            }
+
+            case 'beide':
+            default: {
+                transactions = [...transactionsIn, ...transactionsOut];
+                break;
+            }
+        }
+
+        return transactions
+          .sort(this.sortTransactions)
+          .map(({ id, amount, inOut, time, name, note }) => (
+            <TableRow className={`${classes.row} ${classes.tableRow}`} key={id}>
+                <TableCell>€{amount}</TableCell>
+                <TableCell>{inOut}</TableCell>
+                <TableCell>{name}</TableCell>
+                <TableCell>{note}</TableCell>
+                <TableCell>{time}</TableCell>
+            </TableRow>
+          ));
+    };
+
     render() {
         const { classes } = this.props;
-        const { bank, banks, comment, isAnonymousDonation, isMoneyToAnotherActie, amount, dialogOpen, view } = this.state;
+        const { bank, banks, comment, isAnonymousDonation, isMoneyToAnotherActie, amount, dialogOpen, view, totalBudget } = this.state;
 
         return (
           <div>
@@ -339,7 +434,7 @@ class DonateCard extends Component {
                     <div>
                         <div className={classes.content}>
                             <div className={classes.donation}>
-                                <div className={classes.totalSum}>€{mocks.totalSum}</div>
+                                <div className={classes.totalBudget}>€{totalBudget}</div>
                                 <p className={classes.totalSubtitle}>Opgehaald bedrag</p>
                                 <Button onClick={this.toggleDialog} className={classes.donateButton} variant="outlined">
                                     <DonateIcon className={classes.donateIcon} />
@@ -390,15 +485,7 @@ class DonateCard extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {mocks.donations.filter(filterDonations(view)).map(({ sum, inOut, name, notice, time }, index) => (
-                                  <TableRow className={`${classes.row} ${classes.tableRow}`} key={sum + time + name + index}>
-                                      <TableCell>€{sum}</TableCell>
-                                      <TableCell>{inOut}</TableCell>
-                                      <TableCell>{name}</TableCell>
-                                      <TableCell>{notice}</TableCell>
-                                      <TableCell>{time}</TableCell>
-                                  </TableRow>
-                                ))}
+                                {this.renderTransactions()}
                             </TableBody>
                         </Table>
 
