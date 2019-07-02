@@ -20,7 +20,7 @@ import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import MiniMap from "../components/MiniMap";
 import { slugifyPlaygroundName } from "../../../components/Playground/PlaygroundActions";
-import { titlePrefix } from "../../../misc/WorkspaceHelpers";
+import { playgroundStatuses, titlePrefix } from "../../../misc/WorkspaceHelpers";
 import { Helmet } from "react-helmet";
 
 const styles = theme => ({
@@ -140,6 +140,8 @@ const styles = theme => ({
     resultButton: {
         boxShadow: 'none',
         fontSize: 13,
+        textTransform: 'none',
+        width: 130,
 
         '&:hover': {
             background: '#51a5d6',
@@ -300,7 +302,9 @@ class AddFindPlayground extends Component {
           <React.Fragment>
               {
                   results.map((playground) => {
+
                       const { name, distance = 0, volunteerCount } = playground;
+                      const isPlaygroundNotStarted = playground.status === playgroundStatuses[0] && volunteerCount === 0;
 
                       const convertedDistance = distance >= 1000
                         ? `< ${Math.round(distance / 1000)} km`
@@ -335,7 +339,7 @@ class AddFindPlayground extends Component {
                               component={Link}
                               to={`/actie/${slugifyPlaygroundName(playground)}`}
                               variant="contained"
-                            >Sluit je aan</Button>
+                            >{isPlaygroundNotStarted ? 'Begin de actie' : 'Sluit je aan'}</Button>
                         </div>
                       );
                   })

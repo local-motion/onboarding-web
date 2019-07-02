@@ -38,7 +38,7 @@ class SocialMedia extends React.Component {
         const phase = getStatus(playground);
 
         var details = {
-            title: `Help make ${name} smoke free.`,
+            title: `Help om ${name} rookvrij te maken!`,
             description: `Ik kom in actie om een speeltuin rookvrij te maken. De actie bevindt zich in de fase ${phase}. Help jij mij om ${name} rookvrij te maken? 
             ${shareUrl}`,
             via: "Longfonds Rookvrij Generatie.",
