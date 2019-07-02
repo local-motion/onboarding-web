@@ -107,7 +107,7 @@ const getPlaygroundDetailsQuery = gql`
 
 export const findPlaygroundsByName = ({ initiativeName, playgrounds }) => {
     if (!initiativeName || !playgrounds.length) return null;
-    const decodedInitiativeName = initiativeName.replace(/_/g, ' ')
+    const decodedInitiativeName = decodeURIComponent(initiativeName).replace(/_/g, ' ')
     const playground = playgrounds
       .find(({ name }) => name.toLowerCase() === decodedInitiativeName)
 
@@ -116,7 +116,7 @@ export const findPlaygroundsByName = ({ initiativeName, playgrounds }) => {
 
 export const slugifyPlaygroundName = ({ id, name }) => {
     const sluggedName = name.toLowerCase().replace(/ /g, '_');
-    return sluggedName
+    return encodeURIComponent(sluggedName);
 };
 
 export const ensurePlaygrounds = () => {
