@@ -25,7 +25,7 @@ const headerLinksStyle = theme => ({
         padding: "0",
         [theme.breakpoints.down("sm")]: {
             width: "100%"
-        }
+        },
     },
     listItemText: {
         padding: "0 !important"
@@ -36,7 +36,7 @@ const headerLinksStyle = theme => ({
         border: "1px solid #b1defe",
         width: 46,
         height: 46,
-        margin: "0 30px",
+        marginRight: 20,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
