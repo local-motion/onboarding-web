@@ -25,6 +25,7 @@ import UserProfile from "./views/UserProfile/UserProfile";
 import { titlePrefix } from "./misc/WorkspaceHelpers";
 import Authenticator from "./authentication/Authenticator";
 import WrappedWarningSnackbar from "components/StatusNotification/WrappedWarningSnackbar";
+import PublicBetaNotification from "./components/PublicBetaNotification/PublicBetaNotification";
   
 
 const mapDispatchToProps = (dispatch) => ({
@@ -46,6 +47,8 @@ class App extends React.Component {
                     <title>{titlePrefix} | Home</title>
                 </Helmet>
                 <Router history={history}>
+                    <PublicBetaNotification />
+
                     <Switch>
                         <Route exact path="/inloggen" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler} isInCard={false}/> } />
 
