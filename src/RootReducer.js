@@ -9,6 +9,7 @@ import { streamReducer } from "./api/StreamReducer";
 import configReducer from "./misc/ConfigReducer";
 import auditTrailReducer from "components/AuditTrail/AuditTrailReducer";
 import userDataReducer from "components/UserData/UserDataReducer";
+import donationsReducer from "views/Workspace/Cards/DonateCardReducer";
 import statusNotificationReducer from "components/StatusNotification/StatusNotificationReducer";
 
 const rootReducer = (state = {}, action) => ({
@@ -24,7 +25,8 @@ const rootReducer = (state = {}, action) => ({
     error:              errorReducer(state.error, action),
     simpleDialog:       simpleDialogReducer(state.simpleDialog, action),
     statusNotification: statusNotificationReducer(state.statusNotification, action),
-    fetchDetails:       fetchDetailsReducer(state.fetchDetails, action)
+    fetchDetails:       fetchDetailsReducer(state.fetchDetails, action),
+    donations:          donationsReducer(state.donations, action)
   })
 
 export default rootReducer

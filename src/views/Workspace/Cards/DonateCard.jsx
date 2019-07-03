@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 import { Button, TextField, Typography } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import Checkbox from '@material-ui/core/Checkbox';
@@ -17,7 +18,12 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import { 
+    getTransactions,
+    getTotalBudget,
+    getBanks,
+    requestPayment
+ } from './DonateCardActions';
 
 const styles = theme => ({
     content: {
@@ -208,130 +214,28 @@ const DonateIcon = ({ className }) => (
   </SvgIcon>
 );
 
-const apiUrl = 'https://dev.api.forus.io/api/v1';
-
-const mocks = {
-    names: ['Chloe', 'Maximillian', 'Den', 'Bill', 'James', 'Peter'],
-    notes: ['Longfonds: flyers', 'Success allemaal'],
-};
+const fundId = 11;
 
 // step:  "Doneer"
 class DonateCard extends Component {
     state = {
         dialogOpen: false,
         bank: '',
-        banks: [],
-        bankFetched: false,
         amount: 25,
         comment: '',
         isAnonymousDonation: true,
         isMoneyToAnotherActie: true,
         view: 'beide',
-        submitLoading: null,
-        redirectUrl: null,
-        totalBudget: null,
-        transactionsIn: [],
-        transactionsOut: [],
     };
 
     componentDidMount() {
-        this.getTransactions();
-        this.getBanks();
-        this.getTotalBudget();
-    }
-
-    fetchTransactionsRequest = (fetchUrl, direction) => {
-        return fetch(fetchUrl, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        })
-          .then(r => r.json())
-          .then(({ data }) => {
-              this.setState({ [direction]: data[0] && data.map(this.prepareTransaction) });
-          })
-          .catch(error => { console.error(error); });
-    };
-
-    getTransactions = () => {
-        const getInTransactionsUrl = `${apiUrl}/platform/organizations/41/funds/11/bunq-transactions`;
-        const getOutTransactionsUrl = `${apiUrl}/platform/organizations/41/funds/11/transactions`;
-
-        this.fetchTransactionsRequest(getInTransactionsUrl, 'transactionsIn');
-        this.fetchTransactionsRequest(getOutTransactionsUrl, 'transactionsOut');
-    };
-
-    getBanks = () => {
-        const getIssuersUrl = `${apiUrl}/platform/funds/11/ideal/issuers`;
-
-        fetch(getIssuersUrl, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        })
-          .then(r => r.json())
-          .then(({ data }) => {
-              this.setState({ banks: data, banksFetched: true, bank: data[0] && data[0].bic });
-          })
-          .catch(error => { console.error(error); });
-    };
-
-    getTotalBudget = () => {
-        const fundInfoUrl = `${apiUrl}/platform/organizations/41/funds/11`;
-
-        fetch(fundInfoUrl, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        })
-          .then(r => r.json())
-          .then(({ data }) => {
-              this.setState({ totalBudget: data.budget && data.budget.left });
-          })
-          .catch(error => { console.error(error); });
-    };
-
-    requestPayment = () => {
-        const { amount, comment: description, bank: issuer } = this.state;
-
-        this.setState({ submitLoading: true });
-
-        const requestUrl = `${apiUrl}/platform/funds/11/ideal/requests`;
-        const body = JSON.stringify({
-            amount,
-            issuer,
-            description,
+        this.props.getBanks({ id: fundId }).then(() => {
+            const { banks } = this.props;
+            this.setState({ bank: banks[0] && banks[0].bic })
         });
-
-        fetch(requestUrl, {
-            method: 'POST',
-            body,
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        })
-          .then(r => r.json())
-          .then(({ data }) => {
-              let redirectUrl = data.issuer_authentication_url || data.share_url || null;
-
-              if (redirectUrl === null) {
-                  this.setState({ submitLoading: false });
-                  return null;
-              }
-
-              this.setState({ redirectUrl, submitLoading: false });
-
-              window.open(redirectUrl);
-          })
-          .catch(error => { console.error(error); });
-    };
+        this.props.getTransactions({ id: fundId });
+        this.props.getTotalBudget({ id: fundId });
+    }
 
     toggleDialog = () => this.setState(({ dialogOpen }) => ({ dialogOpen: !dialogOpen }));
 
@@ -342,8 +246,7 @@ class DonateCard extends Component {
     changeView = (view) => () => this.setState({ view });
 
     getSubmitContent = () => {
-        const { submitLoading, redirectUrl } = this.state;
-        const { classes } = this.props;
+        const { classes, submitLoading, redirectUrl } = this.props;
 
         switch(submitLoading) {
             case null: return <div className={classes.submitText}>Submit</div>;
@@ -359,56 +262,17 @@ class DonateCard extends Component {
         }
     };
 
-    prepareTransaction = ({ id, amount, created_at, payment_id }) => {
-        const createdAt = new Date(created_at);
-        const hours = ('0' + createdAt.getHours()).slice(-2);
-        const minutes = ('0' + createdAt.getMinutes()).slice(-2);
-        const day = createdAt.getDate();
-        const month = createdAt.toLocaleString('nl', { month: "long" });
-        const year = createdAt.getFullYear();
-
-        // change later when backend will implement related fields
-        const randomNameNum = Math.floor(Math.random() * mocks.names.length);
-        const randomNotesNum = Math.floor(Math.random() * mocks.notes.length);
-
-        return {
-            id,
-            amount,
-            time: `${hours}:${minutes} - ${day} ${month}, ${year}`,
-            created_at,
-            inOut: payment_id ? 'Uit' : 'In',
-            name: mocks.names[randomNameNum],
-            note: mocks.notes[randomNotesNum],
-        };
-    };
-
-    sortTransactions = (a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf();
-
     renderTransactions = () => {
-        const { classes } = this.props;
-        const { view, transactionsIn, transactionsOut } = this.state;
-        let transactions = [];
+        const { view } = this.state;
+        const { classes, transactionsIn, transactionsOut, allTransactions } = this.props;
 
-        switch(view) {
-            case 'in': {
-                transactions = transactionsIn;
-                break;
-            }
-
-            case 'uit': {
-                transactions = transactionsOut;
-                break;
-            }
-
-            case 'beide':
-            default: {
-                transactions = [...transactionsIn, ...transactionsOut];
-                break;
-            }
-        }
+        const transactions = view === 'in' 
+            ? transactionsIn
+            : view === 'uit'
+                ? transactionsOut
+                : allTransactions;
 
         return transactions
-          .sort(this.sortTransactions)
           .map(({ id, amount, inOut, time, name, note }) => (
             <TableRow className={`${classes.row} ${classes.tableRow}`} key={id}>
                 <TableCell>€{amount}</TableCell>
@@ -420,9 +284,15 @@ class DonateCard extends Component {
           ));
     };
 
+    requestPayment = () => {
+        const { amount, comment: description, bank: issuer } = this.state;
+
+        this.props.requestPayment({ id: fundId, amount, description, issuer });
+    };
+
     render() {
-        const { classes } = this.props;
-        const { bank, banks, comment, isAnonymousDonation, isMoneyToAnotherActie, amount, dialogOpen, view, totalBudget } = this.state;
+        const { classes, banks, totalBudget, submitLoading, redirectUrl } = this.props;
+        const { bank, comment, isAnonymousDonation, isMoneyToAnotherActie, amount, dialogOpen, view } = this.state;
 
         return (
           <div>
@@ -570,7 +440,7 @@ class DonateCard extends Component {
                                     />
                                 </div>
 
-                                <Button disabled={!!this.state.submitLoading || !!this.state.redirectUrl}
+                                <Button disabled={!!submitLoading || !!redirectUrl}
                                         variant="outlined" onClick={this.requestPayment}
                                         color="primary" className={classes.submit} fullWidth
                                 >
@@ -586,4 +456,24 @@ class DonateCard extends Component {
     }
 }
 
-export default withStyles(styles)(DonateCard);
+const mapStateToProps = (state) => ({
+    banks: state.donations.banks,
+    banksLoading: state.donations.banksLoading,
+    totalBudget: state.donations.totalBudget,
+    totalBudgetLoading: state.donations.totalBudgetLoading,
+    transactionsIn: state.donations.transactionsIn,
+    transactionsOut: state.donations.transactionsOut,
+    allTransactions: state.donations.allTransactions,
+    transactionsLoading: state.donations.transactionsLoading,
+    submitLoading: state.donations.submitLoading,
+    redirectUrl: state.donations.redirectUrl,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    getTransactions: ({ id }) => dispatch(getTransactions({ id })),
+    getTotalBudget: ({ id }) => dispatch(getTotalBudget({ id })),
+    getBanks: ({ id }) => dispatch(getBanks({ id })),
+    requestPayment: ({ id, amount, issuer, description }) => dispatch(requestPayment({ id, amount, issuer, description })),
+});
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(DonateCard));
