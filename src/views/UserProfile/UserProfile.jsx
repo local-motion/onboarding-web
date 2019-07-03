@@ -5,12 +5,13 @@ import Button from "@material-ui/core/Button/Button";
 
 import { container } from "../../assets/jss/material-kit-react";
 import MyProfile from "./MyProfile";
-import MyActies from "./MyInitiatives";
+import MyInitiatives from "./MyInitiatives";
 import WrappedHeader from "../../components/Header/WrappedHeader";
 import Footer from "../../components/Footer/Footer";
 import connect from "react-redux/es/connect/connect";
 import { getUser } from "../../components/UserProfile/UserProfileReducer";
 import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
+import { withRouter } from "react-router-dom";
 
 
 const styles = theme => ({
@@ -95,7 +96,7 @@ class UserProfile extends React.Component {
     render() {
         const { classes, user, playgrounds } = this.props;
 
-        if (!user) return <div>Loading...</div>;
+        if (!user) return <div>De pagina wordt geladen. Klik <a href='/'>hier</a> om terug naar de startpagina te gaan.</div>;
 
         return (
           <div className={classes.wrapper}>
@@ -108,7 +109,7 @@ class UserProfile extends React.Component {
 
                   <Switch>
                       <Route exact path="/mijn-profiel" key="My Profile" render={() => <MyProfile user={user}/>}/>
-                      <Route exact path="/mijn-acties" key="My Acties" render={() => <MyActies user={user} playgrounds={playgrounds}/>}/>
+                      <Route exact path="/mijn-acties" key="My Acties" render={() => <MyInitiatives user={user} playgrounds={playgrounds}/>}/>
                   </Switch>
               </div>
 
@@ -123,4 +124,4 @@ const mapStateToProps = (state) => ({
     user: getUser(state),
 });
 
-export default withStyles(styles)(connect(mapStateToProps)(UserProfile));
+export default withStyles(styles)(withRouter(connect(mapStateToProps)(UserProfile)));

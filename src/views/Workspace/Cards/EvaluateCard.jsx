@@ -51,6 +51,23 @@ const mapDispatchToProps = dispatch => ({
 
 const isSameDate = (date1, date2) => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 
+export const calculateStats = (playground) => {
+    const observations = playground.playgroundObservations;
+    let streak = 0;
+    let totalSmokefree = 0;
+    let totalSmoking = 0;
+    for (let i = 0; i < observations.length; i++)
+        if (observations[i].smokefree) {
+            streak++;
+            totalSmokefree++;
+        }
+        else {
+            streak = 0;
+            totalSmoking++;
+        }
+    return { streak, totalSmokefree, totalSmoking };
+};
+
 
 // Step:  "Evalueren"
 class EvaluateCard extends React.Component {
@@ -87,7 +104,7 @@ class EvaluateCard extends React.Component {
 
     renderCustomButton({ todaysObserver, todayWasSmokefree }) {
         const { classes, playground, user } = this.props;
-        const disabled = !isUserVolunteerOfPlayground(user, playground) || todaysObserver;
+        const disabled = !isUserVolunteerOfPlayground(user, playground) || !!todaysObserver;
 
         return (
           <div className={classes.ctaWrapper}>
@@ -155,23 +172,6 @@ class EvaluateCard extends React.Component {
         this.setState({ commentDialogOpen: false });
     };
 
-    calculateStats = () => {
-        const observations = this.props.playground.playgroundObservations;
-        let streak = 0;
-        let totalSmokefree = 0;
-        let totalSmoking = 0;
-        for (let i = 0; i < observations.length; i++)
-            if (observations[i].smokefree) {
-                streak++;
-                totalSmokefree++;
-            }
-            else {
-                streak = 0;
-                totalSmoking++;
-            }
-        return { streak, totalSmokefree, totalSmoking };
-    };
-
     render() {
         const { classes, playground } = this.props;
 
@@ -179,12 +179,12 @@ class EvaluateCard extends React.Component {
 
         const { todaysObserver, todayWasSmokefree } = this.getTodaysInfo();
 
-        const { streak } = this.calculateStats();
+        const { streak } = calculateStats(playground);
 
         return (
             <WorkspaceCard
                 title={"Evalueren"}
-                done={this.state.streak >= 10}
+                done={streak >= 10}
                 image={require("assets/img/backgrounds/magnify.jpg")}
                 content={"Evalueer de nieuwe afspraak voor een rookvrije speelplek met het team dat betrokken is bij de invoering."}
                 expandContent={

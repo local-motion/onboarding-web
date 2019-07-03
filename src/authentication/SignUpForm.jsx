@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
-import {Button, TextField, withStyles} from '@material-ui/core'
+import {Button, TextField, withStyles, CardMedia} from '@material-ui/core'
 import {Auth} from 'aws-amplify';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -11,9 +11,11 @@ import PrivacyText from "../views/Legal/PrivacyText";
 import { checkEmailExists } from '../components/UserProfile/UserProfileActions';
 import { connect } from "react-redux";
 import { validateToMessage } from '../components/validation/Validations';
-import { style } from './AuthenticatorStyles';
+import { styles } from './AuthenticatorStyles';
 import { passwordMaximumLength, passwordMinimumLength, containsLowerCaseLetterPattern, containsUpperCaseLetterPattern, containsDecimalPattern, containsSpecialCharacterPattern, usernameMaximumLength, usernameValidations, isValidPassword, containsOnlyValidCharactersPattern, allowedSpecialCharacters, isValidEmailAddress } from './AuthenticatorValidations';
 import { bindMethods } from '../utils/Generics';
+import { PadlockIcon } from './AuthenticatorStyles';
+import { Link } from "react-router-dom";
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -23,14 +25,6 @@ const mapDispatchToProps = (dispatch) => ({
     checkEmailExists: (emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback) => dispatch(checkEmailExists(emailAddress, onSuccessCallback, onFailCallback, onCompletionCallback)),
 })
 
-const styles = theme => ({
-    checkmark: {
-        color: 'green'
-    },
-    specialCharacters: {
-        fontWeight: 'bold',
-    }
-})
 
 const limitedPasswordValidations = [
     {
@@ -177,148 +171,310 @@ class SignUpForm extends Component {
 
 
         return (
-            <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+
+
+            <div>
                 {isInCard || <div className={"secure-app-background"}></div>}
-                <div className={"secure-app-container"}>
-                    <h1 className={"grunge-title"}>Schrijf je in</h1>
-                    <div className={"signin-wrapper"}>
-                        <p>Geef je emailadres op en kies een gebruikersnaam en wachtwoord</p>
-                        <form
-                            style={style}
-                            onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
-                        >
-                            <div>
-                                <TextField
-                                    type="email"
-                                    placeholder="Geef je emailadres op"
-                                    fullWidth
-                                    variant={"outlined"}
-                                    style={style.input}
-                                    value={emailAddress}
-                                    onChange={this.onChangeEmailAddress}
-                                    autoFocus
-                                />
-                            </div>
-                            {emailAddress && emailAddressError && <p className={"error"}>{emailAddressError}</p>}
-                            <div>
-                                <TextField
-                                    type="text"
-                                    placeholder="Kies een gebruikersnaam"
-                                    fullWidth
-                                    variant={"outlined"}
-                                    style={style.input}
-                                    className={"code"}
-                                    value={username}
-                                    onChange={this.onChangeUsername}
-                                    autoComplete='off'
-                                />
-                            </div>
-                            {username && usernameError && <p className={"error"}>{usernameError}</p>}
-                            <div>
-                                <TextField
-                                    type="password"
-                                    placeholder="Kies een wachtwoord"
-                                    fullWidth
-                                    variant={"outlined"}
-                                    value={password}
-                                    onChange={this.onChangePassword}
-                                    onFocus={() => this.onFocusChangePassword(true)}
-                                    onBlur={() => this.onFocusChangePassword(false)}
-                                    style={style.input}
-                                    autoComplete="new-password"
-                                />
-                            </div>
-                            {passwordFocus &&
-                                <p>
-                                    Het wachtwoord moet:<br />
-                                    {containsLowerCaseLetterPattern.test(password) ? checkmark : '-'} een kleine letter bevatten<br />
-                                    {containsUpperCaseLetterPattern.test(password) ? checkmark : '-'} een hoofdletter bevatten<br />
-                                    {containsDecimalPattern.test(password) ? checkmark : '-'} een cijfer bevatten<br />
-                                    {containsSpecialCharacterPattern.test(password) ? checkmark : '-'} een van de volgende tekens bevatten: <span className={classes.specialCharacters}>{allowedSpecialCharacters}</span><br />
-                                    {password.length >= passwordMinimumLength ? checkmark : '-'} tenminste {passwordMinimumLength} karakters lang zijn<br />
-                                    {passwordErrorLimited && <span className={"error"}>{passwordErrorLimited}</span>}
-                                </p>
-                            }
-                            {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
+                {isInCard && (
+                      <CardMedia
+                        className={classes.media}
+                        image={require("../assets/img/backgrounds/login-bg.jpg")}
+                        title={"Inschrijven"}
+                      />
+                    )}
+                <div className={classes.secureAppContainer}>
 
-                            <div>
-                                <TextField
-                                    type="password"
-                                    placeholder="Herhaal het wachtwoord"
-                                    fullWidth
-                                    variant={"outlined"}
-                                    value={repeatedPassword}
-                                    onChange={this.onChangeRepeatedPassword}
-                                    style={style.input}
-                                    autoComplete="new-password"
-                                />
-                            </div>
-                            {repeatedPasswordError && <p className={"error"}>{repeatedPasswordError}</p>}
-
-
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={acceptedTerms}
-                                        onChange={this.onChangeAcceptedTerms}
-                                        color="primary"
-                                        value="accepted"
-                                    />
-                                }
-                                label={[
-                                    <span key="1">Ik ga akkoord met de </span>,
-                                    // eslint-disable-next-line
-                                    <a key="2" onClick={this.toggleTermsDialog}>Gebruiksvoorwaarden</a>,
-                                    <span key="3"> en de </span>,
-                                    // eslint-disable-next-line
-                                    <a key="4" onClick={this.togglePrivacyDialog}>Privacyverklaring</a>
-                                ]}
-                            />
-
-                            <ContentDialog
-                              open={this.state.isTermsOpened}
-                              onClose={this.toggleTermsDialog}
-                              title="Gebruiksvoorwaarden"
-                              content={<TermsText />}
-                              maxWidth="lg"
-                            />
-
-                            <ContentDialog
-                              open={this.state.isPrivacyOpened}
-                              onClose={this.togglePrivacyDialog}
-                              title="Privacyverklaring"
-                              content={<PrivacyText />}
-                              maxWidth="lg"
-                            />
-
-                            <Button
-                                style={style.loginButton}
-                                variant="contained"
-                                color="primary"
-                                disabled={ !isReadyToSubmit }
-                                onClick={this.signUp}>
-                                Maak het account
-                            </Button>
-                        </form>
-                        <div style={style.links} className={"extra-info"}>
-                            <div style={style.left}>
-                                <Button
-                                    style={style.extraButton}
-                                    onClick={() => changeForm('signIn')}>
-                                    Ga terug naar login
-                                </Button>
-                            </div>
-                            <div style={style.left}>
-                                <Button
-                                    style={style.extraButton}
-                                    onClick={() => changeForm('confirmSignUp')}>
-                                    Bevestig je account
-                                </Button>
-                            </div>
-                        </div>
+                    <div className={classes.settingsTitle}>
+                        <PadlockIcon className={classes.settingsIcon}/>
+                        Schrijf je in
                     </div>
+                    <p>Geef je emailadres op en kies een gebruikersnaam en wachtwoord</p>
+
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Emailadres"
+                        type="text"
+                        name="email"          // Setting the name property triggers the autocomplete in Chrome
+                        value={emailAddress}
+                        onChange={this.onChangeEmailAddress}
+                        autoFocus
+                        autoComplete="email"
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    />
+                    {emailAddress && emailAddressError && <p className={"error"}>{emailAddressError}</p>}
+
+                    <TextField
+                        variant="outlined"
+                        className={classes.input}
+                        label="Gebruikersnaam"
+                        type="text"
+                        value={username}
+                        onChange={this.onChangeUsername}
+                        autoComplete="off"
+                        onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    />
+                    {username && usernameError && <p className={"error"}>{usernameError}</p>}
+
+                <TextField
+                    variant="outlined"
+                    className={classes.input}
+                    label="Wachtwoord"
+                    type="password"
+                    value={password}
+                    onChange={this.onChangePassword}
+                    onFocus={() => this.onFocusChangePassword(true)}
+                    onBlur={() => this.onFocusChangePassword(false)}
+                    onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    autoComplete="new-password"
+                />
+                {passwordFocus &&
+                    <p>
+                        Het wachtwoord moet:<br />
+                        {containsLowerCaseLetterPattern.test(password) ? checkmark : '-'} een kleine letter bevatten<br />
+                        {containsUpperCaseLetterPattern.test(password) ? checkmark : '-'} een hoofdletter bevatten<br />
+                        {containsDecimalPattern.test(password) ? checkmark : '-'} een cijfer bevatten<br />
+                        {containsSpecialCharacterPattern.test(password) ? checkmark : '-'} een van de volgende tekens bevatten: <span className={classes.specialCharacters}>{allowedSpecialCharacters}</span><br />
+                        {password.length >= passwordMinimumLength ? checkmark : '-'} tenminste {passwordMinimumLength} karakters lang zijn<br />
+                        {passwordErrorLimited && <span className={"error"}>{passwordErrorLimited}</span>}
+                    </p>
+                }
+                {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
+
+                <TextField
+                    variant="outlined"
+                    className={classes.input}
+                    label="Wachtwoord nogmaals"
+                    type="password"
+                    value={repeatedPassword}
+                    onChange={this.onChangeRepeatedPassword}
+                    onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+                    autoComplete="new-password"
+                />
+                {repeatedPasswordError && <p className={"error"}>{repeatedPasswordError}</p>}
+
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={acceptedTerms}
+                            onChange={this.onChangeAcceptedTerms}
+                            color="primary"
+                            value="accepted"
+                        />
+                    }
+                    label={[
+                        <span key="1">Ik ga akkoord met de </span>,
+                        // eslint-disable-next-line
+                        <a key="2" onClick={this.toggleTermsDialog}>Gebruiksvoorwaarden</a>,
+                        <span key="3"> en de </span>,
+                        // eslint-disable-next-line
+                        <a key="4" onClick={this.togglePrivacyDialog}>Privacyverklaring</a>
+                    ]}
+                />
+
+                <ContentDialog
+                    open={this.state.isTermsOpened}
+                    onClose={this.toggleTermsDialog}
+                    title="Gebruiksvoorwaarden"
+                    content={<TermsText />}
+                    maxWidth="lg"
+                />
+
+                <ContentDialog
+                    open={this.state.isPrivacyOpened}
+                    onClose={this.togglePrivacyDialog}
+                    title="Privacyverklaring"
+                    content={<PrivacyText />}
+                    maxWidth="lg"
+                />
+
+                <div className={classes.actions}>
+                    <Button
+                        variant="contained"
+                        className={`${classes.button} ${classes.saveButton}`}
+                        classes={{ disabled: classes.disabled }}
+                        disabled={ !isReadyToSubmit }
+                        onClick={this.signUp}
+                    >
+                        Maak het account
+                    </Button>
+                </div>
+
+
+                <div className={classes.links}>
+                    <Link 
+                            to=""
+                            className={classes.link}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('signIn')
+                            }}
+                    >
+                        Ga terug naar login
+                    </Link>
+                    <Link 
+                            to=""
+                            className={classes.link}
+                            onClick={event => {
+                                event.preventDefault()
+                                changeForm('confirmSignUp')
+                            }}
+                    >
+                        Bevestig je account
+                    </Link>
+                </div>
+
                 </div>
             </div>
+
+
+
+
+
+
+
+            // <div className={isInCard ? "secure-app-wrapper-card" : "secure-app-wrapper"}>
+            //     {isInCard || <div className={"secure-app-background"}></div>}
+            //     <div className={"secure-app-container"}>
+            //         <h1 className={"grunge-title"}>Schrijf je in</h1>
+            //         <div className={"signin-wrapper"}>
+            //             <p>Geef je emailadres op en kies een gebruikersnaam en wachtwoord</p>
+            //             <form
+            //                 style={style}
+            //                 onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
+            //             >
+            //                 <div>
+            //                     <TextField
+            //                         type="email"
+            //                         placeholder="Geef je emailadres op"
+            //                         fullWidth
+            //                         variant={"outlined"}
+            //                         style={style.input}
+            //                         value={emailAddress}
+            //                         onChange={this.onChangeEmailAddress}
+            //                         autoFocus
+            //                     />
+            //                 </div>
+            //                 {emailAddress && emailAddressError && <p className={"error"}>{emailAddressError}</p>}
+            //                 <div>
+            //                     <TextField
+            //                         type="text"
+            //                         placeholder="Kies een gebruikersnaam"
+            //                         fullWidth
+            //                         variant={"outlined"}
+            //                         style={style.input}
+            //                         className={"code"}
+            //                         value={username}
+            //                         onChange={this.onChangeUsername}
+            //                         autoComplete='off'
+            //                     />
+            //                 </div>
+            //                 {username && usernameError && <p className={"error"}>{usernameError}</p>}
+            //                 <div>
+            //                     <TextField
+            //                         type="password"
+            //                         placeholder="Kies een wachtwoord"
+            //                         fullWidth
+            //                         variant={"outlined"}
+            //                         value={password}
+            //                         onChange={this.onChangePassword}
+            //                         onFocus={() => this.onFocusChangePassword(true)}
+            //                         onBlur={() => this.onFocusChangePassword(false)}
+            //                         style={style.input}
+            //                         autoComplete="new-password"
+            //                     />
+            //                 </div>
+            //                 {passwordFocus &&
+            //                     <p>
+            //                         Het wachtwoord moet:<br />
+            //                         {containsLowerCaseLetterPattern.test(password) ? checkmark : '-'} een kleine letter bevatten<br />
+            //                         {containsUpperCaseLetterPattern.test(password) ? checkmark : '-'} een hoofdletter bevatten<br />
+            //                         {containsDecimalPattern.test(password) ? checkmark : '-'} een cijfer bevatten<br />
+            //                         {containsSpecialCharacterPattern.test(password) ? checkmark : '-'} een van de volgende tekens bevatten: <span className={classes.specialCharacters}>{allowedSpecialCharacters}</span><br />
+            //                         {password.length >= passwordMinimumLength ? checkmark : '-'} tenminste {passwordMinimumLength} karakters lang zijn<br />
+            //                         {passwordErrorLimited && <span className={"error"}>{passwordErrorLimited}</span>}
+            //                     </p>
+            //                 }
+            //                 {!passwordFocus && passwordError && <p className={"error"}>{passwordError}</p>}
+
+            //                 <div>
+            //                     <TextField
+            //                         type="password"
+            //                         placeholder="Herhaal het wachtwoord"
+            //                         fullWidth
+            //                         variant={"outlined"}
+            //                         value={repeatedPassword}
+            //                         onChange={this.onChangeRepeatedPassword}
+            //                         style={style.input}
+            //                         autoComplete="new-password"
+            //                     />
+            //                 </div>
+            //                 {repeatedPasswordError && <p className={"error"}>{repeatedPasswordError}</p>}
+
+
+            //                 <FormControlLabel
+            //                     control={
+            //                         <Checkbox
+            //                             checked={acceptedTerms}
+            //                             onChange={this.onChangeAcceptedTerms}
+            //                             color="primary"
+            //                             value="accepted"
+            //                         />
+            //                     }
+            //                     label={[
+            //                         <span key="1">Ik ga akkoord met de </span>,
+            //                         // eslint-disable-next-line
+            //                         <a key="2" onClick={this.toggleTermsDialog}>Gebruiksvoorwaarden</a>,
+            //                         <span key="3"> en de </span>,
+            //                         // eslint-disable-next-line
+            //                         <a key="4" onClick={this.togglePrivacyDialog}>Privacyverklaring</a>
+            //                     ]}
+            //                 />
+
+            //                 <ContentDialog
+            //                   open={this.state.isTermsOpened}
+            //                   onClose={this.toggleTermsDialog}
+            //                   title="Gebruiksvoorwaarden"
+            //                   content={<TermsText />}
+            //                   maxWidth="lg"
+            //                 />
+
+            //                 <ContentDialog
+            //                   open={this.state.isPrivacyOpened}
+            //                   onClose={this.togglePrivacyDialog}
+            //                   title="Privacyverklaring"
+            //                   content={<PrivacyText />}
+            //                   maxWidth="lg"
+            //                 />
+
+            //                 <Button
+            //                     style={style.loginButton}
+            //                     variant="contained"
+            //                     color="primary"
+            //                     disabled={ !isReadyToSubmit }
+            //                     onClick={this.signUp}>
+            //                     Maak het account
+            //                 </Button>
+            //             </form>
+            //             <div style={style.links} className={"extra-info"}>
+            //                 <div style={style.left}>
+            //                     <Button
+            //                         style={style.extraButton}
+            //                         onClick={() => changeForm('signIn')}>
+            //                         Ga terug naar login
+            //                     </Button>
+            //                 </div>
+            //                 <div style={style.left}>
+            //                     <Button
+            //                         style={style.extraButton}
+            //                         onClick={() => changeForm('confirmSignUp')}>
+            //                         Bevestig je account
+            //                     </Button>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </div>
+            // </div>
         )
     }
 }

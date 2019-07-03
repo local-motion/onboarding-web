@@ -20,6 +20,11 @@ import { getUser } from "../UserProfile/UserProfileReducer";
 // import { isDeveloperMode } from "../../utils/DeveloperMode";
 import { openConfirmationDialog } from "../SimpleDialog/SimpleDialogActions.js";
 import Activities from "../Activities/Activities";
+import { getRecordCountSinceExcludingActor } from "components/AuditTrail/AuditTrailReducer.js";
+import { getLastAuditTrailView, getUserData } from "components/UserData/UserDataReducer.js";
+import { storeUserData } from "components/UserData/UserDataActions.js";
+import { isRecordIncluded } from "components/Activities/Activities.jsx";
+import { TOTAL_RECORDS_TO_DISPLAY } from "components/Activities/Activities.jsx";
 
 const StyledBadge = withStyles(theme => ({
     badge: {
@@ -34,11 +39,19 @@ const StyledBadge = withStyles(theme => ({
     },
 }))(Badge);
 
-const mapStateToProps = state => ({
-    user: getUser(state)
-});
+const mapStateToProps = state => {
+    // var date = new Date();
+    // date.setDate(date.getDate() - 10);
+
+    return ({
+        user: getUser(state),
+        unreadNotificationCount: getRecordCountSinceExcludingActor(state, getLastAuditTrailView(state), getUser(state).name, TOTAL_RECORDS_TO_DISPLAY, isRecordIncluded),
+        userData: getUserData(state)
+    });
+};
 
 const mapDispatchToProps = dispatch => ({
+    storeUserData: (userData) => dispatch(storeUserData(userData)),
     signOutUser: () => dispatch(signOutUser()),
     deleteUser: () => dispatch(
       openConfirmationDialog(
@@ -56,15 +69,18 @@ class HeaderLinks extends React.Component {
 
     gotoMyProfile = () => this.props.history.push('/mijn-profiel');
 
-    toggleDrawer = () => this.setState(
-      ({ notificationsOpen }) => ({ notificationsOpen: !notificationsOpen })
-    );
+    toggleDrawer = () => {
+      // if (!this.state.notificationsOpen && this.props.unreadNotificationCount > 0)
+      if (this.props.unreadNotificationCount > 0)
+        this.props.storeUserData( {...this.props.userData, lastAuditTrailView: new Date()} )
+      this.setState( ({ notificationsOpen }) => ({ notificationsOpen: !notificationsOpen } ) )
+    }
 
     renderNotifications() {
-        const { classes } = this.props;
+        const { unreadNotificationCount, classes } = this.props;
 
         return (
-          <StyledBadge color="secondary" badgeContent={12} onClick={this.toggleDrawer}>
+          <StyledBadge color="secondary" badgeContent={unreadNotificationCount} onClick={this.toggleDrawer}>
               <IconButton size="small" color="primary" className={classes.navLink}>
                   <NotificationsNone className={classes.navIcon} />
               </IconButton>
@@ -82,6 +98,9 @@ class HeaderLinks extends React.Component {
 
         return (
               <div className={classes.list}>
+
+                  {this.renderNotifications()}
+
                   <CustomDropdown
                     noLiPadding
                     buttonText=""

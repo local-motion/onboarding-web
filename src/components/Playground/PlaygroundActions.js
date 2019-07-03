@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import { startGraphQLStream, stopStream, triggerStream } from '../../api/StreamActions';
 import { executeQuery } from '../../api/QueryActions';
 import { generateUuid } from '../../utils/Generics';
+import { USER_PROFILE_STREAM } from 'components/UserProfile/UserProfileActions';
 
 
 export const GET_PLAYGROUNDS = 'GET_PLAYGROUNDS'
@@ -106,7 +107,7 @@ const getPlaygroundDetailsQuery = gql`
 
 export const findPlaygroundsByName = ({ initiativeName, playgrounds }) => {
     if (!initiativeName || !playgrounds.length) return null;
-    const decodedInitiativeName = initiativeName.replace(/_/g, ' ')
+    const decodedInitiativeName = decodeURIComponent(initiativeName).replace(/_/g, ' ')
     const playground = playgrounds
       .find(({ name }) => name.toLowerCase() === decodedInitiativeName)
 
@@ -115,7 +116,7 @@ export const findPlaygroundsByName = ({ initiativeName, playgrounds }) => {
 
 export const slugifyPlaygroundName = ({ id, name }) => {
     const sluggedName = name.toLowerCase().replace(/ /g, '_');
-    return sluggedName
+    return encodeURIComponent(sluggedName);
 };
 
 export const ensurePlaygrounds = () => {
@@ -153,6 +154,7 @@ export const createInitiative = (name, lat, lng, onSuccessCallback) => {
         }
       },
       onSuccess: (data, dispatch, getState) => {
+        dispatch(triggerStream(USER_PROFILE_STREAM))
         dispatch(triggerStream(PLAYGROUNDS_STREAM))
         onSuccessCallback(data, dispatch, getState)
       }
@@ -175,7 +177,10 @@ export const joinInitiative = initiativeId => executeQuery( {
         initiativeId,
       }
     },
-    onSuccess: triggerPlaygroundDetailsStream(initiativeId)
+    onSuccess: (result, dispatch) => {
+      dispatch(triggerStream(USER_PROFILE_STREAM))
+      dispatch(triggerStream(PLAYGROUND_DETAILS_STREAM + initiativeId))
+    }
   })
     
 export const claimManagerRole = initiativeId => executeQuery( {

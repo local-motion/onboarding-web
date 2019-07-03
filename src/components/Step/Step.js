@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import Check from "@material-ui/icons/Check";
 import { withStyles } from "@material-ui/core";
 
 const styles = themes => ({
@@ -10,6 +11,7 @@ const styles = themes => ({
         cursor: "pointer",
         display: "block",
         marginBottom: "15px",
+        position: 'relative',
         "&:first-child": {
             marginTop: "15px"
         },
@@ -23,12 +25,30 @@ const styles = themes => ({
         border: 'none',
         boxShadow: 'none',
         transition: 'all .2s',
+        paddingRight: 30,
         '&:hover $name': {
             color: '#f5f5f5',
         },
         '&:hover': {
            background: '#085ca6',
         },
+    },
+    done: {
+        borderRadius: '50%',
+        background: '#085ca6',
+        width: 20,
+        height: 20,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        right: 15,
+        top: '50%',
+        transform: 'translateY(-50%)',
+    },
+    doneIcon: {
+        fill: "#FFFFFF",
+        width: 15,
     },
     name: {
         color: '#626262',
@@ -55,17 +75,22 @@ const styles = themes => ({
     },
 });
 
-const StepLink = ({ name, description, image, link, classes, location: { pathname }, startPathUrl, onClick }) => (
-  <Link to={(startPathUrl || '') + link} className={classes.link} onClick={onClick}>
-      <Card className={`${classes.card} ${pathname.includes(link) ? classes.cardActive : null}`}>
-          <CardContent className={classes.cardContent}>
-              <Typography gutterBottom className={classes.name}>
-                  {name}
-              </Typography>
-          </CardContent>
-      </Card>
-  </Link>
-);
+const StepLink = ({ name, description, image, link, classes, location: { pathname }, startPathUrl, onClick, isDone }) => {
+    return (
+      <Link to={(startPathUrl || '') + link} className={classes.link} onClick={onClick}>
+          <Card className={`${classes.card} ${pathname.includes(link) ? classes.cardActive : ''}`}>
+              <CardContent className={classes.cardContent}>
+                  <Typography gutterBottom className={classes.name}>
+                      {name}
+                  </Typography>
+                  {isDone && (
+                    <div className={classes.done}><Check className={classes.doneIcon} /></div>
+                  )}
+              </CardContent>
+          </Card>
+      </Link>
+    );
+};
 
 const StepButton = ({ name, description, image, onClick, classes }) => (
     <div onClick={onClick} className={classes.link}>

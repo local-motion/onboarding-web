@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { NavLink, Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import Paper from "@material-ui/core/Paper/Paper";
@@ -8,6 +8,7 @@ import SvgIcon from "@material-ui/core/SvgIcon";
 import Check from "@material-ui/icons/Check";
 import Hidden from "@material-ui/core/Hidden/Hidden";
 import classNames from "classnames";
+import Sticky from "react-sticky-el";
 
 import { StyledStepLink } from "../../../components/Step/Step";
 import ExpansionPhase from "../../../components/ExpansionPhase/ExpansionPhase";
@@ -75,7 +76,6 @@ class WorkspacePage extends PureComponent {
         ctaDisabled: true,
         ctaDone: false,
         CustomButton: null,
-        showMobileMenu: false
     };
 
     componentDidMount() {
@@ -207,11 +207,9 @@ class WorkspacePage extends PureComponent {
         );
     }
 
-    toggleShowMobileMenu = () => this.setState(({ showMobileMenu }) => ({ showMobileMenu: !showMobileMenu }));
-
     render() {
         const { phases, playground, user, location: { pathname }, startPathUrl, classes } = this.props;
-        const { expandedPhase, showMobileMenu } = this.state;
+        const { expandedPhase } = this.state;
 
         const prev = getPrevStep(phases, pathname);
         const next = getNextStep(phases, pathname);
@@ -220,7 +218,39 @@ class WorkspacePage extends PureComponent {
 
         return (
           <React.Fragment>
-              <WrappedHeader fullWidth customStyle={classes.customWrappedHeader}/>
+              <WrappedHeader
+                fullWidth
+                customStyle={classes.customWrappedHeader}
+                actieItems={!!playground}
+                playground={playground}
+                startPathUrl={startPathUrl}
+                phases={phases}
+              />
+
+              <Hidden mdUp>
+                  <div className={classes.mobileNavLinks}>
+                      {playground && Object.keys(phases).map((phaseName) => {
+                          const phase = phases[phaseName];
+                          const firstStepLink = getFirstStepLinkOfPhase(phase.title, phases, playground, user);
+
+                          return (
+                            <NavLink
+                              isActive={(match, location) => phase.steps.some(({ link }) => location.pathname.includes(link))}
+                              activeClassName={classes.activePhase}
+                              to={firstStepLink}
+                              className={classes.phase}
+                              key={phase.title}
+                            >
+                                {
+                                    phaseName === 'community'
+                                      ? <img style={{ width: 35 }} src={phase.icon} alt={phase.title} />
+                                      : phase.title
+                                }
+                            </NavLink>
+                          );
+                      })}
+                  </div>
+              </Hidden>
 
               <Helmet>
                   <title>{titlePrefix} | Actiepagina</title>
@@ -230,16 +260,15 @@ class WorkspacePage extends PureComponent {
 
                   <GridContainer className={"grid-container"}>
                       <GridItem xs={12} sm={12} md={12} className={"workspace-phase-explainer"}>
-                          <BackButton where="home"/>
+                          <Hidden smDown><BackButton where="home"/></Hidden>
 
                           <div className={"title-wrapper"}>
-                              <h2
-                                className={classes.playgroundTitle}>{playground ? playground.name : "Actiepagina"}</h2>
+                              <h2 className={classes.playgroundTitle}>{playground ? playground.name : "Actiepagina"}</h2>
                           </div>
                       </GridItem>
 
                       <Paper className={classes.workspacePaper}>
-                          <Hidden mdDown={showMobileMenu}>
+                          <Hidden smDown>
                               <GridItem xs={12} sm={12} md={3} className={"workspace-menu-column"}>
                                   <ExpansionPhase
                                     title={phases.community.title}
@@ -249,8 +278,8 @@ class WorkspacePage extends PureComponent {
                                     onChange={this.clickPhase}
                                   >
                                       {phases.community.steps.map(step => step.visible({ playground, user }) &&
-                                        <StyledStepLink onClick={this.toggleShowMobileMenu} user={user}
-                                                        startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                        <StyledStepLink user={user} startPathUrl={startPathUrl} key={step.name} {...step} />
+                                      )}
                                   </ExpansionPhase>
 
                                   {
@@ -264,9 +293,18 @@ class WorkspacePage extends PureComponent {
                                           disabled={!playground}
                                           key={phaseName}
                                         >
-                                            {phases[phaseName].steps.map(step => <StyledStepLink
-                                              onClick={this.toggleShowMobileMenu} user={user}
-                                              startPathUrl={startPathUrl} key={step.name} {...step} />)}
+                                            {phases[phaseName].steps.map(step => {
+                                                return (
+                                                  <StyledStepLink
+                                                    onClick={this.toggleShowMobileMenu}
+                                                    user={user}
+                                                    startPathUrl={startPathUrl}
+                                                    key={step.name}
+                                                    {...step}
+                                                    isDone={!!(step.done && playground && step.done({ playground }))}
+                                                  />
+                                                );
+                                            })}
                                         </ExpansionPhase>
                                       ))
                                   }
@@ -277,12 +315,11 @@ class WorkspacePage extends PureComponent {
                               <Switch>
 
                                   <Route exact path="/actie/inloggen" key="WorkspaceLogin"
-                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
+                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta}  isInCard={true} onSignIn={this.props.signInHandler}/>} />
                                   <Route exact path="/actie/starten" key="AddFindPlayground"
                                          render={(props) => <AddFindPlayground {...props} user={user}/>}/>
                                   <Route exact path="/actie/:initiativeName/inloggen" key="WorkspaceLogin"
-                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta} onSignIn={this.props.signInHandler}/>} />
-
+                                         render={(props) => <Authenticator {...props} setCta={this.setCta} unsetCta={this.unsetCta}  isInCard={true} onSignIn={this.props.signInHandler}/>} />
 
                                   {
                                       playground && (
@@ -382,23 +419,25 @@ class WorkspacePage extends PureComponent {
                               </Switch>
 
                               {openedStepTitle && (
-                                <div className={"workspace-content-pagination"}>
-                                    {prev.stepLink ? (
-                                      <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined"
-                                              className={"pagination-button"}>
-                                          <PaginationIcon/>
-                                      </Button>
-                                    ) : <div className={classes.noButton}/>}
+                                <Sticky mode="bottom">
+                                    <div className={"workspace-content-pagination"}>
+                                        {prev.stepLink ? (
+                                          <Button onClick={() => this.gotoPrevStep(prev)} variant="outlined"
+                                                  className={"pagination-button"}>
+                                              <PaginationIcon/>
+                                          </Button>
+                                        ) : <div className={classes.noButton}/>}
 
-                                    {this.renderCtaButton()}
+                                        {this.renderCtaButton()}
 
-                                    {next.stepLink ? (
-                                      <Button onClick={() => this.gotoNextStep(next)} variant="outlined"
-                                              className={"pagination-button"}>
-                                          <PaginationIcon className={"pagination-button-icon-right"}/>
-                                      </Button>
-                                    ) : <div className={classes.noButton}/>}
-                                </div>
+                                        {next.stepLink ? (
+                                          <Button onClick={() => this.gotoNextStep(next)} variant="outlined"
+                                                  className={"pagination-button"}>
+                                              <PaginationIcon className={"pagination-button-icon-right"}/>
+                                          </Button>
+                                        ) : <div className={classes.noButton}/>}
+                                    </div>
+                                </Sticky>
                               )}
                           </GridItem>
                       </Paper>
@@ -411,7 +450,7 @@ class WorkspacePage extends PureComponent {
     }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
     playgrounds: getAllPlaygrounds(state)
 });
 

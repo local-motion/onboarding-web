@@ -1,4 +1,5 @@
 import { slugifyPlaygroundName } from "../components/Playground/PlaygroundActions";
+import { calculateStats } from "../views/Workspace/Cards/EvaluateCard";
 
 export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
@@ -104,11 +105,13 @@ export function getPhases() {
                     name: 'Mensen verzamelen',
                     link: '/mensen-verzamelen',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => playground.volunteerCount >= 2,
                 },
                 {
                     name: 'Flyers verspreiden',
                     link: '/flyers-verspreiden',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => !!playground.jointChecklistItems.includes('distribute_flyers'),
                 },
                 {
                     name: 'Meningen inventariseren',
@@ -119,11 +122,14 @@ export function getPhases() {
                     name: 'Contact leggen met bestuur',
                     link: '/contact-leggen-met-bestuur',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => playground.managers.length > 0,
                 },
                 {
                     name: 'Wij worden rookvrij',
                     link: '/wij-worden-rookvrij',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => playground.status === 'IN_PROGRESS'
+                      || playground.status === 'FINISHED',
                 },
             ],
         },
@@ -137,16 +143,23 @@ export function getPhases() {
                     name: 'Kies moment van invoering',
                     link: '/kies-moment-van-invoering',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => !!playground.smokeFreeDate,
                 },
                 {
                     name: 'Communiceer over de rookvrije afspraak',
                     link: '/communiceer-over-de-rookvrije-afspraak',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => playground.jointChecklistItems.includes("press_announcement") &&
+                      playground.jointChecklistItems.includes("newsletter_announcement") &&
+                      playground.jointChecklistItems.includes("website_announcement"),
                 },
                 {
                     name: 'Laat zien dat de speeltuin rookvrij is',
                     link: '/laat-zien-dat-de-speeltuin-rookvrij-is',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => playground.jointChecklistItems.includes("place_sign")
+                      && playground.jointChecklistItems.includes("adjust_regulations")
+                      && playground.jointChecklistItems.includes("publish_regulations"),
                 },
             ],
         },
@@ -160,11 +173,13 @@ export function getPhases() {
                     name: 'We zijn rookvrij',
                     link: '/we-zijn-rookvrij',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => !!playground.jointChecklistItems.includes("press_announcement_smokefree"),
                 },
                 {
                     name: 'Evalueren',
                     link: '/evalueren',
                     visible: ({ playground }) => !!playground,
+                    done: ({ playground }) => calculateStats(playground).streak >= 10,
                 },
             ],
         },

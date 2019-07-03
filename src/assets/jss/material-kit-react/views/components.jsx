@@ -139,6 +139,37 @@ const componentsStyle = theme => ({
         width: 15,
         height: 15,
     },
+    mobileNavLinks: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: -40,
+        zIndex: 99,
+        position: 'relative',
+    },
+    phase: {
+        background: '#f9f9f9',
+        padding: '10px 15px',
+        borderBottom: '1px solid #e5e5e5',
+        flex: 1,
+        textAlign: 'center',
+        marginBottom: 15,
+        color: '#2783BE',
+
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 10,
+        },
+
+        '&:hover, &:visited, &:active': {
+            color: '#2783BE',
+        },
+    },
+    activePhase: {
+        background: '#FFF',
+        border: '1px solid #e5e5e5',
+        borderBottom: 'none',
+        color: '#2783BE',
+    },
 });
 
 export default componentsStyle;

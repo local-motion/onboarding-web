@@ -24,7 +24,10 @@ import WorkspaceJoin from "./views/Workspace/Sections/WorkspaceJoin";
 import UserProfile from "./views/UserProfile/UserProfile";
 import { titlePrefix } from "./misc/WorkspaceHelpers";
 import Authenticator from "./authentication/Authenticator";
+import WrappedWarningSnackbar from "components/StatusNotification/WrappedWarningSnackbar";
+import PublicBetaNotification from "./components/PublicBetaNotification/PublicBetaNotification";
   
+
 const mapDispatchToProps = (dispatch) => ({
     onUserSignedIn: user => dispatch(userSignedIn(user))
 });
@@ -44,11 +47,13 @@ class App extends React.Component {
                     <title>{titlePrefix} | Home</title>
                 </Helmet>
                 <Router history={history}>
+                    <PublicBetaNotification />
+
                     <Switch>
-                        <Route exact path="/inloggen" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}/> } />
+                        <Route exact path="/inloggen" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler} isInCard={false}/> } />
 
                         {/* This route is required for now to capture the links from the verification mails */}
-                        <Route exact path="/login" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}/> } />
+                        <Route exact path="/login" key="Login" render={ props => <Authenticator onSignIn={this.signInHandler}  isInCard={false}/> } />
 
                         <Route exact path="/over-ons" key="Who are we" component={About}/>
                         <Route exact path="/contact" key="Contact us" component={Contact}/>
@@ -91,6 +96,7 @@ class App extends React.Component {
                 </CookieConsent>
 
                 <WrappedSimpleDialog/>
+                <WrappedWarningSnackbar/>
             </div>
         )
     }
