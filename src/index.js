@@ -8,6 +8,9 @@ import {HttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ApolloProvider} from 'react-apollo';
 import {setContext} from "apollo-link-context";
+// fix ie11
+import 'babel-polyfill';
+import 'react-app-polyfill/ie11';
 
 import "assets/scss/material-kit-react.css?v=1.2.0";
 
