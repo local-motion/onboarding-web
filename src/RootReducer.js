@@ -26,7 +26,7 @@ const rootReducer = (state = {}, action) => ({
     simpleDialog:       simpleDialogReducer(state.simpleDialog, action),
     statusNotification: statusNotificationReducer(state.statusNotification, action),
     fetchDetails:       fetchDetailsReducer(state.fetchDetails, action),
-    adminjob:           adminJobReducer(state.fetchDetails, action),
+    adminjob:           adminJobReducer(state.adminjob, action),
   })
 
 export default rootReducer

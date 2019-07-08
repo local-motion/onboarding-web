@@ -1,13 +1,13 @@
-import { GET_USER_PROFILE, USER_SIGNED_IN, USER_SIGNED_OUT, DELETE_USER_PROFILE, USER_REFRESHED } from "./UserProfileActions";
 import { SUCCESS_POSTFIX } from "../../api/QueryActions";
+import { GET_ADMIN_JOB } from "./AdminJobActions";
 
 
 // State definition
 
 const initialState = {
-  // commandRecord: {
-  //     jobIdentifier;
-  //     description;
+  // adminCommand: {
+  //     commandIdentifier;
+  //     comment;
   //     operatorEmail;
   //     inputParameters;
   // }
@@ -23,7 +23,7 @@ export const NOTIFICATION_LEVEL_FULL = 'FULL'
 
 // Selectors
 
-export const getCommandRecord = (state) => state.adminjob.commandRecord
+export const getAdminCommand = (state) => state.adminjob.adminCommand
 
 
 // Reducer
@@ -36,13 +36,19 @@ const adminJobReducer = (state = initialState, action) => {
         if (action.payload.status === 'not_modified')
         return state
 
+        if (!action.payload.adminCommand) {
+          let newState = { ...state }
+          delete newState.adminCommand
+          return newState
+        }
+
         return {
           ...state,
-          commandRecord: {
-            jobIdentifier: action.payload.adminjob.jobIdentifier,
-            description: action.payload.adminjob.description,
-            operatorEmail: action.payload.adminjob.operatorEmail,
-            inputParameters: action.payload.adminjob.inputParameters,
+          adminCommand: {
+            commandIdentifier: action.payload.adminCommand.commandIdentifier,
+            comment: action.payload.adminCommand.comment,
+            operatorEmail: action.payload.adminCommand.operatorEmail,
+            inputParameters: JSON.parse(action.payload.adminCommand.inputParameters),
           }
         }
     

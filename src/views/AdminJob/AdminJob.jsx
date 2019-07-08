@@ -3,90 +3,57 @@ import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
-import { getPlaygroundDetails } from "../../components/Playground/PlaygroundReducer.js";
-import { getUser } from "../../components/UserProfile/UserProfileReducer.js";
-import { getAllPlaygrounds } from "../../components/Playground/PlaygroundReducer";
-import { getPhases, getWorkspaceStartLink, shouldWorkspaceUpdate } from "../../misc/WorkspaceHelpers";
-import WorkspacePage from "./Sections/WorkspacePage";
-import { createInitiative, slugifyPlaygroundName } from "../../components/Playground/PlaygroundActions";
-import { readFromBrowserStorage, deleteFromBrowserStorage } from "utils/Generics.js";
-import { STORAGE_KEY_CREATE_PLAYGROUND } from "views/Onboarding/Sections/Playgrounds/AddPlayground.jsx";
+import { retrieveAdminCommand } from "components/AdminJob/AdminJobActions.js";
+import { getAdminCommand } from "components/AdminJob/AdminJobReducer.js";
+import Button from "components/CustomButtons/Button.jsx";
+import { dlog } from "utils/Generics.js";
 
 const mapStateToProps = (state, ownProps) => ({
-    playgrounds: getAllPlaygrounds(state).map(playground => ({
-          id: playground.id,
-          name: playground.name,
-          lat: playground.lat,
-          lng: playground.lng,
-          vol: playground.volunteerCount,
-          votes: playground.votes,
-          slug: playground.name + " Rookvrij",
-          zoom: 18,
-          default: false,
-      })
-    ),
-    playground: getPlaygroundDetails(state, ownProps.match.params.initiativeName),
-
-    user: getUser(state),
+    commandRecord: getAdminCommand(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-    createInitiative:    (name, lat, lng, onSuccessCallback) =>     dispatch(createInitiative(name, lat, lng, onSuccessCallback)),
+    retrieveAdminCommand: () => dispatch(retrieveAdminCommand())
 });
 
 
 class AdminJob extends React.Component {
-    componentDidMount() {
-        this.createLocalPlayground();
-    }
+    // componentDidMount() {
+    // }
 
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return shouldWorkspaceUpdate(this.props, nextProps);
-    }
+    // shouldComponentUpdate(nextProps, nextState, nextContext) {
+    // }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (!prevProps.user && this.props.user) {
-            this.createLocalPlayground();
-        }
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    // }
 
-    createLocalPlayground = () => {
-        const { createInitiative, history, user } = this.props;
-
-        const playgroundToCreate = readFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND);
-
-        if (user && (playgroundToCreate !== null)) {
-            const { name, lat, lng } = playgroundToCreate;
-
-            createInitiative(name, lat, lng, (data, dispatch) => {
-                deleteFromBrowserStorage(STORAGE_KEY_CREATE_PLAYGROUND);
-
-                const playground = {
-                    id: data.createInitiative.id,
-                    name,
-                };
-                history.push('/actie/' + slugifyPlaygroundName(playground));
-            });
-        }
-    };
 
     render() {
-        const { playground, user, classes, signInHandler, ...rest } = this.props;
-
-        const startPathUrl = getWorkspaceStartLink(playground);
-        const phases = getPhases();
+        const { commandRecord, retrieveAdminCommand } = this.props;
+        dlog('rendering command record: ', commandRecord)
 
         return (
             <div className={"workspace-wrapper"}>
-                <WorkspacePage
-                    playground={playground}
-                    phases={phases}
-                    startPathUrl={startPathUrl}
-                    user={user}
-                    classes={classes}
-                    rest={rest}
-                    signInHandler={signInHandler}
-                />
+                <h1>Administration</h1>
+                <h2>Job command</h2>
+                {
+                    commandRecord ?
+                        <div>
+                            commandIdentifier:      {commandRecord.commandIdentifier}<br />
+                            comment:                {commandRecord.comment}<br />
+                            operatorEmail:          {commandRecord.operatorEmail}<br />
+                            inputParameters:    <br />
+                            <ul>
+                                {Object.keys(commandRecord.inputParameters).map((item, index) => 
+                                    <li key={index}>{item}: {commandRecord.inputParameters[item]}</li>
+                                )}
+                            </ul>
+
+                        </div>    
+                    :
+                        <div>No record present</div>
+                }
+                <Button onClick={retrieveAdminCommand}>Refresh job</Button>
             </div>
         );
     }
