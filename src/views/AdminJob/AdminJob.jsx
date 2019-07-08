@@ -3,60 +3,106 @@ import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
-import { retrieveAdminCommand, runAdminJob } from "components/AdminJob/AdminJobActions.js";
-import { getAdminCommand, getLastJobResult } from "components/AdminJob/AdminJobReducer.js";
+import { retrieveAdminCommand, runAdminJob, deleteAdminCommand } from "components/AdminJob/AdminJobActions.js";
+import { getAdminCommand, getLastJobResult, getJobResult } from "components/AdminJob/AdminJobReducer.js";
 import Button from "components/CustomButtons/Button.jsx";
 import { dlog } from "utils/Generics.js";
+import JSONPretty from 'react-json-pretty';
+import { FormControlLabel, Checkbox } from '@material-ui/core';
+
 
 const mapStateToProps = (state, ownProps) => ({
     commandRecord: getAdminCommand(state),
+    jobResult: getJobResult(state),
     lastJobResult: getLastJobResult(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     retrieveAdminCommand: () => dispatch(retrieveAdminCommand()),
-    runAdminJob: () => dispatch(runAdminJob()),
+    runAdminJob: (validationCode, retainCommandFile) => dispatch(runAdminJob(validationCode, retainCommandFile)),
+    deleteAdminCommand: () => dispatch(deleteAdminCommand()),
 });
 
 
 class AdminJob extends React.Component {
-    // componentDidMount() {
-    // }
+    constructor(props) {
+        super(props);
 
-    // shouldComponentUpdate(nextProps, nextState, nextContext) {
-    // }
+        this.state = {
+            retainCommandFile: false,
+        }
+    }
 
-    // componentDidUpdate(prevProps, prevState) {
-    // }
+    retrieveAdminCommand = () => {
+        this.props.retrieveAdminCommand();
+    }
 
+    runAdminJob = () => {
+        this.props.runAdminJob(this.props.commandRecord.validationCode, this.state.retainCommandFile);
+    }
+
+    toggleRetainCommandFile = () => {
+        this.setState(prevState =>({retainCommandFile: !prevState.retainCommandFile}))
+    }
 
     render() {
-        const { commandRecord, retrieveAdminCommand, runAdminJob } = this.props;
+        const { commandRecord, jobResult, deleteAdminCommand } = this.props;
         dlog('rendering command record: ', commandRecord)
 
         return (
             <div className={"workspace-wrapper"}>
                 <h1>Administration</h1>
-                <h2>Job command</h2>
+                <h2>Admin command</h2>
+                <span>
+                <div>
                 {
                     commandRecord ?
-                        <div>
-                            commandIdentifier:      {commandRecord.commandIdentifier}<br />
-                            comment:                {commandRecord.comment}<br />
-                            operatorEmail:          {commandRecord.operatorEmail}<br />
-                            inputParameters:    <br />
-                            <ul>
-                                {Object.keys(commandRecord.inputParameters).map((item, index) =>
-                                    <li key={index}>{item}: {commandRecord.inputParameters[item]}</li>
-                                )}
-                            </ul>
-
-                        </div>
+                        <JSONPretty data={commandRecord}></JSONPretty>
                         :
-                        <div>No record present</div>
+                        <div>No command file present</div>
                 }
-                <Button onClick={retrieveAdminCommand}>Refresh job</Button>
-                <Button onClick={runAdminJob} color="primary">Run job</Button>
+                </div>
+                {   jobResult &&
+                    <div>
+                        <h3>Result</h3>
+                        <JSONPretty data={jobResult}></JSONPretty>
+                    </div>
+                }
+                </span>
+
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={this.state.retainCommandFile}
+                            onChange={this.toggleRetainCommandFile}
+                        />
+                    }
+                    label='Retain command file'
+                />
+
+                <br />
+
+                <Button 
+                    onClick={this.retrieveAdminCommand} 
+                    color={commandRecord ? null : 'primary'}
+                >
+                    {commandRecord ? 'Refresh command' : 'Fetch command'}
+                </Button>
+
+                <Button 
+                    onClick={this.runAdminJob} 
+                    color="primary" 
+                    disabled={!commandRecord}
+                >
+                    Run job
+                </Button>
+
+                <Button 
+                    onClick={deleteAdminCommand} 
+                    disabled={!commandRecord}
+                >
+                    Delete command
+                </Button>
             </div>
         );
     }

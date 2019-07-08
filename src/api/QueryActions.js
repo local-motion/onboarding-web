@@ -145,8 +145,8 @@ const executeGraphQLQuery = (queryOptions) => {
             response: errorResponse,
             queryOptions,
           }
-          if (error.code === 'NETWORK')
-            networkErrorHandler(error, dispatch, getState, queryOptions, errorResponse)
+          // if (error.code === 'NETWORK')
+          networkErrorHandler(error, dispatch, getState, queryOptions, errorResponse)
           handleError(error, dispatch, getState, queryOptions, error, false)
         })
     }
@@ -300,7 +300,7 @@ const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorH
 
 // default error handler
 
-const handleError = (error, dispatch, getState, queryOptions, message, displayErrorMessage) => {
+const handleError = (error, dispatch, getState, queryOptions, message, displayErrorMessage=true) => {
 
   const {baseActionIdentifier, onFailPrepublish, onCompletionPrepublish, onFail, onCompletion} = queryOptions
   let cancel = false
