@@ -1,5 +1,5 @@
 import { SUCCESS_POSTFIX } from "../../api/QueryActions";
-import { GET_ADMIN_JOB } from "./AdminJobActions";
+import { GET_ADMIN_JOB, RUN_ADMIN_JOB } from "./AdminJobActions";
 
 
 // State definition
@@ -11,8 +11,10 @@ const initialState = {
   //     operatorEmail;
   //     inputParameters;
   // }
-  // lastExecutionResult: {
-
+  // lastJobResult: {
+  //     resultCode:  SUCCESS | FAIL
+  //     message:     string to display to user
+  //     result:      result object, contents depend on job
   // }
 }
 
@@ -24,6 +26,7 @@ export const NOTIFICATION_LEVEL_FULL = 'FULL'
 // Selectors
 
 export const getAdminCommand = (state) => state.adminjob.adminCommand
+export const getLastJobResult = (state) => state.adminjob.lastJobResult
 
 
 // Reducer
@@ -52,6 +55,19 @@ const adminJobReducer = (state = initialState, action) => {
           }
         }
     
+    case RUN_ADMIN_JOB + SUCCESS_POSTFIX:
+        console.log("reducer received run adminjob results", action.payload)
+
+        return {
+          ...state,
+          lastJobResult: {
+            resultCode: action.payload.runAdminJob.resultCode,
+            message: action.payload.runAdminJob.message,
+            result: JSON.parse(action.payload.runAdminJob.result),
+          }
+        }
+    
+
     default:
       return state
   }

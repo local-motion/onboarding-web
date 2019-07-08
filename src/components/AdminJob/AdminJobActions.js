@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import { executeQuery, GRAPHQL_QUERY, GRAPHQL_MUTATION } from '../../api/QueryActions';
 
 export const GET_ADMIN_JOB = 'GET_ADMIN_JOB'
+export const RUN_ADMIN_JOB = 'RUN_ADMIN_JOB'
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
 export const CREATE_USER_PROFILE = 'CREATE_USER_PROFILE'
@@ -52,16 +53,35 @@ export const USER_PROFILE_STREAM = 'USERPROFILE'
 // }
 
 export const retrieveAdminCommand = () => executeQuery( {
-    type: GRAPHQL_QUERY,
-    baseActionIdentifier: GET_ADMIN_JOB, 
-    query: gql`
-    {
-      adminCommand {
-        commandIdentifier
-        comment
-        operatorEmail
-        inputParameters
-      }
+  type: GRAPHQL_QUERY,
+  baseActionIdentifier: GET_ADMIN_JOB, 
+  query: gql`
+  {
+    adminCommand {
+      commandIdentifier
+      comment
+      operatorEmail
+      inputParameters
+    }
+  }
+`, 
+})
+
+export const runAdminJob = () => executeQuery( {
+  type: GRAPHQL_MUTATION,
+  baseActionIdentifier: RUN_ADMIN_JOB,
+  query: gql`
+    mutation RunAdminJob {
+      runAdminJob(doesNotMatter: "irrelevant") {
+          resultCode
+          message
+          result
+        }
     }
   `, 
-  })
+  // variables: {
+  //   input: {
+  //     initiativeId,
+  //   }
+  // },
+})
