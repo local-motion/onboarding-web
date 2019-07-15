@@ -5,6 +5,7 @@ import { openErrorDialog, openInformationDialog } from '../SimpleDialog/SimpleDi
 import { stopStream, triggerStream, startStream, pollingIntervalSetterFactory } from 'api/StreamActions';
 import { startUserDataStream, USER_DATA_STREAM } from 'components/UserData/UserDataActions';
 import { getRefreshInterval } from './UserProfileReducer';
+import { dlog } from 'utils/Generics';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
@@ -28,22 +29,45 @@ const startUserProfileStream = () => {
       query: gql`
       {
           profile {
-              id
-              username
-              emailAddress
-              notificationLevel
-              initiativeMemberships
+            profileStatus
+            profile {
+                id
+                username
+                emailAddress
+                notificationLevel
+                initiativeMemberships
+            }
+            newUserName
           }
       }
     `, 
+    //   query: gql`
+    //   {
+    //       profile {
+    //           id
+    //           username
+    //           emailAddress
+    //           notificationLevel
+    //           initiativeMemberships
+    //       }
+    //   }
+    // `, 
       onSuccessPrepublish: (result, dispatch) => {
-        if (!result.profile && result.status !== 'not_modified') {
+        dlog("user profile reponse", result)
+        if (result.status !== 'not_modified' && result.profile.profileStatus !== 'ACTIVE') {
           dispatch(openErrorDialog(
-            'Gebruikersprofiel niet aanwezig', 
+            'Gebruikersprofiel niet actief (' + result.profile.profileStatus  + ')', 
             'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
             'OK', 
             () => dispatch(signOutUser()))
           )
+        // if (!result.profile && result.status !== 'not_modified') {
+        //   dispatch(openErrorDialog(
+        //     'Gebruikersprofiel niet aanwezig', 
+        //     'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
+        //     'OK', 
+        //     () => dispatch(signOutUser()))
+        //   )
           return true   // terminate event execution
         }
       }
