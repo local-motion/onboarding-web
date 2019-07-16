@@ -12,6 +12,7 @@ export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
 export const CREATE_USER_PROFILE = 'CREATE_USER_PROFILE'
 export const REVIVE_USER_PROFILE = 'REVIVE_USER_PROFILE'
 export const DELETE_USER_PROFILE = 'DELETE_USER_PROFILE'
+export const CHANGE_USER_NAME = 'CHANGE_USER_NAME'
 export const SET_NOTIFICATION_LEVEL = 'SET_NOTIFICATION_LEVEL'
 export const USER_SIGNED_IN = 'USER_SIGNED_IN'
 export const USER_SIGNED_OUT = 'USER_SIGNED_OUT'
@@ -42,17 +43,6 @@ const startUserProfileStream = () => {
           }
       }
     `, 
-    //   query: gql`
-    //   {
-    //       profile {
-    //           id
-    //           username
-    //           emailAddress
-    //           notificationLevel
-    //           initiativeMemberships
-    //       }
-    //   }
-    // `, 
       onSuccessPrepublish: (result, dispatch) => {
         dlog("user profile reponse", result)
         if (result.status === 'not_modified')
@@ -64,10 +54,23 @@ const startUserProfileStream = () => {
           case 'ACTIVE':
             return false; // continue normally
 
-          case 'DELETED':
+            case 'ACTIVE_USER_NAME_CHANGED':
+              dispatch(openConfirmationDialog(
+                'Gebruikersnaam is veranderd', 
+                'Jouw gebruikersnaam was ' + result.profile.profile.username + ' en wordt nu veranderd in ' + result.profile.newUserName + '. ' +
+                'Wil je doorgaan? ' +
+                '(Zo nee dan word je uitgelogd.)', 
+                'Ja',
+                'Nee', 
+                () => dispatch(renameUser(result.profile.newUserName, triggerUserProfileStream)),
+                () => dispatch(signOutUser()),
+              ))
+              return true   // terminate event execution
+  
+            case 'DELETED':
             dispatch(openConfirmationDialog(
               'Gebruikersprofiel is verwijderd', 
-              'Wilt u dit profiel opnieuw activeren? (Zo nee dan wordt u uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
+              'Wil je dit profiel opnieuw activeren? (Zo nee dan word je uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
               'Ja',
               'Nee', 
               () => dispatch(reviveUser(triggerUserProfileStream)),
@@ -78,9 +81,9 @@ const startUserProfileStream = () => {
           case 'DELETED_USER_NAME_CHANGED':
             dispatch(openConfirmationDialog(
               'Gebruikersprofiel is verwijderd', 
-              'Wilt u dit profiel opnieuw activeren? ' + 
-              'Uw gebruikersnaam was ' + result.profile.profile.username + ' en wordt dan veranderd in ' + result.profile.newUserName + '. ' +
-              '(Zo nee dan wordt u uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
+              'Wil je dit profiel opnieuw activeren? ' + 
+              'Jouw gebruikersnaam was ' + result.profile.profile.username + ' en wordt dan veranderd in ' + result.profile.newUserName + '. ' +
+              '(Zo nee dan word je uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
               'Ja',
               'Nee', 
               () => dispatch(reviveUser(triggerUserProfileStream)),
@@ -88,20 +91,17 @@ const startUserProfileStream = () => {
             ))
             return true   // terminate event execution
 
+          case 'NEW':
+            dispatch(createUser(triggerUserProfileStream))
+            return true   // terminate event execution
+
           default:          
           dispatch(openErrorDialog(
             'Gebruikersprofiel niet actief (' + result.profile.profileStatus  + ')', 
-            'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
+            'Er heeft zich een probleem voorgedaan met je gebruikersprofiel. Probeer opnieuw in te loggen.', 
             'OK', 
             () => dispatch(signOutUser()))
           )
-        // if (!result.profile && result.status !== 'not_modified') {
-        //   dispatch(openErrorDialog(
-        //     'Gebruikersprofiel niet aanwezig', 
-        //     'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
-        //     'OK', 
-        //     () => dispatch(signOutUser()))
-        //   )
           return true   // terminate event execution
         }
       }
@@ -197,6 +197,24 @@ export const deleteUser = () => executeQuery( {
     })
     }
   })
+
+export const renameUser = (newName, onSuccessCallback) => executeQuery( {
+  type: GRAPHQL_MUTATION,
+  baseActionIdentifier: CHANGE_USER_NAME, 
+
+// Passing in 'irrelevant' to the input parameter as GraphQL apparantly does not support mutations without input parameters
+  query: gql`
+    mutation ChangeUserName($newName: String!) {
+      changeUserName(newName: $newName) {
+        id
+      }
+    }
+  `, 
+  variables: {
+    newName
+  },  
+  onSuccess: (data, dispatch, getState) => onSuccessCallback && onSuccessCallback(data, dispatch, getState)
+})
 
 export const setNotificationLevel = (user, level) => executeQuery( {
   type: GRAPHQL_MUTATION,
