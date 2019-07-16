@@ -36,7 +36,7 @@ const userProfileReducer = (state = initialState, action) => {
         console.log("reducer received fetched user profile:", action.payload)
 
         if (action.payload.status === 'not_modified' || action.payload.profile.profileStatus !== 'ACTIVE')
-        return state
+          return state
 
         return {
           ...state,

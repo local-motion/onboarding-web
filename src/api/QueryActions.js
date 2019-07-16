@@ -278,7 +278,7 @@ const userNotAuthenticatedErrorHandler = (error, dispatch, getState, queryOption
     console.log('Server detected unauthenticated user')
 
     dispatch(signOutUser( dispatch =>
-      dispatch(openErrorDialog('Sessie verlopen', 'Je sessie is verlopen. Log opnieuw in.', 'Sluiten'))
+      dispatch(openErrorDialog('Sessie verlopen', 'Je sessie is verlopen. Log opnieuw in.', 'Sluiten', () => window.location.replace('/')))
     ))
     return true   // error handled
   }

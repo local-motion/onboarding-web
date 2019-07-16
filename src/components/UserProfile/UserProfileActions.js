@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Auth } from 'aws-amplify';
 import { executeQuery, GRAPHQL_QUERY, GRAPHQL_MUTATION } from '../../api/QueryActions';
-import { openErrorDialog, openInformationDialog } from '../SimpleDialog/SimpleDialogActions';
+import { openErrorDialog, openInformationDialog, openConfirmationDialog } from '../SimpleDialog/SimpleDialogActions';
 import { stopStream, triggerStream, startStream, pollingIntervalSetterFactory } from 'api/StreamActions';
 import { startUserDataStream, USER_DATA_STREAM } from 'components/UserData/UserDataActions';
 import { getRefreshInterval } from './UserProfileReducer';
@@ -10,6 +10,7 @@ import { dlog } from 'utils/Generics';
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
 export const CREATE_USER_PROFILE = 'CREATE_USER_PROFILE'
+export const REVIVE_USER_PROFILE = 'REVIVE_USER_PROFILE'
 export const DELETE_USER_PROFILE = 'DELETE_USER_PROFILE'
 export const SET_NOTIFICATION_LEVEL = 'SET_NOTIFICATION_LEVEL'
 export const USER_SIGNED_IN = 'USER_SIGNED_IN'
@@ -54,7 +55,40 @@ const startUserProfileStream = () => {
     // `, 
       onSuccessPrepublish: (result, dispatch) => {
         dlog("user profile reponse", result)
-        if (result.status !== 'not_modified' && result.profile.profileStatus !== 'ACTIVE') {
+        if (result.status === 'not_modified')
+          return false; // continue normally
+
+        
+        
+        switch (result.profile.profileStatus) {
+          case 'ACTIVE':
+            return false; // continue normally
+
+          case 'DELETED':
+            dispatch(openConfirmationDialog(
+              'Gebruikersprofiel is verwijderd', 
+              'Wilt u dit profiel opnieuw activeren? (Zo nee dan wordt u uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
+              'Ja',
+              'Nee', 
+              () => dispatch(reviveUser(triggerUserProfileStream)),
+              () => dispatch(signOutUser()),
+            ))
+            return true   // terminate event execution
+
+          case 'DELETED_USER_NAME_CHANGED':
+            dispatch(openConfirmationDialog(
+              'Gebruikersprofiel is verwijderd', 
+              'Wilt u dit profiel opnieuw activeren? ' + 
+              'Uw gebruikersnaam was ' + result.profile.profile.username + ' en wordt dan veranderd in ' + result.profile.newUserName + '. ' +
+              '(Zo nee dan wordt u uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
+              'Ja',
+              'Nee', 
+              () => dispatch(reviveUser(triggerUserProfileStream)),
+              () => dispatch(signOutUser()),
+            ))
+            return true   // terminate event execution
+
+          default:          
           dispatch(openErrorDialog(
             'Gebruikersprofiel niet actief (' + result.profile.profileStatus  + ')', 
             'Er heeft zich een probleem voorgedaan met uw gebruikersprofiel. Probeer opnieuw in te loggen.', 
@@ -107,7 +141,22 @@ export const createUser = (onSuccessCallback) => executeQuery( {
         }
       }
     `, 
-    onSuccess: (data, dispatch, getState) => onSuccessCallback(data, dispatch, getState)
+    onSuccess: (data, dispatch, getState) => onSuccessCallback && onSuccessCallback(data, dispatch, getState)
+  })
+
+export const reviveUser = (onSuccessCallback) => executeQuery( {
+    type: GRAPHQL_MUTATION,
+    baseActionIdentifier: REVIVE_USER_PROFILE, 
+
+// Passing in 'irrelevant' to the input parameter as GraphQL apparantly does not support mutations without input parameters
+    query: gql`
+      mutation ReviveUser {
+        reviveUser(doesNotMatter: "irrelevant") {
+          id
+        }
+      }
+    `, 
+    onSuccess: (data, dispatch, getState) => onSuccessCallback && onSuccessCallback(data, dispatch, getState)
   })
 
 export const deleteUser = () => executeQuery( {
@@ -187,8 +236,10 @@ export const signOutUser = (onSignOut) => (dispatch, getState) => {
       .then(() => {
           console.log('sign out success')
           dispatch({ type: USER_SIGNED_OUT })
-          window.location.replace('/')
-          onSignOut && onSignOut(dispatch, getState)
+          if (onSignOut)
+            onSignOut(dispatch, getState)
+          else
+            window.location.replace('/')
       })
       .catch(error => {
           console.log('sign out error', error)
@@ -217,3 +268,5 @@ const refreshTokens = async dispatch => {
     dispatch(openErrorDialog('Sessie verlopen', 'Je sessie is verlopen. Log opnieuw in.', 'Sluiten', () => dispatch(signOutUser())))
   }
 }
+
+const triggerUserProfileStream = (data, dispatch, getState) => dispatch(triggerStream(USER_PROFILE_STREAM))
