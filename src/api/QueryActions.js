@@ -145,8 +145,8 @@ const executeGraphQLQuery = (queryOptions) => {
             response: errorResponse,
             queryOptions,
           }
-          if (error.code === 'NETWORK')
-            networkErrorHandler(error, dispatch, getState, queryOptions, errorResponse)
+          // if (error.code === 'NETWORK')
+          networkErrorHandler(error, dispatch, getState, queryOptions, errorResponse)
           handleError(error, dispatch, getState, queryOptions, error, false)
         })
     }
@@ -248,6 +248,9 @@ const executeRestQuery = (queryOptions) => {
 
 const noUserProfileErrorHandler = (error, dispatch, getState, queryOptions) => {
   if (error.code === 'NO_PROFILE') {
+
+    alert('NO_PROFILE: this should no longer occur')
+
     // try to create a user profile and then retry the original query
       console.log("Error: No user profile -> Trying to create one...")
       dispatch(createUser(
@@ -259,6 +262,15 @@ const noUserProfileErrorHandler = (error, dispatch, getState, queryOptions) => {
           dispatch(executeQuery(options))
         }
       ))
+    return true   // error handled
+  }
+  else
+    return false  // error not handled
+}
+
+const profileAlreadyExistsErrorHandler = (error, dispatch, getState, queryOptions) => {
+  if (error.code === 'USER_PROFILE_ALREADY_BEING_CREATED' && queryOptions.auxParameters && queryOptions.auxParameters.ignoreProfileAlreadyExists) {
+      console.log("create user got rejected as user is already present. Ignoring...")
     return true   // error handled
   }
   else
@@ -278,7 +290,7 @@ const userNotAuthenticatedErrorHandler = (error, dispatch, getState, queryOption
     console.log('Server detected unauthenticated user')
 
     dispatch(signOutUser( dispatch =>
-      dispatch(openErrorDialog('Sessie verlopen', 'Je sessie is verlopen. Log opnieuw in.', 'Sluiten'))
+      dispatch(openErrorDialog('Sessie verlopen', 'Je sessie is verlopen. Log opnieuw in.', 'Sluiten', () => window.location.replace('/')))
     ))
     return true   // error handled
   }
@@ -295,12 +307,12 @@ const networkErrorHandler = (error, dispatch, getState, queryOptions) => {
   return false
 }
 
-const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorHandler, userNotAuthenticatedErrorHandler, networkErrorHandler]
+const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorHandler, userNotAuthenticatedErrorHandler, networkErrorHandler, profileAlreadyExistsErrorHandler]
 
 
 // default error handler
 
-const handleError = (error, dispatch, getState, queryOptions, message, displayErrorMessage) => {
+const handleError = (error, dispatch, getState, queryOptions, message, displayErrorMessage=true) => {
 
   const {baseActionIdentifier, onFailPrepublish, onCompletionPrepublish, onFail, onCompletion} = queryOptions
   let cancel = false

@@ -10,6 +10,7 @@ import configReducer from "./misc/ConfigReducer";
 import auditTrailReducer from "components/AuditTrail/AuditTrailReducer";
 import userDataReducer from "components/UserData/UserDataReducer";
 import statusNotificationReducer from "components/StatusNotification/StatusNotificationReducer";
+import adminJobReducer from "components/AdminJob/AdminJobReducer";
 
 const rootReducer = (state = {}, action) => ({
     ...state,
@@ -24,7 +25,8 @@ const rootReducer = (state = {}, action) => ({
     error:              errorReducer(state.error, action),
     simpleDialog:       simpleDialogReducer(state.simpleDialog, action),
     statusNotification: statusNotificationReducer(state.statusNotification, action),
-    fetchDetails:       fetchDetailsReducer(state.fetchDetails, action)
+    fetchDetails:       fetchDetailsReducer(state.fetchDetails, action),
+    adminjob:           adminJobReducer(state.adminjob, action),
   })
 
 export default rootReducer

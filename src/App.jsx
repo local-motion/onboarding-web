@@ -26,6 +26,7 @@ import { titlePrefix } from "./misc/WorkspaceHelpers";
 import Authenticator from "./authentication/Authenticator";
 import WrappedWarningSnackbar from "components/StatusNotification/WrappedWarningSnackbar";
 import PublicBetaNotification from "./components/PublicBetaNotification/PublicBetaNotification";
+import AdminJob from "views/AdminJob/AdminJob";
   
 
 const mapDispatchToProps = (dispatch) => ({
@@ -75,6 +76,7 @@ class App extends React.Component {
                         <Route path="/actie/:initiativeName/" component={Workspace}/>
 
                         <Route exact path="/" key="Onboarding" component={Onboarding}/>
+                        <Route exact path="/admin" key="Admin" component={AdminJob}/>
 
                         { /* If none of the paths match, redirect to /*/ }
                         <Route path="/" render={ () => (<Redirect to='/'/>) } />

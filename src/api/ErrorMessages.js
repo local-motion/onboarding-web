@@ -18,6 +18,8 @@ export const ErrorCode = {
     EMAIL_ADDRESS_ALREADY_EXISTS: {developerMessage: 'Email address already exists', message: 'Dit emailadres is al in gebruik.'},
     DUPLICATE_EMAIL_ADDRESS:    {developerMessage: 'Cannot onboard user as email address already exists', message: 'Dit emailadres is al in gebruik. Neem contact op met de beheerder (zie contact link onderaan het scherm)'},
     DUPLICATE_USERNAME:         {developerMessage: 'Cannot onboard user as user name already exists', message: 'Deze gebruikersnaam is al in gebruik. Neem contact op met de beheerder (zie contact link onderaan het scherm)'},
+    INVALID_COMMAND_RECORD:      {developerMessage: 'Command record contains invalid Json', message: 'Command record contains invalid Json'},
+    REVIVAL_COOLDOWN_ACTIVE:      {developerMessage: 'A user cannot be revived within 60 seconds of being deleted', message: 'Je moet een minuut wachten voordat je je met dezelfde gebruiker opnieuw kunt aanmelden. Probeer nogmaals in te loggen.'},
 
 // Cognito errors
     UserNotFoundException:      {developerMessage: 'User does not exist', message: 'Deze gebruikersnaam is onbekend'},

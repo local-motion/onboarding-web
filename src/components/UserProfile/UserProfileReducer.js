@@ -35,17 +35,17 @@ const userProfileReducer = (state = initialState, action) => {
     case GET_USER_PROFILE + SUCCESS_POSTFIX:
         console.log("reducer received fetched user profile:", action.payload)
 
-        if (action.payload.status === 'not_modified')
-        return state
+        if (action.payload.status === 'not_modified' || action.payload.profile.profileStatus !== 'ACTIVE')
+          return state
 
         return {
           ...state,
           user: {
-            id: action.payload.profile.id,
-            name: action.payload.profile.username,
-            emailAddress: action.payload.profile.emailAddress,
-            notificationLevel: action.payload.profile.notificationLevel,
-            initiativeMemberships: action.payload.profile.initiativeMemberships
+            id: action.payload.profile.profile.id,
+            name: action.payload.profile.profile.username,
+            emailAddress: action.payload.profile.profile.emailAddress,
+            notificationLevel: action.payload.profile.profile.notificationLevel,
+            initiativeMemberships: action.payload.profile.profile.initiativeMemberships
           }
         }
     

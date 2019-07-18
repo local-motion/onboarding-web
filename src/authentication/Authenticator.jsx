@@ -103,18 +103,6 @@ class Authenticator extends Component {
 
     }
 
-    componentDidMount() {
-        this.props.setCta && this.props.setCta({
-            ctaAction: () => this.changeForm('signUp'),
-            ctaText: 'Maak een account',
-            ctaDisabled: false,
-        });
-    }
-
-    componentWillUnmount() {
-        this.props.unsetCta && this.props.unsetCta();
-    }
-
     changeForm(newForm) {   
 
         console.log('changing form to ', newForm)
@@ -159,7 +147,7 @@ class Authenticator extends Component {
         let formProps = copyProperties(this.state, {},    [ 'username', 'password', 'emailAddress', 'verificationCode', 'verificationLink', 'waitingForServerResponse' ])
         formProps = copyProperties(this, formProps,       [ 'setUsername', 'setPassword', 'setEmailAddress', 'setVerificationCode', 'displayError',
                                                             'setWaitingForServerResponse', 'clearWaitingForServerResponse', 'changeForm'])
-        formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog', 'isInCard'])
+        formProps = copyProperties(this.props, formProps, [ 'openInformationDialog', 'openErrorDialog', 'isInCard', 'setCta', 'unsetCta'])
         formProps.storeInitiativeForVerification = storeInitiativeForVerification
         formProps.clearInitiativeForVerification = clearInitiativeForVerification
         // formProps.isInCard = this.props.location.pathname.includes('actie')

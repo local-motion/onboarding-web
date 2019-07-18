@@ -22,7 +22,7 @@ const userDataReducer = (state = initialState, action) => {
     case GET_USER_DATA + SUCCESS_POSTFIX:
         console.log("reducer received fetched user data:", action.payload)
 
-        if (action.payload.status === 'not_modified')
+        if (action.payload.status === 'not_modified' || !action.payload.userData)
         return state
 
         const {__typename, ...trueUserData} = action.payload.userData

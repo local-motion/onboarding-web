@@ -9,7 +9,7 @@ import { getErrorMessage } from '../api/ErrorMessages';
 import { getPlaygroundDetails } from "../components/Playground/PlaygroundReducer";
 import TextField from "@material-ui/core/TextField/TextField";
 import { signOutUser } from '../components/UserProfile/UserProfileActions';
-import { bindMethods } from '../utils/Generics';
+import { bindMethods, dlog } from '../utils/Generics';
 import { styles } from './AuthenticatorStyles';
 import { PadlockIcon } from './AuthenticatorStyles';
 
@@ -38,11 +38,14 @@ class SignInForm extends Component {
     }
 
     componentDidMount() {
+        dlog('mounting signin, setting cta', this.props)
+
         this.props.setCta && this.props.setCta({
             ctaAction: () => this.props.changeForm('signUp'),
             ctaText: 'Maak een account',
             ctaDisabled: false,
         });
+        // this.props.unsetCta && this.props.unsetCta();
     }
 
     componentWillUnmount() {
