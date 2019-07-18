@@ -142,7 +142,17 @@ export const createUser = (onSuccessCallback) => executeQuery( {
         }
       }
     `, 
-    onSuccess: (data, dispatch, getState) => onSuccessCallback && onSuccessCallback(data, dispatch, getState)
+    onSuccess: (data, dispatch, getState) => {
+
+
+// USER_PROFILE_ALREADY_BEING_CREATED
+      dlog('successful return from createUser: ', data)
+
+      onSuccessCallback && onSuccessCallback(data, dispatch, getState)
+    },
+    auxParameters: {
+      ignoreProfileAlreadyExists: true
+    }
   })
 
 export const reviveUser = (onSuccessCallback) => executeQuery( {
