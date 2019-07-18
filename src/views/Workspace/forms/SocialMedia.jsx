@@ -11,8 +11,6 @@ import {
     TwitterIcon,
     WhatsappShareButton,
     WhatsappIcon,
-    WorkplaceShareButton,
-    WorkplaceIcon
 } from 'react-share';
 import { connect } from 'react-redux'
 import { withTranslation } from "react-i18next";
@@ -62,10 +60,6 @@ class SocialMedia extends React.Component {
                 <WhatsappShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} title={details.title} seperator=" ">
                     <WhatsappIcon size={32} round />
                 </WhatsappShareButton>
-
-                <WorkplaceShareButton className="socialIcon" disabled={!userIsVolunteer} url={shareUrl} quote={details.title} hashtag={details.hashtags[0]} >
-                    <WorkplaceIcon size={32} round />
-                </WorkplaceShareButton>
             </div>
         );
     }
