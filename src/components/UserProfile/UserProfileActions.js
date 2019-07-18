@@ -54,29 +54,33 @@ const startUserProfileStream = () => {
           case 'ACTIVE':
             return false; // continue normally
 
-            case 'ACTIVE_USER_NAME_CHANGED':
-              dispatch(openConfirmationDialog(
-                'Gebruikersnaam is veranderd', 
-                'Jouw gebruikersnaam was ' + result.profile.profile.username + ' en wordt nu veranderd in ' + result.profile.newUserName + '. ' +
-                'Wil je doorgaan? ' +
-                '(Zo nee dan word je uitgelogd.)', 
-                'Ja',
-                'Nee', 
-                () => dispatch(renameUser(result.profile.newUserName, triggerUserProfileStream)),
-                () => dispatch(signOutUser()),
-              ))
+            case 'NEW':
+              dispatch(createUser(triggerUserProfileStream))
               return true   // terminate event execution
   
-            case 'DELETED':
+          case 'ACTIVE_USER_NAME_CHANGED':
             dispatch(openConfirmationDialog(
-              'Gebruikersprofiel is verwijderd', 
-              'Wil je dit profiel opnieuw activeren? (Zo nee dan word je uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
+              'Gebruikersnaam is veranderd', 
+              'Jouw gebruikersnaam was ' + result.profile.profile.username + ' en wordt nu veranderd in ' + result.profile.newUserName + '. ' +
+              'Wil je doorgaan? ' +
+              '(Zo nee dan word je uitgelogd.)', 
               'Ja',
               'Nee', 
-              () => dispatch(reviveUser(triggerUserProfileStream)),
+              () => dispatch(renameUser(result.profile.newUserName, triggerUserProfileStream)),
               () => dispatch(signOutUser()),
             ))
             return true   // terminate event execution
+
+          case 'DELETED':
+          dispatch(openConfirmationDialog(
+            'Gebruikersprofiel is verwijderd', 
+            'Wil je dit profiel opnieuw activeren? (Zo nee dan word je uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
+            'Ja',
+            'Nee', 
+            () => dispatch(reviveUser(triggerUserProfileStream)),
+            () => dispatch(signOutUser()),
+          ))
+          return true   // terminate event execution
 
           case 'DELETED_USER_NAME_CHANGED':
             dispatch(openConfirmationDialog(
@@ -91,19 +95,16 @@ const startUserProfileStream = () => {
             ))
             return true   // terminate event execution
 
-          case 'NEW':
-            dispatch(createUser(triggerUserProfileStream))
-            return true   // terminate event execution
-
           default:          
-          dispatch(openErrorDialog(
-            'Gebruikersprofiel niet actief (' + result.profile.profileStatus  + ')', 
-            'Er heeft zich een probleem voorgedaan met je gebruikersprofiel. Probeer opnieuw in te loggen.', 
-            'OK', 
-            () => dispatch(signOutUser()))
-          )
-          return true   // terminate event execution
-        }
+            console.warn('User profile in unknown state: ' + result.profile.profileStatus)
+            dispatch(openErrorDialog(
+              'Gebruikersprofiel niet actief', 
+              'Er heeft zich een probleem voorgedaan met je gebruikersprofiel. Probeer opnieuw in te loggen.', 
+              'OK', 
+              () => dispatch(signOutUser()))
+            )
+            return true   // terminate event execution
+          }
       }
     }
     ,

@@ -30,11 +30,13 @@ class AdminJob extends React.Component {
 
         this.state = {
             retainCommandFile: false,
+            adminRecordRetrieved: false,
         }
     }
 
     retrieveAdminCommand = () => {
         this.props.retrieveAdminCommand();
+        this.setState({adminRecordRetrieved: true});
     }
 
     runAdminJob = () => {
@@ -59,7 +61,10 @@ class AdminJob extends React.Component {
                     commandRecord ?
                         <JSONPretty data={commandRecord}></JSONPretty>
                         :
-                        <div>No command file present</div>
+                        this.state.adminRecordRetrieved ?
+                            <div>No command file present</div>
+                            :
+                            <div>Press 'Fetch command'</div>
                 }
                 </div>
                 {   jobResult &&

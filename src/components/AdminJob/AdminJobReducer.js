@@ -48,7 +48,14 @@ const adminJobReducer = (state = initialState, action) => {
             jobResult: null,
             adminCommand: null,
           }
-        else
+        else {
+          let inputParameters = ""
+          try {
+            inputParameters = JSON.parse(action.payload.adminCommand.inputParameters)
+          }
+          catch (e) {
+            inputParameters = "*** error parsing input parameters ***"
+          }
           return {
             ...state,
             jobResult: null,
@@ -56,10 +63,11 @@ const adminJobReducer = (state = initialState, action) => {
               commandIdentifier: action.payload.adminCommand.commandIdentifier,
               comment: action.payload.adminCommand.comment,
               operatorEmail: action.payload.adminCommand.operatorEmail,
-              inputParameters: JSON.parse(action.payload.adminCommand.inputParameters),
+              inputParameters,
               validationCode: action.payload.adminCommand.validationCode,
             }
           }
+        }
     
     case RUN_ADMIN_JOB + SUCCESS_POSTFIX:
         console.log("reducer received run adminjob results", action.payload)

@@ -38,11 +38,12 @@ class SignInForm extends Component {
     }
 
     componentDidMount() {
-        this.props.setCta && this.props.setCta({
-            ctaAction: () => this.props.changeForm('signUp'),
-            ctaText: 'Maak een account',
-            ctaDisabled: false,
-        });
+        // this.props.setCta && this.props.setCta({
+        //     ctaAction: () => this.props.changeForm('signUp'),
+        //     ctaText: 'Maak een account',
+        //     ctaDisabled: false,
+        // });
+        this.props.unsetCta && this.props.unsetCta();
     }
 
     componentWillUnmount() {

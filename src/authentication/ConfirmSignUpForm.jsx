@@ -25,11 +25,12 @@ class ConfirmSignUpForm extends Component {
     }
     
     componentDidMount() {
-        this.props.setCta && this.props.setCta({
-            ctaAction: () => this.props.changeForm('signUp'),
-            ctaText: 'Maak een account',
-            ctaDisabled: false,
-        });
+        // this.props.setCta && this.props.setCta({
+        //     ctaAction: () => this.props.changeForm('signUp'),
+        //     ctaText: 'Maak een account',
+        //     ctaDisabled: false,
+        // });
+        this.props.unsetCta && this.props.unsetCta();
 
         console.log('update of componentDidMount, verificationLink, autoSubmitTriggered', this.props.verificationLink, this.state.autoSubmitTriggered)
         if (this.props.verificationLink  && !this.state.autoSubmitTriggered) {

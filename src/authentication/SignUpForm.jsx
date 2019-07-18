@@ -258,6 +258,7 @@ class SignUpForm extends Component {
                         <Checkbox
                             checked={acceptedTerms}
                             onChange={this.onChangeAcceptedTerms}
+                            onKeyDown={ event => this.catchEnterSubmit(event, isReadyToSubmit) }
                             color="primary"
                             value="accepted"
                         />
