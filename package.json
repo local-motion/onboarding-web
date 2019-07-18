@@ -65,7 +65,7 @@
     "react-scripts": "3.0.1",
     "react-share": "3.0.0",
     "react-slick": "0.24.0",
-    "react-sticky-el": "^1.0.20",
+    "react-sticky-el": "1.0.20",
     "react-swipeable-views": "0.13.3",
     "recompose": "0.30.0",
     "redux-thunk": "2.3.0",
