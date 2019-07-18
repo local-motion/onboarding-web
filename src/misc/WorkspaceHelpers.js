@@ -152,7 +152,12 @@ export function getPhases() {
                     name: 'Laat zien dat de speeltuin rookvrij is',
                     link: '/laat-zien-dat-de-speeltuin-rookvrij-is',
                     visible: ({ playground }) => !!playground,
+<<<<<<< HEAD
                     done: ({ playground }) => playground.jointChecklistItems.includes("place_sign")
+=======
+                    done: ({ playground }) => playground.jointChecklistItems.includes("order_sign")
+                      && playground.jointChecklistItems.includes("place_sign")
+>>>>>>> origin/checkmarks
                       && playground.jointChecklistItems.includes("adjust_regulations")
                       && playground.jointChecklistItems.includes("publish_regulations"),
                 },
