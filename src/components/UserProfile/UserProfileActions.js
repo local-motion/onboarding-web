@@ -54,6 +54,10 @@ const startUserProfileStream = () => {
           case 'ACTIVE':
             return false; // continue normally
 
+          case 'UNDETERMINED':
+            dlog('undetermined profile')
+            return true; // terminate event execution, the next poll should deliver a determined profile
+
             case 'NEW':
               dispatch(createUser(triggerUserProfileStream))
               return true   // terminate event execution

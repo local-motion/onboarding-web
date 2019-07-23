@@ -1,5 +1,5 @@
 import { openErrorDialog } from "../components/SimpleDialog/SimpleDialogActions";
-import { createUser, signOutUser } from "../components/UserProfile/UserProfileActions";
+import { signOutUser } from "../components/UserProfile/UserProfileActions";
 import { getErrorMessage } from "./ErrorMessages";
 import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 import { getGraphQLClient } from "../misc/ConfigReducer";
@@ -246,28 +246,6 @@ const executeRestQuery = (queryOptions) => {
 
 // Error handlers
 
-const noUserProfileErrorHandler = (error, dispatch, getState, queryOptions) => {
-  if (error.code === 'NO_PROFILE') {
-
-    alert('NO_PROFILE: this should no longer occur')
-
-    // try to create a user profile and then retry the original query
-      console.log("Error: No user profile -> Trying to create one...")
-      dispatch(createUser(
-        () => {
-          console.log("User profile created-> Retrying original query")
-
-          // on success retry the original query, without invoking the errorHandlers this time to avoid infinite loops
-          const options = {...queryOptions, invokeErrorHandlers: false}
-          dispatch(executeQuery(options))
-        }
-      ))
-    return true   // error handled
-  }
-  else
-    return false  // error not handled
-}
-
 const profileAlreadyExistsErrorHandler = (error, dispatch, getState, queryOptions) => {
   if (error.code === 'USER_PROFILE_ALREADY_BEING_CREATED' && queryOptions.auxParameters && queryOptions.auxParameters.ignoreProfileAlreadyExists) {
       console.log("create user got rejected as user is already present. Ignoring...")
@@ -307,7 +285,7 @@ const networkErrorHandler = (error, dispatch, getState, queryOptions) => {
   return false
 }
 
-const errorHandlers = [noUserProfileErrorHandler, nonUniqueUsernameOrEmailErrorHandler, userNotAuthenticatedErrorHandler, networkErrorHandler, profileAlreadyExistsErrorHandler]
+const errorHandlers = [nonUniqueUsernameOrEmailErrorHandler, userNotAuthenticatedErrorHandler, networkErrorHandler, profileAlreadyExistsErrorHandler]
 
 
 // default error handler
