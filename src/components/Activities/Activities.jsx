@@ -117,16 +117,14 @@ class Activities extends Component {
 
     // User events
             case 'USER_CREATED':
-                playground = this.props.getPlayground(record.initiativeId)
                 return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft zich aangemeld voor rookvrijspelen</Fragment>
             case 'USER_DELETED':
-                playground = this.props.getPlayground(record.initiativeId)
                 return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft zich afgemeld voor rookvrijspelen</Fragment>
             case 'USER_REVIVED':
-                playground = this.props.getPlayground(record.initiativeId)
                 return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft zich opnieuw aangemeld voor rookvrijspelen</Fragment>
+            case 'USER_RENAMED':
+                return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft zijn/haar gebruikersnaam gewijzigd</Fragment>
             case 'NOTIFICATION_SETTINGS_UPDATED':
-                playground = this.props.getPlayground(record.initiativeId)
                 return <Fragment><span className={classes.highlighted}>{record.actorName}</span> heeft zijn notificaties {record.notificationLevel === 'FULL' ? 'aangezet' : 'uitgezet'}</Fragment>
 
     // Playground events
