@@ -238,7 +238,7 @@ export const setNotificationLevel = (user, level) => executeQuery( {
       notificationLevel: level
     }
   },
-  onSuccess: (result, dispatch) => dispatch(triggerStream(USER_PROFILE_STREAM))
+  onSuccess: triggerUserProfileStream
 })
  
 
@@ -292,4 +292,7 @@ const refreshTokens = async dispatch => {
   }
 }
 
-const triggerUserProfileStream = (data, dispatch, getState) => dispatch(triggerStream(USER_PROFILE_STREAM))
+const triggerUserProfileStream = (data, dispatch, getState) => {
+  dispatch(triggerStream(USER_PROFILE_STREAM))
+  dispatch(triggerStream(USER_DATA_STREAM))
+}
