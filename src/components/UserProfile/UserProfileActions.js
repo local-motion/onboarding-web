@@ -5,7 +5,6 @@ import { openErrorDialog, openInformationDialog, openConfirmationDialog } from '
 import { stopStream, triggerStream, startStream, pollingIntervalSetterFactory } from 'api/StreamActions';
 import { startUserDataStream, USER_DATA_STREAM } from 'components/UserData/UserDataActions';
 import { getRefreshInterval } from './UserProfileReducer';
-import { dlog } from 'utils/Generics';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
@@ -44,18 +43,14 @@ const startUserProfileStream = () => {
       }
     `, 
       onSuccessPrepublish: (result, dispatch) => {
-        dlog("user profile reponse", result)
         if (result.status === 'not_modified')
           return false; // continue normally
-
-        
         
         switch (result.profile.profileStatus) {
           case 'ACTIVE':
             return false; // continue normally
 
           case 'UNDETERMINED':
-            dlog('undetermined profile')
             return true; // terminate event execution, the next poll should deliver a determined profile
 
             case 'NEW':
@@ -147,11 +142,6 @@ export const createUser = (onSuccessCallback) => executeQuery( {
       }
     `, 
     onSuccess: (data, dispatch, getState) => {
-
-
-// USER_PROFILE_ALREADY_BEING_CREATED
-      dlog('successful return from createUser: ', data)
-
       onSuccessCallback && onSuccessCallback(data, dispatch, getState)
     },
     auxParameters: {

@@ -5,7 +5,6 @@ import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 import { getGraphQLClient } from "../misc/ConfigReducer";
 import { openWarningNotification, closeStatusNotification } from "components/StatusNotification/StatusNotificationActions";
 import { getStatusNotification } from "components/StatusNotification/StatusNotificationReducer";
-import { dlog } from "utils/Generics";
 
 export const REQUEST_POSTFIX = '_REQUEST'
 export const SUCCESS_POSTFIX = '_SUCCESS'
@@ -182,7 +181,6 @@ const executeRestQuery = (queryOptions) => {
             dispatch(closeStatusNotification())
                     
           if (response.ok) {
-            dlog('this is the response', response)
             response.json().then(
               json => {
                 let cancel = false
