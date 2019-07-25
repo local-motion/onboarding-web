@@ -1,4 +1,4 @@
-import { POSTED_MESSAGE, SET_ACTIVE_CHATBOX, SET_UNACTIVE_CHATBOX, EDIT_CHAT_MESSAGE, GET_CHAT_MESSAGES } from "../actions/chatActions";
+import { SET_ACTIVE_CHATBOX, SET_UNACTIVE_CHATBOX, EDIT_CHAT_MESSAGE, GET_CHAT_MESSAGES, POST_CHAT_MESSAGE } from "../actions/chatActions";
 import { SUCCESS_POSTFIX } from "../../../api/QueryActions";
 
 /* 
@@ -50,7 +50,8 @@ const chatReducer = (state = initialState, action) => {
         editText: action.text
       }
 
-    case POSTED_MESSAGE:
+    // case POSTED_MESSAGE:
+    case POST_CHAT_MESSAGE + SUCCESS_POSTFIX:
       return {
         ...state,
         editText: ''

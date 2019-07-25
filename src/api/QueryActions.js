@@ -1,10 +1,11 @@
 import { openErrorDialog } from "../components/SimpleDialog/SimpleDialogActions";
 import { signOutUser } from "../components/UserProfile/UserProfileActions";
-import { getErrorMessage } from "./ErrorMessages";
+import { getErrorMessage, getErrorMessageForRestResponse } from "./ErrorMessages";
 import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 import { getGraphQLClient } from "../misc/ConfigReducer";
 import { openWarningNotification, closeStatusNotification } from "components/StatusNotification/StatusNotificationActions";
 import { getStatusNotification } from "components/StatusNotification/StatusNotificationReducer";
+import { dlog } from "utils/Generics";
 
 export const REQUEST_POSTFIX = '_REQUEST'
 export const SUCCESS_POSTFIX = '_SUCCESS'
@@ -181,6 +182,7 @@ const executeRestQuery = (queryOptions) => {
             dispatch(closeStatusNotification())
                     
           if (response.ok) {
+            dlog('this is the response', response)
             response.json().then(
               json => {
                 let cancel = false
@@ -314,14 +316,25 @@ const handleError = (error, dispatch, getState, queryOptions, message, displayEr
 // Helper functions
 
 const openErrorMessageDialog = (error) => (dispatch, getState) => {
-  dispatch(openErrorDialog('Er is helaas iets fout gegaan', 
-                                  getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => {window.location.reload()}))
+  const isRestError = error.queryOptions && (error.queryOptions.type === REST_GET || error.queryOptions.type === REST_POST)
+  dispatch(openErrorDialog( 'Er is helaas iets fout gegaan', 
+                            isRestError ? getErrorMessageForRestResponse(error.response.status, error.response.statusText) : getErrorMessage(error.code, error.serverMessage), 
+                            'Sluiten', 
+                            () => {window.location.reload()})
+                          )
 }
 
 const openErrorMessageAndLogoffDialog = (error) => (dispatch, getState) => {
   console.log('dispatching err msg and logoff')
-  dispatch(openErrorDialog('Er is helaas iets fout gegaan', 
-                                  getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => dispatch(signOutUser())))
+  // dispatch(openErrorDialog('Er is helaas iets fout gegaan', 
+  //                                 getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => dispatch(signOutUser())))
+  const isRestError = error.queryOptions && (error.queryOptions.type === REST_GET || error.queryOptions.type === REST_POST)
+  dispatch(openErrorDialog( 'Er is helaas iets fout gegaan', 
+                            isRestError ? getErrorMessageForRestResponse(error.response.status, error.response.statusText) : getErrorMessage(error.code, error.serverMessage), 
+                            'Sluiten', 
+                            () => dispatch(signOutUser()))
+                          )
+
 }
 
 
