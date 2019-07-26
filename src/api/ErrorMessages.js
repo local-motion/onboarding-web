@@ -12,14 +12,15 @@ import { isDeveloperMode } from "../utils/DeveloperMode";
 export const ErrorCode = {
     GENERIC:                    {developerMessage: 'Generic error', message: 'Er is een technische fout opgetreden'},
     NOT_AUTHORISED:             {developerMessage: 'Not authorised', message: 'Er is een technische fout opgetreden'},
-    INTERNAL_SERVER_ERROR:      {developerMessage: 'Internal server error', message: 'Er is een technische fout opgetreden'},
+    // INTERNAL_SERVER_ERROR:      {developerMessage: 'Internal server error', message: 'Er is een technische fout opgetreden'},
     JSON_PARSE:                 {developerMessage: 'Json did not parse', message: 'Er is een technische fout opgetreden'},
     NETWORK:                    {developerMessage: 'Network error', message: 'Er is een netwerk fout opgetreden'},
     EMAIL_ADDRESS_ALREADY_EXISTS: {developerMessage: 'Email address already exists', message: 'Dit emailadres is al in gebruik.'},
     DUPLICATE_EMAIL_ADDRESS:    {developerMessage: 'Cannot onboard user as email address already exists', message: 'Dit emailadres is al in gebruik. Neem contact op met de beheerder (zie contact link onderaan het scherm)'},
     DUPLICATE_USERNAME:         {developerMessage: 'Cannot onboard user as user name already exists', message: 'Deze gebruikersnaam is al in gebruik. Neem contact op met de beheerder (zie contact link onderaan het scherm)'},
-    INVALID_COMMAND_RECORD:      {developerMessage: 'Command record contains invalid Json', message: 'Command record contains invalid Json'},
-    REVIVAL_COOLDOWN_ACTIVE:      {developerMessage: 'A user cannot be revived within 60 seconds of being deleted', message: 'Je moet een minuut wachten voordat je je met dezelfde gebruiker opnieuw kunt aanmelden. Probeer nogmaals in te loggen.'},
+    INVALID_COMMAND_RECORD:     {developerMessage: 'Command record contains invalid Json', message: 'Command record contains invalid Json'},
+    REVIVAL_COOLDOWN_ACTIVE:    {developerMessage: 'A user cannot be revived within 60 seconds of being deleted', message: 'Je moet een minuut wachten voordat je je met dezelfde gebruiker opnieuw kunt aanmelden. Probeer nogmaals in te loggen.'},
+    SYSTEM_STARTUP:             {developerMessage: 'System is starting up', message: 'Het systeem wordt opgestart. Probeer het straks opnieuw.'},
 
 // Cognito errors
     UserNotFoundException:      {developerMessage: 'User does not exist', message: 'Deze gebruikersnaam is onbekend'},
@@ -37,6 +38,13 @@ export const ErrorCode = {
 
 
 }
+
+// Mapping errors from Rest (non-graphQL) responses
+const restErrorMappings = [
+    {key: {code: 500}, developerMessage: "Internal server error'", message: 'Er is een technische fout opgetreden'},
+    {key: {code: 503, statusText: 'System is starting up'}, developerMessage: 'System is starting up', message: 'Het systeem wordt opgestart. Probeer het straks opnieuw.'},
+    {key: {code: 400}, developerMessage: 'Not authorised', message: 'Er is een technische fout opgetreden'},
+]
 
 const translations = [
     ['Network error', 'Er is een probleem met de verbinding'],
@@ -66,6 +74,16 @@ export const getErrorMessage = (code, sourceMessage, fallbackMessage) => {
         return isDeveloperMode() ? ErrorCode[code].developerMessage : ErrorCode[code].message
     else
         return translatedMessage || (isDeveloperMode() ? sourceMessage : fallbackMessage) || 'Er is een onbekende fout opgetreden'
+}
+
+/**
+ * Constructs an errpr message from the rest response code and (optional) status text.
+ * @param {*} responseCode HTTP response code
+ * @param {*} statusText (optional) status text that was sent along with the response code
+ */
+export const getErrorMessageForRestResponse = (responseCode, statusText) => {
+    const messageMapping = restErrorMappings.find(mapping => mapping.key.code === responseCode && (!mapping.statusText || mapping.statusText === statusText))
+    return messageMapping ? (isDeveloperMode() ? messageMapping.developerMessage : messageMapping.message) : 'Er is een onbekende fout opgetreden'
 }
 
 export default ErrorCode

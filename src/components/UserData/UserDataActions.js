@@ -50,4 +50,3 @@ export const storeUserData = (userData) => executeQuery( {
   },
   onSuccess: (result, dispatch) => dispatch(triggerStream(USER_DATA_STREAM))
 })
-

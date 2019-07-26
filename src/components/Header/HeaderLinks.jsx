@@ -70,7 +70,6 @@ class HeaderLinks extends React.Component {
     gotoMyProfile = () => this.props.history.push('/mijn-profiel');
 
     toggleDrawer = () => {
-      // if (!this.state.notificationsOpen && this.props.unreadNotificationCount > 0)
       if (this.props.unreadNotificationCount > 0)
         this.props.storeUserData( {...this.props.userData, lastAuditTrailView: new Date()} )
       this.setState( ({ notificationsOpen }) => ({ notificationsOpen: !notificationsOpen } ) )

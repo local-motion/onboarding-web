@@ -5,7 +5,6 @@ import { openErrorDialog, openInformationDialog, openConfirmationDialog } from '
 import { stopStream, triggerStream, startStream, pollingIntervalSetterFactory } from 'api/StreamActions';
 import { startUserDataStream, USER_DATA_STREAM } from 'components/UserData/UserDataActions';
 import { getRefreshInterval } from './UserProfileReducer';
-import { dlog } from 'utils/Generics';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
@@ -44,15 +43,15 @@ const startUserProfileStream = () => {
       }
     `, 
       onSuccessPrepublish: (result, dispatch) => {
-        dlog("user profile reponse", result)
         if (result.status === 'not_modified')
           return false; // continue normally
-
-        
         
         switch (result.profile.profileStatus) {
           case 'ACTIVE':
             return false; // continue normally
+
+          case 'UNDETERMINED':
+            return true; // terminate event execution, the next poll should deliver a determined profile
 
             case 'NEW':
               dispatch(createUser(triggerUserProfileStream))
@@ -143,11 +142,6 @@ export const createUser = (onSuccessCallback) => executeQuery( {
       }
     `, 
     onSuccess: (data, dispatch, getState) => {
-
-
-// USER_PROFILE_ALREADY_BEING_CREATED
-      dlog('successful return from createUser: ', data)
-
       onSuccessCallback && onSuccessCallback(data, dispatch, getState)
     },
     auxParameters: {
@@ -244,7 +238,7 @@ export const setNotificationLevel = (user, level) => executeQuery( {
       notificationLevel: level
     }
   },
-  onSuccess: (result, dispatch) => dispatch(triggerStream(USER_PROFILE_STREAM))
+  onSuccess: triggerUserProfileStream
 })
  
 
@@ -298,4 +292,7 @@ const refreshTokens = async dispatch => {
   }
 }
 
-const triggerUserProfileStream = (data, dispatch, getState) => dispatch(triggerStream(USER_PROFILE_STREAM))
+const triggerUserProfileStream = (data, dispatch, getState) => {
+  dispatch(triggerStream(USER_PROFILE_STREAM))
+  dispatch(triggerStream(USER_DATA_STREAM))
+}

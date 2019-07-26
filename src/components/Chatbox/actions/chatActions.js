@@ -75,7 +75,7 @@ export const postChatMessage = text => (dispatch, getState) => {
   const query = getApiBaseUrl(getState()) + CHAT_PATH + '/' + chatboxId
 
   const onSuccess = (data, dispatch, getState, queryOptions, response) => {
-    dispatch({type: POSTED_MESSAGE})
+    // dispatch({type: POSTED_MESSAGE})
     dispatch(triggerStream(CHAT_STREAM))
   }
 

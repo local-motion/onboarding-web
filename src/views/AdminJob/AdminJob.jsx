@@ -6,7 +6,6 @@ import componentsStyle from "../../assets/jss/material-kit-react/views/component
 import { retrieveAdminCommand, runAdminJob, deleteAdminCommand } from "components/AdminJob/AdminJobActions.js";
 import { getAdminCommand, getLastJobResult, getJobResult } from "components/AdminJob/AdminJobReducer.js";
 import Button from "components/CustomButtons/Button.jsx";
-import { dlog } from "utils/Generics.js";
 import JSONPretty from 'react-json-pretty';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 
@@ -49,8 +48,6 @@ class AdminJob extends React.Component {
 
     render() {
         const { commandRecord, jobResult, deleteAdminCommand } = this.props;
-        dlog('rendering command record: ', commandRecord)
-
         return (
             <div className={"workspace-wrapper"}>
                 <h1>Administration</h1>
