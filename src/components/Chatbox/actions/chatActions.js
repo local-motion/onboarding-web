@@ -1,4 +1,3 @@
-import { uuid } from "../scripts/Generics";
 import { stopStream, triggerStream, startStream } from "../../../api/StreamActions";
 import { REST_GET, executeQuery, REST_POST } from "../../../api/QueryActions";
 import { getApiBaseUrl } from "../../../misc/ConfigReducer";
@@ -69,13 +68,11 @@ export const postChatMessage = text => (dispatch, getState) => {
   const chatboxId = getState().chat.chatboxId
 
   const chatMessage = {
-    messageId: uuid(),
     text: getState().chat.editText
   }
   const query = getApiBaseUrl(getState()) + CHAT_PATH + '/' + chatboxId
 
   const onSuccess = (data, dispatch, getState, queryOptions, response) => {
-    // dispatch({type: POSTED_MESSAGE})
     dispatch(triggerStream(CHAT_STREAM))
   }
 
