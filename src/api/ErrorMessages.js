@@ -31,7 +31,7 @@ export const ErrorCode = {
     ExpiredCodeException:       {developerMessage: 'Invalid code provided, please request a code again.', message: 'Deze verificatiecode is verlopen, vraag een nieuwe code aan'},
     LimitExceededException:     {developerMessage: 'Attempt limit exceeded, please try after some time.', message: 'Teveel wachtwoord resets in korte tijd. Probeer het later nog eens.'},
     InvalidPasswordException:   {developerMessage: 'Password does not meet requirements', message: 'Je wachtwoord heeft minimaal 8 karakters, een cijfer, een hoofdletter en een speciaal karakter nodig.'},
-    PasswordResetRequiredException:   {developerMessage: 'Password reset required for the user', message: 'Je moet je wachtwoord opnieuw instellen. Ga naar \'wachtwoord vergeten?\''},
+    PasswordResetRequiredException:   {developerMessage: 'Password reset required for the user', message: 'Als gevolg van een wijziging in het systeem vragen wij je je wachtwoord opnieuw in te stellen. Ga naar \'wachtwoord vergeten?\''},
 
 
 // Functional validation errors
