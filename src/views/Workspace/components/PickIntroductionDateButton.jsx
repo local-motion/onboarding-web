@@ -16,6 +16,10 @@ const dateToString = date => {
     return year + "-" + monthPadded + "-" + dayPadded;
 };
 
+const dateToDisplayString = date => {
+    return date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+};
+
 const styles = theme => ({
     datePickerWrapper: {
         display: 'flex',
@@ -69,6 +73,7 @@ const PickIntroductionDateButton = ({ classes, playground, user, setSmokefreeDat
                       <DatePicker
                         disabled={disabled}
                         dateFormat="dd-MM-YYYY"
+                        minDate={new Date()}
                         selected={date}
                         onChange={selectDate}
                         withPortal
@@ -89,7 +94,7 @@ const PickIntroductionDateButton = ({ classes, playground, user, setSmokefreeDat
                       playground.smokeFreeDate
                         ? (
                           <React.Fragment>
-                              {dateToString(playground.smokeFreeDate)}
+                              {dateToDisplayString(playground.smokeFreeDate)}
                               <Check className={classes.ctaDone} />
                           </React.Fragment>
                         )
