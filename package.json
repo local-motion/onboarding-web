@@ -34,7 +34,7 @@
     "aws-amplify-react": "2.4.4",
     "classnames": "2.2.6",
     "cognito-user-pool": "0.2.4",
-    "date-fns": "2.2.1",
+    "date-fns": "2.3.0",
     "graphql": "14.4.2",
     "graphql-tag": "2.10.1",
     "history": "4.9.0",
