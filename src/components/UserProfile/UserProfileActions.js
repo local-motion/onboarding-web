@@ -73,7 +73,7 @@ const startUserProfileStream = () => {
           case 'DELETED':
           dispatch(openConfirmationDialog(
             'Gebruikersprofiel is verwijderd', 
-            'Wil je dit profiel opnieuw activeren? (Zo nee dan word je uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
+            'Wil je dit profiel opnieuw activeren? (Zo nee dan word je uitgelogd. Maak indien gewenst een andere profiel aan met een ander emailadres)', 
             'Ja',
             'Nee', 
             () => dispatch(reviveUser(triggerUserProfileStream)),
@@ -86,7 +86,7 @@ const startUserProfileStream = () => {
               'Gebruikersprofiel is verwijderd', 
               'Wil je dit profiel opnieuw activeren? ' + 
               'Jouw gebruikersnaam was ' + result.profile.profile.username + ' en wordt dan veranderd in ' + result.profile.newUserName + '. ' +
-              '(Zo nee dan word je uitgelogd. Maak indien gewenst een andere profiel aan met een ander email adres)', 
+              '(Zo nee dan word je uitgelogd. Maak indien gewenst een andere profiel aan met een ander emailadres)', 
               'Ja',
               'Nee', 
               () => dispatch(reviveUser(triggerUserProfileStream)),
