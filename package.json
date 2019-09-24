@@ -37,7 +37,7 @@
     "date-fns": "2.2.1",
     "graphql": "14.4.2",
     "graphql-tag": "2.10.1",
-    "history": "4.9.0",
+    "history": "4.10.1",
     "i18next": "17.0.16",
     "lodash": "4.17.15",
     "i18next-browser-languagedetector": "3.0.3",
