@@ -27,6 +27,7 @@ import Authenticator from "./authentication/Authenticator";
 import WrappedWarningSnackbar from "components/StatusNotification/WrappedWarningSnackbar";
 import PublicBetaNotification from "./components/PublicBetaNotification/PublicBetaNotification";
 import AdminJob from "views/AdminJob/AdminJob";
+import DeveloperControlCenter from "views/Developer/DeveloperControlCenter";
   
 
 const mapDispatchToProps = (dispatch) => ({
@@ -77,6 +78,7 @@ class App extends React.Component {
 
                         <Route exact path="/" key="Onboarding" component={Onboarding}/>
                         <Route exact path="/admin" key="Admin" component={AdminJob}/>
+                        <Route exact path="/developer" key="Developer" component={DeveloperControlCenter}/>
 
                         { /* If none of the paths match, redirect to /*/ }
                         <Route path="/" render={ () => (<Redirect to='/'/>) } />

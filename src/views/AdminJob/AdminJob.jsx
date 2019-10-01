@@ -105,7 +105,14 @@ class AdminJob extends React.Component {
                 >
                     Delete command
                 </Button>
-            </div>
+                
+                <br />
+                <Button 
+                    onClick={() => this.props.history.push('/')} 
+                    color="primary"
+                >
+                    Back to homepage
+                </Button>            </div>
         );
     }
 }
