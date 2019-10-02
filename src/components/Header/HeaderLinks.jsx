@@ -26,7 +26,6 @@ import { storeUserData } from "components/UserData/UserDataActions.js";
 import { isRecordIncluded } from "components/Activities/Activities.jsx";
 import { TOTAL_RECORDS_TO_DISPLAY } from "components/Activities/Activities.jsx";
 import { showDeveloperCCLinkInMenu } from "views/Developer/DeveloperControlCenter.jsx";
-import { dlog } from "utils/Generics.js";
 
 const StyledBadge = withStyles(theme => ({
     badge: {
@@ -122,9 +121,6 @@ class HeaderLinks extends React.Component {
                         <Button onClick={signOutUser}>Uitloggen</Button>,
                     ]}
                   />
-                  {/*<Button onClick={this.gotoMyActies}>Mijn acties</Button>,*/}
-                  {/*<Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,*/}
-                  {/*<Button onClick={deleteUser}>Uitschrijven</Button>,*/}
 
                   <Drawer
                     classes={{ paper: classes.notifications }}

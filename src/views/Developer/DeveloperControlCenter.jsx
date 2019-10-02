@@ -15,6 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
+import {logLevels, logLevelOff, error} from 'utils/Logging.js';
 
 const mapStateToProps = (state, ownProps) => ({
     commandRecord: getAdminCommand(state),
@@ -33,7 +34,7 @@ const browserStorageKey = "developer-settings"
 const defaultSettings = {
     developerMode: false,
     showLinkInMenu: false,
-    logLevel: 'OFF',
+    logLevel: logLevelOff.label,
     testPassword: '',
 }
 const getSettings = () => readFromBrowserStorage(browserStorageKey) || defaultSettings;
@@ -41,7 +42,8 @@ const storeSettings = settings => writeToBrowserStorage(browserStorageKey, setti
 const eraseSettings = () => deleteFromBrowserStorage(browserStorageKey);
 
 export const isDeveloperMode = () => getSettings().developerMode;
-export const showDeveloperCCLinkInMenu = () => isDeveloperMode() && getSettings.showLinkInMenu;
+export const showDeveloperCCLinkInMenu = () => isDeveloperMode() && getSettings().showLinkInMenu;
+export const getLogLevelLabel = () => getSettings().logLevel;
 
 dlog('makestyles:' + makeStyles);
 // const useStyles = makeStyles(theme => ({
@@ -109,21 +111,9 @@ class DeveloperControlCenter extends React.Component {
     }
 
 
-    // toggleShowLinkInMenu = () => {
-    //     this.triggerState();
-    //     // this.setState(prevState =>({showLinkInMenu: !prevState.showLinkInMenu}))
-    //     const settings = getSettings();
-    //     settings.showLinkInMenu = !settings.showLinkInMenu;
-    //     storeSettings(settings);
-    // }
-
-
-
-
     render() {
         // const classes = useStyles();
         const { commandRecord, jobResult, deleteAdminCommand } = this.props;
-
         const settings = getSettings();
 
         return (
@@ -166,10 +156,10 @@ class DeveloperControlCenter extends React.Component {
                             id: 'log-level',
                         }}
                         >
-                            {/* {logLevel} */}
-                        <MenuItem value={10}>Ten</MenuItem>
+                            {logLevels.map((logLevel, idx) => <MenuItem key={idx} value={logLevel.label}>{logLevel.label}</MenuItem>)}
+                        {/* <MenuItem value={10}>Ten</MenuItem>
                         <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem> */}
                     </Select>
                 </FormControl>
 

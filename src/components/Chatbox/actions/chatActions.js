@@ -2,6 +2,7 @@ import { stopStream, triggerStream, startStream } from "../../../api/StreamActio
 import { REST_GET, executeQuery, REST_POST } from "../../../api/QueryActions";
 import { getApiBaseUrl } from "../../../misc/ConfigReducer";
 import { CHAT_PATH } from "../../../misc/Paths";
+import { debug } from "utils/Logging";
 
 
 // Action type definitions
@@ -22,7 +23,7 @@ export const CHAT_STREAM = 'CHAT'
 
 
 export const activateChatbox = chatboxId => (dispatch, getState) => {
-  console.log('activating chatbox ' + chatboxId)
+  debug('activating chatbox ' + chatboxId)
   dispatch({type: SET_ACTIVE_CHATBOX, chatboxId})
 
   const chatEndpoint = getApiBaseUrl(getState()) + CHAT_PATH
