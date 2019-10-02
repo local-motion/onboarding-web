@@ -9,6 +9,7 @@ import { bindMethods } from '../utils/Generics';
 import { styles } from './AuthenticatorStyles';
 import { PadlockIcon } from './AuthenticatorStyles';
 import { Link } from "react-router-dom";
+import { logdebug, loginfo } from 'utils/Logging';
 
 const limitedPasswordValidations = [
     {
@@ -46,10 +47,10 @@ class ResetPasswordForm extends Component {
 
         const {username, password, verificationCode} = this.props;
         this.props.setWaitingForServerResponse()
-        console.log('submitting reset password for ' + username);
+        logdebug('submitting reset password for ' + username);
         Auth.forgotPasswordSubmit(username, verificationCode, password)
             .then(data => {
-                console.log('password reset success for ' + username, data);
+                logdebug('password reset success for ' + username, data);
                 // Leave the password in memory so it is correctly prefilled for sign in
                 this.props.setVerificationCode('')
                 this.props.clearWaitingForServerResponse()
@@ -57,7 +58,7 @@ class ResetPasswordForm extends Component {
                 this.props.changeForm('signIn')
             })
             .catch(error => {
-                console.log('password reset error', error);
+                loginfo('password reset error', error);
                 this.props.clearWaitingForServerResponse()
                 this.props.displayError(getErrorMessage(error.code, error.message))
             })

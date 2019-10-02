@@ -9,6 +9,7 @@ import { bindMethods } from '../utils/Generics';
 import Paper from "@material-ui/core/Paper/Paper";
 import { styles } from './AuthenticatorStyles';
 import { PadlockIcon } from './AuthenticatorStyles';
+import { logdebug } from 'utils/Logging';
 
 
 const limitedPasswordValidations = [
@@ -52,18 +53,18 @@ class ChangePasswordForm extends Component {
 
         Auth.currentAuthenticatedUser()
         .then(user => {
-            console.log('submitting change password for ', user);
+            logdebug('submitting change password for ', user);
             return Auth.changePassword(user, password, newPassword);
         })
         .then(data => {
-            console.log('password change success', data);
+            logdebug('password change success', data);
             this.setState({newPassword: '', repeatedPassword: ''})
             this.props.setPassword('')
             this.props.clearWaitingForServerResponse()
             this.props.openInformationDialog('Gelukt', 'Je wachtwoord is gewijzigd.')
         })
         .catch(error => {
-            console.log('password change error', error);
+            logdebug('password change error', error);
             this.props.clearWaitingForServerResponse()
             if (error.message === 'Incorrect username or password.')
                 this.props.displayError('Het huidige wachtwoord is incorrect. Probeer het nog eens.')

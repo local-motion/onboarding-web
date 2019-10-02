@@ -9,13 +9,12 @@ import Button from "components/CustomButtons/Button.jsx";
 // import Hook from "views/Developer/Hook.jsx";
 import JSONPretty from 'react-json-pretty';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
-import { readFromBrowserStorage, deleteFromBrowserStorage, writeToBrowserStorage, dlog } from "utils/Generics.js";
+import { readFromBrowserStorage, deleteFromBrowserStorage, writeToBrowserStorage } from "utils/Generics.js";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { makeStyles } from '@material-ui/core/styles';
-import {logLevels, logLevelOff, error} from 'utils/Logging.js';
+import {logLevels, logLevelOff} from 'utils/Logging.js';
 
 const mapStateToProps = (state, ownProps) => ({
     commandRecord: getAdminCommand(state),
@@ -31,10 +30,12 @@ const mapDispatchToProps = dispatch => ({
 
 const browserStorageKey = "developer-settings"
 
+console.log("loglevel", logLevelOff)
+
 const defaultSettings = {
     developerMode: false,
     showLinkInMenu: false,
-    logLevel: logLevelOff.label,
+    logLevel: 'OFF',
     testPassword: '',
 }
 const getSettings = () => readFromBrowserStorage(browserStorageKey) || defaultSettings;
@@ -45,7 +46,7 @@ export const isDeveloperMode = () => getSettings().developerMode;
 export const showDeveloperCCLinkInMenu = () => isDeveloperMode() && getSettings().showLinkInMenu;
 export const getLogLevelLabel = () => getSettings().logLevel;
 
-dlog('makestyles:' + makeStyles);
+// console.log('makestyles:' + makeStyles);
 // const useStyles = makeStyles(theme => ({
 //     root: {
 //       display: 'flex',
@@ -63,7 +64,6 @@ dlog('makestyles:' + makeStyles);
 class DeveloperControlCenter extends React.Component {
     constructor(props) {
         super(props);
-
         const settings = readFromBrowserStorage(browserStorageKey);
         this.state = settings || defaultSettings;
     }
@@ -113,7 +113,7 @@ class DeveloperControlCenter extends React.Component {
 
     render() {
         // const classes = useStyles();
-        const { commandRecord, jobResult, deleteAdminCommand } = this.props;
+        const { commandRecord, jobResult } = this.props;
         const settings = getSettings();
 
         return (

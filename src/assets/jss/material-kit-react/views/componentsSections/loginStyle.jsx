@@ -2,6 +2,8 @@ import { container } from "assets/jss/material-kit-react.jsx";
 
 import image from "assets/img/sign.jpg";
 
+// TODO This module can probably be removed
+
 const loginStyle = {
   section: {
     minHeight: "110vh",

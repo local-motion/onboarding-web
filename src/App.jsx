@@ -28,6 +28,7 @@ import WrappedWarningSnackbar from "components/StatusNotification/WrappedWarning
 import PublicBetaNotification from "./components/PublicBetaNotification/PublicBetaNotification";
 import AdminJob from "views/AdminJob/AdminJob";
 import DeveloperControlCenter from "views/Developer/DeveloperControlCenter";
+import { logdebug } from "utils/Logging";
   
 
 const mapDispatchToProps = (dispatch) => ({
@@ -38,7 +39,7 @@ const mapDispatchToProps = (dispatch) => ({
 class App extends React.Component {
 
     signInHandler = (username) => {
-        console.log('signed in with ' + username);
+        logdebug('signed in with ' + username);
         this.props.onUserSignedIn(username);
     };
 

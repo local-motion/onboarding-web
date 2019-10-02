@@ -5,6 +5,7 @@ import { getJwtToken } from "../components/UserProfile/UserProfileReducer";
 import { getGraphQLClient } from "../misc/ConfigReducer";
 import { openWarningNotification, closeStatusNotification } from "components/StatusNotification/StatusNotificationActions";
 import { getStatusNotification } from "components/StatusNotification/StatusNotificationReducer";
+import { loginfo, logdebug } from "utils/Logging";
 
 export const REQUEST_POSTFIX = '_REQUEST'
 export const SUCCESS_POSTFIX = '_SUCCESS'
@@ -109,13 +110,13 @@ const executeGraphQLQuery = (queryOptions) => {
             let errorHandled = false
             if (invokeErrorHandlers) {
                 for (var i = 0; i < errorHandlers.length && !errorHandled; i++) {
-                  console.log("invoking error handler: ", errorHandlers[i])
+                  logdebug("invoking error handler: ", errorHandlers[i])
                   errorHandled = errorHandlers[i](error, dispatch, getState, queryOptions)
                 }
             }
 
             if (!errorHandled) {
-              console.log("Unhandled error: ", error)
+              loginfo("Unhandled error: ", error)
               handleError(error, dispatch, getState, queryOptions, error)
             }
           }
@@ -137,7 +138,7 @@ const executeGraphQLQuery = (queryOptions) => {
         })
         .catch(errorResponse => {
           // Network errors end up here
-          console.log('graphQL query (network) error: ', errorResponse.message)
+          loginfo('graphQL query (network) error: ', errorResponse.message)
 
           const error = {
             code: errorResponse.message && errorResponse.message.startsWith('Network error') ? 'NETWORK' : 'GENERIC',
@@ -248,7 +249,7 @@ const executeRestQuery = (queryOptions) => {
 
 const profileAlreadyExistsErrorHandler = (error, dispatch, getState, queryOptions) => {
   if (error.code === 'USER_PROFILE_ALREADY_BEING_CREATED' && queryOptions.auxParameters && queryOptions.auxParameters.ignoreProfileAlreadyExists) {
-      console.log("create user got rejected as user is already present. Ignoring...")
+      loginfo("create user got rejected as user is already present. Ignoring...")
     return true   // error handled
   }
   else
@@ -265,7 +266,7 @@ const nonUniqueUsernameOrEmailErrorHandler = (error, dispatch, getState, queryOp
 
 const userNotAuthenticatedErrorHandler = (error, dispatch, getState, queryOptions) => {
   if (error.code === '9-812' || error.code === 'UNAUTHENTICATED' || error.code === 'NOT_AUTHORISED') {           // "niceMessage" : "User must be authenticated"
-    console.log('Server detected unauthenticated user')
+    loginfo('Server detected unauthenticated user')
 
     dispatch(signOutUser( dispatch =>
       dispatch(openErrorDialog('Sessie verlopen', 'Je sessie is verlopen. Log opnieuw in.', 'Sluiten', () => window.location.replace('/')))
@@ -277,7 +278,7 @@ const userNotAuthenticatedErrorHandler = (error, dispatch, getState, queryOption
 
 const networkErrorHandler = (error, dispatch, getState, queryOptions) => {
   if (error.code === 'NETWORK') {
-    console.log('Server detected network error')
+    loginfo('Server detected network error')
 
     dispatch(openWarningNotification('Er is een probleem met de verbinding'))
     return true   // error handled
@@ -323,7 +324,7 @@ const openErrorMessageDialog = (error) => (dispatch, getState) => {
 }
 
 const openErrorMessageAndLogoffDialog = (error) => (dispatch, getState) => {
-  console.log('dispatching err msg and logoff')
+  logdebug('dispatching err msg and logoff')
   // dispatch(openErrorDialog('Er is helaas iets fout gegaan', 
   //                                 getErrorMessage(error.code, error.serverMessage), 'Sluiten', () => dispatch(signOutUser())))
   const isRestError = error.queryOptions && (error.queryOptions.type === REST_GET || error.queryOptions.type === REST_POST)

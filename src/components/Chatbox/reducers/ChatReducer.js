@@ -1,5 +1,6 @@
 import { SET_ACTIVE_CHATBOX, SET_UNACTIVE_CHATBOX, EDIT_CHAT_MESSAGE, GET_CHAT_MESSAGES, POST_CHAT_MESSAGE } from "../actions/chatActions";
 import { SUCCESS_POSTFIX } from "../../../api/QueryActions";
+import { logdebug } from "utils/Logging";
 
 /* 
 Chat item definition:
@@ -20,7 +21,7 @@ const chatReducer = (state = initialState, action) => {
   switch (action.type) {
 
     case SET_ACTIVE_CHATBOX:
-      console.log("activating chatbox: " + action.chatboxId)
+      logdebug("activating chatbox: " + action.chatboxId)
       return {
         ...state,
         chatboxId: action.chatboxId,

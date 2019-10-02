@@ -8,7 +8,6 @@ import { getAdminCommand, getLastJobResult, getJobResult } from "components/Admi
 import Button from "components/CustomButtons/Button.jsx";
 import JSONPretty from 'react-json-pretty';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
-import { warn, error, info, debug } from 'utils/Logging.js';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -48,11 +47,6 @@ class AdminJob extends React.Component {
     }
 
     render() {
-        warn("Dit is de %s waarschuwing", 'eerste')
-        error("Dit is de %s error", 'eerste')
-        info("Dit is de %s info", 'eerste')
-        debug("Dit is de %s debug", 'eerste')
-        
         const { commandRecord, jobResult, deleteAdminCommand } = this.props;
         return (
             <div className={"workspace-wrapper"}>

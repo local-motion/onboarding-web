@@ -29,8 +29,15 @@ export const log = (logLevel, message, ...substitutions) => {
         logLevel.logger(message, ...substitutions)
 }
 
-export const error = (message, ...substitutions) => log(logLevelError, message, ...substitutions)
-export const warn = (message, ...substitutions) => log(logLevelWarn, message, ...substitutions)
-export const info = (message, ...substitutions) => log(logLevelInfo, message, ...substitutions)
-export const debug = (message, ...substitutions) => log(logLevelDebug, message, ...substitutions)
+export const logerror = (message, ...substitutions) => log(logLevelError, message, ...substitutions)
+export const logwarn = (message, ...substitutions) => log(logLevelWarn, message, ...substitutions)
+export const loginfo = (message, ...substitutions) => log(logLevelInfo, message, ...substitutions)
+export const logdebug = (message, ...substitutions) => log(logLevelDebug, message, ...substitutions)
 
+
+/**
+ * Logger to be used for temporary debugging. Just logs to console, but makes it easy to distinguish from the structural logging statements.
+ */
+export const logg = (...args) => {
+    console.log(...args)
+}

@@ -60,12 +60,7 @@ export const getFetchStart = (state, baseActionIdentifier,  fetchId) => getPrope
 export const getFetchError = (state, baseActionIdentifier,  fetchId) => getProperty(state, baseActionIdentifier, fetchId, 'error')
 
 export const isLoading = (state, baseActionIdentifier,  fetchId) => {
-  // console.log("isLoading state, baseActionIdentifier,  fetchId, result")
-  // console.log(state)
-  // console.log(baseActionIdentifier)
-  // console.log(fetchId)
   const result =  !!getFetchStart(state, baseActionIdentifier, fetchId)
-  // console.log(result)
   return result
 }
 

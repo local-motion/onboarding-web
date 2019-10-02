@@ -23,6 +23,7 @@ import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 import { history } from "../../../setup";
 import { Paper, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@material-ui/core";
 import { deepPurple } from "@material-ui/core/colors";
+import { logdebug } from "utils/Logging";
 
 const mapStateToProps = (state, ownProps) => ({
     playground: getPlaygroundDetails(state, ownProps.match.params.initiativeName),
@@ -75,7 +76,7 @@ class Team extends React.Component {
     }
 
     componentDidMount() {
-        console.log("ensuring playground details of " + this.props.match.params.initiativeName)
+        logdebug("ensuring playground details of " + this.props.match.params.initiativeName)
         this.props.ensurePlaygroundDetails(initiativeId)
     }
 

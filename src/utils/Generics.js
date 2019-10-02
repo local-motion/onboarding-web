@@ -83,13 +83,6 @@ export const guidToObjectKey = guid => 'P' + guid.replace('-', '_')
 export const objectKeyToGuid = key => key.replace('_', '-').substring(1)
 
 /**
- * Logger to be used for debugging. Just logs to console, but makes it easy to distinguish for the structural logging statements.
- */
-export const dlog = (...args) => {
-    console.log(...args)
-}
-
-/**
  * Merge-sorts the records of a list of arrays into one array. The records within each of the input array need already be sorted.
  * @param {*} recordsList list of arrays containing the input records
  * @param {*} compareFunction accepts two records and should return true when the first record should be ordered before the second record

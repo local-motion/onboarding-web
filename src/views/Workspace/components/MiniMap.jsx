@@ -29,8 +29,6 @@ const PlaygroundMapImpl = compose(
   window.google ? null : withScriptjs,
   withGoogleMap
 )(props => {
-    console.log('drawing mini-map');
-
     const playground = props.playground;
 
     if (!playground) return null;
