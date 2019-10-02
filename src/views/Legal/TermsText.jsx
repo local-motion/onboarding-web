@@ -15,8 +15,8 @@ const TermsText = ({ classes }) => {
         akkoord.
         <h3>Toepasselijkheid</h3>
         Deze Gebruiksvoorwaarden gelden tussen jou als bezoeker en/of gebruiker
-        van het Platform en ABN AMRO N.V. en het Longfonds als gezamenlijke
-        eigenaren van het Platform. Door gebruik van het Platform ga je akkoord
+        van het Platform en het Longfonds als eigenaar van het Platform. 
+        Door gebruik van het Platform ga je akkoord
         met deze Gebruiksvoorwaarden. Deze Gebruiksvoorwaarden gelden wanneer je
         het Platform bezoekt en wanneer je reviews, klachten, reacties,
         berichten, meldingen, vragen of andere bijdragen op of via het Platform
@@ -34,7 +34,8 @@ const TermsText = ({ classes }) => {
         hebt dat jouw inloggegevens bij een onbevoegde derde bekend (kunnen)
         zijn, wijzig dan per direct jouw wachtwoord. Dit kun je doen door in te
         loggen op het Platform en vervolgens in het menu te kiezen voor de optie
-        “wachtwoord wijzigen”. Stel ons daarnaast zo spoedig mogelijk op de
+        “mijn profiel” en dan op de profielpagina bij het onderdeel “wachtwoord instellen” 
+        een nieuw wachtwoord te kiezen. Stel ons daarnaast zo spoedig mogelijk op de
         hoogte. Dit kan middels de contact link die onderaan elk scherm in het
         Platform aanwezig is.
         <h3>Gedragsregels</h3>
@@ -94,7 +95,7 @@ const TermsText = ({ classes }) => {
         dat wij ook aangifte kunnen doen van strafbare feiten. Wil je bezwaar
         aantekenen tegen geplaatste teksten, andere uitingen of via het Platform
         verzonden berichten van andere gebruikers, dan kun je gebruik maken van
-        de feedback knop die rechtsonder op elk scherm in het Platform aanwezig
+        de contact knop die rechtsonder op elk scherm in het Platform aanwezig
         is. Je bezwaar wordt behandeld door een moderator van het Longfonds.
         Bezwaren worden in beginsel binnen 5 dagen in behandeling genomen. We
         streven ernaar ieder bezwaar binnen 30 dagen af te handelen. Omschrijf
@@ -113,8 +114,7 @@ const TermsText = ({ classes }) => {
         zoals in deze Gebruiksvoorwaarden beschreven. Je vrijwaart ons van
         aansprakelijkheid voor enige schade die je ondervindt door gebruik van
         (de informatie op) het Platform en je aanvaardt de verplichting tot
-        schadeloosstelling van ABN AMRO en het Longfonds, als deze afzonderlijk
-        of gezamenlijk schade lijden, doordat je je niet houdt aan hetgeen
+        schadeloosstelling van het Longfonds, als deze schade lijdt, doordat je je niet houdt aan hetgeen
         beschreven in deze gebruiksvoorwaarden. Wij zijn niet aansprakelijk voor
         een (tijdelijke) onmogelijkheid om het Platform te gebruiken.
         <h3>Privacy</h3>
@@ -122,7 +122,7 @@ const TermsText = ({ classes }) => {
         persoonsgegevens is vastgelegd in onze Privacyverklaring.
         <h3>Opzeggen account</h3>
         Je kunt jouw account op het platform verwijderen door gebruik te maken
-        van de uitschrijven-optie in het profielmenu.
+        van de afmelden-optie op de profielpagina.
         <h3>Toepasselijk recht</h3>
         Deze Gebruiksvoorwaarden vallen onder Nederlands recht.
         <h3>Wijzigingen</h3>

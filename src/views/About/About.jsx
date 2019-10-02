@@ -28,7 +28,7 @@ const About = ({ classes }) => (
                   <GridItem xs={12} sm={12} md={6} className={classes.container}>
                       <h2>Over Rookvrij Spelen</h2>
 
-                      Dit platform is een initiatief van het Longfonds en ABN AMRO. Met Rookvrij Spelen willen we je
+                      Dit platform is een initiatief van het Longfonds. Met Rookvrij Spelen willen we je
                       helpen om een speeltuin bij jou in de buurt rookvrij te maken. Dat doen we door je handige tools &
                       tips aan te bieden. Door je in contact te brengen met het bestuur van de speeltuin én met
                       buurtgenoten die je willen helpen.<br/>

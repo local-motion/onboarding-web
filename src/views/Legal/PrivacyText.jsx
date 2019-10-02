@@ -10,10 +10,15 @@ const PrivacyText = ({ classes }) => {
         <GridContainer className={"grid-container"}>
             <GridItem xs={12} sm={12} md={6} className={classes.container}>
                 <h2>Privacyverklaring</h2>
-                Deze website www.rookvrijspelen.nl is een initiatief van Longfonds en ABN AMRO. Het Longfonds en ABN AMRO respecteren jouw privacy en stellen alles in het werk deze te beschermen. Deze privacyverklaring stelt jou op de hoogte hoe wij omgaan met je gegevens.
+                Deze website rookvrijspelen.nl is een initiatief van Longfonds. 
+                Het Longfonds respecteert jouw privacy en stelt alles in het werk deze te beschermen. 
+                Deze privacyverklaring stelt jou op de hoogte hoe wij omgaan met je gegevens.
 
-                Als je gebruik maakt van de website rookvrijspelen.nl verwerken wij mogelijk gegevens over jou (persoonsgegevens). Persoonsgegevens worden met de grootst mogelijke zorgvuldigheid behandeld en beveiligd. Uitgangspunt bij het verwerken van jouw persoonsgegevens is dat er niet meer persoonsgegevens worden verzameld dan noodzakelijk is.
-                Zowel het Longfonds (Stationsplein 127, te Amersfoort) als ABN AMRO (Gustav Mahlerlaan 10) zijn verantwoordelijk voor de gegevensverwerking. Wij kunnen dit privacy statement van tijd tot tijd aanpassen.
+                Als je gebruik maakt van de website rookvrijspelen.nl verwerken wij mogelijk gegevens over jou (persoonsgegevens). 
+                Persoonsgegevens worden met de grootst mogelijke zorgvuldigheid behandeld en beveiligd. 
+                Uitgangspunt bij het verwerken van jouw persoonsgegevens is dat er niet meer persoonsgegevens worden verzameld dan noodzakelijk is.
+                Het Longfonds (Stationsplein 127, te Amersfoort) is verantwoordelijk voor de gegevensverwerking. 
+                Wij kunnen dit privacy statement van tijd tot tijd aanpassen.
 
                 <h3>Verwerking persoonsgegevens</h3>
                 In dit privacy statement lichten wij, aan de hand van de verschillende manieren waarop wij persoonsgegevens verkrijgen, toe welke gegevens wij verzamelen en voor welke doeleinden wij deze gegevens gebruiken.
@@ -43,7 +48,7 @@ const PrivacyText = ({ classes }) => {
                 <h3>Cookies</h3>
                 We maken gebruik van cookies en scripts voor een betere werking van de website.
                 Een cookie is een databestand dat een website op de harde schijf van uw computer zet, wanneer u deze website bezoekt. Een cookie-bestand kan informatie bevatten, zoals een gebruikers-identificatie code, die de website gebruikt om de pagina’s die u bezoekt te traceren.
-                Het Longfonds en ABN AMRO maken gebruik van cookies om het gebruik van de website technisch mogelijk te maken en te analyseren.
+                Het Longfonds maakt gebruik van cookies om het gebruik van de website technisch mogelijk te maken en te analyseren.
 
                 <h4>Lijst met analytische cookies rookvrijspelen.nl</h4>
                 <ul>
@@ -63,7 +68,7 @@ const PrivacyText = ({ classes }) => {
                 Je kunt een verzoek tot inzage, correctie, vergetelheid en/of gegevensoverdraging van jouw persoonsgegevens of verzoek tot intrekking van jouw toestemming of bezwaar op de verwerking van jouw persoonsgegevens sturen naar privacy@longfonds.nl.
 
                 <h3>Contact</h3>
-                Voor vragen of opmerkingen aangaande het privacy statement kun je contact opnemen via privacy@longfonds.nl. Ook kun je contact opnemen met de Functionaris Gegevensbescherming van ABN AMRO via privacy.office@nl.abnamro.com
+                Voor vragen of opmerkingen aangaande het privacy statement kun je contact opnemen via privacy@longfonds.nl.
 
 
             </GridItem>

@@ -2,9 +2,7 @@
   "name": "Local Motion Community",
   "homepage": "https://localmotion.community",
   "authors": [
-    "ABN Amro",
-    "Longfonds",
-    "Forus.io"
+    "Longfonds"
   ],
   "description": "Web frontend for Local Motion Community",
   "main": "dist/index.js",
