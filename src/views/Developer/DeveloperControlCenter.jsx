@@ -1,42 +1,23 @@
 import React from "react";
-import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
-import { retrieveAdminCommand, runAdminJob, deleteAdminCommand } from "components/AdminJob/AdminJobActions.js";
-import { getAdminCommand, getLastJobResult, getJobResult } from "components/AdminJob/AdminJobReducer.js";
 import Button from "components/CustomButtons/Button.jsx";
 // import Hook from "views/Developer/Hook.jsx";
-import JSONPretty from 'react-json-pretty';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 import { readFromBrowserStorage, deleteFromBrowserStorage, writeToBrowserStorage } from "utils/Generics.js";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {logLevels, logLevelOff} from 'utils/Logging.js';
-
-const mapStateToProps = (state, ownProps) => ({
-    commandRecord: getAdminCommand(state),
-    jobResult: getJobResult(state),
-    lastJobResult: getLastJobResult(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    retrieveAdminCommand: () => dispatch(retrieveAdminCommand()),
-    runAdminJob: (validationCode, retainCommandFile) => dispatch(runAdminJob(validationCode, retainCommandFile)),
-    deleteAdminCommand: () => dispatch(deleteAdminCommand()),
-});
+import {logLevels} from 'utils/Logging.js';
 
 const browserStorageKey = "developer-settings"
-
-console.log("loglevel", logLevelOff)
 
 const defaultSettings = {
     developerMode: false,
     showLinkInMenu: false,
     logLevel: 'OFF',
-    testPassword: '',
 }
 const getSettings = () => readFromBrowserStorage(browserStorageKey) || defaultSettings;
 const storeSettings = settings => writeToBrowserStorage(browserStorageKey, settings);
@@ -62,35 +43,13 @@ export const getLogLevelLabel = () => getSettings().logLevel;
 //   }));
 
 class DeveloperControlCenter extends React.Component {
-    constructor(props) {
-        super(props);
-        const settings = readFromBrowserStorage(browserStorageKey);
-        this.state = settings || defaultSettings;
-    }
 
     clearSettings = () => {
         eraseSettings();
         this.triggerState();
     }
 
-    // saveSettings = () => {
-    //     writeToBrowserStorage(browserStorageKey, this.state);
-    // }
-
-    retrieveAdminCommand = () => {
-        this.props.retrieveAdminCommand();
-        this.setState({adminRecordRetrieved: true});
-    }
-
-    runAdminJob = () => {
-        this.props.runAdminJob(this.props.commandRecord.validationCode, this.state.retainCommandFile);
-    }
-
-    toggleRetainCommandFile = () => {
-        this.setState(prevState =>({retainCommandFile: !prevState.retainCommandFile}))
-    }
-
-    triggerState = () => this.setState({});
+    triggerState = () => this.setState({});             // Just to trigger a render cycle
 
     updateSettings = settingsUpdateFunction => {
         const settings = getSettings();
@@ -107,13 +66,11 @@ class DeveloperControlCenter extends React.Component {
     }
     updateLogLevel = event => {
         this.updateSettings(settings => ({logLevel: event.target.value}) );
-        // this.updateSettings(settings => ({logLevel}) );
     }
 
 
     render() {
         // const classes = useStyles();
-        const { commandRecord, jobResult } = this.props;
         const settings = getSettings();
 
         return (
@@ -134,7 +91,7 @@ class DeveloperControlCenter extends React.Component {
                     label="Developer mode active"
                 />
 
-                {/* <Hook/> */}
+                <br />
 
                 <FormControlLabel
                     control={
@@ -146,6 +103,18 @@ class DeveloperControlCenter extends React.Component {
                     label="Link to this page in menu"
                 />
 
+                <br />
+
+                <Button 
+                    onClick={this.clearSettings} 
+                    color={'primary'}
+                >
+                    Clear all settings
+                </Button>
+
+                <h2>Logging</h2>
+
+                {/* <Hook/> */}
                 {/* <FormControl  variant="filled" className={classes.formControl}> */}
                 <FormControl  variant="filled">
                     <InputLabel htmlFor="log-level">Log level</InputLabel>
@@ -156,51 +125,12 @@ class DeveloperControlCenter extends React.Component {
                             id: 'log-level',
                         }}
                         >
-                            {logLevels.map((logLevel, idx) => <MenuItem key={idx} value={logLevel.label}>{logLevel.label}</MenuItem>)}
-                        {/* <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem> */}
+                        {logLevels.map((logLevel, idx) => <MenuItem key={idx} value={logLevel.label}>{logLevel.label}</MenuItem>)}
                     </Select>
                 </FormControl>
 
-
-
-                <span>
-                <div>
-                {
-                    commandRecord ?
-                        <JSONPretty data={commandRecord}></JSONPretty>
-                        :
-                        this.state.adminRecordRetrieved ?
-                            <div>No command file present</div>
-                            :
-                            <div>Press 'Fetch command'</div>
-                }
-                </div>
-                {   jobResult &&
-                    <div>
-                        <h3>Result</h3>
-                        <JSONPretty data={jobResult}></JSONPretty>
-                    </div>
-                }
-                </span>
-
                 <br />
-
-                <Button 
-                    onClick={this.retrieveAdminCommand} 
-                    color={commandRecord ? null : 'primary'}
-                >
-                    {commandRecord ? 'Refresh command' : 'Fetch command'}
-                </Button>
-
-                <Button 
-                    onClick={this.clearSettings} 
-                    color={'primary'}
-                >
-                    Clear settings
-                </Button>
-
+                <br />
                 <br />
                 <Button 
                     onClick={() => this.props.history.push('/')} 
@@ -214,4 +144,4 @@ class DeveloperControlCenter extends React.Component {
     }
 }
 
-export default withRouter(withStyles(componentsStyle)(connect(mapStateToProps, mapDispatchToProps)(DeveloperControlCenter)));
+export default withRouter(withStyles(componentsStyle)(DeveloperControlCenter));

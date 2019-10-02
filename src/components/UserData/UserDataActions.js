@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import { executeQuery, GRAPHQL_QUERY, GRAPHQL_MUTATION } from '../../api/QueryActions';
 import { triggerStream, startStream, pollingIntervalSetterFactory } from 'api/StreamActions';
-import { logg } from 'utils/Logging';
 
 export const GET_USER_DATA = 'GET_USER_DATA'
 export const SET_LAST_AUDIT_TRAIL_VIEW = 'SET_LAST_AUDIT_TRAIL_VIEW'
@@ -23,11 +22,6 @@ export const startUserDataStream = () => {
           }
       }
     `, 
-      onSuccessPrepublish: (result, dispatch) => {
-
-        logg('result from user data stream:', result)
-
-      }
     }
     ,
     {
