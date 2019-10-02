@@ -7,6 +7,7 @@ import { styles } from './AuthenticatorStyles';
 import { bindMethods } from '../utils/Generics';
 import { PadlockIcon } from './AuthenticatorStyles';
 import { Link } from "react-router-dom";
+import { logdebug } from 'utils/Logging';
 
 /**
  * This form allows the user to specify his username or email address and get sent an email containing a code to reset his password
@@ -23,7 +24,7 @@ class ForgotPasswordForm extends Component {
             this.props.setWaitingForServerResponse()
             Auth.forgotPassword(username)
                 .then(data => {
-                    console.log('sent password reset code to ' + username);
+                    logdebug('sent password reset code to ' + username);
                     this.props.clearWaitingForServerResponse()
                     this.props.setVerificationCode('')
 
@@ -35,7 +36,7 @@ class ForgotPasswordForm extends Component {
                     this.props.changeForm('passwordReset')
                 })
                 .catch(error => {
-                    console.log('forgot password send code error', error);
+                    logdebug('forgot password send code error', error);
                     this.props.clearWaitingForServerResponse()
                     if (error.code === 'InvalidParameterException' && error.message === 'Cannot reset password for the user as there is no registered/verified email or phone_number')
                         this.props.openErrorDialog(
@@ -63,9 +64,6 @@ class ForgotPasswordForm extends Component {
 
     render() {
         const {username, waitingForServerResponse, changeForm, isInCard, classes} = this.props
-
-        console.log('initiativeid: ', this.props.match.params)
-
         const isReadyToSubmit = username && !waitingForServerResponse
 
         return (

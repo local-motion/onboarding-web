@@ -12,6 +12,7 @@ import { signOutUser } from '../components/UserProfile/UserProfileActions';
 import { bindMethods } from '../utils/Generics';
 import { styles } from './AuthenticatorStyles';
 import { PadlockIcon } from './AuthenticatorStyles';
+import { logdebug, loginfo } from 'utils/Logging';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -56,7 +57,7 @@ class SignInForm extends Component {
             this.props.setWaitingForServerResponse()
             Auth.signIn(username, password)
                 .then(user => {
-                    console.log('sign in success', user);
+                    logdebug('sign in success', user);
                     this.props.setPassword('')                                    // clear password from memory
                     this.props.clearWaitingForServerResponse()
             
@@ -79,7 +80,7 @@ class SignInForm extends Component {
                     }
                 })
                 .catch(error => {
-                    console.log('sign in error', error);
+                    loginfo('sign in error', error);
                     this.props.setPassword('')                                    // clear password from memory
                     this.props.clearWaitingForServerResponse()
 

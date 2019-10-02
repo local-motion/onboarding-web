@@ -16,6 +16,7 @@ import ResetPasswordForm from './ResetPasswordForm';
 import queryString from 'query-string';
 import SignUpSuccessForm from './SignUpSuccessForm';
 import ChangePasswordForm from './ChangePasswordForm';
+import { logdebug } from 'utils/Logging';
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -74,7 +75,7 @@ class Authenticator extends Component {
         const {authenticatedUser, openAlreadyLoggedInDialog} = this.props                     
         const initiativeName = readFromBrowserStorage(STORAGE_KEY_VERIFICATION_INITIATIVE)
 
-        console.log('constructing authenticator: type, username, code:', verificationType, username, verificationCode)
+        logdebug('constructing authenticator: type, username, code:', verificationType, username, verificationCode)
 
         if (username && verificationCode && verificationType && (verificationType === VERIFICATION_TYPE_SIGNUP || verificationType === VERIFICATION_TYPE_RESET_PASSWORD)) {
             if (authenticatedUser) {
@@ -83,13 +84,13 @@ class Authenticator extends Component {
             }
             else if (!isInCard && initiativeName) {
                 // Let the VerificationLinkHandler within the particular workspace handle this
-                console.log('redirecting from verification link handler to workspace ' + initiativeName)
+                logdebug('redirecting from verification link handler to workspace ' + initiativeName)
                 this.props.history.push(`/actie/${initiativeName}/inloggen?type=${verificationType}&user=${username}&code=${verificationCode}&target=/actie/${initiativeName}/aansluiten`)
                 return
             }
             else if (!isInCard) { 
                 // Go to the signin area in the generic workspace
-                console.log('redirecting from verification link handler to generic workspace')
+                logdebug('redirecting from verification link handler to generic workspace')
                 this.props.history.push(`/actie/inloggen?type=${verificationType}&user=${username}&code=${verificationCode}`)
                 return
             }
@@ -105,7 +106,7 @@ class Authenticator extends Component {
 
     changeForm(newForm) {   
 
-        console.log('changing form to ', newForm)
+        logdebug('changing form to ', newForm)
 
         if (newForm === 'signUp' || newForm === 'forgotPassword')
             this.setPassword('')
@@ -168,7 +169,7 @@ class Authenticator extends Component {
             case 'changePassword':
                 return <ChangePasswordForm {...formProps}/>
             case 'signedIn':
-                console.log('redirecting to /actie')
+                logdebug('redirecting to /actie')
                 return <Redirect to='/actie'/>
             default:
                 return <div>Invalid form state: {this.state.form}</div> 

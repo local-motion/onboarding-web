@@ -33,7 +33,6 @@ export const getRefreshInterval = (state) => state.userprofile.refreshInterval
 const userProfileReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_USER_PROFILE + SUCCESS_POSTFIX:
-        console.log("reducer received fetched user profile:", action.payload)
 
         if (action.payload.status === 'not_modified' || action.payload.profile.profileStatus !== 'ACTIVE')
           return state

@@ -1,4 +1,4 @@
-import { isDeveloperMode } from "../utils/DeveloperMode";
+import { isDeveloperMode } from "views/Developer/DeveloperControlCenter"
 
 /*
     This file contains the user-friendly translations of all error codes

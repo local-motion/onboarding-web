@@ -1,6 +1,7 @@
 import { executeQuery, GRAPHQL_QUERY } from "./QueryActions";
 import { getActiveStream } from "./StreamReducer";
 import { isFunction } from "../utils/Generics";
+import { logdebug } from "utils/Logging";
 
 export const CLEAR_ERROR = 'CLEAR_ERROR'
 
@@ -70,7 +71,7 @@ export const startStream = (streamIdentifier, queryOptions, streamOptions, resta
 
 export const stopStream = (streamIdentifier) => (dispatch, getState) => {
   const stream = getActiveStream(getState(), streamIdentifier)
-  console.log('stopping stream ' + streamIdentifier + ': ', stream)
+  logdebug('stopping stream ' + streamIdentifier + ': ', stream)
   if (stream) {
     dispatch( {type: STOP_STREAM, streamIdentifier} )
   }
@@ -78,7 +79,7 @@ export const stopStream = (streamIdentifier) => (dispatch, getState) => {
 
 export const triggerStream = (streamIdentifier) => (dispatch, getState) => {
   const activeStream = getActiveStream(getState(), streamIdentifier)
-  console.log('triggering stream ' + streamIdentifier + ' which is ' + (activeStream ? "active" : "not active"), activeStream)
+  logdebug('triggering stream ' + streamIdentifier + ' which is ' + (activeStream ? "active" : "not active"), activeStream)
   if (activeStream)
     dispatch(startStream(activeStream.streamIdentifier, activeStream.queryOptions, activeStream.originalOptions, true))
   else

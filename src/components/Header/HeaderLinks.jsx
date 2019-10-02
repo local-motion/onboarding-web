@@ -25,6 +25,7 @@ import { getLastAuditTrailView, getUserData } from "components/UserData/UserData
 import { storeUserData } from "components/UserData/UserDataActions.js";
 import { isRecordIncluded } from "components/Activities/Activities.jsx";
 import { TOTAL_RECORDS_TO_DISPLAY } from "components/Activities/Activities.jsx";
+import { showDeveloperCCLinkInMenu } from "views/Developer/DeveloperControlCenter.jsx";
 
 const StyledBadge = withStyles(theme => ({
     badge: {
@@ -68,6 +69,7 @@ class HeaderLinks extends React.Component {
     };
 
     gotoMyProfile = () => this.props.history.push('/mijn-profiel');
+    gotoDeveloperCC = () => this.props.history.push('/developer');
 
     toggleDrawer = () => {
       if (this.props.unreadNotificationCount > 0)
@@ -91,8 +93,6 @@ class HeaderLinks extends React.Component {
         const { classes, user, signOutUser } = this.props;
         const { notificationsOpen } = this.state;
 
-        // const devModeIndicator = isDeveloperMode() ? 'on' : 'off';
-
         if (!user) return null;
 
         return (
@@ -114,13 +114,13 @@ class HeaderLinks extends React.Component {
                     dropdownList={[
                         <Typography className={classes.name}>Ingelogd als {user.name}</Typography>,
                         {divider: true},
+                        showDeveloperCCLinkInMenu() ?
+                          <Button onClick={this.gotoDeveloperCC}>Developer CC</Button> : <React.Fragment />
+                        ,
                         <Button onClick={this.gotoMyProfile}>Mijn profiel</Button>,
                         <Button onClick={signOutUser}>Uitloggen</Button>,
                     ]}
                   />
-                  {/*<Button onClick={this.gotoMyActies}>Mijn acties</Button>,*/}
-                  {/*<Button onClick={() => setDeveloperMode(!isDeveloperMode())} >{'dev mode: ' + devModeIndicator}</Button>,*/}
-                  {/*<Button onClick={deleteUser}>Uitschrijven</Button>,*/}
 
                   <Drawer
                     classes={{ paper: classes.notifications }}

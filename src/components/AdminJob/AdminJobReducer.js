@@ -37,7 +37,6 @@ export const getLastJobResult = (state) => state.adminjob.lastJobResult
 const adminJobReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ADMIN_COMMAND + SUCCESS_POSTFIX:
-        console.log("reducer received fetched adminjob", action.payload)
 
         if (action.payload.status === 'not_modified')
         return state
@@ -70,7 +69,6 @@ const adminJobReducer = (state = initialState, action) => {
         }
     
     case RUN_ADMIN_JOB + SUCCESS_POSTFIX:
-        console.log("reducer received run adminjob results", action.payload)
 
         const jobResult = {
           resultCode: action.payload.runAdminJob.resultCode,

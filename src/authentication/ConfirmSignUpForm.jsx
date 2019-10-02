@@ -10,6 +10,7 @@ import { getErrorMessage } from '../api/ErrorMessages';
 import TextField from "@material-ui/core/TextField/TextField";
 import { bindMethods } from '../utils/Generics';
 import { allVerificationCodeCharactersPattern, verificationCodeLength, isValidVerificationCode } from './AuthenticatorValidations';
+import { logdebug, loginfo } from 'utils/Logging';
 
 
 /**
@@ -32,7 +33,7 @@ class ConfirmSignUpForm extends Component {
         // });
         this.props.unsetCta && this.props.unsetCta();
 
-        console.log('update of componentDidMount, verificationLink, autoSubmitTriggered', this.props.verificationLink, this.state.autoSubmitTriggered)
+        logdebug('update of componentDidMount, verificationLink, autoSubmitTriggered', this.props.verificationLink, this.state.autoSubmitTriggered)
         if (this.props.verificationLink  && !this.state.autoSubmitTriggered) {
             this.setState({autoSubmitTriggered: true})
             this.confirmSignUp()
@@ -46,14 +47,14 @@ class ConfirmSignUpForm extends Component {
     confirmSignUp() {
         const {username, verificationCode} = this.props
         if (username && verificationCode) {
-            console.log('submitting confirm sign up with ' + verificationCode);
+            logdebug('submitting confirm sign up with ' + verificationCode);
 
             this.props.setWaitingForServerResponse()
 
             Auth.confirmSignUp(username, verificationCode)
                 .then(() => this.confirmSuccess(username))
                 .catch(error => {
-                    console.log('error in confirm signup: ', error)
+                    loginfo('error in confirm signup: ', error)
                     if (error.code === "NotAuthorizedException" && error.message === "User cannot be confirm. Current status is CONFIRMED")
                         this.confirmSuccess(username)
                     else
@@ -67,14 +68,14 @@ class ConfirmSignUpForm extends Component {
         if (!username)
             this.props.displayError('Vul je gebruikersnaam of emailadres in')
         else {
-            console.log('resend code to ' + username);
+            logdebug('resend code to ' + username);
             Auth.resendSignUp(username)
                 .then(() => {
                     this.props.setVerificationCode('')
                     this.props.openInformationDialog('Code verstuurd', 'De verificatiecode is naar jouw emailadres verstuurd.')
                 })
                 .catch(error => {
-                    console.log('error in resend code: ', error)
+                    logdebug('error in resend code: ', error)
                     if (error.message === "User is already confirmed.") {
                         this.props.clearWaitingForServerResponse()
                         this.props.setVerificationCode('')
@@ -87,7 +88,7 @@ class ConfirmSignUpForm extends Component {
     }
 
     confirmSuccess(username) {
-        console.log('confirm sign up success with ' + username);
+        logdebug('confirm sign up success with ' + username);
         this.props.clearInitiativeForVerification()
         this.props.setVerificationCode('')
         this.props.clearWaitingForServerResponse()
@@ -95,7 +96,7 @@ class ConfirmSignUpForm extends Component {
     }
 
     handleError(error) {
-        console.log('confirm sign up error', error);
+        loginfo('confirm sign up error', error);
         this.props.clearWaitingForServerResponse()
         this.props.displayError(getErrorMessage(error.code, error.message))
     }

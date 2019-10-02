@@ -44,6 +44,7 @@ import {
 } from "../../../components/Playground/PlaygroundActions";
 import { getAllPlaygrounds } from "../../../components/Playground/PlaygroundReducer";
 import Authenticator from "../../../authentication/Authenticator";
+import { logdebug } from "utils/Logging";
 
 const PaginationIcon = (props) => (
   <SvgIcon {...props} width="80" height="160" viewBox="0 0 100 200">
@@ -109,7 +110,7 @@ class WorkspacePage extends PureComponent {
         const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
 
         if (initiative && initiative.id) {
-            console.log("stopping stream: ", initiativeName, initiative.id);
+            logdebug("stopping stream: ", initiativeName, initiative.id);
             stopPlaygroundDetailsStream(initiative.id);
         }
     }
@@ -120,7 +121,7 @@ class WorkspacePage extends PureComponent {
         const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
 
         if (initiative && initiative.id) {
-            console.log("starting stream playground details of " + initiativeName, initiative.id);
+            logdebug("starting stream playground details of " + initiativeName, initiative.id);
             ensurePlaygroundDetails(initiative.id);
         }
     }

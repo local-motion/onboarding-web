@@ -1,5 +1,6 @@
 import { slugifyPlaygroundName } from "../components/Playground/PlaygroundActions";
 import { calculateStats } from "../views/Workspace/Cards/EvaluateCard";
+import { logdebug } from "utils/Logging";
 
 export const playgroundStatuses = ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'];
 export const playgroundLabels = ['Voorbereiden', 'Invoeren', 'Onderhouden'];
@@ -17,7 +18,7 @@ export function checkBox({ playground, user, name, setCheckbox }) {
 export function getActivePhaseUrl(playground) {
     const activePhase = getActivePhase(playground);
 
-    console.log(`active phase: ${getWorkspaceStartLink(playground)}${activePhase.steps[0].link}`)
+    logdebug(`active phase: ${getWorkspaceStartLink(playground)}${activePhase.steps[0].link}`)
     return `${getWorkspaceStartLink(playground)}${activePhase.steps[0].link}`;
 }
 

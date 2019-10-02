@@ -55,11 +55,8 @@ const PlaygroundMapImpl = compose(
             newPin: e.latLng,
             isMarkerShown: true
         }),
-        onMarkerClustererClick: () => markerClusterer => {
-            const clickedMarkers = markerClusterer.getMarkers();
-            console.log(`Current clicked markers length: ${clickedMarkers.length}`);
-            console.log(clickedMarkers);
-        },
+        // onMarkerClustererClick: () => markerClusterer => {
+        // },
         onZoomChange: () => (value) => ({
             shouldOutline: value <= 8,
         }),
@@ -112,7 +109,7 @@ const PlaygroundMapImpl = compose(
           )}
 
           <MarkerClusterer
-            onClick={props.onMarkerClustererClick.bind(this)}
+            // onClick={props.onMarkerClustererClick.bind(this)}
             averageCenter
             enableRetinaIcons
             gridSize={60}

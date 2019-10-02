@@ -6,6 +6,7 @@ import { getUser } from "../../../components/UserProfile/UserProfileReducer";
 import { getPlaygroundDetails } from "../../../components/Playground/PlaygroundReducer";
 import { joinInitiative } from "../../../components/Playground/PlaygroundActions";
 import { getActivePhaseUrl } from "../../../misc/WorkspaceHelpers";
+import { logdebug } from "utils/Logging";
 
 const mapStateToProps = (state, ownProps) => ({
     playground: getPlaygroundDetails(state, ownProps.match.params.initiativeName),
@@ -30,7 +31,7 @@ class WorkspaceJoin extends React.Component {
 
             if (!isUserAlreadyJoined) {
                 joinInitiative(playground.id)
-                console.log('join!')
+                logdebug('Joining initiative ' + playground.id)
             }
             this.setState( {joined: true} )
             history.push(activePhaseUrl)

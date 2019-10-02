@@ -22,11 +22,6 @@ export const startUserDataStream = () => {
           }
       }
     `, 
-      onSuccessPrepublish: (result, dispatch) => {
-
-        console.log('result from user data stream:', result)
-
-      }
     }
     ,
     {

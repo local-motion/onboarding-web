@@ -29,13 +29,14 @@ import { executeQuery, REST_GET } from "./api/QueryActions";
 import { CONFIGURATION_PATH, GRAPHQL_PATH } from "./misc/Paths";
 import App from "./App";
 import AuditTrailListener from "components/AuditTrail/AuditTrailListener";
+import { logdebug, loginfo } from "utils/Logging";
 
 // Determine api base endpoints
 const hostName = window.location.hostname
  // eslint-disable-next-line 
 const baseUrl = hostName === 'localhost' ? 'http://localhost:3000/' : 'https://' + hostName + '/'
 const apiBaseUrl = hostName === 'localhost' ? 'http://localhost:8086/api/' : 'https://' + hostName + '/api/'
-console.log("apiBaseUrl is: " + apiBaseUrl);
+logdebug("apiBaseUrl is: " + apiBaseUrl);
 
 
 // Set up the Redux store
@@ -57,7 +58,7 @@ store.dispatch(executeQuery({
     baseActionIdentifier: PUBLISH_ENVIRONMENT,
     query: apiBaseUrl + CONFIGURATION_PATH,
     onSuccess: configuration => {
-        console.log("fetched config: ", configuration)
+        loginfo("fetched config: ", configuration)
 
         const cognitoConfig = configuration.cognitoSettings
 
@@ -141,7 +142,7 @@ store.dispatch(executeQuery({
         // initialised with the proper userinfo (especially Apollo's authLink)
         Auth.currentAuthenticatedUser()
             .then(user => {
-                console.log('Found authenticated user: ', user)
+                loginfo('Found authenticated user: ', user)
                 store.dispatch(userSignedIn(user))
                 const rootElement = document.querySelector("#root")
                 ReactDOM.render(
@@ -150,7 +151,7 @@ store.dispatch(executeQuery({
                 )
             })
             .catch(error => {
-                console.log('No authenticated user', error)
+                loginfo('No authenticated user', error)
                 const rootElement = document.querySelector("#root")
                 ReactDOM.render(
                     wrappedApplication,

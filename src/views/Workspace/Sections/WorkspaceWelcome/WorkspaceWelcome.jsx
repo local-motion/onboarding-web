@@ -15,6 +15,7 @@ import { getAllPlaygrounds, getPlaygroundDetails } from "../../../../components/
 import { getUser } from "../../../../components/UserProfile/UserProfileReducer";
 import { getActivePhaseUrl } from "../../../../misc/WorkspaceHelpers";
 import WorkspaceWelcomeContent from "./WorkspaceWelcomeContent";
+import { logdebug } from "utils/Logging.js";
 
 const mapStateToProps = (state, ownProps) => ({
     playground: getPlaygroundDetails(state, ownProps.match.params.initiativeName),
@@ -36,7 +37,7 @@ class WorkspaceWelcome extends React.Component {
         const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
 
         if (initiative && initiative.id) {
-            console.log("starting stream playground details of " + initiativeName, initiative.id);
+            logdebug("starting stream playground details of " + initiativeName, initiative.id);
             ensurePlaygroundDetails(initiative.id);
         }
     }
@@ -47,7 +48,7 @@ class WorkspaceWelcome extends React.Component {
         const initiative = findPlaygroundsByName({ playgrounds, initiativeName });
 
         if (initiative && initiative.id) {
-            console.log('stopping stream: ', initiativeName, initiative.id);
+            logdebug('stopping stream: ', initiativeName, initiative.id);
             stopPlaygroundDetailsStream(initiative.id);
         }
     }
@@ -63,7 +64,7 @@ class WorkspaceWelcome extends React.Component {
             return manager.id === user.id
         }).length
 
-        console.log(`Displaying workspace welcome for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${user ? user.id : 'anonymous'}`);
+        logdebug(`Displaying workspace welcome for playground ${playground.id} and ${isManager ? 'manager' : 'user'} ${user ? user.id : 'anonymous'}`);
 
         return (
             <div className={"workspace-wrapper"}>

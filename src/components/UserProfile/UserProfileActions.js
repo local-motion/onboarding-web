@@ -5,6 +5,7 @@ import { openErrorDialog, openInformationDialog, openConfirmationDialog } from '
 import { stopStream, triggerStream, startStream, pollingIntervalSetterFactory } from 'api/StreamActions';
 import { startUserDataStream, USER_DATA_STREAM } from 'components/UserData/UserDataActions';
 import { getRefreshInterval } from './UserProfileReducer';
+import { logwarn, logdebug, loginfo } from 'utils/Logging';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const CHECK_EMAIL_EXISTS = 'CHECK_EMAIL_EXISTS'
@@ -180,13 +181,13 @@ export const deleteUser = () => executeQuery( {
       Auth.currentAuthenticatedUser().then( user => {
         user.deleteUser( (error, data) => {
           if (data !== 'SUCCESS') {
-            console.log('delete user error', error)
+            logwarn('delete user error', error)
             dispatch(openErrorDialog('Uitschrijven mislukt',
             'Er heeft zich een probleem voorgedaan met het verwijderen van je gegevens. Log opnieuw in en probeer het opnieuw.', 
             'OK', () => dispatch(signOutUser()) ))
           }
           else {
-            console.log('delete user success', error)
+            logdebug('delete user success', error)
             dispatch(openInformationDialog('Uitgeschreven', 'Je bent uitgeschreven van rookvrijspelen.nl', 'OK', () => {
               dispatch({ type: USER_SIGNED_OUT })
               window.location.replace('/')
@@ -195,7 +196,7 @@ export const deleteUser = () => executeQuery( {
         })
       })
       .catch(error => {
-        console.log('delete user error', error)
+        logwarn('delete user error', error)
         dispatch(openErrorDialog('Uitschrijven mislukt',
                                         'Er heeft zich een probleem voorgedaan met het verwijderen van je gegevens. Log opnieuw in en probeer het opnieuw.', 
                                         'OK', () => dispatch(signOutUser()) ))
@@ -257,7 +258,7 @@ export const signOutUser = (onSignOut) => (dispatch, getState) => {
   dispatch(stopStream(USER_DATA_STREAM))
   Auth.signOut({global: true})
       .then(() => {
-          console.log('sign out success')
+          logdebug('sign out success')
           dispatch({ type: USER_SIGNED_OUT })
           if (onSignOut)
             onSignOut(dispatch, getState)
@@ -265,7 +266,7 @@ export const signOutUser = (onSignOut) => (dispatch, getState) => {
             window.location.replace('/')
       })
       .catch(error => {
-          console.log('sign out error', error)
+          loginfo('sign out error', error)
 
           // Global signout failed (possibly the user was already signed out or expired), remove the cognito related items from local storage for a local signout
           for(let i in localStorage)
@@ -283,11 +284,11 @@ const refreshTokens = async dispatch => {
     const cognitoUser = await Auth.currentAuthenticatedUser();
     const currentSession = await Auth.currentSession();
     cognitoUser.refreshSession(currentSession.refreshToken, (error, session) => {
-      console.log('session tokens refreshed (error, session):', error, session)
+      logdebug('session tokens refreshed (error, session):', error, session)
       dispatch({ type: USER_REFRESHED, cognitoUser})
     })
   } catch (e) {
-    console.log('Unable to refresh tokens', e);
+    loginfo('Unable to refresh tokens', e);
     dispatch(openErrorDialog('Sessie verlopen', 'Je sessie is verlopen. Log opnieuw in.', 'Sluiten', () => dispatch(signOutUser())))
   }
 }
