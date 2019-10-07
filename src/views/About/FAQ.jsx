@@ -88,7 +88,8 @@ const FAQ = ({ classes }) => (
                               </ExpansionPanelSummary>
                               <ExpansionPanelDetails>
                                   <Typography>
-                                      Dit platform is een initiatief van het Longfonds en ABN AMRO.<br/>
+                                  Dit platform is oorspronkelijk opgezet door het Longfonds en ABN AMRO. 
+                                  Inmiddels is ABN AMRO niet meer betrokken en is het Longfonds de eigenaar van het platform. <br/>
                                       Het rookvrij maken van speelplekken maakt onderdeel uit van de beweging ‘<a
                                     href='https://rookvrijegeneratie.nl'>op weg naar een Rookvrije Generatie</a>’. Deze
                                       beweging is een gezamenlijk initiatief van het Longfonds, KWF Kankerbestrijding en
@@ -97,17 +98,6 @@ const FAQ = ({ classes }) => (
                                       aangesloten bij de Rookvrije Generatie: speeltuinen, maar ook sportverenigingen,
                                       scholen, bedrijven, gemeenten en zorginstellingen. Ook de overgrote meerderheid
                                       van de Nederlanders steunt het doel van de Rookvrije Generatie.
-                                  </Typography>
-                              </ExpansionPanelDetails>
-                          </ExpansionPanel>
-                          <ExpansionPanel>
-                              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                                  <Typography className={classes.heading}>Waarom is ABN AMRO hierbij
-                                      betrokken?</Typography>
-                              </ExpansionPanelSummary>
-                              <ExpansionPanelDetails>
-                                  <Typography>
-                                      - nog in te vullen -
                                   </Typography>
                               </ExpansionPanelDetails>
                           </ExpansionPanel>
@@ -134,7 +124,7 @@ const FAQ = ({ classes }) => (
                                       Jouw privacy vinden we heel belangrijk. We gaan daarom zorgvuldig om met je
                                       (persoons)gegevens.
                                       Gegevens zijn veilig opgeslagen en worden niet gedeeld met derden.
-                                      Lees hier meer over in onze <Link to='/privacy'>privacyverklaring</Link>.
+                                      Lees hier meer over in onze <Link to='/privacyverklaring'>privacyverklaring</Link>.
                                   </Typography>
                               </ExpansionPanelDetails>
                           </ExpansionPanel>

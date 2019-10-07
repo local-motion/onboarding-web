@@ -8,7 +8,7 @@ i18n.use('nl').init({
       translations: {
         "header.brand": "Smoke-free playground",
         "footer.attribution":
-          "Smoke-free playground is an initiative of het Longfonds and ABN AMRO",
+          "Smoke-free playgrounds is an initiative of het Longfonds",
 
         "onboarding.playground.progress.smokefree.title":
           "{{percentage}}% smoke-free",
@@ -53,7 +53,7 @@ i18n.use('nl').init({
             "playground.default.area": "Speeltuinen in Nederland",
             "header.brand": "Rookvrije speeltuin",
             "footer.attribution":
-                "Rookvrije speeltuinen is een initiatief van het Longfonds en ABN AMRO",
+                "Rookvrije speeltuinen is een initiatief van het Longfonds",
             "onboarding.playground.calltoaction.button": "Doe mee",
 
             "onboarding.playground.calltoaction.smokefree": "rookvrij",
