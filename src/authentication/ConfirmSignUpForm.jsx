@@ -184,7 +184,8 @@ class ConfirmSignUpForm extends Component {
                             className={classes.link}
                             onClick={event => {
                                 event.preventDefault()
-                                changeForm('resendCode')
+                                this.resendCode()
+                                // changeForm('resendCode')
                             }}
                             >
                             Stuur code opnieuw
