@@ -39,7 +39,7 @@
     "graphql-tag": "2.10.1",
     "history": "4.10.1",
     "i18next": "17.0.16",
-    "lodash": "4.17.15",
+    "lodash": "4.17.21",
     "i18next-browser-languagedetector": "3.0.3",
     "lunr": "2.3.6",
     "moment": "2.24.0",
