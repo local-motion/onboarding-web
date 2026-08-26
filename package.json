@@ -84,7 +84,7 @@
     "prettier": "1.18.2",
     "eslint-config-prettier": "6.3.0",
     "redux": "4.0.4",
-    "uuid": "3.3.3"
+    "uuid": "11.1.1"
   },
   "browserslist": [
     ">0.2%",
